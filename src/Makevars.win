@@ -1,0 +1,17 @@
+MATIO_PLATFORM=\"`$(R_HOME)/bin$(R_ARCH_BIN)/Rscript -e "cat(R.version$$platform[[1]])"`\"
+
+COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matioConfig.h.win', 'matioConfig.h', overwrite=TRUE))")
+ifneq ($(COPY_MATIO_CONFIG_H), TRUE)
+$(error Unable top create matioConfig.h)
+endif
+
+COPY_MATIO_PUBCONF_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio_pubconf.h.win', 'matio_pubconf.h', overwrite=TRUE))")
+ifneq ($(COPY_MATIO_PUBCONF_H), TRUE)
+$(error Unable top create matio_pubconf.h)
+endif
+
+ifeq "$(WIN)" "64"
+PKG_CFLAGS = -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
+else
+PKG_CFLAGS = -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
+endif

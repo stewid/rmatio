@@ -1,0 +1,2 @@
+MATIO_PLATFORM=\"`Rscript -e "cat(R.version$$platform[[1]])"`\"
+PKG_CFLAGS = -DMATIO_PLATFORM=$(MATIO_PLATFORM)

@@ -1,0 +1,104 @@
+/* Have asprintf */
+#undef HAVE_ASPRINTF
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <getopt.h> header file. */
+#undef HAVE_GETOPT_H
+
+/* Define to 1 if you have the `getopt_long_only' function. */
+#undef HAVE_GETOPT_LONG_ONLY
+
+/* Define to 1 if you have the `m' library (-lm). */
+#undef HAVE_LIBM
+
+/* Have MAT int16 */
+#define HAVE_MAT_INT16_T 1
+
+/* Have MAT int32 */
+#define HAVE_MAT_INT32_T 1
+
+/* Have MAT int64 */
+#define HAVE_MAT_INT64_T 1
+
+/* Have MAT int8 */
+#define HAVE_MAT_INT8_T 1
+
+/* Have MAT int16 */
+#define HAVE_MAT_UINT16_T 1
+
+/* Have MAT int32 */
+#define HAVE_MAT_UINT32_T 1
+
+/* Have MAT int64 */
+#define HAVE_MAT_UINT64_T 1
+
+/* Have MAT int8 */
+#define HAVE_MAT_UINT8_T 1
+
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
+/* Have snprintf */
+#undef HAVE_SNPRINTF
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#define HAVE_STDLIB_H 1
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#define HAVE_STRING_H 1
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Have vasprintf */
+#undef HAVE_VASPRINTF
+
+/* Have va_copy */
+#undef HAVE_VA_COPY
+
+/* Have vsnprintf */
+#undef HAVE_VSNPRINTF
+
+/* Have va_copy */
+#undef HAVE___VA_COPY
+
+/* The size of `char', as computed by sizeof. */
+#define SIZEOF_CHAR 1
+
+/* The size of `double', as computed by sizeof. */
+#define SIZEOF_DOUBLE 8
+
+/* The size of `float', as computed by sizeof. */
+#define SIZEOF_FLOAT 4
+
+/* The size of `int', as computed by sizeof. */
+#define SIZEOF_INT 4
+
+/* The size of `long', as computed by sizeof. */
+#define SIZEOF_LONG 4
+
+/* The size of `long long', as computed by sizeof. */
+#define SIZEOF_LONG_LONG 8
+
+/* The size of `short', as computed by sizeof. */
+#define SIZEOF_SHORT 2
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Version number of package */
+#define VERSION "1.5.0"
+
+/* Z prefix */
+#undef Z_PREFIX

@@ -1,0 +1,3 @@
+exportMethods(write.mat)
+export(read.mat)
+useDynLib(rmatio)
