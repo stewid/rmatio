@@ -44,8 +44,8 @@
 ##' @param filename  The MAT file to read.
 ##' @return list
 ##' @references \itemize{
-##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.\cr
-##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.0/matio_user_guide.pdf}
+##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.1.\cr
+##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.1/matio_user_guide.pdf}
 ##' }
 ##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 ##' @export
