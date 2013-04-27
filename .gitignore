@@ -1,0 +1,9 @@
+.R*
+*.so
+*.o
+*.dll
+*.Rproj
+config.log
+config.status
+src/matioConfig.h
+src/matio_pubconf.h

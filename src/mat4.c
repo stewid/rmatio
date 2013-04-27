@@ -136,22 +136,8 @@ ReadData4(mat_t *mat,matvar_t *matvar,void *data,
         case MAT_T_UINT8:
             class_type = MAT_C_UINT8;
             break;
-        case MAT_T_UNKNOWN:	/* :FIX:SW: */
-	case MAT_T_INT8:        /* :FIX:SW: */
-	case MAT_T_UINT32:	/* :FIX:SW: */
-	case MAT_T_INT64:	/* :FIX:SW: */
-	case MAT_T_UINT64:	/* :FIX:SW: */
-	case MAT_T_MATRIX:	/* :FIX:SW: */
-	case MAT_T_COMPRESSED:	/* :FIX:SW: */
-	case MAT_T_UTF8:        /* :FIX:SW: */
-	case MAT_T_UTF16:	/* :FIX:SW: */
-	case MAT_T_UTF32:	/* :FIX:SW: */
-	case MAT_T_STRING:	/* :FIX:SW: */
-	case MAT_T_CELL:        /* :FIX:SW: */
-	case MAT_T_STRUCT:	/* :FIX:SW: */
-	case MAT_T_ARRAY:	/* :FIX:SW: */
-	case MAT_T_FUNCTION:	/* :FIX:SW: */
-            break;
+        default:
+            return 1;
     }
 
     if ( matvar->rank == 2 ) {
@@ -209,6 +195,10 @@ Mat_VarReadNextInfo4(mat_t *mat)
     long      nBytes;
     size_t    err;
     matvar_t *matvar = NULL;
+    union {
+        mat_uint32_t u;
+        mat_uint8_t  c[4];
+    } endian;
 
     if ( mat == NULL || mat->fp == NULL )
         return NULL;
@@ -223,6 +213,8 @@ Mat_VarReadNextInfo4(mat_t *mat)
         free(matvar);
         return NULL;
     }
+
+    endian.u = 0x01020304;
 
     /* See if MOPT may need byteswapping */
     if ( tmp < 0 || tmp > 4052 ) {
@@ -240,7 +232,16 @@ Mat_VarReadNextInfo4(mat_t *mat)
     tmp -= data_type*10;
     class_type = floor(tmp);
 
-    mat->byteswap = (M == 1) ? 1 : 0;
+    switch ( M ) {
+        case 0:
+            /* IEEE little endian */
+            mat->byteswap = (endian.c[0] != 4);
+            break;
+        case 1:
+            /* IEEE big endian */
+            mat->byteswap = (endian.c[0] != 1);
+            break;
+    }
     /* Convert the V4 data type */
     switch ( data_type ) {
         case 0:

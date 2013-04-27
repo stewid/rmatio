@@ -209,8 +209,8 @@ ReadDoubleData(mat_t *mat,double *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	  break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -476,6 +476,8 @@ ReadCompressedDoubleData(mat_t *mat,z_stream *z,double *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -647,8 +649,8 @@ ReadSingleData(mat_t *mat,float *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	  break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -807,6 +809,8 @@ ReadCompressedSingleData(mat_t *mat,z_stream *z,float *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -1016,6 +1020,8 @@ ReadInt64Data(mat_t *mat,mat_int64_t *data,enum matio_types data_type,int len)
             }
             break;
         }
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -1212,6 +1218,8 @@ ReadCompressedInt64Data(mat_t *mat,z_stream *z,mat_int64_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -1422,6 +1430,8 @@ ReadUInt64Data(mat_t *mat,mat_uint64_t *data,enum matio_types data_type,int len)
             }
             break;
         }
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -1618,6 +1628,8 @@ ReadCompressedUInt64Data(mat_t *mat,z_stream *z,mat_uint64_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -1791,8 +1803,8 @@ ReadInt32Data(mat_t *mat,mat_int32_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	  break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -1953,6 +1965,8 @@ ReadCompressedInt32Data(mat_t *mat,z_stream *z,mat_int32_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -2125,8 +2139,8 @@ ReadUInt32Data(mat_t *mat,mat_uint32_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	  break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -2287,6 +2301,8 @@ ReadCompressedUInt32Data(mat_t *mat,z_stream *z,mat_uint32_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -2459,8 +2475,8 @@ ReadInt16Data(mat_t *mat,mat_int16_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	  break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -2621,6 +2637,8 @@ ReadCompressedInt16Data(mat_t *mat,z_stream *z,mat_int16_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -2793,8 +2811,8 @@ ReadUInt16Data(mat_t *mat,mat_uint16_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	    break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -2955,6 +2973,8 @@ ReadCompressedUInt16Data(mat_t *mat,z_stream *z,mat_uint16_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -3127,8 +3147,8 @@ ReadInt8Data(mat_t *mat,mat_int8_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	    break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -3289,6 +3309,8 @@ ReadCompressedInt8Data(mat_t *mat,z_stream *z,mat_int8_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -3461,8 +3483,8 @@ ReadUInt8Data(mat_t *mat,mat_uint8_t *data,enum matio_types data_type,int len)
             }
             break;
         }
-        default: /* :FIX:SW: */
-	    break;
+        default:
+            return 0;
     }
     bytesread *= data_size;
     return bytesread;
@@ -3623,6 +3645,8 @@ ReadCompressedUInt8Data(mat_t *mat,z_stream *z,mat_uint8_t *data,
             }
             break;
         }
+        default:
+            return 0;
     }
     nBytes = len*data_size;
     return nBytes;
@@ -3764,9 +3788,6 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
     int nBytes = 0, i, j, N, I = 0;
     int inc[10] = {0,}, cnt[10] = {0,}, dimp[10] = {0,};
     size_t data_size;
-
-    /* int (*read_data_func)(mat_t *mat,void *data,enum matio_types data_type,
-       int len) = NULL; :FIX:Wunused-variable: */
 
     if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) ||
          (start == NULL) || (stride == NULL) || (edge    == NULL) ) {
@@ -5748,8 +5769,8 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
                 }
             }
             break;
-        default: /* :FIX:SW: */
-	    break;
+        default:
+            return 0;
     }
 
     return bytesread;
@@ -6169,6 +6190,8 @@ ReadCompressedDataSlab1(mat_t *mat,z_stream *z,void *data,
             }
             break;
         }
+        default:
+            break;
     }
     inflateEnd(&z_copy);
     return nBytes;

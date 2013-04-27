@@ -34,20 +34,20 @@
 #   define EXTERN extern
 #endif
 
-/* static size_t GetStructFieldBufSize(matvar_t *matvar); :FIX:Wunused-function: */
-/* static size_t GetCellArrayFieldBufSize(matvar_t *matvar); :FIX:Wunused-function: */
-/* static size_t GetMatrixMaxBufSize(matvar_t *matvar); :FIX:Wunused-function: */
-/* static size_t GetEmptyMatrixMaxBufSize(const char *name,int rank); :FIX:Wunused-function: */
-/* static int WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type); :FIX:Wunused-function: */
-/* static int WriteEmptyData(mat_t *mat,int N,enum matio_types data_type); :FIX:Wunused-function: */
-/* static int ReadNextCell( mat_t *mat, matvar_t *matvar ); :FIX:Wunused-function: */
-/* static int ReadNextStructField( mat_t *mat, matvar_t *matvar ); */
-/* static int ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar); :FIX:Wunused-function: */
-/* static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar); :FIX:Wunused-function: */
-/* static int WriteCellArrayField(mat_t *mat,matvar_t *matvar ); :FIX:Wunused-function: */
-/* static int WriteStructField(mat_t *mat,matvar_t *matvar); :FIX:Wunused-function: */
-/* static size_t Mat_WriteEmptyVariable5(mat_t *mat,const char *name,int rank,
-                   size_t *dims); :FIX:Wunused-function: */
+static size_t GetStructFieldBufSize(matvar_t *matvar);
+static size_t GetCellArrayFieldBufSize(matvar_t *matvar);
+static size_t GetMatrixMaxBufSize(matvar_t *matvar);
+static size_t GetEmptyMatrixMaxBufSize(const char *name,int rank);
+static int WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type);
+static int WriteEmptyData(mat_t *mat,int N,enum matio_types data_type);
+static int ReadNextCell( mat_t *mat, matvar_t *matvar );
+static int ReadNextStructField( mat_t *mat, matvar_t *matvar );
+static int ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar);
+static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar);
+static int WriteCellArrayField(mat_t *mat,matvar_t *matvar );
+static int WriteStructField(mat_t *mat,matvar_t *matvar);
+static size_t Mat_WriteEmptyVariable5(mat_t *mat,const char *name,int rank,
+                  size_t *dims);
 #if defined(HAVE_ZLIB)
 static size_t WriteCompressedCharData(mat_t *mat,z_stream *z,void *data,int N,
                   enum matio_types data_type);

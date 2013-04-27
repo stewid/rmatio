@@ -31,7 +31,6 @@
  */
 
 /* FIXME: Implement Unicode support */
-#define __USE_MINGW_ANSI_STDIO 1
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -98,8 +97,8 @@ Mat_PrintNumber(enum matio_types type, void *data)
         case MAT_T_UINT8:
             printf("%hhu",*(mat_uint8_t*)data);
             break;
-        default:    /* :FIX:Wswitch: */
-	    break;
+        default:
+            break;
     }
 }
 
@@ -175,7 +174,7 @@ Mat_Open(const char *matname,int mode)
 {
     FILE *fp = NULL;
     mat_int16_t tmp, tmp2;
-    /* :FIX:SW: int     err;*/
+    int     err;
     mat_t *mat = NULL;
 
     if ( (mode & 0x00000001) == MAT_ACC_RDONLY ) {
@@ -206,10 +205,10 @@ Mat_Open(const char *matname,int mode)
     mat->filename      = NULL;
     mat->byteswap      = 0;
 
-    /* :FIX:SW: err =*/ fread(mat->header,1,116,fp);
+    err = fread(mat->header,1,116,fp);
     mat->header[116] = '\0';
-    /* :FIX:SW: err =*/ fread(mat->subsys_offset,1,8,fp);
-    /* :FIX:SW: err =*/ fread(&tmp2,2,1,fp);
+    err = fread(mat->subsys_offset,1,8,fp);
+    err = fread(&tmp2,2,1,fp);
     fread(&tmp,1,2,fp);
 
     mat->byteswap = -1;
@@ -620,12 +619,13 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
                 if ( nmemb )
                     nfields = nfields / nmemb;
                 matvar->internal->num_fields = nfields;
-                matvar->internal->fieldnames =
-                    calloc(nfields,sizeof(*matvar->internal->fieldnames));
-                for ( i = 0; i < nfields; i++ )
-                    matvar->internal->fieldnames[i] = strdup(fields[i]->name);
-                if ( nfields )
+                if ( nfields ) {
+                    matvar->internal->fieldnames =
+                        calloc(nfields,sizeof(*matvar->internal->fieldnames));
+                    for ( i = 0; i < nfields; i++ )
+                        matvar->internal->fieldnames[i] = strdup(fields[i]->name);
                     nmemb *= nfields;
+                }
             }
             break;
         }
@@ -726,10 +726,13 @@ int
 Mat_VarDelete(mat_t *mat, const char *name)
 {
     int   err = 1;
-    enum mat_ft mat_file_ver;
+    enum mat_ft mat_file_ver = MAT_FT_DEFAULT;
     char *tmp_name, *new_name, *temp;
     mat_t *tmp;
     matvar_t *matvar;
+
+    if ( NULL == mat || NULL == name )
+        return err;
 
     switch ( mat->version ) {
         case 0x0200:
@@ -765,7 +768,8 @@ Mat_VarDelete(mat_t *mat, const char *name)
                 new_name);
         } else {
             tmp = Mat_Open(new_name,mat->mode);
-            memcpy(mat,tmp,sizeof(mat_t));
+            if ( NULL != tmp )
+                memcpy(mat,tmp,sizeof(mat_t));
         }
         free(tmp);
         free(new_name);
@@ -976,8 +980,10 @@ Mat_VarFree(matvar_t *matvar)
                     }
                 }
                 break;
-	    default: /* :FIX:Wswitch: */
-	        break;
+            case MAT_C_EMPTY:
+            case MAT_C_OBJECT:
+            case MAT_C_FUNCTION:
+                break;
         }
     }
 
@@ -1250,6 +1256,8 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
     printf("Class Type: %s",class_type_desc[matvar->class_type]);
     if ( matvar->isComplex )
         printf(" (complex)");
+    else if ( matvar->isLogical )
+        printf(" (logical)");
     printf("\n");
     if ( matvar->data_type )
         printf(" Data Type: %s\n", data_type_desc[matvar->data_type]);
@@ -1401,8 +1409,8 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
                 }
                 break;
             } /* case MAT_C_SPARSE: */
-	    default: /* :FIX:Wswitch: */
-	        break;
+            default:
+                break;
         } /* switch( matvar->class_type ) */
     }
 
@@ -1430,10 +1438,38 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
 {
     int err = 0;
 
-    if ( mat->version != MAT_FT_MAT4 )
-        err = ReadData5(mat,matvar,data,start,stride,edge);
-    else
-        err = ReadData4(mat,matvar,data,start,stride,edge);
+    switch ( matvar->class_type ) {
+        case MAT_C_DOUBLE:
+        case MAT_C_SINGLE:
+        case MAT_C_INT64:
+        case MAT_C_UINT64:
+        case MAT_C_INT32:
+        case MAT_C_UINT32:
+        case MAT_C_INT16:
+        case MAT_C_UINT16:
+        case MAT_C_INT8:
+        case MAT_C_UINT8:
+            break;
+        default:
+            return -1;
+    }
+
+    switch ( mat->version ) {
+        case MAT_FT_MAT73:
+#if defined(MAT73) && MAT73
+            err = Mat_VarReadData73(mat,matvar,data,start,stride,edge);
+#else
+            err = 1;
+#endif
+            break;
+        case MAT_FT_MAT5:
+            err = ReadData5(mat,matvar,data,start,stride,edge);
+            break;
+        case MAT_FT_MAT4:
+            err = ReadData4(mat,matvar,data,start,stride,edge);
+            break;
+    }
+
     return err;
 }
 
@@ -1628,8 +1664,8 @@ Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
             matvar->data_type = MAT_T_UINT8;
             matvar->data_size = sizeof(mat_uint8_t);
             break;
-        default: /* :FIX:Wswitch: */
-	    break;
+        default:
+            break;
     }
 
     return err;
@@ -1735,7 +1771,7 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
 matvar_t *
 Mat_VarRead( mat_t *mat, const char *name )
 {
-    long  fpos;
+    long  fpos = 0;
     matvar_t *matvar = NULL;;
 
     if ( (mat == NULL) || (name == NULL) )
@@ -1764,7 +1800,7 @@ Mat_VarRead( mat_t *mat, const char *name )
 matvar_t *
 Mat_VarReadNext( mat_t *mat )
 {
-    long fpos;
+    long fpos = 0;
     matvar_t *matvar = NULL;
 
     if ( mat->version != MAT_FT_MAT73 ) {
@@ -1841,6 +1877,8 @@ Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
             matvar->internal->z = NULL;
         }
 #endif
+    } else if ( start == NULL || stride == NULL || edge == NULL ) {
+        err = 1;
     } else if ( matvar->rank == 2 ) {
         if ( stride[0]*(edge[0]-1)+start[0]+1 > matvar->dims[0] ) {
             err = 1;
@@ -1865,8 +1903,8 @@ Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
                     WriteCharDataSlab2(mat,data,matvar->data_type,matvar->dims,
                                    start,stride,edge);
                     break;
-	        default: /* :FIX:Wswitch: */
-		    break;
+                default:
+                    break;
             }
         }
     }
