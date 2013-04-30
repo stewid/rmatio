@@ -30,6 +30,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Changes in the R package rmatio:
+ * 
+ * - The io routines have been adopted to use R printing and error routines.
+ *   See the R manual Writing R Extensions 
+ */
+
 #ifndef MATIO_H
 #define MATIO_H
 
@@ -241,6 +248,8 @@ EXTERN int    Mat_VerbMessage( int level, const char *format, ... );
 EXTERN void   Mat_Warning( const char *format, ... );
 EXTERN size_t Mat_SizeOf(enum matio_types data_type);
 EXTERN size_t Mat_SizeOfClass(int class_type);
+EXTERN void   Mat_PrintNumber(enum matio_types type, void *data);
+EXTERN void   Mat_VarPrint( matvar_t *matvar, int printdata );
 
 /*   MAT File functions   */
 #define            Mat_Create(a,b) Mat_CreateVer(a,b,MAT_FT_DEFAULT)
@@ -281,7 +290,6 @@ EXTERN matvar_t  *Mat_VarGetStructs(matvar_t *matvar,int *start,int *stride,
                       int *edge,int copy_fields);
 EXTERN matvar_t  *Mat_VarGetStructsLinear(matvar_t *matvar,int start,int stride,
                       int edge,int copy_fields);
-EXTERN void       Mat_VarPrint( matvar_t *matvar, int printdata );
 EXTERN matvar_t  *Mat_VarRead(mat_t *mat, const char *name );
 EXTERN int        Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
                       int *start,int *stride,int *edge);
