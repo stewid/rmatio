@@ -306,7 +306,7 @@ int write_list(SEXP list, mat_t* mat)
   return 0;
 }
 
-SEXP write_mat(SEXP list, SEXP filename)
+SEXP write_mat(SEXP list, SEXP filename, SEXP version)
 {
   mat_t *mat;
 
@@ -319,7 +319,7 @@ SEXP write_mat(SEXP list, SEXP filename)
   if(!isString(filename))
     error("'filename' must be a string.");
 
-  mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDWR);
+  mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)), NULL, INTEGER(version)[0]);
   if(!mat)
     error("Unable to open file.");
 
@@ -336,7 +336,7 @@ SEXP write_mat(SEXP list, SEXP filename)
 static const R_CallMethodDef callMethods[] =
   {
     {"read_mat", (DL_FUNC)&read_mat, 1},
-    {"write_mat", (DL_FUNC)&write_mat, 2},
+    {"write_mat", (DL_FUNC)&write_mat, 3},
     {NULL, NULL, 0}
   };
 

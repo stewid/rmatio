@@ -1,3 +1,13 @@
+rmatio 0.0.3
+-------------
+
+NEW FEATURES
+
+* Added option for MAT file version to create in write.mat. Currently
+  only support for Matlab level-5 file (MAT5) from rmatio package.
+
+* Removed option overwrite from write.mat.
+
 rmatio 0.0.2
 -------------
 

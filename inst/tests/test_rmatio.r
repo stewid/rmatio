@@ -14,30 +14,6 @@ test_that("Filename", {
                "'filename' must be a character vector of length one")  
 })
 
-test_that("Overwrite", {
-  filename <- tempfile(fileext = ".mat")
-  write.mat(list(a=1:5), filename=filename)
-  
-  expect_error(write.mat(list(a=1:5), filename=filename),
-               sprintf("File exists"))
-
-  expect_error(write.mat(list(a=1:5), filename=filename, overwrite=3),
-               sprintf("File exists"))
-
-  expect_error(write.mat(list(a=1:5), filename=filename, overwrite=1),
-               sprintf("File exists"))
-
-  expect_error(write.mat(list(a=1:5), filename=filename, overwrite=0),
-               sprintf("File exists"))
-
-  expect_error(write.mat(list(a=1:5), filename=filename, overwrite=FALSE),
-               sprintf("File exists"))
-
-  expect_true(is.null(write.mat(list(a=1:5), filename=filename, overwrite=TRUE)))
-  
-  unlink(filename)  
-})
-
 test_that("Names", {
   expect_error(write.mat(list(1:5), filename="a.mat"),
                "All values in the list must have a unique name")

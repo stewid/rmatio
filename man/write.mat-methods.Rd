@@ -25,6 +25,9 @@
 
   \item{filename}{The MAT file to write.}
 
+  \item{version}{MAT file version to create. Currently only support for
+    Matlab level-5 file (MAT5) from rmatio package.}
+  
   \item{overwrite}{logical or 'NULL' (the default),
   specifying if the method should overwrite an existing
   file or signal error. By default, it signals error.}
@@ -108,13 +111,13 @@ setMethod("write.mat",
           signature(object = "DemoS4Mat"),
           function(object,
                    filename,
-                   overwrite)
+                   version)
           {
             ## Coerce the 'DemoS4Mat' object to a list and
             ## call 'rmatio' 'write.mat' with the list.
             return(write.mat(as(object, "list"),
                              filename,
-                             overwrite))
+                             version))
           }
 )
 

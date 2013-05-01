@@ -43,9 +43,8 @@
 ##' @title Write Matlab file
 ##' @param object The \code{object} to write.
 ##' @param filename The MAT file to write.
-##' @param overwrite logical or 'NULL' (the default), specifying if
-##' the method should overwrite an existing file or signal error. By
-##' default, it signals error.
+##' @param version MAT file version to create. Currently only support
+##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
 ##' @references \itemize{
 ##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.1.\cr
@@ -104,13 +103,13 @@
 ##'           signature(object = "DemoS4Mat"),
 ##'           function(object,
 ##'                    filename,
-##'                    overwrite)
+##'                    version)
 ##'           {
 ##'             ## Coerce the 'DemoS4Mat' object to a list and
 ##'             ## call 'rmatio' 'write.mat' with the list.
 ##'             return(write.mat(as(object, "list"),
 ##'                              filename,
-##'                              overwrite))
+##'                              version))
 ##'           }
 ##' )
 ##'
@@ -142,13 +141,13 @@ setGeneric("write.mat",
            signature = "object",
            function(object,
                     filename = NULL,
-                    overwrite = NULL) standardGeneric("write.mat"))
+                    version = c('MAT5')) standardGeneric("write.mat"))
 
 setMethod("write.mat",
           signature(object = "list"),
           function(object,
                    filename,
-                   overwrite)
+                   version)
           {
             ## Check filename
             if(any(!is.character(filename),
@@ -157,11 +156,14 @@ setMethod("write.mat",
               stop("'filename' must be a character vector of length one")
             }
 
-            ## Check overwrite
-            if(is.null(overwrite) || !is.logical(overwrite) || !overwrite) {
-              if(file.exists(filename)) {
-                stop("File exists")
-              }
+            ## Check version
+            version <- match.arg(version)
+            if(identical(version, 'MAT5')) {
+              version <- 0x0100L
+            ## } else if(identical(version, 'MAT73')) {
+            ##   version <- 0x0200L
+            } else {
+              stop('Undefined version')
             }
 
             ## Check names in object          
@@ -171,7 +173,7 @@ setMethod("write.mat",
               stop("All values in the list must have a unique name")
             }                        
             
-            .Call("write_mat", object, filename)
+            .Call("write_mat", object, filename, version)
 
             invisible(NULL)
           }
