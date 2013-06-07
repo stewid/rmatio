@@ -225,15 +225,6 @@ int read_matrix(SEXP list,
     setAttrib(m, R_DimSymbol, dim);
   }
 
-/* Rcomplex cpl = COMPLEX(el)[0]; */
-/* 	    Rprintf("[%d] '%s' %f + %fi\n", i+1, name, cpl.r, cpl.i); */
-/*     error("Complex"); */
-
-  /* if(matvar->dims[0] == 1 || matvar->dims[1] == 1) */
-  /*   PROTECT(m = allocVector(REALSXP, matvar->dims[0] * matvar->dims[1])); */
-  /* else  */
-  /*   PROTECT(m = allocMatrix(REALSXP, matvar->dims[0], matvar->dims[1])); */
- 
   Mat_VarFree(matvar);
   SET_VECTOR_ELT(list, i, m);
   if(dim == R_NilValue)
