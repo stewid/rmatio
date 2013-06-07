@@ -25,12 +25,9 @@
 
   \item{filename}{The MAT file to write.}
 
-  \item{version}{MAT file version to create. Currently only support for
-    Matlab level-5 file (MAT5) from rmatio package.}
-  
-  \item{overwrite}{logical or 'NULL' (the default),
-  specifying if the method should overwrite an existing
-  file or signal error. By default, it signals error.}
+  \item{version}{MAT file version to create. Currently only
+  support for Matlab level-5 file (MAT5) from rmatio
+  package.}
 }
 \value{
   invisible NULL
