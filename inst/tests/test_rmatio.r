@@ -106,3 +106,33 @@ test_that("matrix: case-2", {
   
   unlink(filename)
 })
+
+context("array")
+
+test_that("array: case-1", {
+  filename <- tempfile(fileext = ".mat")
+
+  a.1 <- array(seq_len(32^3), c(32,32,32))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+  storage.mode(a.2) <- 'integer'
+
+  expect_identical(a.2, a.1)
+  
+  unlink(filename)
+})
+
+test_that("array: case-2", {
+  filename <- tempfile(fileext = ".mat")
+
+  a.1 <- array(seq_len(32^3), c(32,32,32))
+  storage.mode(a.1) <- 'double'
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, a.1)
+  
+  unlink(filename)
+})

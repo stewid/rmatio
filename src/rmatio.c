@@ -64,34 +64,42 @@ int write_dgCMatrix(SEXP slot, const char* name, mat_t* mat)
 /* Matrices must have rank equal to 2              */
 int write_vector(SEXP elmt, mat_t *mat, const char *name)
 {
-  size_t dims[2];
+  size_t* dims;
+  int rank;
   matvar_t *matvar;
   int do_unprotect=0;
 
   if(elmt == R_NilValue || !isVector(elmt))
     return 1;
 
-  if(isMatrix(elmt)) {
-    if(LENGTH(GET_SLOT(elmt, Rf_install("dim"))) != 2)
+  if(isNull(getAttrib(elmt, R_DimSymbol))) {
+    rank = 2;
+    dims = malloc(rank*sizeof(size_t));
+    if(dims == NULL)
       return 1;
-
-    dims[0] = INTEGER(GET_SLOT(elmt, Rf_install("dim")))[0];
-    dims[1] = INTEGER(GET_SLOT(elmt, Rf_install("dim")))[1];
-  } else {
     dims[0] = 1;
     dims[1] = LENGTH(elmt);
+  } else {
+    rank = LENGTH(GET_SLOT(elmt, R_DimSymbol));
+    dims = malloc(rank*sizeof(size_t));
+    if(dims == NULL)
+      return 1;
+    for(int i=0;i<rank;i++)
+      dims[i] = INTEGER(GET_SLOT(elmt, R_DimSymbol))[i];
   }
 
   if(isInteger(elmt)) {
     PROTECT(elmt = AS_NUMERIC(elmt));
     do_unprotect=1;
-  } else if(!isReal(elmt))
+  } else if(!isReal(elmt)) {
+    free(dims);
     return 1;
+  }
 
   matvar = Mat_VarCreate(name,
 			 MAT_C_DOUBLE,
 			 MAT_T_DOUBLE,
-			 2,
+			 rank,
 			 dims,
 			 REAL(elmt),
 			 0); /* :TODO:CHECK: Is that the correct option? */
@@ -99,12 +107,13 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
   if(matvar == NULL) {
     if(do_unprotect)
       UNPROTECT(1);
+    free(dims);
     return 1;
   }
 
   Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
   Mat_VarFree(matvar);
-
+  free(dims);
   if(do_unprotect)
     UNPROTECT(1);
 
@@ -183,25 +192,54 @@ int read_matrix(SEXP list,
 		mat_t* mat)
 {
   SEXP m;
+  SEXP dim = R_NilValue;
   matvar_t *matvar;
   double* data;
+  int len;
 
   matvar = Mat_VarRead(mat, name);
-  if(matvar == NULL || matvar->rank != 2)
-    return 0;
+  if(matvar == NULL || matvar->rank < 2)
+    return 1;
 
-  if(matvar->dims[0] == 1 || matvar->dims[1] == 1)
-    PROTECT(m = allocVector(REALSXP, matvar->dims[0] * matvar->dims[1]));
-  else 
-    PROTECT(m = allocMatrix(REALSXP, matvar->dims[0], matvar->dims[1]));
-  data = REAL(m);
+  len = matvar->dims[0];
+  for(size_t j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+  if(len <= 0)
+    return 1;
 
-  for(size_t i=0;i<matvar->dims[0]*matvar->dims[1];i++)
-    data[i] = ((double*)matvar->data)[i];
+  if(matvar->isComplex)  
+    PROTECT(m = allocVector(CPLXSXP, len));
+  else {
+    PROTECT(m = allocVector(REALSXP, len));
+    data = REAL(m);
+    for(size_t j=0;j<len;j++)
+      data[j] = ((double*)matvar->data)[j];
+  }
+
+  /* Assign dimension to the allocated vector, if not the rank is two and one */
+  /* of the dimensions is one. */
+  if(!(matvar->rank == 2 && (matvar->dims[0] == 1 || matvar->dims[1] == 1))) {
+    PROTECT(dim = allocVector(INTSXP, matvar->rank));
+    for(size_t j=0;j<matvar->rank;j++)
+      INTEGER(dim)[j] = matvar->dims[j];
+    setAttrib(m, R_DimSymbol, dim);
+  }
+
+/* Rcomplex cpl = COMPLEX(el)[0]; */
+/* 	    Rprintf("[%d] '%s' %f + %fi\n", i+1, name, cpl.r, cpl.i); */
+/*     error("Complex"); */
+
+  /* if(matvar->dims[0] == 1 || matvar->dims[1] == 1) */
+  /*   PROTECT(m = allocVector(REALSXP, matvar->dims[0] * matvar->dims[1])); */
+  /* else  */
+  /*   PROTECT(m = allocMatrix(REALSXP, matvar->dims[0], matvar->dims[1])); */
  
   Mat_VarFree(matvar);
   SET_VECTOR_ELT(list, i, m);
-  UNPROTECT(1);
+  if(dim == R_NilValue)
+    UNPROTECT(1);
+  else
+    UNPROTECT(2);
   
   return 0;
 }
@@ -218,7 +256,7 @@ SEXP read_mat(SEXP filename)
   if(!isString(filename))
     error("'filename' must be a string.");
 
-  mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDWR);
+  mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDONLY);
   if(!mat)
     error("Unable to open file.");
 
