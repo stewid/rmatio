@@ -61,13 +61,15 @@ int write_dgCMatrix(SEXP slot, const char* name, mat_t* mat)
 /* Write a R vector or matrix to mat file.         */
 /* Currently, only integer and real are supported. */
 /* Vectors are written as 1 x length               */
-/* Matrices must have rank equal to 2              */
 int write_vector(SEXP elmt, mat_t *mat, const char *name)
 {
   size_t* dims;
   int rank;
   matvar_t *matvar;
   int do_unprotect=0;
+  double* re = NULL;
+  double* im = NULL;
+  struct mat_complex_split_t z;
 
   if(elmt == R_NilValue || !isVector(elmt))
     return 1;
@@ -88,32 +90,59 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
       dims[i] = INTEGER(GET_SLOT(elmt, R_DimSymbol))[i];
   }
 
-  if(isInteger(elmt)) {
-    PROTECT(elmt = AS_NUMERIC(elmt));
-    do_unprotect=1;
-  } else if(!isReal(elmt)) {
-    free(dims);
-    return 1;
-  }
+  if(isComplex(elmt)) {
+    re = malloc(LENGTH(elmt)*sizeof(double));
+    im = malloc(LENGTH(elmt)*sizeof(double));
+    for(int i=0;i<LENGTH(elmt);i++) {
+      re[i] = COMPLEX(elmt)[i].r;
+      im[i] = COMPLEX(elmt)[i].i;
+    }
 
-  matvar = Mat_VarCreate(name,
-			 MAT_C_DOUBLE,
-			 MAT_T_DOUBLE,
-			 rank,
-			 dims,
-			 REAL(elmt),
-			 0); /* :TODO:CHECK: Is that the correct option? */
+    z.Re = re;
+    z.Im = im;
+    matvar = Mat_VarCreate(name,
+			   MAT_C_DOUBLE,
+			   MAT_T_DOUBLE,
+			   rank,
+			   dims,
+			   &z,
+			   MAT_F_COMPLEX);
+  } else {
+    if(isInteger(elmt)) {
+      PROTECT(elmt = AS_NUMERIC(elmt));
+      do_unprotect=1;
+    } else if(!isReal(elmt)) {
+      free(dims);
+      return 1;
+    }
+
+    matvar = Mat_VarCreate(name,
+			   MAT_C_DOUBLE,
+			   MAT_T_DOUBLE,
+			   rank,
+			   dims,
+			   REAL(elmt),
+			   0);
+  }
 
   if(matvar == NULL) {
     if(do_unprotect)
       UNPROTECT(1);
     free(dims);
+    if(re)
+      free(re);
+    if(im)
+      free(im);
     return 1;
   }
 
   Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
   Mat_VarFree(matvar);
   free(dims);
+  if(re)
+    free(re);
+  if(im)
+    free(im);
   if(do_unprotect)
     UNPROTECT(1);
 
@@ -138,83 +167,9 @@ int number_of_variables(mat_t *mat)
  return len;
 }
 
-int read_dgCMatrix(SEXP list,
-		   int i,
-		   const char* name,
-		   mat_t* mat)
+void set_dim(SEXP m, matvar_t *matvar)
 {
-  SEXP m;
-  int *dims;
-  int *ir;              /* Array of size nnzero where ir[k] is the row of data[k] */
-  int *jc;              /* Array of size ncol+1, jc[k] index to data of first non-zero element in row k */
-  double *data;         /* Array of data elements */
-  matvar_t *matvar;
-  mat_sparse_t *sparse;
-
-  matvar = Mat_VarRead(mat, name);
-  if(matvar == NULL)
-    return 1;
-
-  PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
-  if(m == R_NilValue)
-    return 1;
-
-  dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
-  dims[0] = matvar->dims[0];
-  dims[1] = matvar->dims[1];
-
-  sparse = matvar->data;
-  SET_SLOT(m, Rf_install("i"), allocVector(INTSXP, sparse->nir));
-  ir = INTEGER(GET_SLOT(m, Rf_install("i")));
-  for(int i=0;i<sparse->nir;++i)
-    ir[i] = sparse->ir[i];
-
-  SET_SLOT(m, Rf_install("p"), allocVector(INTSXP, sparse->njc));
-  jc = INTEGER(GET_SLOT(m, Rf_install("p")));
-  for(int i=0;i<sparse->njc;++i)
-    jc[i] = sparse->jc[i];
-
-  SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
-  data = REAL(GET_SLOT(m, Rf_install("x")));
-  for(int i=0;i<sparse->ndata;++i)
-    data[i] = ((double*)sparse->data)[i];
-
-  Mat_VarFree(matvar);
-  SET_VECTOR_ELT(list, i, m);
-  UNPROTECT(1);
-
-  return 0;
-}
-
-int read_matrix(SEXP list,
-		int i,
-		const char* name,
-		mat_t* mat)
-{
-  SEXP m;
-  SEXP dim = R_NilValue;
-  matvar_t *matvar;
-  double* data;
-  int len;
-
-  matvar = Mat_VarRead(mat, name);
-  if(matvar == NULL || matvar->rank < 2)
-    return 1;
-
-  len = matvar->dims[0];
-  for(size_t j=1;j<matvar->rank;j++)
-    len *= matvar->dims[j];
-  if(len <= 0)
-    return 1;
-
-  if(matvar->isComplex)  
-    PROTECT(m = allocVector(CPLXSXP, len));
-  else {
-    PROTECT(m = allocVector(REALSXP, len));
-    data = REAL(m);
-    for(size_t j=0;j<len;j++)
-      data[j] = ((double*)matvar->data)[j];
-  }
+  SEXP dim;
 
   /* Assign dimension to the allocated vector, if not the rank is two and one */
   /* of the dimensions is one. */
@@ -223,14 +178,276 @@ int read_matrix(SEXP list,
     for(size_t j=0;j<matvar->rank;j++)
       INTEGER(dim)[j] = matvar->dims[j];
     setAttrib(m, R_DimSymbol, dim);
+    UNPROTECT(1);
+  }
+}
+
+int read_mat_sparse(SEXP list, int i, matvar_t *matvar)
+{
+  SEXP m;
+  int *dims;
+  int *ir;              /* Array of size nnzero where ir[k] is the row of data[k] */
+  int *jc;              /* Array of size ncol+1, jc[k] index to data of first non-zero element in row k */
+  double *data;         /* Array of data elements */
+  mat_sparse_t *sparse;
+
+  if(matvar == NULL || matvar->rank != 2)
+    return 1;
+
+  sparse = matvar->data;
+
+  if(matvar->isComplex)  {
+    size_t len = matvar->dims[0] * matvar->dims[1];
+    PROTECT(m = allocVector(CPLXSXP, len));
+    mat_complex_split_t *complex_data = sparse->data;
+
+    for(size_t j=0;j<len;j++) {
+      COMPLEX(m)[j].r = 0;
+      COMPLEX(m)[j].i = 0;
+    }
+
+    for(int j=0,k=0;k<sparse->ndata;++k) {
+      while(sparse->jc[j] < k || sparse->jc[j] == sparse->jc[j+1])
+	j++;
+
+      COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].r = ((double*)complex_data->Re)[k];
+      COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].i = ((double*)complex_data->Im)[k];
+    }
+
+    set_dim(m, matvar);
+  }
+  else {
+    PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+    if(m == R_NilValue)
+      return 1;
+
+    dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
+    dims[0] = matvar->dims[0];
+    dims[1] = matvar->dims[1];
+
+    SET_SLOT(m, Rf_install("i"), allocVector(INTSXP, sparse->nir));
+    ir = INTEGER(GET_SLOT(m, Rf_install("i")));
+    for(int j=0;j<sparse->nir;++j)
+      ir[j] = sparse->ir[j];
+
+    SET_SLOT(m, Rf_install("p"), allocVector(INTSXP, sparse->njc));
+    jc = INTEGER(GET_SLOT(m, Rf_install("p")));
+    for(int j=0;j<sparse->njc;++j)
+      jc[j] = sparse->jc[j];
+
+    SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
+    data = REAL(GET_SLOT(m, Rf_install("x")));
+    for(int j=0;j<sparse->ndata;++j)
+      data[j] = ((double*)sparse->data)[j];
   }
 
-  Mat_VarFree(matvar);
   SET_VECTOR_ELT(list, i, m);
-  if(dim == R_NilValue)
-    UNPROTECT(1);
-  else
-    UNPROTECT(2);
+  UNPROTECT(1);
+
+  return 0;
+}
+
+int read_mat_complex(SEXP list, int i, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j, len;
+  mat_complex_split_t *complex_data;
+
+  if(matvar == NULL || matvar->rank < 2 || !matvar->isComplex)
+    return 1;
+
+  len = matvar->dims[0];
+  for(j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+
+  PROTECT(m = allocVector(CPLXSXP, len));
+  if(m == R_NilValue)
+    return 1;
+
+  complex_data = matvar->data;
+  switch(matvar->data_type) {
+  case MAT_T_SINGLE:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((float*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((float*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_DOUBLE:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((double*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((double*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_INT64:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_int64_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_int64_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_INT32:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_int32_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_int32_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_INT16:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_int16_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_int16_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_INT8:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_int8_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_int8_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_UINT64:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_uint64_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_uint64_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_UINT32:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_uint32_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_uint32_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_UINT16:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_uint16_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_uint16_t*)complex_data->Im)[j];
+    }
+    break;
+
+  case MAT_T_UINT8:
+    for(j=0;j<len;j++) {
+      COMPLEX(m)[j].r = ((mat_uint8_t*)complex_data->Re)[j];
+      COMPLEX(m)[j].i = ((mat_uint8_t*)complex_data->Im)[j];
+    }
+    break;
+
+  default:
+    error("Unimplemented Matlab data type");
+    break;
+  }
+
+  set_dim(m, matvar);
+  SET_VECTOR_ELT(list, i, m);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
+int read_mat_data(SEXP list, int i, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j, len;
+
+  if(matvar == NULL || matvar->rank < 2 || matvar->isComplex)
+    return 1;
+
+  len = matvar->dims[0];
+  for(j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+
+  switch(matvar->data_type) {
+  case MAT_T_SINGLE:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((float*)matvar->data)[j];
+    break;
+
+  case MAT_T_DOUBLE:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((double*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT64:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_int64_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT32:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int32_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT16:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int16_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT8:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int8_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT64:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_uint64_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT32:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_uint32_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT16:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_uint16_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT8:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_uint8_t*)matvar->data)[j];
+    break;
+
+  default:
+    error("Unimplemented Matlab data type");
+    break;
+  }
+
+  set_dim(m, matvar);
+  SET_VECTOR_ELT(list, i, m);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
+int read_mat_char(SEXP list, int i, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j;
+
+  if(matvar == NULL || matvar->rank != 2 || matvar->isComplex)
+    return 1;
+
+  PROTECT(m = allocVector(STRSXP, matvar->dims[0]));
+
+  for(j=0;j<matvar->dims[0];j++)
+    SET_STRING_ELT(m, j, mkChar("Under construction"));
+
+  SET_VECTOR_ELT(list, i, m);
+  UNPROTECT(1);
   
   return 0;
 }
@@ -260,17 +477,63 @@ SEXP read_mat(SEXP filename)
     error("Error reading MAT file");
   }
 
-  while((matvar = Mat_VarReadNextInfo(mat)) != NULL) {
+  while((matvar = Mat_VarReadNext(mat)) != NULL) {
     SET_STRING_ELT(names, i, mkChar(matvar->name));
 
     switch(matvar->class_type) {
+    case MAT_C_EMPTY:
+      Mat_VarFree(matvar);
+      Mat_Close(mat);
+      UNPROTECT(2);
+      error("Not implemented support to read matio class type MAT_C_EMPTY");
+
+    case MAT_C_CELL:
+      Mat_VarFree(matvar);
+      Mat_Close(mat);
+      UNPROTECT(2);
+      error("Not implemented support to read matio class type MAT_C_CELL");
+
+    case MAT_C_STRUCT:
+      Mat_VarFree(matvar);
+      Mat_Close(mat);
+      UNPROTECT(2);
+      error("Not implemented support to read matio class type MAT_C_STRUCT");
+
+    case MAT_C_OBJECT:
+      Mat_VarFree(matvar);
+      Mat_Close(mat);
+      UNPROTECT(2);
+      error("Not implemented support to read matio class type MAT_C_OBJECT");
+
+    case MAT_C_CHAR:
+	err = read_mat_char(list, i, matvar);
+	break;
+
     case MAT_C_SPARSE:
-      err = read_dgCMatrix(list, i, matvar->name, mat);
+      err = read_mat_sparse(list, i, matvar);
       break;
 
     case MAT_C_DOUBLE:
-      err = read_matrix(list, i, matvar->name, mat);
+    case MAT_C_SINGLE:
+    case MAT_C_INT64:
+    case MAT_C_INT32:
+    case MAT_C_INT16:
+    case MAT_C_INT8:
+    case MAT_C_UINT64:
+    case MAT_C_UINT32:
+    case MAT_C_UINT16:
+    case MAT_C_UINT8:
+      if(matvar->isComplex)
+	err = read_mat_complex(list, i, matvar);
+      else
+	err = read_mat_data(list, i, matvar);
       break;
+
+    case MAT_C_FUNCTION:
+      Mat_VarFree(matvar);
+      Mat_Close(mat);
+      UNPROTECT(2);
+      error("Not implemented support to read matio class type MAT_C_FUNCTION");
 
     default:
       err = 1;
