@@ -22,7 +22,7 @@
 #include <R_ext/Rdynload.h>
 #include "matio.h"
 
-int write_dgCMatrix(SEXP slot, const char* name, mat_t* mat)
+int write_sparse(SEXP slot, const char* name, mat_t* mat)
 {
   size_t dims[2];
   matvar_t *matvar;
@@ -571,7 +571,7 @@ int write_element(SEXP elmt, const char* name, mat_t* mat)
       class_name = getAttrib(elmt, R_ClassSymbol);
       
       if(strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0) {
-	err = write_dgCMatrix(elmt, name, mat);
+	err = write_sparse(elmt, name, mat);
       }
     }
   }
