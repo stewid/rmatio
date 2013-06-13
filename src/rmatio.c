@@ -348,6 +348,70 @@ int read_mat_complex(SEXP list, int i, matvar_t *matvar)
   return 0;
 }
 
+int read_mat_struct(SEXP list, int i, matvar_t *matvar)
+{
+  SEXP names, s;
+  matvar_t *field;
+  char * const * field_names;
+  size_t n,k;
+  int err;
+
+  if(matvar == NULL)
+    return 1;
+
+  n = Mat_VarGetNumberOfFields(matvar);
+  field_names = Mat_VarGetStructFieldnames(matvar);
+
+  PROTECT(s = allocVector(VECSXP, n));
+  PROTECT(names = allocVector(STRSXP, n));
+
+  for(size_t j=0;j<n;j++) {
+    SET_STRING_ELT(names, j, mkChar(field_names[j]));
+    
+    k = 0;
+    while((field = Mat_VarGetStructFieldByIndex(matvar, j, k)) != NULL) {
+      switch(field->class_type) {
+      case MAT_C_DOUBLE:
+      case MAT_C_SINGLE:
+      case MAT_C_INT64:
+      case MAT_C_INT32:
+      case MAT_C_INT16:
+      case MAT_C_INT8:
+      case MAT_C_UINT64:
+      case MAT_C_UINT32:
+      case MAT_C_UINT16:
+      case MAT_C_UINT8:
+      	if(matvar->isComplex)
+      	  err = read_mat_complex(s, j, field);
+      	else
+      	  err = read_mat_data(s, j, field);
+      	break;
+
+      default:
+	err = 1;
+      }
+
+      if(err) {
+	UNPROTECT(2);
+	return 1;
+      }
+
+      k++;
+    }
+  }
+
+  setAttrib(s, R_NamesSymbol, names);
+  SET_VECTOR_ELT(list, i, s);
+  UNPROTECT(2);
+  
+  return 0;
+}
+
+int read_mat_cell(SEXP list, int i, matvar_t *matvar)
+{
+  return 1;
+}
+
 int read_mat_data(SEXP list, int i, matvar_t *matvar)
 {
   SEXP m;
@@ -488,16 +552,12 @@ SEXP read_mat(SEXP filename)
       error("Not implemented support to read matio class type MAT_C_EMPTY");
 
     case MAT_C_CELL:
-      Mat_VarFree(matvar);
-      Mat_Close(mat);
-      UNPROTECT(2);
-      error("Not implemented support to read matio class type MAT_C_CELL");
+	err = read_mat_cell(list, i, matvar);
+	break;
 
     case MAT_C_STRUCT:
-      Mat_VarFree(matvar);
-      Mat_Close(mat);
-      UNPROTECT(2);
-      error("Not implemented support to read matio class type MAT_C_STRUCT");
+      err = read_mat_struct(list, i, matvar);
+      break;
 
     case MAT_C_OBJECT:
       Mat_VarFree(matvar);
