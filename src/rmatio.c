@@ -171,9 +171,9 @@ void set_dim(SEXP m, matvar_t *matvar)
 {
   SEXP dim;
 
-  /* Assign dimension to the allocated vector, if not the rank is two and one */
-  /* of the dimensions is one. */
-  if(!(matvar->rank == 2 && (matvar->dims[0] == 1 || matvar->dims[1] == 1))) {
+  /* Assign dimension to the allocated vector, if not   */
+  /* the rank is two and one of the dimensions is <= 1  */
+  if(!(matvar->rank == 2 && (matvar->dims[0] <= 1 || matvar->dims[1] <= 1))) {
     PROTECT(dim = allocVector(INTSXP, matvar->rank));
     for(size_t j=0;j<matvar->rank;j++)
       INTEGER(dim)[j] = matvar->dims[j];
@@ -182,7 +182,42 @@ void set_dim(SEXP m, matvar_t *matvar)
   }
 }
 
-int read_mat_sparse(SEXP list, int i, matvar_t *matvar)
+int read_mat_char(SEXP list, int index, matvar_t *matvar)
+{
+  SEXP c;
+  size_t i,j;
+  char *buf;
+
+  if(matvar == NULL || matvar->rank != 2 || matvar->isComplex)
+    return 1;
+
+  PROTECT(c = allocVector(STRSXP, matvar->dims[0]));
+
+  switch(matvar->data_type) {
+  case MAT_T_UINT8:
+  case MAT_T_UNKNOWN:
+    buf = (char*)malloc((matvar->dims[1]+1)*sizeof(char));
+    for(i=0;i<matvar->dims[0];i++) {
+      for(j=0;j<matvar->dims[1];j++)
+	buf[j] = ((char*)matvar->data)[matvar->dims[0]*j + i];
+      buf[matvar->dims[1]] = 0;
+      SET_STRING_ELT(c, i, mkChar(buf));
+    }
+    free(buf);
+    break;
+
+  default:
+    error("Unimplemented Matlab character data type");
+    break;
+  }
+
+  SET_VECTOR_ELT(list, index, c);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
+int read_mat_sparse(SEXP list, int index, matvar_t *matvar)
 {
   SEXP m;
   int *dims;
@@ -206,12 +241,12 @@ int read_mat_sparse(SEXP list, int i, matvar_t *matvar)
       COMPLEX(m)[j].i = 0;
     }
 
-    for(int j=0,k=0;k<sparse->ndata;++k) {
-      while(sparse->jc[j] < k || sparse->jc[j] == sparse->jc[j+1])
-	j++;
-
-      COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].r = ((double*)complex_data->Re)[k];
-      COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].i = ((double*)complex_data->Im)[k];
+    for(size_t j=0,k=0;j<matvar->dims[1];j++) {
+      while(k<sparse->jc[j+1]) {
+      	COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].r = ((double*)complex_data->Re)[k];
+      	COMPLEX(m)[matvar->dims[0]*j+sparse->ir[k]].i = ((double*)complex_data->Im)[k];
+	k++;
+      }
     }
 
     set_dim(m, matvar);
@@ -241,13 +276,13 @@ int read_mat_sparse(SEXP list, int i, matvar_t *matvar)
       data[j] = ((double*)sparse->data)[j];
   }
 
-  SET_VECTOR_ELT(list, i, m);
+  SET_VECTOR_ELT(list, index, m);
   UNPROTECT(1);
 
   return 0;
 }
 
-int read_mat_complex(SEXP list, int i, matvar_t *matvar)
+int read_mat_complex(SEXP list, int index, matvar_t *matvar)
 {
   SEXP m;
   size_t j, len;
@@ -342,34 +377,65 @@ int read_mat_complex(SEXP list, int i, matvar_t *matvar)
   }
 
   set_dim(m, matvar);
-  SET_VECTOR_ELT(list, i, m);
+  SET_VECTOR_ELT(list, index, m);
   UNPROTECT(1);
   
   return 0;
 }
 
-int read_mat_struct(SEXP list, int i, matvar_t *matvar)
+int read_mat_struct(SEXP list, int index, matvar_t *matvar)
 {
-  SEXP names, s;
+  SEXP names, struc, s, elmt;
   matvar_t *field;
   char * const * field_names;
-  size_t n,k;
-  int err;
+  size_t i, j, n_fields, field_len;
+  int err = 0;
+  char* buf;
 
-  if(matvar == NULL)
+  if(matvar == NULL || matvar->class_type != MAT_C_STRUCT)
     return 1;
 
-  n = Mat_VarGetNumberOfFields(matvar);
+  n_fields = Mat_VarGetNumberOfFields(matvar);
   field_names = Mat_VarGetStructFieldnames(matvar);
+  PROTECT(struc = allocVector(VECSXP, n_fields));
+  PROTECT(names = allocVector(STRSXP, n_fields));
 
-  PROTECT(s = allocVector(VECSXP, n));
-  PROTECT(names = allocVector(STRSXP, n));
+  for(i=0;i<n_fields;i++) {
+    if(field_names[i])
+      SET_STRING_ELT(names, i, mkChar(field_names[i]));
 
-  for(size_t j=0;j<n;j++) {
-    SET_STRING_ELT(names, j, mkChar(field_names[j]));
-    
-    k = 0;
-    while((field = Mat_VarGetStructFieldByIndex(matvar, j, k)) != NULL) {
+    field_len = 0;
+    if(matvar->dims[0] && matvar->dims[1]) {
+      field = Mat_VarGetStructFieldByIndex(matvar, i, 0);
+      if(field->dims[0] && field->dims[1]) {
+	while(Mat_VarGetStructFieldByIndex(matvar, i, field_len) != NULL)
+	  field_len++;
+      }
+
+      if(field->class_type == MAT_C_CHAR) {
+	if(field_len)
+	  PROTECT(s = allocVector(STRSXP, field_len));
+	else
+	  PROTECT(s = allocVector(STRSXP, 0));
+      } else if(field_len) {
+	PROTECT(s = allocVector(VECSXP, field_len));
+      } else {
+	PROTECT(s = allocVector(VECSXP, 1));
+
+	if(field->data_type != MAT_T_DOUBLE)
+	  error("Unimplemented Matlab data type");
+
+	PROTECT(elmt = allocVector(REALSXP, 0));
+	SET_VECTOR_ELT(s, 0, elmt);
+	UNPROTECT(1);
+      }
+    } else {
+      PROTECT(s = allocVector(VECSXP, 0));
+    }
+
+    for(j=0;j<field_len;j++) {
+      field = Mat_VarGetStructFieldByIndex(matvar, i, j);
+
       switch(field->class_type) {
       case MAT_C_DOUBLE:
       case MAT_C_SINGLE:
@@ -381,38 +447,149 @@ int read_mat_struct(SEXP list, int i, matvar_t *matvar)
       case MAT_C_UINT32:
       case MAT_C_UINT16:
       case MAT_C_UINT8:
-      	if(matvar->isComplex)
-      	  err = read_mat_complex(s, j, field);
-      	else
-      	  err = read_mat_data(s, j, field);
+	if(field->isComplex)
+	  err = read_mat_complex(s, j, field);
+	else
+	  err = read_mat_data(s, j, field);
+	break;
+
+      case MAT_C_SPARSE:
+      	err = read_mat_sparse(s, j, field);
+      	break;
+
+      case MAT_C_CHAR:
+	switch(field->data_type) {
+	case MAT_T_UINT8:
+	case MAT_T_UNKNOWN:
+	  buf = (char*)malloc((field->dims[1]+1)*sizeof(char));
+	  for(size_t k=0;k<field->dims[1];k++)
+	    buf[k] = ((char*)field->data)[field->dims[0]*k + j];
+	  buf[field->dims[1]] = 0;
+	  SET_STRING_ELT(s, j, mkChar(buf));
+	  free(buf);
+	  break;
+	    
+	default:
+	  error("Unimplemented Matlab character data type");
+	  break;
+	}
       	break;
 
       default:
 	err = 1;
+	break;
       }
+    }
 
-      if(err) {
-	UNPROTECT(2);
-	return 1;
-      }
+    SET_VECTOR_ELT(struc, i, s);
+    UNPROTECT(1);
 
-      k++;
+    if(err) {
+      UNPROTECT(2);
+      return 1;
     }
   }
 
-  setAttrib(s, R_NamesSymbol, names);
-  SET_VECTOR_ELT(list, i, s);
+  setAttrib(struc, R_NamesSymbol, names);
+  SET_VECTOR_ELT(list, index, struc);
   UNPROTECT(2);
   
   return 0;
 }
 
-int read_mat_cell(SEXP list, int i, matvar_t *matvar)
+int read_mat_cell(SEXP list, int index, matvar_t *matvar)
 {
-  return 1;
+  SEXP cell, cell_row, s;
+  matvar_t *mat_cell;
+  int err;
+
+  if(matvar == NULL || matvar->data_type != MAT_T_CELL)
+    return 1;
+
+  PROTECT(cell = allocVector(VECSXP, matvar->dims[0]));
+
+  for(size_t i=0;i<matvar->dims[0];i++) {
+    PROTECT(cell_row = allocVector(VECSXP, matvar->dims[1]));
+
+    for(size_t j=0;j<matvar->dims[1];j++) {
+      mat_cell = Mat_VarGetCell(matvar, j*matvar->dims[0] + i);
+
+      if(mat_cell->dims[0] == 0 && mat_cell->dims[1] == 0) {
+      	switch(mat_cell->data_type) {
+      	case MAT_T_INT8:
+      	case MAT_T_UINT8:
+      	case MAT_T_INT16:
+      	case MAT_T_UINT16:
+      	case MAT_T_INT32:
+      	case MAT_T_UINT32:
+      	case MAT_T_SINGLE:
+      	case MAT_T_DOUBLE:
+      	case MAT_T_INT64:
+      	case MAT_T_UINT64:
+      	  err = read_mat_data(cell_row, j, mat_cell);
+      	  break;
+
+      	default:
+      	  err = 1;
+      	  break;
+      	}
+      } else if(mat_cell->dims[0] == 0 || mat_cell->dims[1] == 0) {
+	PROTECT(s = allocVector(VECSXP, 0));
+	SET_VECTOR_ELT(cell_row, j, s);
+	UNPROTECT(1);
+      } else {
+      	switch(mat_cell->class_type) {
+      	case MAT_C_DOUBLE:
+      	case MAT_C_SINGLE:
+      	case MAT_C_INT64:
+      	case MAT_C_INT32:
+      	case MAT_C_INT16:
+      	case MAT_C_INT8:
+      	case MAT_C_UINT64:
+      	case MAT_C_UINT32:
+      	case MAT_C_UINT16:
+      	case MAT_C_UINT8:
+      	  if(mat_cell->isComplex)
+      	    err = read_mat_complex(cell_row, j, mat_cell);
+      	  else
+      	    err = read_mat_data(cell_row, j, mat_cell);
+      	  break;
+
+      	case MAT_C_SPARSE:
+      	  err = read_mat_sparse(cell_row, j, mat_cell);
+      	  break;
+
+      	case MAT_C_CHAR:
+      	  err = read_mat_char(cell_row, j, mat_cell);
+      	  break;
+
+      	case MAT_C_STRUCT:
+      	  err = read_mat_struct(cell_row, j, mat_cell);
+      	  break;
+
+      	default:
+      	  err = 1;
+      	  break;
+      	}
+      }
+
+      if(err) {
+      	UNPROTECT(1);
+      	return 1;
+      }
+    }
+
+    SET_VECTOR_ELT(cell, i, cell_row);
+    UNPROTECT(1);
+  }
+
+  SET_VECTOR_ELT(list, index, cell);
+  UNPROTECT(1);
+
+  return 0;
 }
 
-int read_mat_data(SEXP list, int i, matvar_t *matvar)
+int read_mat_data(SEXP list, int index, matvar_t *matvar)
 {
   SEXP m;
   size_t j, len;
@@ -491,26 +668,7 @@ int read_mat_data(SEXP list, int i, matvar_t *matvar)
   }
 
   set_dim(m, matvar);
-  SET_VECTOR_ELT(list, i, m);
-  UNPROTECT(1);
-  
-  return 0;
-}
-
-int read_mat_char(SEXP list, int i, matvar_t *matvar)
-{
-  SEXP m;
-  size_t j;
-
-  if(matvar == NULL || matvar->rank != 2 || matvar->isComplex)
-    return 1;
-
-  PROTECT(m = allocVector(STRSXP, matvar->dims[0]));
-
-  for(j=0;j<matvar->dims[0];j++)
-    SET_STRING_ELT(m, j, mkChar("Under construction"));
-
-  SET_VECTOR_ELT(list, i, m);
+  SET_VECTOR_ELT(list, index, m);
   UNPROTECT(1);
   
   return 0;
