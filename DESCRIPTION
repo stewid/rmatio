@@ -1,6 +1,6 @@
 Package: rmatio
 Title: R interface to the C-library matio
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: c(
     person("Christopher",
     "Hulbert",
