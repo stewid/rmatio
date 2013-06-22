@@ -219,11 +219,10 @@ int read_mat_char(SEXP list, int index, matvar_t *matvar)
 
 int read_mat_sparse(SEXP list, int index, matvar_t *matvar)
 {
-  SEXP m;
+  SEXP m, data;
   int *dims;
   int *ir;              /* Array of size nnzero where ir[k] is the row of data[k] */
   int *jc;              /* Array of size ncol+1, jc[k] index to data of first non-zero element in row k */
-  double *data;         /* Array of data elements */
   mat_sparse_t *sparse;
 
   if(matvar == NULL || matvar->rank != 2)
@@ -231,7 +230,30 @@ int read_mat_sparse(SEXP list, int index, matvar_t *matvar)
 
   sparse = matvar->data;
 
-  if(matvar->isComplex)  {
+  if(matvar->isLogical) {
+    PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
+    if(m == R_NilValue)
+      return 1;
+
+    dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
+    dims[0] = matvar->dims[0];
+    dims[1] = matvar->dims[1];
+
+    SET_SLOT(m, Rf_install("i"), allocVector(INTSXP, sparse->nir));
+    ir = INTEGER(GET_SLOT(m, Rf_install("i")));
+    for(int j=0;j<sparse->nir;++j)
+      ir[j] = sparse->ir[j];
+
+    SET_SLOT(m, Rf_install("p"), allocVector(INTSXP, sparse->njc));
+    jc = INTEGER(GET_SLOT(m, Rf_install("p")));
+    for(int j=0;j<sparse->njc;++j)
+      jc[j] = sparse->jc[j];
+
+    SET_SLOT(m, Rf_install("x"), allocVector(LGLSXP, sparse->nir));
+    data = GET_SLOT(m, Rf_install("x"));
+    for(int j=0;j<sparse->nir;++j)
+      LOGICAL(data)[j] = 1;
+  } else if(matvar->isComplex)  {
     size_t len = matvar->dims[0] * matvar->dims[1];
     PROTECT(m = allocVector(CPLXSXP, len));
     mat_complex_split_t *complex_data = sparse->data;
@@ -271,9 +293,9 @@ int read_mat_sparse(SEXP list, int index, matvar_t *matvar)
       jc[j] = sparse->jc[j];
 
     SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
-    data = REAL(GET_SLOT(m, Rf_install("x")));
+    data = GET_SLOT(m, Rf_install("x"));
     for(int j=0;j<sparse->ndata;++j)
-      data[j] = ((double*)sparse->data)[j];
+      REAL(data)[j] = ((double*)sparse->data)[j];
   }
 
   SET_VECTOR_ELT(list, index, m);
@@ -447,7 +469,9 @@ int read_mat_struct(SEXP list, int index, matvar_t *matvar)
       case MAT_C_UINT32:
       case MAT_C_UINT16:
       case MAT_C_UINT8:
-	if(field->isComplex)
+	if(field->isLogical)
+	  err = 1;
+	else if(field->isComplex)
 	  err = read_mat_complex(s, j, field);
 	else
 	  err = read_mat_data(s, j, field);
@@ -549,7 +573,9 @@ int read_mat_cell(SEXP list, int index, matvar_t *matvar)
       	case MAT_C_UINT32:
       	case MAT_C_UINT16:
       	case MAT_C_UINT8:
-      	  if(mat_cell->isComplex)
+	  if(mat_cell->isLogical)
+	    err = 1;
+      	  else if(mat_cell->isComplex)
       	    err = read_mat_complex(cell_row, j, mat_cell);
       	  else
       	    err = read_mat_data(cell_row, j, mat_cell);
@@ -741,7 +767,9 @@ SEXP read_mat(SEXP filename)
     case MAT_C_UINT32:
     case MAT_C_UINT16:
     case MAT_C_UINT8:
-      if(matvar->isComplex)
+      if(matvar->isLogical)
+	err = 1;
+      else if(matvar->isComplex)
 	err = read_mat_complex(list, i, matvar);
       else
 	err = read_mat_data(list, i, matvar);
