@@ -1,4 +1,13 @@
-rmatio 0.0.3
+rmatio 0.0.5
+-------------
+
+NEW FEATURES
+
+* Added support to read a sparse logical matrix.
+
+* Added support to read struct and cell data types.
+
+rmatio 0.0.4
 -------------
 
 NEW FEATURES
