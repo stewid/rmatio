@@ -470,7 +470,7 @@ int read_mat_struct(SEXP list, int index, matvar_t *matvar)
       case MAT_C_UINT16:
       case MAT_C_UINT8:
 	if(field->isLogical)
-	  err = 1;
+	  err = read_mat_logical(s, j, field);
 	else if(field->isComplex)
 	  err = read_mat_complex(s, j, field);
 	else
@@ -574,7 +574,7 @@ int read_mat_cell(SEXP list, int index, matvar_t *matvar)
       	case MAT_C_UINT16:
       	case MAT_C_UINT8:
 	  if(mat_cell->isLogical)
-	    err = 1;
+	    err = read_mat_logical(cell_row, j, mat_cell);
       	  else if(mat_cell->isComplex)
       	    err = read_mat_complex(cell_row, j, mat_cell);
       	  else
@@ -700,6 +700,37 @@ int read_mat_data(SEXP list, int index, matvar_t *matvar)
   return 0;
 }
 
+int read_mat_logical(SEXP list, int index, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j, len;
+
+  if(matvar == NULL || matvar->rank < 2 || !matvar->isLogical)
+    return 1;
+
+  len = matvar->dims[0];
+  for(j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+
+  switch(matvar->data_type) {
+  case MAT_T_UINT8:
+    PROTECT(m = allocVector(LGLSXP, len));
+    for(j=0;j<len;j++)
+      LOGICAL(m)[j] = ((mat_uint8_t*)matvar->data)[j] != 0;
+    break;
+
+  default:
+    error("Unimplemented Matlab logical data type");
+    break;
+  }
+
+  set_dim(m, matvar);
+  SET_VECTOR_ELT(list, index, m);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
 SEXP read_mat(SEXP filename)
 {
   mat_t *mat;
@@ -768,7 +799,7 @@ SEXP read_mat(SEXP filename)
     case MAT_C_UINT16:
     case MAT_C_UINT8:
       if(matvar->isLogical)
-	err = 1;
+	err = read_mat_logical(list, i, matvar);
       else if(matvar->isComplex)
 	err = read_mat_complex(list, i, matvar);
       else
