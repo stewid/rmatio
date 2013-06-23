@@ -120,10 +120,10 @@ test_that("array: case-1", {
   on.exit(unlink(filename))
 
   a.1 <- array(seq_len(32^3), c(32,32,32))
+  storage.mode(a.1) <- 'integer'
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-  storage.mode(a.2) <- 'integer'
 
   expect_identical(a.2, a.1)
 })
@@ -165,6 +165,25 @@ test_that("string: case-1", {
            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
            "1234567890!@#$%^&*()-_=+`~",
            "[{]}\\|;:'\",<.>/?          ")
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+    
+  expect_identical(a.2, a.1)
+})
+
+context("logical")
+
+test_that("logical: case-1", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+    
+  a.1 <- array(c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+                 FALSE, TRUE,  TRUE,  TRUE,  TRUE,
+                 FALSE, FALSE, TRUE,  TRUE,  TRUE,
+                 FALSE, FALSE, FALSE, TRUE,  TRUE,
+                 FALSE, FALSE, FALSE, FALSE, TRUE),
+               c(5L, 5L))
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
