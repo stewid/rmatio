@@ -1,3 +1,13 @@
+rmatio 0.0.8
+-------------
+
+NEW FEATURES
+
+* Added support to write a logical vector.
+
+* An integer vector is now written as a signed
+  32 bit integer instead of as a double.
+
 rmatio 0.0.7
 -------------
 

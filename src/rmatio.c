@@ -22,24 +22,24 @@
 #include <R_ext/Rdynload.h>
 #include "matio.h"
 
-int write_sparse(SEXP slot, const char* name, mat_t* mat)
+int write_sparse(SEXP elmt, const char* name, mat_t* mat)
 {
   size_t dims[2];
   matvar_t *matvar;
   mat_sparse_t  sparse = {0,};
 
-  if(slot == R_NilValue || LENGTH(GET_SLOT(slot, Rf_install("Dim"))) != 2)
+  if(elmt == R_NilValue || LENGTH(GET_SLOT(elmt, Rf_install("Dim"))) != 2)
     return 1;
 
-  dims[0] = INTEGER(GET_SLOT(slot, Rf_install("Dim")))[0];
-  dims[1] = INTEGER(GET_SLOT(slot, Rf_install("Dim")))[1];
-  sparse.nzmax = LENGTH(GET_SLOT(slot, Rf_install("i")));
-  sparse.ir = INTEGER(GET_SLOT(slot, Rf_install("i")));
-  sparse.nir = LENGTH(GET_SLOT(slot, Rf_install("i")));
-  sparse.jc = INTEGER(GET_SLOT(slot, Rf_install("p")));
-  sparse.njc = LENGTH(GET_SLOT(slot, Rf_install("p")));
-  sparse.data = REAL(GET_SLOT(slot, Rf_install("x")));
-  sparse.ndata = LENGTH(GET_SLOT(slot, Rf_install("x")));
+  dims[0] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[0];
+  dims[1] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[1];
+  sparse.nzmax = LENGTH(GET_SLOT(elmt, Rf_install("i")));
+  sparse.ir = INTEGER(GET_SLOT(elmt, Rf_install("i")));
+  sparse.nir = LENGTH(GET_SLOT(elmt, Rf_install("i")));
+  sparse.jc = INTEGER(GET_SLOT(elmt, Rf_install("p")));
+  sparse.njc = LENGTH(GET_SLOT(elmt, Rf_install("p")));
+  sparse.data = REAL(GET_SLOT(elmt, Rf_install("x")));
+  sparse.ndata = LENGTH(GET_SLOT(elmt, Rf_install("x")));
 
   matvar = Mat_VarCreate(name,
   			 MAT_C_SPARSE,
@@ -58,17 +58,14 @@ int write_sparse(SEXP slot, const char* name, mat_t* mat)
   return 0;
 }
 
-/* Write a R vector or matrix to mat file.         */
-/* Currently, only integer and real are supported. */
-/* Vectors are written as 1 x length               */
 int write_vector(SEXP elmt, mat_t *mat, const char *name)
 {
-  size_t* dims;
+  size_t *dims, len;
   int rank;
-  matvar_t *matvar;
-  int do_unprotect=0;
-  double* re = NULL;
-  double* im = NULL;
+  matvar_t *matvar=NULL;
+  double *re = NULL;
+  double *im = NULL;
+  mat_uint8_t *logical = NULL;
   struct mat_complex_split_t z;
 
   if(elmt == R_NilValue || !isVector(elmt))
@@ -90,9 +87,41 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
       dims[i] = INTEGER(GET_SLOT(elmt, R_DimSymbol))[i];
   }
 
-  if(isComplex(elmt)) {
+  switch(TYPEOF(elmt)) {
+  case REALSXP:
+    matvar = Mat_VarCreate(name,
+			   MAT_C_DOUBLE,
+			   MAT_T_DOUBLE,
+			   rank,
+			   dims,
+			   REAL(elmt),
+			   0);
+    break;
+
+  case INTSXP:
+    matvar = Mat_VarCreate(name,
+			   MAT_C_INT32,
+			   MAT_T_INT32,
+			   rank,
+			   dims,
+			   INTEGER(elmt),
+			   0);
+    break;
+
+  case CPLXSXP:
     re = malloc(LENGTH(elmt)*sizeof(double));
+    if(re == NULL) {
+      free(dims);
+      return 1;
+    }
+    
     im = malloc(LENGTH(elmt)*sizeof(double));
+    if(im == NULL) {
+      free(dims);
+      free(re);
+      return 1;
+    }
+
     for(int i=0;i<LENGTH(elmt);i++) {
       re[i] = COMPLEX(elmt)[i].r;
       im[i] = COMPLEX(elmt)[i].i;
@@ -107,32 +136,40 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
 			   dims,
 			   &z,
 			   MAT_F_COMPLEX);
-  } else {
-    if(isInteger(elmt)) {
-      PROTECT(elmt = AS_NUMERIC(elmt));
-      do_unprotect=1;
-    } else if(!isReal(elmt)) {
+    break;
+
+  case LGLSXP:
+    len = dims[0];
+    for(int i=1;i<rank;i++)
+      len *= dims[i];
+
+    logical = malloc(len*sizeof(mat_uint8_t));
+    if(logical == NULL) {
       free(dims);
       return 1;
     }
 
+    for(size_t i=0;i<len;i++)
+      logical[i] = LOGICAL(elmt)[i] != 0;
+
     matvar = Mat_VarCreate(name,
-			   MAT_C_DOUBLE,
-			   MAT_T_DOUBLE,
+			   MAT_C_UINT8,
+			   MAT_T_UINT8,
 			   rank,
 			   dims,
-			   REAL(elmt),
-			   0);
+			   logical,
+			   MAT_F_LOGICAL);
+    break;
   }
 
   if(matvar == NULL) {
-    if(do_unprotect)
-      UNPROTECT(1);
     free(dims);
     if(re)
       free(re);
     if(im)
       free(im);
+    if(logical)
+      free(logical);
     return 1;
   }
 
@@ -143,8 +180,8 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
     free(re);
   if(im)
     free(im);
-  if(do_unprotect)
-    UNPROTECT(1);
+  if(logical)
+    free(logical);
 
   return 0;
 }
@@ -912,6 +949,7 @@ SEXP write_mat(SEXP list, SEXP filename, SEXP version)
     case REALSXP:
     case INTSXP:
     case CPLXSXP:
+    case LGLSXP:
       err = write_vector(elmt, mat, CHAR(STRING_ELT(names, i)));
       break;
 
