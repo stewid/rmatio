@@ -149,6 +149,54 @@ int write_vector(SEXP elmt, mat_t *mat, const char *name)
   return 0;
 }
 
+int write_string(SEXP elmt, mat_t *mat, const char *name)
+{
+  size_t* dims;
+  matvar_t *matvar;
+  int rank = 2;
+  mat_uint8_t *buf;
+
+  if(elmt == R_NilValue
+     || TYPEOF(elmt) != STRSXP
+     || !isNull(getAttrib(elmt, R_DimSymbol)))
+    return 1;
+
+  dims = calloc(rank, sizeof(size_t));
+  if(dims == NULL)
+    return 1;
+  dims[0] = LENGTH(elmt);
+  if(dims[0])
+    dims[1] = LENGTH(STRING_ELT(elmt, 0));
+  
+  /* Copy data and check that all strings have equal length */
+  buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
+  for(size_t i=0;i<dims[0];i++) {
+    if(dims[1] != LENGTH(STRING_ELT(elmt, i))) {
+      free(buf);
+      free(dims);
+      return 1;
+    }
+
+    for(size_t j=0;j<dims[1];j++)
+      buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
+  }
+
+  matvar = Mat_VarCreate(name,
+  			 MAT_C_CHAR,
+  			 MAT_T_UINT8,
+  			 rank,
+  			 dims,
+  			 buf,
+  			 0);
+
+  Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+  Mat_VarFree(matvar);
+  free(buf);
+  free(dims);
+
+  return 0;
+}
+
 int number_of_variables(mat_t *mat)
 {
   int len=0;
@@ -835,49 +883,13 @@ SEXP read_mat(SEXP filename)
   return list;    
 }
 
-int write_element(SEXP elmt, const char* name, mat_t* mat)
-{
-  SEXP class_name;
-  int *dims;
-  int err = 1;
-
-  if(elmt != R_NilValue) {
-    if(isVector(elmt))
-      err = write_vector(elmt, mat, name);
-    else if(isS4(elmt)) {
-      class_name = getAttrib(elmt, R_ClassSymbol);
-      
-      if(strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0) {
-	err = write_sparse(elmt, name, mat);
-      }
-    }
-  }
-  
-  return err;
-}
-
-int write_list(SEXP list, mat_t* mat)
+SEXP write_mat(SEXP list, SEXP filename, SEXP version)
 {
   SEXP names;    /* names in list */
   SEXP elmt;     /* element in list */
-
-  if(list == R_NilValue || !isNewList(list))
-    return 1;
-
-  names = getAttrib(list, R_NamesSymbol);
-  for (int i = 0; i < length(list); i++) {
-    elmt = VECTOR_ELT(list, i);
-    if(elmt == R_NilValue
-       || write_element(elmt, CHAR(STRING_ELT(names, i)), mat))
-      return 1;
-  }
-
-  return 0;
-}
-
-SEXP write_mat(SEXP list, SEXP filename, SEXP version)
-{
+  SEXP class_name;
   mat_t *mat;
+  int err;
 
   if(list == R_NilValue)
     error("'list' equals R_NilValue.");
@@ -892,13 +904,40 @@ SEXP write_mat(SEXP list, SEXP filename, SEXP version)
   if(!mat)
     error("Unable to open file.");
 
-  if(write_list(list, mat)) {
-    Mat_Close(mat);
-    error("Unable to write list");
+  names = getAttrib(list, R_NamesSymbol);
+  for (int i = 0; i < length(list); i++) {
+    elmt = VECTOR_ELT(list, i);
+
+    switch(TYPEOF(elmt)) {
+    case REALSXP:
+    case INTSXP:
+    case CPLXSXP:
+      err = write_vector(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
+    case STRSXP:
+      err= write_string(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
+    case S4SXP:
+      class_name = getAttrib(elmt, R_ClassSymbol);      
+      if(strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+	err= write_sparse(elmt, CHAR(STRING_ELT(names, i)), mat);
+      else
+	err = 1;
+      break;
+
+    default:
+      Mat_Close(mat);
+      error("Unsupported SEXPTYPE: %i\n", TYPEOF(elmt));
+    }
+
+    if(err) {
+      Mat_Close(mat);
+      error("Unable to write list");
+    }
   }
 
-  Mat_Close(mat);
-  
   return R_NilValue;
 }
 
