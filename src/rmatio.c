@@ -58,130 +58,194 @@ int write_sparse(SEXP elmt, const char* name, mat_t* mat)
   return 0;
 }
 
-int write_vector(SEXP elmt, mat_t *mat, const char *name)
+int get_dim(SEXP elmt, int *rank, size_t **dims)
+{
+  if(isNull(getAttrib(elmt, R_DimSymbol))) {
+    *rank = 2;
+    *dims = malloc((*rank)*sizeof(size_t));
+    if(dims == NULL)
+      return 1;
+    (*dims)[0] = 1;
+    (*dims)[1] = LENGTH(elmt);
+  } else {
+    *rank = LENGTH(GET_SLOT(elmt, R_DimSymbol));
+    *dims = malloc((*rank)*sizeof(size_t));
+    if(*dims == NULL)
+      return 1;
+    for(int i=0;i<*rank;i++)
+      (*dims)[i] = INTEGER(GET_SLOT(elmt, R_DimSymbol))[i];
+  }
+
+  return 0;
+}
+
+int write_realsxp(SEXP elmt, mat_t *mat, const char *name)
 {
   size_t *dims, len;
   int rank;
   matvar_t *matvar=NULL;
-  double *re = NULL;
-  double *im = NULL;
-  mat_uint8_t *logical = NULL;
-  struct mat_complex_split_t z;
 
-  if(elmt == R_NilValue || !isVector(elmt))
+  if(elmt == R_NilValue || TYPEOF(elmt) != REALSXP)
     return 1;
 
-  if(isNull(getAttrib(elmt, R_DimSymbol))) {
-    rank = 2;
-    dims = malloc(rank*sizeof(size_t));
-    if(dims == NULL)
-      return 1;
-    dims[0] = 1;
-    dims[1] = LENGTH(elmt);
-  } else {
-    rank = LENGTH(GET_SLOT(elmt, R_DimSymbol));
-    dims = malloc(rank*sizeof(size_t));
-    if(dims == NULL)
-      return 1;
-    for(int i=0;i<rank;i++)
-      dims[i] = INTEGER(GET_SLOT(elmt, R_DimSymbol))[i];
-  }
+  if(get_dim(elmt, &rank, &dims))
+    return 1;
 
-  switch(TYPEOF(elmt)) {
-  case REALSXP:
-    matvar = Mat_VarCreate(name,
-			   MAT_C_DOUBLE,
-			   MAT_T_DOUBLE,
-			   rank,
-			   dims,
-			   REAL(elmt),
-			   0);
-    break;
-
-  case INTSXP:
-    matvar = Mat_VarCreate(name,
-			   MAT_C_INT32,
-			   MAT_T_INT32,
-			   rank,
-			   dims,
-			   INTEGER(elmt),
-			   0);
-    break;
-
-  case CPLXSXP:
-    re = malloc(LENGTH(elmt)*sizeof(double));
-    if(re == NULL) {
-      free(dims);
-      return 1;
-    }
-    
-    im = malloc(LENGTH(elmt)*sizeof(double));
-    if(im == NULL) {
-      free(dims);
-      free(re);
-      return 1;
-    }
-
-    for(int i=0;i<LENGTH(elmt);i++) {
-      re[i] = COMPLEX(elmt)[i].r;
-      im[i] = COMPLEX(elmt)[i].i;
-    }
-
-    z.Re = re;
-    z.Im = im;
-    matvar = Mat_VarCreate(name,
-			   MAT_C_DOUBLE,
-			   MAT_T_DOUBLE,
-			   rank,
-			   dims,
-			   &z,
-			   MAT_F_COMPLEX);
-    break;
-
-  case LGLSXP:
-    len = dims[0];
-    for(int i=1;i<rank;i++)
-      len *= dims[i];
-
-    logical = malloc(len*sizeof(mat_uint8_t));
-    if(logical == NULL) {
-      free(dims);
-      return 1;
-    }
-
-    for(size_t i=0;i<len;i++)
-      logical[i] = LOGICAL(elmt)[i] != 0;
-
-    matvar = Mat_VarCreate(name,
-			   MAT_C_UINT8,
-			   MAT_T_UINT8,
-			   rank,
-			   dims,
-			   logical,
-			   MAT_F_LOGICAL);
-    break;
-  }
+  matvar = Mat_VarCreate(name,
+			 MAT_C_DOUBLE,
+			 MAT_T_DOUBLE,
+			 rank,
+			 dims,
+			 REAL(elmt),
+			 0);
 
   if(matvar == NULL) {
     free(dims);
-    if(re)
-      free(re);
-    if(im)
-      free(im);
-    if(logical)
-      free(logical);
     return 1;
   }
 
   Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
   Mat_VarFree(matvar);
   free(dims);
-  if(re)
+
+  return 0;
+}
+
+int write_intsxp(SEXP elmt, mat_t *mat, const char *name)
+{
+  size_t *dims, len;
+  int rank;
+  matvar_t *matvar=NULL;
+
+  if(elmt == R_NilValue || TYPEOF(elmt) != INTSXP)
+    return 1;
+
+  if(get_dim(elmt, &rank, &dims))
+    return 1;
+
+  matvar = Mat_VarCreate(name,
+			 MAT_C_INT32,
+			 MAT_T_INT32,
+			 rank,
+			 dims,
+			 INTEGER(elmt),
+			 0);
+
+  if(matvar == NULL) {
+    free(dims);
+    return 1;
+  }
+
+  Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+  Mat_VarFree(matvar);
+  free(dims);
+
+  return 0;
+}
+
+int write_cplxsxp(SEXP elmt, mat_t *mat, const char *name)
+{
+  size_t *dims;
+  int rank;
+  matvar_t *matvar=NULL;
+  double *re = NULL;
+  double *im = NULL;
+  struct mat_complex_split_t z;
+
+  if(elmt == R_NilValue || TYPEOF(elmt) != CPLXSXP)
+    return 1;
+
+  if(get_dim(elmt, &rank, &dims))
+    return 1;
+
+  re = malloc(LENGTH(elmt)*sizeof(double));
+  if(re == NULL) {
+    free(dims);
+    return 1;
+  }
+    
+  im = malloc(LENGTH(elmt)*sizeof(double));
+  if(im == NULL) {
+    free(dims);
     free(re);
-  if(im)
+    return 1;
+  }
+
+  for(int i=0;i<LENGTH(elmt);i++) {
+    re[i] = COMPLEX(elmt)[i].r;
+    im[i] = COMPLEX(elmt)[i].i;
+  }
+
+  z.Re = re;
+  z.Im = im;
+  matvar = Mat_VarCreate(name,
+			 MAT_C_DOUBLE,
+			 MAT_T_DOUBLE,
+			 rank,
+			 dims,
+			 &z,
+			 MAT_F_COMPLEX);
+
+  if(matvar == NULL) {
+    free(dims);
+    free(re);
     free(im);
-  if(logical)
+    return 1;
+  }
+
+  Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+  Mat_VarFree(matvar);
+  free(dims);
+  free(re);
+  free(im);
+
+  return 0;
+}
+
+int write_lglsxp(SEXP elmt, mat_t *mat, const char *name)
+{
+  size_t *dims, len;
+  int rank;
+  matvar_t *matvar = NULL;
+  mat_uint8_t *logical = NULL;
+
+  if(elmt == R_NilValue || TYPEOF(elmt) != LGLSXP)
+    return 1;
+
+  if(get_dim(elmt, &rank, &dims))
+    return 1;
+
+  len = dims[0];
+  for(int i=1;i<rank;i++)
+    len *= dims[i];
+
+  logical = malloc(len*sizeof(mat_uint8_t));
+  if(logical == NULL) {
+    free(dims);
+    return 1;
+  }
+
+  for(size_t i=0;i<len;i++)
+    logical[i] = LOGICAL(elmt)[i] != 0;
+
+  matvar = Mat_VarCreate(name,
+			 MAT_C_UINT8,
+			 MAT_T_UINT8,
+			 rank,
+			 dims,
+			 logical,
+			 MAT_F_LOGICAL);
+
+  if(matvar == NULL) {
+    free(dims);
     free(logical);
+    return 1;
+  }
+
+  Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+  Mat_VarFree(matvar);
+  free(dims);
+  free(logical);
 
   return 0;
 }
@@ -490,6 +554,122 @@ int read_mat_complex(SEXP list, int index, matvar_t *matvar)
   return 0;
 }
 
+int read_mat_data(SEXP list, int index, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j, len;
+
+  if(matvar == NULL || matvar->rank < 2 || matvar->isComplex)
+    return 1;
+
+  len = matvar->dims[0];
+  for(j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+
+  switch(matvar->data_type) {
+  case MAT_T_SINGLE:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((float*)matvar->data)[j];
+    break;
+
+  case MAT_T_DOUBLE:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((double*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT64:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_int64_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT32:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int32_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT16:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int16_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_INT8:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_int8_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT64:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_uint64_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT32:
+    PROTECT(m = allocVector(REALSXP, len));
+    for(j=0;j<len;j++)
+      REAL(m)[j] = ((mat_uint32_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT16:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_uint16_t*)matvar->data)[j];
+    break;
+
+  case MAT_T_UINT8:
+    PROTECT(m = allocVector(INTSXP, len));
+    for(j=0;j<len;j++)
+      INTEGER(m)[j] = ((mat_uint8_t*)matvar->data)[j];
+    break;
+
+  default:
+    error("Unimplemented Matlab data type");
+    break;
+  }
+
+  set_dim(m, matvar);
+  SET_VECTOR_ELT(list, index, m);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
+int read_mat_logical(SEXP list, int index, matvar_t *matvar)
+{
+  SEXP m;
+  size_t j, len;
+
+  if(matvar == NULL || matvar->rank < 2 || !matvar->isLogical)
+    return 1;
+
+  len = matvar->dims[0];
+  for(j=1;j<matvar->rank;j++)
+    len *= matvar->dims[j];
+
+  switch(matvar->data_type) {
+  case MAT_T_UINT8:
+    PROTECT(m = allocVector(LGLSXP, len));
+    for(j=0;j<len;j++)
+      LOGICAL(m)[j] = ((mat_uint8_t*)matvar->data)[j] != 0;
+    break;
+
+  default:
+    error("Unimplemented Matlab logical data type");
+    break;
+  }
+
+  set_dim(m, matvar);
+  SET_VECTOR_ELT(list, index, m);
+  UNPROTECT(1);
+  
+  return 0;
+}
+
 int read_mat_struct(SEXP list, int index, matvar_t *matvar)
 {
   SEXP names, struc, s, elmt;
@@ -700,122 +880,6 @@ int read_mat_cell(SEXP list, int index, matvar_t *matvar)
   return 0;
 }
 
-int read_mat_data(SEXP list, int index, matvar_t *matvar)
-{
-  SEXP m;
-  size_t j, len;
-
-  if(matvar == NULL || matvar->rank < 2 || matvar->isComplex)
-    return 1;
-
-  len = matvar->dims[0];
-  for(j=1;j<matvar->rank;j++)
-    len *= matvar->dims[j];
-
-  switch(matvar->data_type) {
-  case MAT_T_SINGLE:
-    PROTECT(m = allocVector(REALSXP, len));
-    for(j=0;j<len;j++)
-      REAL(m)[j] = ((float*)matvar->data)[j];
-    break;
-
-  case MAT_T_DOUBLE:
-    PROTECT(m = allocVector(REALSXP, len));
-    for(j=0;j<len;j++)
-      REAL(m)[j] = ((double*)matvar->data)[j];
-    break;
-
-  case MAT_T_INT64:
-    PROTECT(m = allocVector(REALSXP, len));
-    for(j=0;j<len;j++)
-      REAL(m)[j] = ((mat_int64_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_INT32:
-    PROTECT(m = allocVector(INTSXP, len));
-    for(j=0;j<len;j++)
-      INTEGER(m)[j] = ((mat_int32_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_INT16:
-    PROTECT(m = allocVector(INTSXP, len));
-    for(j=0;j<len;j++)
-      INTEGER(m)[j] = ((mat_int16_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_INT8:
-    PROTECT(m = allocVector(INTSXP, len));
-    for(j=0;j<len;j++)
-      INTEGER(m)[j] = ((mat_int8_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_UINT64:
-    PROTECT(m = allocVector(REALSXP, len));
-    for(j=0;j<len;j++)
-      REAL(m)[j] = ((mat_uint64_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_UINT32:
-    PROTECT(m = allocVector(REALSXP, len));
-    for(j=0;j<len;j++)
-      REAL(m)[j] = ((mat_uint32_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_UINT16:
-    PROTECT(m = allocVector(INTSXP, len));
-    for(j=0;j<len;j++)
-      INTEGER(m)[j] = ((mat_uint16_t*)matvar->data)[j];
-    break;
-
-  case MAT_T_UINT8:
-    PROTECT(m = allocVector(INTSXP, len));
-    for(j=0;j<len;j++)
-      INTEGER(m)[j] = ((mat_uint8_t*)matvar->data)[j];
-    break;
-
-  default:
-    error("Unimplemented Matlab data type");
-    break;
-  }
-
-  set_dim(m, matvar);
-  SET_VECTOR_ELT(list, index, m);
-  UNPROTECT(1);
-  
-  return 0;
-}
-
-int read_mat_logical(SEXP list, int index, matvar_t *matvar)
-{
-  SEXP m;
-  size_t j, len;
-
-  if(matvar == NULL || matvar->rank < 2 || !matvar->isLogical)
-    return 1;
-
-  len = matvar->dims[0];
-  for(j=1;j<matvar->rank;j++)
-    len *= matvar->dims[j];
-
-  switch(matvar->data_type) {
-  case MAT_T_UINT8:
-    PROTECT(m = allocVector(LGLSXP, len));
-    for(j=0;j<len;j++)
-      LOGICAL(m)[j] = ((mat_uint8_t*)matvar->data)[j] != 0;
-    break;
-
-  default:
-    error("Unimplemented Matlab logical data type");
-    break;
-  }
-
-  set_dim(m, matvar);
-  SET_VECTOR_ELT(list, index, m);
-  UNPROTECT(1);
-  
-  return 0;
-}
-
 SEXP read_mat(SEXP filename)
 {
   mat_t *mat;
@@ -947,10 +1011,19 @@ SEXP write_mat(SEXP list, SEXP filename, SEXP version)
 
     switch(TYPEOF(elmt)) {
     case REALSXP:
+      err = write_realsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
     case INTSXP:
+      err = write_intsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
     case CPLXSXP:
+      err = write_cplxsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
     case LGLSXP:
-      err = write_vector(elmt, mat, CHAR(STRING_ELT(names, i)));
+      err = write_lglsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
       break;
 
     case STRSXP:
