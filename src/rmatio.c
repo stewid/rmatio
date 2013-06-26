@@ -250,7 +250,7 @@ int write_lglsxp(SEXP elmt, mat_t *mat, const char *name)
   return 0;
 }
 
-int write_string(SEXP elmt, mat_t *mat, const char *name)
+int write_strsxp(SEXP elmt, mat_t *mat, const char *name)
 {
   size_t* dims;
   matvar_t *matvar;
@@ -290,12 +290,78 @@ int write_string(SEXP elmt, mat_t *mat, const char *name)
   			 buf,
   			 0);
 
+  if(matvar == NULL) {
+    free(buf);
+    free(dims);
+    return 1;
+  }
+
   Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
   Mat_VarFree(matvar);
   free(buf);
   free(dims);
 
   return 0;
+}
+
+int write_cell(SEXP elmt, mat_t *mat, const char *name)
+{
+  return 1;
+}
+
+int write_struct(SEXP elmt, SEXP names, mat_t *mat, const char *name)
+{
+  size_t* dims;
+  matvar_t *matvar;
+  int rank;
+
+  if(elmt == R_NilValue
+     || TYPEOF(elmt) != VECSXP
+     || names == R_NilValue)
+    return 1;
+
+  rank = 2;
+  dims = malloc(rank*sizeof(size_t));
+  dims[0] = 1;
+  dims[1] = 1;
+
+  if(LENGTH(elmt)) {
+    matvar == NULL;
+  } else {
+    matvar = Mat_VarCreate(name,
+			   MAT_C_STRUCT,
+			   MAT_T_STRUCT,
+			   rank,
+			   dims,
+			   0,
+			   0);
+  }
+
+  if(matvar == NULL) {
+    free(dims);
+    return 1;
+  }
+
+  Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+  Mat_VarFree(matvar);
+
+  free(dims);
+
+  return 0;
+}
+
+int write_vecsxp(SEXP elmt, mat_t *mat, const char *name)
+{
+  SEXP names;
+
+  if(elmt == R_NilValue || TYPEOF(elmt) != VECSXP)
+    return 1;
+
+  names = getAttrib(elmt, R_NamesSymbol);
+  if(names == R_NilValue)
+    return write_cell(elmt, mat, name);
+  else
+    return write_struct(elmt, names, mat, name);
 }
 
 int number_of_variables(mat_t *mat)
@@ -1027,7 +1093,11 @@ SEXP write_mat(SEXP list, SEXP filename, SEXP version)
       break;
 
     case STRSXP:
-      err= write_string(elmt, mat, CHAR(STRING_ELT(names, i)));
+      err = write_strsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
+      break;
+
+    case VECSXP:
+      err = write_vecsxp(elmt, mat, CHAR(STRING_ELT(names, i)));
       break;
 
     case S4SXP:
