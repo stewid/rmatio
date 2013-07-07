@@ -158,18 +158,18 @@ test_that("complex: case-1", {
 context("string")
 
 test_that("string: case-1", {
-  filename <- tempfile(fileext = ".mat")
-  on.exit(unlink(filename))
+    filename <- tempfile(fileext = ".mat")
+    on.exit(unlink(filename))
     
-  a.1 <- c("abcdefghijklmnopqrstuvwxyz",
-           "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-           "1234567890!@#$%^&*()-_=+`~",
-           "[{]}\\|;:'\",<.>/?          ")
-
-  write.mat(list(a=a.1), filename=filename)
-  a.2 <- read.mat(filename)[['a']]
+    a.1 <- c("abcdefghijklmnopqrstuvwxyz",
+             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+             "1234567890!@#$%^&*()-_=+`~",
+             "[{]}\\|;:'\",<.>/?          ")
     
-  expect_identical(a.2, a.1)
+    write.mat(list(a=a.1), filename=filename)
+    a.2 <- read.mat(filename)[['a']]
+    
+    expect_identical(a.2, a.1)
 })
 
 context("logical")
@@ -193,7 +193,7 @@ test_that("logical: case-1", {
 
 context("struct")
 
-test_that("struct: case-1", {
+test_that("struct: case-1 (Empty structure array)", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
     
@@ -205,7 +205,7 @@ test_that("struct: case-1", {
   expect_identical(a.2, a.1)
 })
 
-test_that("struct: case-2", {
+test_that("struct: case-2 (Empty structure array with fields)", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
@@ -217,11 +217,15 @@ test_that("struct: case-2", {
   expect_identical(a.2, a.1)
 })
 
-test_that("struct: case-3", {
+test_that("struct: case-3 (Structure array with empty fields)", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  a.1 <- list(field1=list(numeric(0)), field2=character(0))
+  a.1 <- list(field1=numeric(0),
+              field2=character(0),
+              field3=complex(0),
+              filed4=integer(0),
+              field5=logical(0))
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
@@ -310,9 +314,33 @@ test_that("struct: case-9", {
   on.exit(unlink(filename))
 
   a.1 <- list(field1 = c("abcdefghijklmnopqrstuvwxyz",
-                  "234567890!@#$%^&*()-_=+`~"),
+                  "1234567890!@#$%^&*()-_=+`~"),
               field2 = c("ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                  "{]}\\|;:'\",<.>/?          "))
+                  "[{]}\\|;:'\",<.>/?          "))
+  
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+    
+  expect_identical(a.2, a.1)
+})
+
+test_that("struct: case-10 (Structure array with empty fields)", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(field1=numeric(0))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+    
+  expect_identical(a.2, a.1)
+})
+
+test_that("struct: case-11", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(field1=list(1))
   
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
