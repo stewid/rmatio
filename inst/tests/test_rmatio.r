@@ -468,9 +468,11 @@ test_that("cell: case-2", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  a.1 <- list(list(numeric(0), numeric(0), numeric(0), numeric(0),
-                   integer(0), numeric(0), integer(0), integer(0), integer(0),
-                   integer(0)))
+  a.1 <- list(complex(0),
+              logical(0),
+              character(0),
+              numeric(0),
+              integer(0))
   
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
