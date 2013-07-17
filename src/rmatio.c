@@ -89,10 +89,9 @@ write_realsxp(const SEXP elmt,
 			 REAL(elmt),
 			 0);
 
-  if (NULL == matvar) {
-    free(dims);
+  free(dims);
+  if (NULL == matvar)
     return 1;
-  }
 
   if (mat_struct) {
     Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
@@ -102,8 +101,6 @@ write_realsxp(const SEXP elmt,
     Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
     Mat_VarFree(matvar);
   }
-
-  free(dims);
 
   return 0;
 }
@@ -149,10 +146,9 @@ write_intsxp(const SEXP elmt,
   			 INTEGER(elmt),
   			 0);
 
-  if (NULL == matvar) {
-    free(dims);
+  free(dims);
+  if (NULL == matvar)
     return 1;
-  }
 
   if (mat_struct) {
     Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
@@ -162,8 +158,6 @@ write_intsxp(const SEXP elmt,
     Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
     Mat_VarFree(matvar);
   }
-
-  free(dims);
 
   return 0;
 }
@@ -232,12 +226,11 @@ write_cplxsxp(const SEXP elmt,
 			 &z,
 			 MAT_F_COMPLEX);
 
-  if (NULL == matvar) {
-    free(dims);
-    free(re);
-    free(im);
+  free(dims);
+  free(re);
+  free(im);
+  if (NULL == matvar)
     return 1;
-  }
 
   if (mat_struct) {
     Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
@@ -247,10 +240,6 @@ write_cplxsxp(const SEXP elmt,
     Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
     Mat_VarFree(matvar);
   }
-
-  free(dims);
-  free(re);
-  free(im);
 
   return 0;
 }
@@ -310,11 +299,10 @@ write_lglsxp(const SEXP elmt,
 			 logical,
 			 MAT_F_LOGICAL);
 
-  if (NULL == matvar) {
-    free(dims);
-    free(logical);
+  free(dims);
+  free(logical);
+  if (NULL == matvar)
     return 1;
-  }
 
   if (mat_struct) {
     Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
@@ -324,9 +312,6 @@ write_lglsxp(const SEXP elmt,
     Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
     Mat_VarFree(matvar);
   }
-
-  free(dims);
-  free(logical);
 
   return 0;
 }
@@ -376,7 +361,6 @@ write_strsxp(const SEXP elmt,
 
   if (mat_struct) {
     if (dims[1] != LENGTH(STRING_ELT(elmt, index))) {
-      free(buf);
       free(dims);
       return 1;
     }
@@ -410,14 +394,13 @@ write_strsxp(const SEXP elmt,
 			   dims,
 			   buf,
 			   0);
+
+    free(buf);
   }
 
-  if (NULL == matvar) {
-    if (buf)
-      free(buf);
-    free(dims);
+  free(dims);
+  if (NULL == matvar)
     return 1;
-  }
 
   if (mat_struct) {
     Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
@@ -427,10 +410,6 @@ write_strsxp(const SEXP elmt,
     Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
     Mat_VarFree(matvar);
   }
-
-  if (buf)
-    free(buf);
-  free(dims);
 
   return 0;
 }
