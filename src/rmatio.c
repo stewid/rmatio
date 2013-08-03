@@ -54,7 +54,7 @@ write_struct(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -111,7 +111,7 @@ write_realsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -168,7 +168,7 @@ write_intsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -250,7 +250,7 @@ write_cplxsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -322,7 +322,7 @@ write_lglsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -420,7 +420,7 @@ write_strsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -462,7 +462,7 @@ write_vecsxp(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -525,7 +525,7 @@ write_sparse(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -994,7 +994,7 @@ write_cell_array_with_arrays(const SEXP elmt,
  * @ingroup 
  * @param elmt R object to write
  * @param mat MAT file pointer
- * @param name
+ * @param name Name of the variable to write
  * @return 0 on succes or 1 on failure. 
  */
 static int
@@ -1132,7 +1132,7 @@ write_structure_array_with_fields(const SEXP elmt,
  * @param elmt R object to write
  * @param names
  * @param mat
- * @param name
+ * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
