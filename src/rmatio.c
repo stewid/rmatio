@@ -904,6 +904,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
 
       	  cell = Mat_VarCreateStruct(NULL, rank, dims, fieldnames, LENGTH(item));
 	  free(fieldnames);
+      	  if (NULL == cell)
+      	    return 1;
 
 	  if (1 == dims[0]) {
 	    for (j=0;j<LENGTH(item);j++) {
@@ -924,9 +926,6 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
 	      Mat_VarSetStructFieldByIndex(cell, j, 0, field);
 	    }
 	  }
-
-      	  if (NULL == cell)
-      	    return 1;
       	} else {
       	  cell = Mat_VarCreateStruct(NULL, rank, dims_1_1, NULL, 0);
       	}
