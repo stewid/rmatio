@@ -2231,6 +2231,8 @@ read_cell_array_with_arrays(SEXP list,
   for (i=0;i<matvar->dims[0];i++) {
     if (matvar->dims[1] > 1)
       PROTECT(cell_row = allocVector(VECSXP, matvar->dims[1]));
+    else
+      cell_row = R_NilValue;
 
     for (j=0;j<matvar->dims[1];j++) {
       mat_cell = Mat_VarGetCell(matvar, j*matvar->dims[0] + i);
@@ -2246,28 +2248,28 @@ read_cell_array_with_arrays(SEXP list,
       case MAT_C_UINT32:
       case MAT_C_UINT16:
       case MAT_C_UINT8:
-	if (matvar->dims[1] > 1) {
-	  if (mat_cell->isLogical)
-	    err = read_logical(cell_row, j, mat_cell);
-	  else if (mat_cell->isComplex)
-	    err = read_mat_complex(cell_row, j, mat_cell);
-	  else
-	    err = read_mat_data(cell_row, j, mat_cell);
-	} else {
+	if (R_NilValue == cell_row) {
 	  if (mat_cell->isLogical)
 	    err = read_logical(cell, i, mat_cell);
 	  else if (mat_cell->isComplex)
 	    err = read_mat_complex(cell, i, mat_cell);
 	  else
 	    err = read_mat_data(cell, i, mat_cell);
+	} else {
+	  if (mat_cell->isLogical)
+	    err = read_logical(cell_row, j, mat_cell);
+	  else if (mat_cell->isComplex)
+	    err = read_mat_complex(cell_row, j, mat_cell);
+	  else
+	    err = read_mat_data(cell_row, j, mat_cell);
 	}
   	break;
 	
       case MAT_C_SPARSE:
-	if (matvar->dims[1] > 1)
-	  err = read_sparse(cell_row, j, mat_cell);
-	else
+	if (R_NilValue == cell_row)
 	  err = read_sparse(cell, i, mat_cell);
+	else
+	  err = read_sparse(cell_row, j, mat_cell);
   	break;
 	
       case MAT_C_CHAR:
@@ -2275,7 +2277,10 @@ read_cell_array_with_arrays(SEXP list,
   	break;
 
       case MAT_C_STRUCT:
-  	err = read_mat_struct(cell, i, mat_cell);
+	if (R_NilValue == cell_row)
+	  err = read_mat_struct(cell, i, mat_cell);
+	else
+	  err = read_mat_struct(cell_row, j, mat_cell);
   	break;
 	
       default:
@@ -2289,7 +2294,7 @@ read_cell_array_with_arrays(SEXP list,
       }
     }
 
-    if (matvar->dims[1] > 1) {
+    if (R_NilValue != cell_row) {
       SET_VECTOR_ELT(cell, i, cell_row);
       UNPROTECT(1);
     }
