@@ -703,14 +703,16 @@ set_dims(const SEXP elmt,
     return 1;
 
   /* Check if cell (have no names) or structure array. */
-  is_cell =  getAttrib(elmt, R_NamesSymbol) == R_NilValue;
+  is_cell =  R_NilValue == getAttrib(elmt, R_NamesSymbol);
 
   if (LENGTH(elmt)) {
     for (i=0;i<LENGTH(elmt);i++) {
       item = VECTOR_ELT(elmt, i);
       switch (TYPEOF(item)) {
       case VECSXP:
-	if (vec_len(item, &tmp))
+	if (R_NilValue == getAttrib(item, R_NamesSymbol))
+	  tmp = LENGTH(item);
+	else if (vec_len(item, &tmp))
 	  return 1;
 	if (!i)
 	  len = tmp;
