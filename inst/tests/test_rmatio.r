@@ -259,6 +259,25 @@ test_that("logical: case-1", {
   expect_identical(a.2, a.1)
 })
 
+test_that("logical: case-2", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+    
+  a.1 <- new("lgCMatrix",
+             i = c(6L, 0L, 4L, 5L, 0L, 2L, 4L, 1L, 4L, 6L, 7L, 3L, 4L),
+             p = c(0L, 1L, 4L, 7L, 11L, 13L),
+             Dim = c(10L, 5L),
+             Dimnames = list(NULL, NULL),
+             x = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
+                 TRUE, TRUE, TRUE),
+             factors = list())
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+    
+  expect_identical(a.2, a.1)
+})
+
 context("struct")
 
 test_that("struct: case-1 (Empty structure array)", {
@@ -580,8 +599,8 @@ test_that("cell: case-8", {
 
 
 test_that("cell: case-9", {
-  ## filename <- tempfile(fileext = ".mat")
-  ## on.exit(unlink(filename))
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
 
   a.1 <- list(list(structure(list(field1 = list(1, 14), field2 =
                   list( structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
@@ -693,10 +712,10 @@ test_that("cell: case-9", {
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2"))))
   
-  ## write.mat(list(a=a.1), filename=filename)
-  ## a.2 <- read.mat(filename)[['a']]
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
     
-  ## expect_identical(a.2, a.1)
+  expect_identical(a.2, a.1)
 })
 
 test_that("cell: case-10", {

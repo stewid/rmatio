@@ -470,13 +470,13 @@ write_vecsxp(const SEXP elmt,
  * @return 0 on succes or 1 on failure. 
  */
 static int
-write_sparse(const SEXP elmt,
-	     mat_t *mat,
-	     const char *name,
-	     matvar_t *mat_struct,
-	     matvar_t *mat_cell,
-	     size_t field_index,
-	     size_t index)
+write_dgCMatrix(const SEXP elmt,
+		mat_t *mat,
+		const char *name,
+		matvar_t *mat_struct,
+		matvar_t *mat_cell,
+		size_t field_index,
+		size_t index)
 {
   size_t dims[2];
   matvar_t *matvar;
@@ -503,6 +503,76 @@ write_sparse(const SEXP elmt,
   			 dims,
   			 &sparse,
   			 0);
+
+  if (NULL == matvar)
+    return 1;
+
+  if (mat_struct) {
+    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
+  } else if(mat_cell) {
+    Mat_VarSetCell(mat_cell, index, matvar);
+  } else {
+    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+    Mat_VarFree(matvar);
+  }
+
+  return 0;
+}
+
+/** @brief 
+ *
+ * 
+ * @ingroup 
+ * @param elmt R object to write
+ * @param mat MAT file pointer
+ * @param name Name of the variable to write
+ * @param mat_struct
+ * @param mat_cell
+ * @param field_index
+ * @param index
+ * @return 0 on succes or 1 on failure. 
+ */
+static int
+write_lgCMatrix(const SEXP elmt,
+		mat_t *mat,
+		const char *name,
+		matvar_t *mat_struct,
+		matvar_t *mat_cell,
+		size_t field_index,
+		size_t index)
+{
+  size_t dims[2];
+  matvar_t *matvar;
+  mat_sparse_t  sparse = {0,};
+
+  if (R_NilValue == elmt
+      || 2 != LENGTH(GET_SLOT(elmt, Rf_install("Dim"))))
+    return 1;
+
+  dims[0] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[0];
+  dims[1] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[1];
+  sparse.nzmax = LENGTH(GET_SLOT(elmt, Rf_install("i")));
+  sparse.ir = INTEGER(GET_SLOT(elmt, Rf_install("i")));
+  sparse.nir = LENGTH(GET_SLOT(elmt, Rf_install("i")));
+  sparse.jc = INTEGER(GET_SLOT(elmt, Rf_install("p")));
+  sparse.njc = LENGTH(GET_SLOT(elmt, Rf_install("p")));
+  sparse.ndata = LENGTH(GET_SLOT(elmt, Rf_install("x")));
+  sparse.data = malloc(sparse.ndata*sizeof(mat_uint8_t));
+  if (NULL == sparse.data)
+    return 1;
+
+  for (size_t i=0;i<sparse.ndata;i++)
+    ((mat_uint8_t*)sparse.data)[i] = LOGICAL(GET_SLOT(elmt, Rf_install("x")))[i] != 0;
+
+  matvar = Mat_VarCreate(name,
+  			 MAT_C_SPARSE,
+  			 MAT_T_UINT8,
+  			 2,
+  			 dims,
+  			 &sparse,
+  			 MAT_F_LOGICAL);
+
+  free(sparse.data);
 
   if (NULL == matvar)
     return 1;
@@ -562,7 +632,9 @@ write_elmt(const SEXP elmt,
   case S4SXP:
     class_name = getAttrib(elmt, R_ClassSymbol);
     if (strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
-      return write_sparse(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+      return write_dgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    else if (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)
+      return write_lgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index);
     return 1;
   default:
     return 1;
