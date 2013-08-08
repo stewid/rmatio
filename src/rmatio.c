@@ -1947,15 +1947,26 @@ read_structure_array_with_fields(SEXP list,
   char* buf;
 
   if (NULL == matvar
-      || matvar->class_type != MAT_C_STRUCT
-      || matvar->rank != 2
-      || matvar->dims[0] < 1
-      || matvar->dims[1] != 1)
+      || MAT_C_STRUCT != matvar->class_type
+      || 2 != matvar->rank)
     return 1;
 
   n_fields = Mat_VarGetNumberOfFields(matvar);
   if (!n_fields)
     return 1;
+
+  /* Check that one dimension == 1 and that the other dimension >= 1 */
+  if (1 == matvar->dims[0]) {
+    if (1 > matvar->dims[1])
+      return 1;
+    field_len = matvar->dims[1];
+  } else if (1 == matvar->dims[1]) {
+    if (1 > matvar->dims[0])
+      return 1;
+    field_len = matvar->dims[0];
+  } else {
+    return 1;
+  }
 
   field_names = Mat_VarGetStructFieldnames(matvar);
   PROTECT(struc = allocVector(VECSXP, n_fields));
@@ -1965,7 +1976,6 @@ read_structure_array_with_fields(SEXP list,
     if (field_names[i])
       SET_STRING_ELT(names, i, mkChar(field_names[i]));
 
-    field_len = matvar->dims[0];
     field = Mat_VarGetStructFieldByIndex(matvar, i, 0);
     if (field->class_type == MAT_C_CHAR)
       PROTECT(s = allocVector(STRSXP, field_len));
