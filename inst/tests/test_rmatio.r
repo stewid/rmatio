@@ -469,6 +469,31 @@ test_that("struct: case-12", {
   expect_identical(a.2, a.1)
 })
 
+test_that("struct: case-13", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- structure(list(X = structure(list(x = list(structure(c(1, 4, 
+    2, 5, 3, 6.2), .Dim = 2:3)), y = list(list("Hello", "world!")), 
+    z = list(structure(c(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), .Dim = c(14L, 14L
+    )))), .Names = c("x", "y", "z"))), .Names = "X")
+  
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+    
+  expect_identical(a.2, a.1)
+})
+
 context("cell")
 
 test_that("cell: case-1", {

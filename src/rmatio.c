@@ -36,7 +36,11 @@ get_dim(const SEXP elmt,
 static int
 write_cell(const SEXP elmt, 
 	   mat_t *mat,
-	   const char *name);
+	   const char *name,
+	   matvar_t *mat_struct,
+	   matvar_t *mat_cell,	   
+	   size_t field_index,
+	   size_t index);
 
 static int
 write_struct(const SEXP elmt,
@@ -449,7 +453,13 @@ write_vecsxp(const SEXP elmt,
 
   names = getAttrib(elmt, R_NamesSymbol);
   if (R_NilValue == names)
-    return write_cell(elmt, mat, name);
+    return write_cell(elmt,
+		      mat,
+		      name,
+		      mat_struct,
+		      mat_cell,
+		      field_index,
+		      index);
 
   return write_struct(elmt,
 		      names, 
@@ -1078,11 +1088,15 @@ write_cell_array_with_arrays(const SEXP elmt,
 static int
 write_cell(const SEXP elmt, 
 	   mat_t *mat,
-	   const char *name)
+	   const char *name,
+	   matvar_t *mat_struct,
+	   matvar_t *mat_cell,	   
+	   size_t field_index,
+	   size_t index)
+
 {
   size_t dims[2];
   size_t nfields;
-  size_t i, cell_index, index;
   matvar_t *matvar;
   const int rank = 2;
   int err = 1;
@@ -1108,11 +1122,21 @@ write_cell(const SEXP elmt,
       err = write_cell_array_with_arrays(elmt, matvar, dims);
   }
 
-  if (!err)
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-  Mat_VarFree(matvar);
+  if (err) {
+    Mat_VarFree(matvar);
+    return 1;
+  }
 
-  return err;
+  if (mat_struct) {
+    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
+  } else if (mat_cell) {
+    Mat_VarSetCell(mat_cell, index, matvar);
+  } else {
+    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+    Mat_VarFree(matvar);
+  }
+
+  return 0;
 }
 
 /*
@@ -1981,19 +2005,10 @@ read_structure_array_with_fields(SEXP list,
     if (field_names[i])
       SET_STRING_ELT(names, i, mkChar(field_names[i]));
 
-    switch (Mat_VarGetStructFieldByIndex(matvar, i, 0)->class_type) {
-    case MAT_C_CELL:
-      s = R_NilValue;
-      break;
-
-    case MAT_C_CHAR:
+    if (MAT_C_CHAR == Mat_VarGetStructFieldByIndex(matvar, i, 0)->class_type)
       PROTECT(s = allocVector(STRSXP, field_len));
-      break;
-
-    default:
+    else
       PROTECT(s = allocVector(VECSXP, field_len));
-      break;
-    }
 
     for (j=0;j<field_len;j++) {
       field = Mat_VarGetStructFieldByIndex(matvar, i, j);
@@ -2040,7 +2055,8 @@ read_structure_array_with_fields(SEXP list,
       	break;
 
       case MAT_C_CELL:
-	err = read_mat_cell(struc, i, field);
+	err = read_mat_cell(s, j, field);
+	/* err = read_mat_cell(struc, i, field); */
 	break;
 
       default:
@@ -2376,7 +2392,10 @@ read_cell_array_with_arrays(SEXP list,
   	break;
 	
       case MAT_C_CHAR:
-  	err = read_mat_char(cell_row, j, mat_cell);
+	if (R_NilValue == cell_row)
+	  err = read_mat_char(cell, i, mat_cell);
+	else
+	  err = read_mat_char(cell_row, j, mat_cell);
   	break;
 
       case MAT_C_STRUCT:
