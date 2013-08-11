@@ -57,6 +57,42 @@ read_mat_cell(SEXP list,
 	      int index,
 	      matvar_t *matvar);
 
+
+/** @brief 
+ *
+ * 
+ * @ingroup 
+ * @param mat MAT file pointer
+ * @param matvar
+ * @param mat_struct
+ * @param mat_cell
+ * @param field_index
+ * @param index
+ * @return 0 on succes or 1 on failure. 
+ */
+static int
+write_matvar(mat_t *mat,
+	     matvar_t *matvar,
+	     matvar_t *mat_struct,
+	     matvar_t *mat_cell,
+	     size_t field_index,
+	     size_t index)
+{
+  if (NULL == matvar)
+    return 1;
+
+  if (mat_struct) {
+    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
+  } else if(mat_cell) {
+    Mat_VarSetCell(mat_cell, index, matvar);
+  } else {
+    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+    Mat_VarFree(matvar);
+  }
+
+  return 0;
+}
+
 /** @brief 
  *
  * 
@@ -99,19 +135,8 @@ write_realsxp(const SEXP elmt,
 			 0);
 
   free(dims);
-  if (NULL == matvar)
-    return 1;
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -156,19 +181,8 @@ write_intsxp(const SEXP elmt,
   			 0);
 
   free(dims);
-  if (NULL == matvar)
-    return 1;
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -238,19 +252,8 @@ write_cplxsxp(const SEXP elmt,
   free(dims);
   free(re);
   free(im);
-  if (NULL == matvar)
-    return 1;
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -310,19 +313,8 @@ write_lglsxp(const SEXP elmt,
 
   free(dims);
   free(logical);
-  if (NULL == matvar)
-    return 1;
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -408,19 +400,8 @@ write_strsxp(const SEXP elmt,
   }
 
   free(dims);
-  if (NULL == matvar)
-    return 1;
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -519,19 +500,7 @@ write_dgCMatrix(const SEXP elmt,
   			 &sparse,
   			 0);
 
-  if (NULL == matvar)
-    return 1;
-
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -589,19 +558,7 @@ write_lgCMatrix(const SEXP elmt,
 
   free(sparse.data);
 
-  if (NULL == matvar)
-    return 1;
-
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if(mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief 
@@ -1127,16 +1084,7 @@ write_cell(const SEXP elmt,
     return 1;
   }
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if (mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /*
@@ -1307,16 +1255,7 @@ write_struct(const SEXP elmt,
     return 1;
   }
 
-  if (mat_struct) {
-    Mat_VarSetStructFieldByIndex(mat_struct, field_index, index, matvar);
-  } else if (mat_cell) {
-    Mat_VarSetCell(mat_cell, index, matvar);
-  } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
-    Mat_VarFree(matvar);
-  }
-
-  return 0;
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
 }
 
 /** @brief
