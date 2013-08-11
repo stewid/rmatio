@@ -1390,34 +1390,11 @@ read_sparse(SEXP list,
 
   sparse = matvar->data;
 
-  if (matvar->isLogical) {
-    PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
-    if (R_NilValue == m)
-      return 1;
-
-    dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
-    dims[0] = matvar->dims[0];
-    dims[1] = matvar->dims[1];
-
-    SET_SLOT(m, Rf_install("i"), allocVector(INTSXP, sparse->nir));
-    ir = INTEGER(GET_SLOT(m, Rf_install("i")));
-    for (int j=0;j<sparse->nir;++j)
-      ir[j] = sparse->ir[j];
-
-    SET_SLOT(m, Rf_install("p"), allocVector(INTSXP, sparse->njc));
-    jc = INTEGER(GET_SLOT(m, Rf_install("p")));
-    for (int j=0;j<sparse->njc;++j)
-      jc[j] = sparse->jc[j];
-
-    SET_SLOT(m, Rf_install("x"), allocVector(LGLSXP, sparse->nir));
-    data = GET_SLOT(m, Rf_install("x"));
-    for (int j=0;j<sparse->nir;++j)
-      LOGICAL(data)[j] = 1;
-  } else if (matvar->isComplex)  {
+  if (matvar->isComplex)  {
     size_t len = matvar->dims[0] * matvar->dims[1];
     PROTECT(m = allocVector(CPLXSXP, len));
     mat_complex_split_t *complex_data = sparse->data;
-
+    
     for (size_t j=0;j<len;j++) {
       COMPLEX(m)[j].r = 0;
       COMPLEX(m)[j].i = 0;
@@ -1433,7 +1410,11 @@ read_sparse(SEXP list,
 
     set_dim(m, matvar);
   } else {
-    PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+    if (matvar->isLogical)
+      PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
+    else
+      PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+
     if (R_NilValue == m)
       return 1;
 
@@ -1451,10 +1432,17 @@ read_sparse(SEXP list,
     for (int j=0;j<sparse->njc;++j)
       jc[j] = sparse->jc[j];
 
-    SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
-    data = GET_SLOT(m, Rf_install("x"));
-    for (int j=0;j<sparse->ndata;++j)
-      REAL(data)[j] = ((double*)sparse->data)[j];
+    if (matvar->isLogical) {
+      SET_SLOT(m, Rf_install("x"), allocVector(LGLSXP, sparse->nir));
+      data = GET_SLOT(m, Rf_install("x"));
+      for (int j=0;j<sparse->nir;++j)
+	LOGICAL(data)[j] = 1;
+    } else {
+      SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
+      data = GET_SLOT(m, Rf_install("x"));
+      for (int j=0;j<sparse->ndata;++j)
+	REAL(data)[j] = ((double*)sparse->data)[j];
+    }
   }
 
   SET_VECTOR_ELT(list, index, m);
