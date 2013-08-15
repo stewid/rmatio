@@ -40,7 +40,8 @@ write_cell(const SEXP elmt,
 	   matvar_t *mat_struct,
 	   matvar_t *mat_cell,	   
 	   size_t field_index,
-	   size_t index);
+	   size_t index,
+	   int compression);
 
 static int
 write_struct(const SEXP elmt,
@@ -50,7 +51,8 @@ write_struct(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,	   
 	     size_t field_index,
-	     size_t index);
+	     size_t index,
+	     int compression);
 
 static int
 read_mat_cell(SEXP list,
@@ -76,7 +78,8 @@ write_matvar(mat_t *mat,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   if (NULL == matvar)
     return 1;
@@ -86,7 +89,7 @@ write_matvar(mat_t *mat,
   } else if(mat_cell) {
     Mat_VarSetCell(mat_cell, index, matvar);
   } else {
-    Mat_VarWrite(mat, matvar, MAT_COMPRESSION_NONE);
+    Mat_VarWrite(mat, matvar, compression);
     Mat_VarFree(matvar);
   }
 
@@ -113,7 +116,8 @@ write_realsxp(const SEXP elmt,
 	      matvar_t *mat_struct,
 	      matvar_t *mat_cell,
 	      size_t field_index,
-	      size_t index)
+	      size_t index,
+	      int compression)
 {
   size_t *dims, len;
   int rank;
@@ -136,7 +140,8 @@ write_realsxp(const SEXP elmt,
 
   free(dims);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief 
@@ -159,7 +164,8 @@ write_intsxp(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   size_t *dims, len;
   int rank;
@@ -182,7 +188,8 @@ write_intsxp(const SEXP elmt,
 
   free(dims);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief 
@@ -205,7 +212,8 @@ write_cplxsxp(const SEXP elmt,
 	      matvar_t *mat_struct,
 	      matvar_t *mat_cell,
 	      size_t field_index,
-	      size_t index)
+	      size_t index,
+	      int compression)
 {
   size_t *dims;
   int rank;
@@ -253,7 +261,8 @@ write_cplxsxp(const SEXP elmt,
   free(re);
   free(im);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief 
@@ -276,7 +285,8 @@ write_lglsxp(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   size_t *dims, len;
   int rank;
@@ -314,7 +324,32 @@ write_lglsxp(const SEXP elmt,
   free(dims);
   free(logical);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
+}
+
+/** @brief Check if all strings have equal length
+ *
+ * 
+ * @ingroup 
+ * @param elmt R object to check
+ * @return 1 if all lengths are equal else 0.
+ */
+static int
+all_strings_have_equal_length(const SEXP elmt)
+{
+  size_t len;
+  size_t n = LENGTH(elmt);
+
+  if (n) {
+    len = LENGTH(STRING_ELT(elmt, 0));
+    for (size_t i=1;i<n;i++) {
+      if (len != LENGTH(STRING_ELT(elmt, i)))
+	return 0;
+    }
+  }
+
+  return 1;
 }
 
 /** @brief 
@@ -337,11 +372,12 @@ write_strsxp(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   size_t* dims;
   matvar_t *matvar;
-  int rank = 2;
+  const int rank = 2;
   mat_uint8_t *buf = NULL;
 
   if (R_NilValue == elmt
@@ -361,47 +397,38 @@ write_strsxp(const SEXP elmt,
     dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
   if (mat_struct) {
-    if (dims[1] != LENGTH(STRING_ELT(elmt, index))) {
-      free(dims);
-      return 1;
-    }
-
-    matvar = Mat_VarCreate(name,
-			   MAT_C_CHAR,
-			   MAT_T_UINT8,
-			   rank,
-			   dims,
-			   (void*)CHAR(STRING_ELT(elmt, index)),
-			   0);
-  } else {
-    /* Copy data and check that all strings have equal length */
+    matvar = Mat_VarCreate(name, MAT_C_CHAR, MAT_T_UINT8, rank, dims,
+			   (void*)CHAR(STRING_ELT(elmt, index)), 0);
+  } else if (all_strings_have_equal_length(elmt)) {
     buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
-
     for (size_t i=0;i<dims[0];i++) {
-      if (dims[1] != LENGTH(STRING_ELT(elmt, i))) {
-	free(buf);
-	free(dims);
-	return 1;
-      }
-      
       for (size_t j=0;j<dims[1];j++)
 	buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
     }
 
-    matvar = Mat_VarCreate(name,
-			   MAT_C_CHAR,
-			   MAT_T_UINT8,
-			   rank,
-			   dims,
-			   buf,
-			   0);
-
+    matvar = Mat_VarCreate(name, MAT_C_CHAR, MAT_T_UINT8, rank, dims, buf, 0);
     free(buf);
+  } else {
+    /* Write strings in a cell */
+    dims[1] = 1;
+    matvar = Mat_VarCreate(name, MAT_C_CELL, MAT_T_CELL, rank, dims, NULL, 0);
+    for (size_t i=0;i<dims[0];i++) {
+      size_t dims_cell[2];
+      matvar_t *cell;
+
+      dims_cell[0] = 1;
+      dims_cell[1] = LENGTH(STRING_ELT(elmt, i));
+
+      cell = Mat_VarCreate(NULL, MAT_C_CHAR, MAT_T_UINT8, rank, dims_cell,
+			   (void*)CHAR(STRING_ELT(elmt, i)), 0);
+      Mat_VarSetCell(matvar, i, cell);
+    }
   }
 
   free(dims);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief 
@@ -424,7 +451,8 @@ write_vecsxp(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,	   
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   SEXP names;
 
@@ -434,22 +462,11 @@ write_vecsxp(const SEXP elmt,
 
   names = getAttrib(elmt, R_NamesSymbol);
   if (R_NilValue == names)
-    return write_cell(elmt,
-		      mat,
-		      name,
-		      mat_struct,
-		      mat_cell,
-		      field_index,
-		      index);
+    return write_cell(elmt, mat, name, mat_struct, mat_cell,
+		      field_index, index, compression);
 
-  return write_struct(elmt,
-		      names, 
-		      mat,
-		      name,
-		      mat_struct,
-		      mat_cell,
-		      field_index,
-		      index);
+  return write_struct(elmt, names, mat, name, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief 
@@ -472,7 +489,8 @@ write_dgCMatrix(const SEXP elmt,
 		matvar_t *mat_struct,
 		matvar_t *mat_cell,
 		size_t field_index,
-		size_t index)
+		size_t index,
+		int compression)
 {
   size_t dims[2];
   matvar_t *matvar;
@@ -500,7 +518,7 @@ write_dgCMatrix(const SEXP elmt,
   			 &sparse,
   			 0);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index, compression);
 }
 
 /** @brief 
@@ -523,7 +541,8 @@ write_lgCMatrix(const SEXP elmt,
 		matvar_t *mat_struct,
 		matvar_t *mat_cell,
 		size_t field_index,
-		size_t index)
+		size_t index,
+		int compression)
 {
   size_t dims[2];
   matvar_t *matvar;
@@ -558,7 +577,7 @@ write_lgCMatrix(const SEXP elmt,
 
   free(sparse.data);
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index, compression);
 }
 
 /** @brief 
@@ -581,7 +600,8 @@ write_elmt(const SEXP elmt,
 	   matvar_t *mat_struct,
 	   matvar_t *mat_cell,	   
 	   size_t field_index,
-	   size_t index)
+	   size_t index,
+	   int compression)
 {
   SEXP class_name;
 
@@ -590,23 +610,23 @@ write_elmt(const SEXP elmt,
   
   switch (TYPEOF(elmt)) {
   case REALSXP:
-    return write_realsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_realsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case INTSXP:
-    return write_intsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_intsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case CPLXSXP:
-    return write_cplxsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_cplxsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case LGLSXP:
-    return write_lglsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_lglsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case STRSXP:
-    return write_strsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_strsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case VECSXP:
-    return write_vecsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+    return write_vecsxp(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
   case S4SXP:
     class_name = getAttrib(elmt, R_ClassSymbol);
     if (strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
-      return write_dgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+      return write_dgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
     else if (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)
-      return write_lgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index);
+      return write_lgCMatrix(elmt, mat, name, mat_struct, mat_cell, field_index, index, compression);
     return 1;
   default:
     return 1;
@@ -1005,7 +1025,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
 static int
 write_cell_array_with_arrays(const SEXP elmt,
 			     matvar_t *mat_cell,
-			     size_t dims[])
+			     size_t dims[],
+			     int compression)
 {
   SEXP cell;
   size_t i, j;
@@ -1025,7 +1046,7 @@ write_cell_array_with_arrays(const SEXP elmt,
 	  && getAttrib(cell, R_NamesSymbol) == R_NilValue)
   	cell = VECTOR_ELT(cell, j);
 
-      if (write_elmt(cell, NULL, NULL, NULL, mat_cell, 0, j*dims[0]+i))
+      if (write_elmt(cell, NULL, NULL, NULL, mat_cell, 0, j*dims[0]+i, compression))
       	return 1;
     }
   }
@@ -1049,7 +1070,8 @@ write_cell(const SEXP elmt,
 	   matvar_t *mat_struct,
 	   matvar_t *mat_cell,	   
 	   size_t field_index,
-	   size_t index)
+	   size_t index,
+	   int compression)
 
 {
   size_t dims[2];
@@ -1076,7 +1098,7 @@ write_cell(const SEXP elmt,
     if(empty)
       err = write_cell_array_with_empty_arrays(elmt, matvar);
     else
-      err = write_cell_array_with_arrays(elmt, matvar, dims);
+      err = write_cell_array_with_arrays(elmt, matvar, dims, compression);
   }
 
   if (err) {
@@ -1084,7 +1106,8 @@ write_cell(const SEXP elmt,
     return 1;
   }
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /*
@@ -1146,10 +1169,11 @@ static int
 write_structure_array_with_fields(const SEXP elmt,
 				  const SEXP names,
 				  matvar_t *mat_struct,
-				  size_t dims[])
+				  size_t *dims,
+				  int compression)
 {
   SEXP field_elmt;
-  size_t n_fields, index, field_index;
+  size_t index, field_index;
 
   if (R_NilValue == elmt
       || VECSXP != TYPEOF(elmt)
@@ -1157,20 +1181,25 @@ write_structure_array_with_fields(const SEXP elmt,
       || R_NilValue == names)
     return 1;
 
-  n_fields = LENGTH(elmt);
-  if (!n_fields)
-    return 1;
-
   for (index=0;index<dims[0];index++) {
-    for (field_index=0;field_index<n_fields;field_index++) {
+    for (field_index=0;field_index<LENGTH(elmt);field_index++) {
       field_elmt = VECTOR_ELT(elmt, field_index);
 
-      /* Make sure it's not a cell or struct */
-      if (VECSXP == TYPEOF(field_elmt)
-	  && VECSXP != TYPEOF(VECTOR_ELT(field_elmt, index)))
-      	field_elmt = VECTOR_ELT(field_elmt, index);
-      
-      if (write_elmt(field_elmt, NULL, NULL, mat_struct, NULL, field_index, index))
+      switch (TYPEOF(field_elmt)) {
+      case VECSXP:
+	if (VECSXP != TYPEOF(VECTOR_ELT(field_elmt, index)))
+	  field_elmt = VECTOR_ELT(field_elmt, index);
+	break;
+      case STRSXP:
+	if(!all_strings_have_equal_length(field_elmt))
+	  return 1; /* FIXME */
+	break;
+      default:
+	break;
+      }
+
+      if (write_elmt(field_elmt, NULL, NULL, mat_struct,
+		     NULL, field_index, index, compression))
   	return 1;
     }
   }
@@ -1200,7 +1229,8 @@ write_struct(const SEXP elmt,
 	     matvar_t *mat_struct,
 	     matvar_t *mat_cell,	   
 	     size_t field_index,
-	     size_t index)
+	     size_t index,
+	     int compression)
 {
   size_t dims[2];
   size_t nfields, i;
@@ -1241,7 +1271,7 @@ write_struct(const SEXP elmt,
     if (empty)
       err = write_structure_array_with_empty_fields(elmt, names, matvar);
     else
-      err = write_structure_array_with_fields(elmt, names, matvar, dims);
+      err = write_structure_array_with_fields(elmt, names, matvar, dims, compression);
   } else if (nfields == 0 && dims[0] == 1 && dims[1] == 1) {
     /* Empty structure array */
     err = 0;
@@ -1255,7 +1285,8 @@ write_struct(const SEXP elmt,
     return 1;
   }
 
-  return write_matvar(mat, matvar, mat_struct, mat_cell, field_index, index);
+  return write_matvar(mat, matvar, mat_struct, mat_cell,
+		      field_index, index, compression);
 }
 
 /** @brief
@@ -1389,6 +1420,8 @@ read_sparse(SEXP list,
     return 1;
 
   sparse = matvar->data;
+  if (NULL == sparse)
+    return 1;
 
   if (matvar->isComplex)  {
     size_t len = matvar->dims[0] * matvar->dims[1];
@@ -2531,9 +2564,10 @@ SEXP read_mat(const SEXP filename)
  *
  * 
  * @ingroup 
- * @param list
- * @param filename
- * @param version
+ * @param list List of variables to write
+ * @param filename Name of MAT file to create
+ * @param version MAT file version to create
+ * @param compression
  * @return R_NilValue.
  */
 SEXP
@@ -2544,7 +2578,8 @@ write_mat(const SEXP list,
   SEXP names;    /* names in list */
   SEXP elmt;     /* element in list */
   mat_t *mat;
-  int err;
+  int err, use_compression = MAT_COMPRESSION_NONE;
+  const SEXP compression = R_NilValue;
 
   if (list == R_NilValue)
     error("'list' equals R_NilValue.");
@@ -2559,9 +2594,13 @@ write_mat(const SEXP list,
   if (!mat)
     error("Unable to open file.");
 
+  if (R_NilValue != compression)
+    use_compression = MAT_COMPRESSION_ZLIB;
+
   names = getAttrib(list, R_NamesSymbol);
   for (int i = 0; i < length(list); i++) {
-    if (write_elmt(VECTOR_ELT(list, i), mat, CHAR(STRING_ELT(names, i)), NULL, NULL, 0, 0)) {
+    if (write_elmt(VECTOR_ELT(list, i), mat, CHAR(STRING_ELT(names, i)),
+		   NULL, NULL, 0, 0, use_compression)) {
       Mat_Close(mat);
       error("Unable to write list");
     }
