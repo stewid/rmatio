@@ -1360,6 +1360,8 @@ read_mat_char(SEXP list,
 
   if (NULL == matvar
       || 2 != matvar->rank
+      || NULL == matvar->dims
+      || (matvar->dims[1] && NULL == matvar->data)
       || matvar->isComplex)
     return 1;
 
@@ -1416,17 +1418,25 @@ read_sparse(SEXP list,
   mat_sparse_t *sparse;
 
   if (NULL == matvar
-      || 2 != matvar->rank)
+      || 2 != matvar->rank
+      || NULL == matvar->dims
+      || NULL == matvar->data)
     return 1;
 
   sparse = matvar->data;
-  if (NULL == sparse)
+  if (NULL == sparse->ir || NULL == sparse->jc)
     return 1;
 
   if (matvar->isComplex)  {
-    size_t len = matvar->dims[0] * matvar->dims[1];
+    size_t len;
+    mat_complex_split_t *complex_data;
+
+    complex_data = sparse->data;
+    if (NULL == complex_data->Im || NULL == complex_data->Re)
+      return 1;
+
+    len = matvar->dims[0] * matvar->dims[1];
     PROTECT(m = allocVector(CPLXSXP, len));
-    mat_complex_split_t *complex_data = sparse->data;
     
     for (size_t j=0;j<len;j++) {
       COMPLEX(m)[j].r = 0;
@@ -1504,7 +1514,13 @@ read_mat_complex(SEXP list,
 
   if (NULL == matvar
       || 2 > matvar->rank
+      || NULL == matvar->dims
+      || NULL == matvar->data
       || !matvar->isComplex)
+    return 1;
+
+  complex_data = matvar->data;
+  if (NULL == complex_data->Im || NULL == complex_data->Re)
     return 1;
 
   len = matvar->dims[0];
@@ -1515,7 +1531,6 @@ read_mat_complex(SEXP list,
   if (R_NilValue == m)
     return 1;
 
-  complex_data = matvar->data;
   switch (matvar->data_type) {
   case MAT_T_SINGLE:
     for (j=0;j<len;j++) {
@@ -1618,6 +1633,8 @@ read_mat_data(SEXP list,
 
   if (NULL == matvar
       || 2 > matvar->rank
+      || NULL == matvar->dims
+      || NULL == matvar->data
       || matvar->isComplex)
     return 1;
 
@@ -1717,6 +1734,8 @@ read_logical(SEXP list,
 
   if (NULL == matvar
       || 2 > matvar->rank
+      || NULL == matvar->dims
+      || NULL == matvar->data
       || !matvar->isLogical)
     return 1;
 
@@ -1940,7 +1959,8 @@ read_structure_array_with_fields(SEXP list,
 
   if (NULL == matvar
       || MAT_C_STRUCT != matvar->class_type
-      || 2 != matvar->rank)
+      || 2 != matvar->rank
+      || NULL == matvar->dims)
     return 1;
 
   n_fields = Mat_VarGetNumberOfFields(matvar);
@@ -2071,8 +2091,9 @@ read_mat_struct(SEXP list,
   matvar_t *field;
 
   if (NULL == matvar
-      || matvar->class_type != MAT_C_STRUCT
-      || matvar->rank != 2)
+      || MAT_C_STRUCT != matvar->class_type
+      || 2 != matvar->rank
+      || NULL == matvar->dims)
     return 1;
 
   if (Mat_VarGetNumberOfFields(matvar)) {
@@ -2118,10 +2139,12 @@ read_empty_cell_array(SEXP list,
   SEXP cell;
 
   if (NULL == matvar
-      || matvar->class_type != MAT_C_CELL
-      || matvar->data_type != MAT_T_CELL
-      || matvar->dims[0] != 0
-      || matvar->dims[1] != 0)
+      || MAT_C_CELL != matvar->class_type
+      || MAT_T_CELL != matvar->data_type
+      || 2 != matvar->rank
+      || NULL == matvar->dims
+      || 0 != matvar->dims[0]
+      || 0 != matvar->dims[1])
     return 1;
 
   PROTECT(cell = allocVector(VECSXP, 0));
@@ -2152,10 +2175,12 @@ read_cell_array_with_empty_arrays(SEXP list,
   matvar_t *field;
 
   if (NULL == matvar
-      || matvar->class_type != MAT_C_CELL
-      || matvar->data_type != MAT_T_CELL
-      || matvar->dims[0] != 1
-      || matvar->dims[1] < 1)
+      || MAT_C_CELL != matvar->class_type
+      || MAT_T_CELL != matvar->data_type
+      || 2 != matvar->rank
+      || NULL == matvar->dims
+      || 1 != matvar->dims[0]
+      || 1 > matvar->dims[1])
     return 1;
 
   PROTECT(cell_array = allocVector(VECSXP, matvar->dims[1]));
@@ -2316,6 +2341,10 @@ read_cell_array_with_arrays(SEXP list,
   matvar_t *mat_cell;
   int err;
 
+  if (NULL == matvar
+      || NULL == matvar->dims)
+    return 1;
+
   PROTECT(cell = allocVector(VECSXP, matvar->dims[0]));
 
   for (i=0;i<matvar->dims[0];i++) {
@@ -2416,8 +2445,9 @@ read_mat_cell(SEXP list,
   matvar_t *cell;
 
   if (NULL == matvar
-      || matvar->class_type != MAT_C_CELL
-      || matvar->data_type != MAT_T_CELL)
+      || MAT_C_CELL != matvar->class_type
+      || MAT_T_CELL != matvar->data_type
+      || NULL == matvar->dims)
     return 1;
 
   if (matvar->dims[0] == 0 && matvar->dims[1] >= 0) {
