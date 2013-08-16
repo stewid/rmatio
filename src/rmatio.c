@@ -397,6 +397,11 @@ write_strsxp(const SEXP elmt,
     dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
   if (mat_struct) {
+    if (dims[1] != LENGTH(STRING_ELT(elmt, index))) {
+      free(dims);
+      return 1;
+    }
+
     matvar = Mat_VarCreate(name, MAT_C_CHAR, MAT_T_UINT8, rank, dims,
                            (void*)CHAR(STRING_ELT(elmt, index)), 0);
   } else if (all_strings_have_equal_length(elmt)) {
