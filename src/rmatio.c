@@ -407,7 +407,6 @@ write_strsxp(const SEXP elmt,
     size_t dims[2] = {0, 0};
     matvar_t *matvar;
     const int rank = 2;
-    mat_uint8_t *buf = NULL;
 
     if (R_NilValue == elmt
         || STRSXP != TYPEOF(elmt)
@@ -447,7 +446,10 @@ write_strsxp(const SEXP elmt,
             dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
         if (all_strings_have_equal_length(elmt)) {
-            buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
+            mat_uint8_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
+            if (NULL == buf)
+                return 1;
+
             for (size_t i=0;i<dims[0];i++) {
                 for (size_t j=0;j<dims[1];j++)
                     buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
@@ -1415,6 +1417,8 @@ write_struct(const SEXP elmt,
     nfields = LENGTH(elmt);
     if (nfields) {
         fieldnames = malloc(nfields*sizeof(char*));
+        if (NULL == fieldnames)
+            return 1;
         for (i=0;i<nfields;i++)
             fieldnames[i] = CHAR(STRING_ELT(names, i));
     }
@@ -1565,7 +1569,12 @@ read_mat_char(SEXP list,
     switch (matvar->data_type) {
     case MAT_T_UINT8:
     case MAT_T_UNKNOWN:
-        buf = (char*)malloc((matvar->dims[1]+1)*sizeof(char));
+        buf = malloc((matvar->dims[1]+1)*sizeof(char));
+        if (NULL == buf) {
+            UNPROTECT(1);
+            return 1;
+        }
+
         for (i=0;i<matvar->dims[0];i++) {
             for (j=0;j<matvar->dims[1];j++)
                 buf[j] = ((char*)matvar->data)[matvar->dims[0]*j + i];
@@ -2228,6 +2237,8 @@ read_structure_array_with_fields(SEXP list,
                 case MAT_T_UINT8:
                 case MAT_T_UNKNOWN:
                     buf = (char*)malloc((field->dims[1]+1)*sizeof(char));
+                    if (NULL == buf)
+                        error("Unable to allocate buffer");
                     for (size_t k=0;k<field->dims[1];k++)
                         buf[k] = ((char*)field->data)[k];
                     buf[field->dims[1]] = 0;
