@@ -5,13 +5,13 @@ test_that("Filename", {
                "'filename' must be a character vector of length one")
 
   expect_error(write.mat(list(a=1:5), filename=5),
-               "'filename' must be a character vector of length one")  
+               "'filename' must be a character vector of length one")
 
   expect_error(write.mat(list(a=1:5), filename=c('a', 'b')),
-               "'filename' must be a character vector of length one")  
+               "'filename' must be a character vector of length one")
 
   expect_error(write.mat(list(a=1:5), filename=''),
-               "'filename' must be a character vector of length one")  
+               "'filename' must be a character vector of length one")
 })
 
 test_that("Names", {
@@ -30,7 +30,7 @@ context("dgCMatrix")
 test_that("dgCMatrix: case-1", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-  
+
   a.1 <- Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
                   0, 0, 0, 0, 0, 0, 0, 1, 0,
                   0, 0, 0, 0, 0, 0, 0, 0, 1),
@@ -149,10 +149,10 @@ test_that("array: case-3", {
                  TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
                  FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE,
                  FALSE, FALSE, TRUE), c(5L, 5L))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -162,10 +162,10 @@ test_that("array: case-4", {
 
   a.1 <- array(seq_len(32^3), c(32,32,32));
   storage.mode(a.1) <- 'double'
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -176,10 +176,10 @@ test_that("array: case-5", {
 
   a.1 <- array(seq_len(32^3), c(32,32,32));
   storage.mode(a.1) <- 'integer'
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -190,10 +190,10 @@ test_that("array: case-6", {
 
   a.1 <- array(c(seq_len(32767), 32767), c(32,32,32));
   storage.mode(a.1) <- 'integer'
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -202,10 +202,10 @@ test_that("array: case-7", {
   on.exit(unlink(filename))
 
   a.1 <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32,32,32))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -228,16 +228,52 @@ context("string")
 test_that("string: case-1", {
     filename <- tempfile(fileext = ".mat")
     on.exit(unlink(filename))
-    
+
     a.1 <- c("abcdefghijklmnopqrstuvwxyz",
              "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
              "1234567890!@#$%^&*()-_=+`~",
              "[{]}\\|;:'\",<.>/?          ")
-    
+
     write.mat(list(a=a.1), filename=filename)
     a.2 <- read.mat(filename)[['a']]
-    
+
     expect_identical(a.2, a.1)
+})
+
+test_that("string: case-2", {
+    filename <- tempfile(fileext = ".mat")
+    on.exit(unlink(filename))
+
+    a.1 <- c("a", "bb")
+
+    write.mat(list(a=a.1), filename=filename)
+    a.2 <- read.mat(filename)[['a']]
+
+    expect_identical(a.2, list("a", "bb"))
+})
+
+test_that("string: case-3", {
+    filename <- tempfile(fileext = ".mat")
+    on.exit(unlink(filename))
+
+    a.1 <- list(y=c("a", "bb"))
+
+    write.mat(list(a=a.1), filename=filename)
+    a.2 <- read.mat(filename)[['a']]
+
+    expect_identical(a.2, list(y=list('a', 'bb')))
+})
+
+test_that("string: case-4", {
+    filename <- tempfile(fileext = ".mat")
+    on.exit(unlink(filename))
+
+    a.1 <- list(c("a", "bb"))
+
+    write.mat(list(a=a.1), filename=filename)
+    a.2 <- read.mat(filename)[['a']]
+
+    expect_identical(a.2, list(list("a", "bb")))
 })
 
 context("logical")
@@ -245,7 +281,7 @@ context("logical")
 test_that("logical: case-1", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-    
+
   a.1 <- array(c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
                  FALSE, TRUE,  TRUE,  TRUE,  TRUE,
                  FALSE, FALSE, TRUE,  TRUE,  TRUE,
@@ -255,26 +291,26 @@ test_that("logical: case-1", {
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
 test_that("logical: case-2", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-    
+
   a.1 <- new("lgCMatrix",
              i = c(6L, 0L, 4L, 5L, 0L, 2L, 4L, 1L, 4L, 6L, 7L, 3L, 4L),
              p = c(0L, 1L, 4L, 7L, 11L, 13L),
              Dim = c(10L, 5L),
              Dimnames = list(NULL, NULL),
-             x = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
+             x = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
                  TRUE, TRUE, TRUE),
              factors = list())
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -283,12 +319,12 @@ context("struct")
 test_that("struct: case-1 (Empty structure array)", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-    
+
   a.1 <- structure(list(), .Names = character(0))
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -300,7 +336,7 @@ test_that("struct: case-2 (Empty structure array with fields)", {
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -316,7 +352,7 @@ test_that("struct: case-3 (Structure array with empty fields)", {
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -327,43 +363,43 @@ test_that("struct: case-4", {
   a.1 <- list(field1=list(1, 14),
               field2=list(array(as.numeric(2:13), c(3,4)),
                   array(as.numeric(15:26), c(3,4))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
 test_that("struct: case-5", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-  
+
   a.1 <- list(field1=list(1L, 14L),
               field2=list(array(2:13, c(3,4)),
                   array(15:26, c(3,4))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
 test_that("struct: case-6", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
-  
+
   a.1 <- list(field1=list(1+51i, 14+64i), field2=list(array(c(2+52i,
               3+53i, 4+54i, 5+55i, 6+56i, 7+57i, 8+58i, 9+59i, 10+60i,
               11+61i, 12+62i, 13+63i), c(3,4)), array(c(15+65i,
               16+66i, 17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
               23+73i, 24+74i, 25+75i, 26+76i), c(3,4))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
-    
+
 test_that("struct: case-7", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
@@ -373,7 +409,7 @@ test_that("struct: case-7", {
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -389,10 +425,10 @@ test_that("struct: case-8", {
                   0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
                   11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
                   16-36i, 20-40i), c(5,4))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -404,10 +440,10 @@ test_that("struct: case-9", {
                   "1234567890!@#$%^&*()-_=+`~"),
               field2 = c("ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                   "[{]}\\|;:'\",<.>/?          "))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -419,7 +455,7 @@ test_that("struct: case-10 (Structure array with empty fields)", {
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -428,10 +464,10 @@ test_that("struct: case-11", {
   on.exit(unlink(filename))
 
   a.1 <- list(field1=list(1))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -462,10 +498,10 @@ test_that("struct: case-12", {
                                         FALSE, TRUE, TRUE, TRUE, TRUE, TRUE),
                                       .Dim = c(5L, 5L)))),
                    .Names = c("field1", "field2"))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -473,24 +509,24 @@ test_that("struct: case-13", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  a.1 <- structure(list(X = structure(list(x = list(structure(c(1, 4, 
-    2, 5, 3, 6.2), .Dim = 2:3)), y = list(list("Hello", "world!")), 
-    z = list(structure(c(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 
+  a.1 <- structure(list(X = structure(list(x = list(structure(c(1, 4,
+    2, 5, 3, 6.2), .Dim = 2:3)), y = list(list("Hello", "world!")),
+    z = list(structure(c(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1), .Dim = c(14L, 14L
     )))), .Names = c("x", "y", "z"))), .Names = "X")
-  
+
   write.mat(a.1, filename=filename)
   a.2 <- read.mat(filename)
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -501,10 +537,10 @@ test_that("cell: case-1", {
   on.exit(unlink(filename))
 
   a.1 <- list()
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -517,10 +553,10 @@ test_that("cell: case-2", {
               character(0),
               numeric(0),
               integer(0))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -534,10 +570,10 @@ test_that("cell: case-3", {
               list(array(c(19, 21, 20, 22), c(2, 2)),
                    array(c(23, 25, 27, 24, 26, 28), c(3L, 2L)),
                    array(c(29, 31, 33, 35, 30, 32, 34, 36), c(4, 2))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -551,10 +587,10 @@ test_that("cell: case-4", {
               list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
                    array(c(23L, 25L, 27L, 24L, 26L, 28L), c(3L, 2L)),
                    array(c(29L, 31L, 33L, 35L, 30L, 32L, 34L, 36L), c(4, 2))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -564,10 +600,10 @@ test_that("cell: case-5", {
 
   a.1 <- list(list(triu(Matrix(1:20, nrow=4, ncol=5, sparse=TRUE)),
                    tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -583,10 +619,10 @@ test_that("cell: case-6", {
                       0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
                       11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
                       16-36i, 20-40i), c(5,4)))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -598,10 +634,10 @@ test_that("cell: case-7", {
                    "1234567890!@#$%^&*()-_=+`~"),
               list("ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                    "[{]}\\|;:'\",<.>/?          "))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -615,10 +651,10 @@ test_that("cell: case-8", {
               structure(list(field1 = numeric(0),
                              field2 = character(0)),
                         .Names = c("field1", "field2")))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -736,10 +772,10 @@ test_that("cell: case-9", {
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2"))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -761,10 +797,10 @@ test_that("cell: case-10", {
                        14-34i, 18-38i, 0+0i, 0+0i, 11-31i, 15-35i,
                        19-39i, 0+0i, 0+0i, 0+0i, 16-36i, 20-40i),
                        c(5,4)))))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -776,10 +812,10 @@ test_that("cell: case-11", {
                    field2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
               list(field1 = "1234567890!@#$%^&*()-_=+`~",
                    field2 = "[{]}\\|;:'\",<.>/?          "))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -812,10 +848,10 @@ test_that("cell: case-12", {
                           TRUE, TRUE, FALSE, TRUE, TRUE,
                           TRUE, TRUE, TRUE),
                         .Dim = c(5L, 5L)))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
 
@@ -829,10 +865,9 @@ test_that("cell: case-13", {
               structure(list(field1 = numeric(0),
                              field2 = character(0)),
                         .Names = c("field1", "field2")))
-  
+
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
-    
+
   expect_identical(a.2, a.1)
 })
-

@@ -1226,7 +1226,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
 static int
 write_cell_array_with_arrays(const SEXP elmt,
                              matvar_t *mat_cell,
-                             size_t dims[],
+                             size_t *dims,
+                             int ragged,
                              int compression)
 {
     SEXP cell;
@@ -1235,6 +1236,7 @@ write_cell_array_with_arrays(const SEXP elmt,
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt)
         || !LENGTH(elmt)
+        || NULL == dims
         || !dims[0]
         || !dims[1]
         || getAttrib(elmt, R_NamesSymbol) != R_NilValue)
@@ -1254,7 +1256,7 @@ write_cell_array_with_arrays(const SEXP elmt,
                            mat_cell,
                            0,
                            j*dims[0]+i,
-                           0,
+                           ragged,
                            compression))
                 return 1;
         }
@@ -1307,7 +1309,11 @@ write_cell(const SEXP elmt,
         if(empty)
             err = write_cell_array_with_empty_arrays(elmt, matvar);
         else
-            err = write_cell_array_with_arrays(elmt, matvar, dims, compression);
+            err = write_cell_array_with_arrays(elmt,
+                                               matvar,
+                                               dims,
+                                               ragged,
+                                               compression);
     }
 
     if (err) {
