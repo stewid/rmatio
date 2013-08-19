@@ -116,6 +116,57 @@ write_matvar(mat_t *mat,
  * @return 0 on succes or 1 on failure.
  */
 static int
+write_charsxp(const SEXP elmt,
+              mat_t *mat,
+              const char *name,
+              matvar_t *mat_struct,
+              matvar_t *mat_cell,
+              size_t field_index,
+              size_t index,
+              int compression)
+{
+    size_t dims[2], len;
+    int rank;
+    matvar_t *matvar=NULL;
+
+    if (R_NilValue == elmt
+        || CHARSXP != TYPEOF(elmt))
+        return 1;
+
+    dims[0] = 1;
+    dims[1] = LENGTH(elmt);
+
+    matvar = Mat_VarCreate(name,
+                           MAT_C_CHAR,
+                           MAT_T_UINT8,
+                           rank,
+                           dims,
+                           (void*)CHAR(elmt),
+                           0);
+
+    return write_matvar(mat,
+                        matvar,
+                        mat_struct,
+                        mat_cell,
+                        field_index,
+                        index,
+                        compression);
+}
+
+/** @brief
+ *
+ *
+ * @ingroup
+ * @param elmt R object to write
+ * @param mat MAT file pointer
+ * @param name Name of the variable to write
+ * @param mat_struct
+ * @param mat_cell
+ * @param field_index
+ * @param index
+ * @return 0 on succes or 1 on failure.
+ */
+static int
 write_realsxp(const SEXP elmt,
               mat_t *mat,
               const char *name,
@@ -707,6 +758,15 @@ write_elmt(const SEXP elmt,
         return 1;
 
     switch (TYPEOF(elmt)) {
+    case CHARSXP:
+        return write_charsxp(elmt,
+                             mat,
+                             name,
+                             mat_struct,
+                             mat_cell,
+                             field_index,
+                             index,
+                             compression);
     case REALSXP:
         return write_realsxp(elmt,
                              mat,
