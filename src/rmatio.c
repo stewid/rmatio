@@ -61,6 +61,17 @@ write_struct(const SEXP elmt,
              int compression);
 
 static int
+write_elmt(const SEXP elmt,
+           mat_t *mat,
+           const char *name,
+           matvar_t *mat_struct,
+           matvar_t *mat_cell,
+           size_t field_index,
+           size_t index,
+           int ragged,
+           int compression);
+
+static int
 read_mat_cell(SEXP list,
               int index,
               matvar_t *matvar);
@@ -106,6 +117,34 @@ write_matvar(mat_t *mat,
  *
  *
  * @ingroup
+ * @param elmt R object to create empty mat variable from
+ * @param matvar
+ * @return 0 on succes or 1 on failure.
+ */
+static matvar_t*
+create_char_MAT_variable(const char *name,
+                         size_t *dims,
+                         void *data)
+{
+    const int rank = 2;
+
+    if (NULL == dims
+        || NULL == data)
+        return NULL;
+
+    return Mat_VarCreate(name,
+                         MAT_C_CHAR,
+                         MAT_T_UINT8,
+                         rank,
+                         dims,
+                         data,
+                         0);
+}
+
+/** @brief
+ *
+ *
+ * @ingroup
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -125,9 +164,8 @@ write_charsxp(const SEXP elmt,
               size_t index,
               int compression)
 {
-    size_t dims[2], len;
-    int rank;
-    matvar_t *matvar=NULL;
+    size_t dims[2];
+    matvar_t *matvar;
 
     if (R_NilValue == elmt
         || CHARSXP != TYPEOF(elmt))
@@ -136,13 +174,9 @@ write_charsxp(const SEXP elmt,
     dims[0] = 1;
     dims[1] = LENGTH(elmt);
 
-    matvar = Mat_VarCreate(name,
-                           MAT_C_CHAR,
-                           MAT_T_UINT8,
-                           rank,
-                           dims,
-                           (void*)CHAR(elmt),
-                           0);
+    matvar = create_char_MAT_variable(name, dims, (void*)CHAR(elmt));
+    if (NULL == matvar)
+        return 1;
 
     return write_matvar(mat,
                         matvar,
@@ -464,83 +498,69 @@ write_strsxp(const SEXP elmt,
         || !isNull(getAttrib(elmt, R_DimSymbol)))
         return 1;
 
-    if (mat_struct) {
-        dims[0] = 1;
+    if (mat_struct
+        && LENGTH(STRING_ELT(elmt, index)) != LENGTH(STRING_ELT(elmt, 0)))
+        return 1;
+    if (ragged
+        && NULL == mat_cell)
+        return 1;
+
+    if (mat_struct || ragged)
+        return write_elmt(STRING_ELT(elmt, index),
+                          mat,
+                          name,
+                          mat_struct,
+                          mat_cell,
+                          field_index,
+                          index,
+                          ragged,
+                          compression);
+
+    dims[0] = LENGTH(elmt);
+    if (dims[0])
         dims[1] = LENGTH(STRING_ELT(elmt, 0));
-        if (LENGTH(STRING_ELT(elmt, index)) != dims[1])
+
+    if (all_strings_have_equal_length(elmt)) {
+        mat_uint8_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
+        if (NULL == buf)
             return 1;
 
-        matvar = Mat_VarCreate(name,
-                               MAT_C_CHAR,
-                               MAT_T_UINT8,
-                               rank,
-                               dims,
-                               (void*)CHAR(STRING_ELT(elmt, index)),
-                               0);
-    } else if (ragged) {
-        if (NULL == mat_cell)
+        for (size_t i=0;i<dims[0];i++) {
+            for (size_t j=0;j<dims[1];j++)
+                buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
+        }
+
+        matvar = create_char_MAT_variable(name, dims, buf);
+        free(buf);
+
+        if (NULL == matvar)
             return 1;
-
-        dims[0] = 1;
-        dims[1] = LENGTH(STRING_ELT(elmt, index));
-
-        matvar = Mat_VarCreate(name,
-                               MAT_C_CHAR,
-                               MAT_T_UINT8,
-                               rank,
-                               dims,
-                               (void*)CHAR(STRING_ELT(elmt, index)),
-                               0);
     } else {
-        dims[0] = LENGTH(elmt);
-        if (dims[0])
-            dims[1] = LENGTH(STRING_ELT(elmt, 0));
+        /* Write strings in a cell */
+        dims[1] = 1;
+        matvar = Mat_VarCreate(name,
+                               MAT_C_CELL,
+                               MAT_T_CELL,
+                               rank,
+                               dims,
+                               NULL,
+                               0);
 
-        if (all_strings_have_equal_length(elmt)) {
-            mat_uint8_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
-            if (NULL == buf)
+        if (NULL == matvar)
+            return 1;
+
+        for (size_t i=0;i<dims[0];i++) {
+            if (write_elmt(STRING_ELT(elmt, i),
+                           mat,
+                           NULL,
+                           NULL,
+                           matvar,
+                           0,
+                           i,
+                           0,
+                           compression)) {
+                Mat_VarFree(matvar);
                 return 1;
-
-            for (size_t i=0;i<dims[0];i++) {
-                for (size_t j=0;j<dims[1];j++)
-                    buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
-            }
-
-            matvar = Mat_VarCreate(name,
-                                   MAT_C_CHAR,
-                                   MAT_T_UINT8,
-                                   rank,
-                                   dims,
-                                   buf,
-                                   0);
-
-            free(buf);
-        } else {
-            /* Write strings in a cell */
-            dims[1] = 1;
-            matvar = Mat_VarCreate(name,
-                                   MAT_C_CELL,
-                                   MAT_T_CELL,
-                                   rank,
-                                   dims,
-                                   NULL,
-                                   0);
-
-            for (size_t i=0;i<dims[0];i++) {
-                size_t dims_cell[2];
-                matvar_t *cell;
-
-                dims_cell[0] = 1;
-                dims_cell[1] = LENGTH(STRING_ELT(elmt, i));
-
-                cell = Mat_VarCreate(NULL,
-                                     MAT_C_CHAR,
-                                     MAT_T_UINT8,
-                                     rank,
-                                     dims_cell,
-                                     (void*)CHAR(STRING_ELT(elmt, i)),
-                                     0);
-                Mat_VarSetCell(matvar, i, cell);
             }
         }
     }
