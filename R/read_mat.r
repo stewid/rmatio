@@ -19,14 +19,14 @@
 ##' Reads the values in a mat-file using the C library MATIO and
 ##' stores them in a list. The following data structures are
 ##' implemented.\cr
-##' 
+##'
 ##' \strong{Vectors}
 ##' \tabular{llll}{
 ##'   \bold{MATIO CLASS} \tab \bold{Dimension} \tab \bold{R data structure} \tab \bold{Length}\cr
 ##'   MAT_C_DOUBLE \tab 1 x n \tab \code{\link[base:double]{vector}} \tab n\cr
 ##'   MAT_C_DOUBLE \tab n x 1 \tab \code{\link[base:double]{vector}} \tab n\cr
 ##' }
-##' 
+##'
 ##' \strong{Matrices}
 ##' \tabular{llll}{
 ##'   \bold{MATIO CLASS} \tab \bold{Dimension} \tab \bold{R data structure} \tab \bold{Dim}\cr
@@ -39,10 +39,10 @@
 ##'   \bold{MATIO CLASS} \tab \bold{Dimension} \tab \bold{R data structure} \tab \bold{Dim}\cr
 ##'   MAT_C_SPARSE \tab row x col \tab \code{\link[=dgCMatrix-class]{dgCMatrix}} \tab row x col\cr
 ##' }
-##' 
+##'
 ##' @title Read Matlab file
-##' @param filename  The MAT file to read.
-##' @return list
+##' @param filename Character string, with the MAT file or URL to read.
+##' @return A list with the variables read.
 ##' @references \itemize{
 ##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.1.\cr
 ##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.1/matio_user_guide.pdf}
@@ -50,16 +50,25 @@
 ##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 ##' @export
 ##' @useDynLib rmatio
+##' @examples
+##' \dontrun{
+##' ## Read a mat file from an URL
+##' m <- read.mat('http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/matio_test_cases_compressed_le.mat?format=raw')
+##' }
 read.mat <- function(filename) {
     ## Argument checking
     stopifnot(is.character(filename),
               identical(length(filename), 1L),
               nchar(filename) > 0)
 
-    if(!file.exists(filename)) {
+    if (length(grep("^(http|ftp|https)://", filename))) {
+        tmp <- tempfile(fileext = ".mat")
+        download.file(filename, tmp, quiet = TRUE, mode = "wb")
+        filename <- tmp
+        on.exit(unlink(filename))
+    } else if(!file.exists(filename)) {
         stop(sprintf("File don't exists: %s", filename))
     }
 
     return(.Call('read_mat', filename))
 }
-

@@ -21,10 +21,11 @@
   read.mat(filename)
 }
 \arguments{
-  \item{filename}{The MAT file to read.}
+  \item{filename}{Character string, with the MAT file or
+  URL to read.}
 }
 \value{
-  list
+  A list with the variables read.
 }
 \description{
   Reads the values in a mat-file to a list.
@@ -53,6 +54,12 @@
   data structure} \tab \bold{Dim}\cr MAT_C_SPARSE \tab row
   x col \tab \code{\link[=dgCMatrix-class]{dgCMatrix}} \tab
   row x col\cr }
+}
+\examples{
+\dontrun{
+## Read a mat file from an URL
+m <- read.mat('http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/matio_test_cases_compressed_le.mat?format=raw')
+}
 }
 \references{
   \itemize{ \item Christopher C. Hulbert, MATIO User Manual
