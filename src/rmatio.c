@@ -210,7 +210,7 @@ write_realsxp(const SEXP elmt,
               size_t index,
               int compression)
 {
-    size_t *dims, len;
+    size_t *dims;
     int rank;
     matvar_t *matvar=NULL;
 
@@ -263,7 +263,7 @@ write_intsxp(const SEXP elmt,
              size_t index,
              int compression)
 {
-    size_t *dims, len;
+    size_t *dims;
     int rank;
     matvar_t *matvar=NULL;
 
@@ -1013,7 +1013,7 @@ set_dims(const SEXP elmt,
             switch (TYPEOF(item)) {
             case VECSXP:
             {
-                int tmp;
+                int tmp = 0;
 
                 if (R_NilValue == getAttrib(item, R_NamesSymbol))
                     tmp = LENGTH(item);
@@ -1361,7 +1361,6 @@ write_cell(const SEXP elmt,
 
 {
     size_t dims[2];
-    size_t nfields;
     matvar_t *matvar;
     const int rank = 2;
     int err = 1;
@@ -2048,8 +2047,7 @@ read_mat_data(SEXP list,
         break;
 
     default:
-        error("Unimplemented Matlab data type");
-        break;
+        return 1;
     }
 
     set_dim(m, matvar);
@@ -2080,25 +2078,17 @@ read_logical(SEXP list,
         || 2 > matvar->rank
         || NULL == matvar->dims
         || NULL == matvar->data
-        || !matvar->isLogical)
+        || !matvar->isLogical
+        || MAT_T_UINT8 != matvar->data_type)
         return 1;
 
     len = matvar->dims[0];
     for (size_t j=1;j<matvar->rank;j++)
         len *= matvar->dims[j];
 
-    switch (matvar->data_type) {
-    case MAT_T_UINT8:
-        PROTECT(m = allocVector(LGLSXP, len));
-        for (size_t j=0;j<len;j++)
-            LOGICAL(m)[j] = (0 != ((mat_uint8_t*)matvar->data)[j]);
-        break;
-
-    default:
-        error("Unimplemented Matlab logical data type");
-        break;
-    }
-
+    PROTECT(m = allocVector(LGLSXP, len));
+    for (size_t j=0;j<len;j++)
+        LOGICAL(m)[j] = (0 != ((mat_uint8_t*)matvar->data)[j]);
     set_dim(m, matvar);
     SET_VECTOR_ELT(list, index, m);
     UNPROTECT(1);
@@ -2952,9 +2942,8 @@ write_mat(const SEXP list,
           const SEXP version)
 {
     SEXP names;    /* names in list */
-    SEXP elmt;     /* element in list */
     mat_t *mat;
-    int err, use_compression = MAT_COMPRESSION_NONE;
+    int use_compression = MAT_COMPRESSION_NONE;
     const SEXP compression = R_NilValue;
 
     if (list == R_NilValue)
