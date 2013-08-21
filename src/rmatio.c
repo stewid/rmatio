@@ -1728,8 +1728,8 @@ read_mat_char(SEXP list,
         break;
     }
     default:
-        error("Unimplemented Matlab character data type");
-        break;
+        UNPROTECT(1);
+        return 1;
     }
 
     SET_VECTOR_ELT(list, index, c);
@@ -2452,18 +2452,21 @@ read_structure_array_with_fields(SEXP list,
                 case MAT_T_UNKNOWN:
                 {
                     char* buf = (char*)malloc((field->dims[1]+1)*sizeof(char));
-                    if (NULL == buf)
-                        error("Unable to allocate buffer");
-                    for (size_t k=0;k<field->dims[1];k++)
-                        buf[k] = ((char*)field->data)[k];
-                    buf[field->dims[1]] = 0;
-                    SET_STRING_ELT(s, j, mkChar(buf));
-                    free(buf);
+                    if (NULL == buf) {
+                        err = 1;
+                    } else {
+                        for (size_t k=0;k<field->dims[1];k++)
+                            buf[k] = ((char*)field->data)[k];
+                        buf[field->dims[1]] = 0;
+                        SET_STRING_ELT(s, j, mkChar(buf));
+                        free(buf);
+                        err = 0;
+                    }
                     break;
                 }
 
                 default:
-                    error("Unimplemented Matlab character data type");
+                    err = 1;
                     break;
                 }
                 break;
