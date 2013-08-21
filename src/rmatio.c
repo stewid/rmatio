@@ -198,6 +198,7 @@ write_charsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -251,6 +252,7 @@ write_realsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -304,6 +306,7 @@ write_intsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -382,6 +385,7 @@ write_cplxsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -475,7 +479,7 @@ all_strings_have_equal_length(const SEXP elmt)
  * @param field_index
  * @param index
  * @param ragged
- * @param compression
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -585,6 +589,7 @@ write_strsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -636,6 +641,7 @@ write_vecsxp(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -694,6 +700,7 @@ write_dgCMatrix(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -760,6 +767,7 @@ write_lgCMatrix(const SEXP elmt,
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1299,6 +1307,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
  * @param elmt R object to write
  * @param mat_cell
  * @param dims
+ * @param ragged
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1347,6 +1357,11 @@ write_cell_array_with_arrays(const SEXP elmt,
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
+ * @param mat_struct
+ * @param mat_cell
+ * @param field_index
+ * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1455,6 +1470,8 @@ write_structure_array_with_empty_fields(const SEXP elmt,
  * @param names
  * @param matvar
  * @param dims
+ * @param ragged
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1517,12 +1534,13 @@ write_structure_array_with_fields(const SEXP elmt,
  * @ingroup
  * @param elmt R object to write
  * @param names
- * @param mat
+ * @param mat MAT file pointer
  * @param name Name of the variable to write
  * @param mat_struct
  * @param mat_cell
  * @param field_index
  * @param index
+ * @param compression Write the file with compression or not
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1630,7 +1648,7 @@ write_struct(const SEXP elmt,
  *
  *
  * @ingroup
- * @param mat
+ * @param mat MAT file pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2971,8 +2989,6 @@ read_mat_cell(SEXP list,
  *
  * @ingroup
  * @param filename
- * @param index
- * @param matvar
  * @return a named list (VECSXP).
  */
 SEXP read_mat(const SEXP filename)
@@ -3096,7 +3112,7 @@ SEXP read_mat(const SEXP filename)
  * @param list List of variables to write
  * @param filename Name of MAT file to create
  * @param version MAT file version to create
- * @param compression
+ * @param compression Write the file with compression or not
  * @return R_NilValue.
  */
 SEXP
