@@ -1677,6 +1677,8 @@ set_dim(SEXP m,
         setAttrib(m, R_DimSymbol, dim);
         UNPROTECT(1);
     }
+
+    return 0;
 }
 
 /** @brief
@@ -1800,7 +1802,10 @@ read_sparse(SEXP list,
             }
         }
 
-        set_dim(m, matvar);
+        if (set_dim(m, matvar)) {
+            UNPROTECT(1);
+            return 1;
+        }
     } else {
         if (matvar->isLogical)
             PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
@@ -1956,7 +1961,11 @@ read_mat_complex(SEXP list,
         return 1;
     }
 
-    set_dim(m, matvar);
+    if (set_dim(m, matvar)) {
+        UNPROTECT(1);
+        return 1;
+    }
+
     SET_VECTOR_ELT(list, index, m);
     UNPROTECT(1);
 
@@ -2076,7 +2085,11 @@ read_mat_data(SEXP list,
         return 1;
     }
 
-    set_dim(m, matvar);
+    if (set_dim(m, matvar)) {
+        UNPROTECT(1);
+        return 1;
+    }
+
     SET_VECTOR_ELT(list, index, m);
     UNPROTECT(1);
 
@@ -2117,7 +2130,12 @@ read_logical(SEXP list,
         return 1;
     for (size_t j=0;j<len;j++)
         LOGICAL(m)[j] = (0 != ((mat_uint8_t*)matvar->data)[j]);
-    set_dim(m, matvar);
+
+    if (set_dim(m, matvar)) {
+        UNPROTECT(1);
+        return 1;
+    }
+
     SET_VECTOR_ELT(list, index, m);
     UNPROTECT(1);
 
