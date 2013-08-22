@@ -530,6 +530,135 @@ test_that("struct: case-13", {
   expect_identical(a.2, a.1)
 })
 
+test_that("struct: case-14", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c(1, 2))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, list(y = list("a", "bb"), z = list(c(1, 2))))
+})
+
+test_that("struct: case-15", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c("c", "dd"))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, list(y = list("a", "bb"),
+                             z = list("c", "dd")))
+})
+
+test_that("struct: case-16", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "b"), z=c(1, 2))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(a = list(y = list("a", "b"),
+                                 z = list(c(1, 2)))))
+})
+
+test_that("struct: case-17", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "b"), z=c(1, 2, 3))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(a = list(y = list("a", "b"),
+                                 z = list(c(1, 2, 3)))))
+})
+
+test_that("struct: case-18", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c(1, 2, 3))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(a = list(y = list("a", "bb"),
+                                 z = list(c(1, 2, 3)))))
+})
+
+test_that("struct: case-19", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c(1, 2))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = list('a', 'bb'),
+                             z = c(1, 2)))
+})
+
+test_that("struct: case-20", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c("c", "dd"))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = list("a", "bb"),
+                             z = list("c", "dd")))
+})
+
+test_that("struct: case-21", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "b"), z=c(1, 2))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = c("a", "b"),
+                             z = c(1, 2)))
+})
+
+test_that("struct: case-22", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "b"), z=c(1, 2, 3))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = c("a", "b"),
+                             z = c(1, 2, 3)))
+})
+
+test_that("struct: case-23", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=c(1, 2, 3))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = list("a", "bb"),
+                             z = c(1, 2, 3)))
+})
+
 context("cell")
 
 test_that("cell: case-1", {
@@ -865,6 +994,18 @@ test_that("cell: case-13", {
               structure(list(field1 = numeric(0),
                              field2 = character(0)),
                         .Names = c("field1", "field2")))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, a.1)
+})
+
+test_that("cell: case-14", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(c("a", "bb"), c("c", "dd"))
 
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]

@@ -999,8 +999,7 @@ set_dims(const SEXP elmt,
          int *ragged)
 {
     size_t len=0;
-    int vecsxp = 0, non_vecsxp = 0;
-    int is_cell;
+    int vecsxp = 0, non_vecsxp = 0, is_cell = 0;
 
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt)
@@ -1013,7 +1012,8 @@ set_dims(const SEXP elmt,
     *ragged = 0;
 
     /* Check if cell (have no names) or structure array. */
-    is_cell = (R_NilValue == getAttrib(elmt, R_NamesSymbol));
+    if (R_NilValue == getAttrib(elmt, R_NamesSymbol))
+        is_cell = 1;
 
     if (LENGTH(elmt)) {
         for (int i=0;i<LENGTH(elmt);i++) {
@@ -1053,7 +1053,7 @@ set_dims(const SEXP elmt,
                 if(!i)
                     len = LENGTH(item) > 1;
                 else if(len != (LENGTH(item) > 1))
-                    return 1;
+                    *ragged = 1;
                 non_vecsxp = 1;
                 break;
 
@@ -1528,6 +1528,96 @@ write_structure_array_with_fields(const SEXP elmt,
     return 0;
 }
 
+static int
+write_ragged_struct(const SEXP elmt,
+                    const SEXP names,
+                    matvar_t *matvar,
+                    size_t nfields,
+                    int compression)
+{
+    size_t dims[2] = {0, 0};
+    const int rank = 2;
+
+    if (R_NilValue == elmt
+        || VECSXP != TYPEOF(elmt)
+        || NULL == matvar
+        || !nfields)
+        return 1;
+
+    for (size_t i=0;i<nfields;i++) {
+        matvar_t *cell;
+        const char *fieldname = NULL;
+
+        switch (TYPEOF(VECTOR_ELT(elmt, i))) {
+        case STRSXP:
+            dims[0] = LENGTH(VECTOR_ELT(elmt, i));
+            dims[1] = 1;
+            break;
+        case REALSXP:
+        case INTSXP:
+        case CPLXSXP:
+        case LGLSXP:
+            dims[0] = LENGTH(VECTOR_ELT(elmt, i)) > 1;
+            dims[1] = 1;
+            break;
+        default:
+            error("Not implemented: %i", TYPEOF(VECTOR_ELT(elmt, i)));
+        }
+
+        if (R_NilValue != names)
+            fieldname = CHAR(STRING_ELT(names, i));
+
+        cell = Mat_VarCreate(fieldname,
+                             MAT_C_CELL,
+                             MAT_T_CELL,
+                             rank,
+                             dims,
+                             NULL,
+                             0);
+
+        Mat_VarSetStructFieldByIndex(matvar, i, 0, cell);
+
+        switch (TYPEOF(VECTOR_ELT(elmt, i))) {
+        case STRSXP:
+            for (size_t j=0;j<dims[0];j++) {
+                if (write_elmt(STRING_ELT(VECTOR_ELT(elmt, i), j),
+                               NULL,
+                               NULL,
+                               NULL,
+                               cell,
+                               0,
+                               j,
+                               0,
+                               compression)) {
+                    return 1;
+                }
+            }
+            break;
+        case REALSXP:
+        case INTSXP:
+        case CPLXSXP:
+        case LGLSXP:
+            if (write_elmt(VECTOR_ELT(elmt, i),
+                           NULL,
+                           NULL,
+                           NULL,
+                           cell,
+                           0,
+                           0,
+                           0,
+                           compression)) {
+                return 1;
+            }
+            break;
+        default:
+            error("Not implemented: %i", TYPEOF(VECTOR_ELT(elmt, i)));
+        }
+
+    }
+
+    return 0;
+}
+
 /** @brief
  *
  *
@@ -1580,32 +1670,15 @@ write_struct(const SEXP elmt,
     }
 
     if (ragged) {
-        size_t dims_1_1[2] = {1, 1};
-
-        matvar = Mat_VarCreateStruct(name,
-                                     rank,
-                                     dims_1_1,
-                                     fieldnames,
-                                     nfields);
-
-        for (size_t i=0;i<nfields;i++) {
-            matvar_t *cell = Mat_VarCreate(fieldnames[i],
-                                           MAT_C_CELL,
-                                           MAT_T_CELL,
-                                           rank,
-                                           dims,
-                                           NULL,
-                                           0);
-
-            Mat_VarSetStructFieldByIndex(matvar, i, 0, cell);
-        }
-    } else {
-        matvar = Mat_VarCreateStruct(name,
-                                     rank,
-                                     dims,
-                                     fieldnames,
-                                     nfields);
+        dims[0] = 1;
+        dims[1] = 1;
     }
+
+    matvar = Mat_VarCreateStruct(name,
+                                 rank,
+                                 dims,
+                                 fieldnames,
+                                 nfields);
 
     if (fieldnames)
         free(fieldnames);
@@ -1613,7 +1686,13 @@ write_struct(const SEXP elmt,
     if (NULL == matvar)
         return 1;
 
-    if (nfields && dims[0] && dims[1]) {
+    if (ragged) {
+        err = write_ragged_struct(elmt,
+                                  names,
+                                  matvar,
+                                  nfields,
+                                  compression);
+    } else if (nfields && dims[0] && dims[1]) {
         if (empty)
             err = write_structure_array_with_empty_fields(elmt, names, matvar);
         else
