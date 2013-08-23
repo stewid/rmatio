@@ -76,6 +76,73 @@ read_mat_cell(SEXP list,
               int index,
               matvar_t *matvar);
 
+/** @brief Create matvar_t pointer to an empty data structure
+ *
+ *
+ * @ingroup
+ * @param elmt R object to create empty mat variable from
+ * @return
+ */
+static matvar_t *
+Mat_VarCreateEmpty(const SEXP elmt)
+{
+    size_t dims_0_1[2] = {0, 1};
+    const int rank = 2;
+
+    if (R_NilValue == elmt)
+        return NULL;
+
+    switch (TYPEOF(elmt)) {
+    case REALSXP:
+        return Mat_VarCreate(NULL,
+                             MAT_C_DOUBLE,
+                             MAT_T_DOUBLE,
+                             rank,
+                             dims_0_1,
+                             NULL,
+                             0);
+    case INTSXP:
+        return Mat_VarCreate(NULL,
+                             MAT_C_INT32,
+                             MAT_T_INT32,
+                             rank,
+                             dims_0_1,
+                             NULL,
+                             0);
+    case CPLXSXP:
+        return Mat_VarCreate(NULL,
+                             MAT_C_DOUBLE,
+                             MAT_T_DOUBLE,
+                             rank,
+                             dims_0_1,
+                             NULL,
+                             MAT_F_COMPLEX);
+    case LGLSXP:
+        return Mat_VarCreate(NULL,
+                             MAT_C_UINT8,
+                             MAT_T_UINT8,
+                             rank,
+                             dims_0_1,
+                             NULL,
+                             MAT_F_LOGICAL);
+    case STRSXP:
+        return Mat_VarCreate(NULL,
+                             MAT_C_CHAR,
+                             MAT_T_UINT8,
+                             rank,
+                             dims_0_1,
+                             NULL,
+                             0);
+    default:
+        return NULL;
+    }
+}
+
+/*
+ * -------------------------------------------------------------
+ *   Write functions
+ * -------------------------------------------------------------
+ */
 
 /** @brief
  *
@@ -117,34 +184,6 @@ write_matvar(mat_t *mat,
  *
  *
  * @ingroup
- * @param elmt R object to create empty mat variable from
- * @param matvar
- * @return 0 on succes or 1 on failure.
- */
-static matvar_t*
-create_char_MAT_variable(const char *name,
-                         size_t *dims,
-                         void *data)
-{
-    const int rank = 2;
-
-    if (NULL == dims
-        || NULL == data)
-        return NULL;
-
-    return Mat_VarCreate(name,
-                         MAT_C_CHAR,
-                         MAT_T_UINT8,
-                         rank,
-                         dims,
-                         data,
-                         0);
-}
-
-/** @brief
- *
- *
- * @ingroup
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -165,6 +204,7 @@ write_charsxp(const SEXP elmt,
               int compression)
 {
     size_t dims[2];
+    const int rank = 2;
     matvar_t *matvar;
 
     if (R_NilValue == elmt
@@ -174,7 +214,14 @@ write_charsxp(const SEXP elmt,
     dims[0] = 1;
     dims[1] = LENGTH(elmt);
 
-    matvar = create_char_MAT_variable(name, dims, (void*)CHAR(elmt));
+    matvar = Mat_VarCreate(name,
+                           MAT_C_CHAR,
+                           MAT_T_UINT8,
+                           rank,
+                           dims,
+                           (void*)CHAR(elmt),
+                           0);
+
     if (NULL == matvar)
         return 1;
 
@@ -534,7 +581,14 @@ write_strsxp(const SEXP elmt,
                 buf[dims[0]*j + i] = CHAR(STRING_ELT(elmt, i))[j];
         }
 
-        matvar = create_char_MAT_variable(name, dims, buf);
+        matvar = Mat_VarCreate(name,
+                               MAT_C_CHAR,
+                               MAT_T_UINT8,
+                               rank,
+                               dims,
+                               buf,
+                               0);
+
         free(buf);
 
         if (NULL == matvar)
@@ -1106,85 +1160,6 @@ set_dims(const SEXP elmt,
  *
  *
  * @ingroup
- * @param elmt R object to create empty mat variable from
- * @param matvar
- * @return 0 on succes or 1 on failure.
- */
-static int
-create_empty_MAT_variable(const SEXP elmt,
-                          matvar_t **matvar)
-{
-    size_t dims_0_1[2] = {0, 1};
-    const int rank = 2;
-
-    if (R_NilValue == elmt)
-        return 1;
-
-    switch (TYPEOF(elmt)) {
-    case REALSXP:
-        *matvar = Mat_VarCreate(NULL,
-                                MAT_C_DOUBLE,
-                                MAT_T_DOUBLE,
-                                rank,
-                                dims_0_1,
-                                NULL,
-                                0);
-        break;
-
-    case INTSXP:
-        *matvar = Mat_VarCreate(NULL,
-                                MAT_C_INT32,
-                                MAT_T_INT32,
-                                rank,
-                                dims_0_1,
-                                NULL,
-                                0);
-        break;
-
-    case CPLXSXP:
-        *matvar = Mat_VarCreate(NULL,
-                                MAT_C_DOUBLE,
-                                MAT_T_DOUBLE,
-                                rank,
-                                dims_0_1,
-                                NULL,
-                                MAT_F_COMPLEX);
-        break;
-
-    case LGLSXP:
-        *matvar = Mat_VarCreate(NULL,
-                                MAT_C_UINT8,
-                                MAT_T_UINT8,
-                                rank,
-                                dims_0_1,
-                                NULL,
-                                MAT_F_LOGICAL);
-        break;
-
-    case STRSXP:
-        *matvar = Mat_VarCreate(NULL,
-                                MAT_C_CHAR,
-                                MAT_T_UINT8,
-                                rank,
-                                dims_0_1,
-                                NULL,
-                                0);
-        break;
-
-    default:
-        return 1;
-    }
-
-    if(NULL == *matvar)
-        return 1;
-
-    return 0;
-}
-
-/** @brief
- *
- *
- * @ingroup
  * @param elmt R object to write
  * @param mat_cell
  * @return 0 on succes or 1 on failure.
@@ -1223,7 +1198,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
         case CPLXSXP:
         case LGLSXP:
         case STRSXP:
-            if(create_empty_MAT_variable(item, &cell))
+            cell = Mat_VarCreateEmpty(item);
+            if(NULL == cell)
                 return 1;
             break;
 
@@ -1262,7 +1238,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt,
                             case CPLXSXP:
                             case LGLSXP:
                             case STRSXP:
-                                if(create_empty_MAT_variable(VECTOR_ELT(item, j), &field))
+                                field = Mat_VarCreateEmpty(VECTOR_ELT(item, j));
+                                if(NULL == field)
                                     return 1;
                                 break;
 
@@ -1453,8 +1430,8 @@ write_structure_array_with_empty_fields(const SEXP elmt,
         SEXP field_elmt = VECTOR_ELT(elmt, field_index);
         if (LENGTH(field_elmt))
             return 1;
-
-        if(create_empty_MAT_variable(field_elmt, &field))
+        field = Mat_VarCreateEmpty(field_elmt);
+        if(NULL == field)
             return 1;
         Mat_VarSetStructFieldByIndex(mat_struct, field_index, 0, field);
     }
