@@ -659,6 +659,82 @@ test_that("struct: case-23", {
                              z = c(1, 2, 3)))
 })
 
+test_that("struct: case-24", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=list(c('d', 'eee')))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(a = list(y = list("a", "bb"),
+                                 z = list(list(list("d", "eee"))))))
+})
+
+test_that("struct: case-25", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=list(c('d', 'eee')))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y = list("a", "bb"),
+                             z = list(list("d", "eee"))))
+})
+
+test_that("struct: case-26", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                         0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                         0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                         nrow=3,
+                                         ncol=9,
+                                         byrow=TRUE,
+                                         sparse=TRUE))
+
+  write.mat(a.1, filename=filename)
+  a.2 <- read.mat(filename)
+
+  expect_identical(a.2, list(y=list("a", "bb"),
+                             z=Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                 nrow=3,
+                                 ncol=9,
+                                 byrow=TRUE,
+                                 sparse=TRUE)))
+})
+
+test_that("struct: case-27", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(y=c("a", "bb"), z=Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                         0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                         0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                         nrow=3,
+                                         ncol=9,
+                                         byrow=TRUE,
+                                         sparse=TRUE))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, list(y=list("a", "bb"),
+                             z=list(Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                 nrow=3,
+                                 ncol=9,
+                                 byrow=TRUE,
+                                 sparse=TRUE))))
+})
+
 context("cell")
 
 test_that("cell: case-1", {
@@ -1010,5 +1086,43 @@ test_that("cell: case-14", {
   write.mat(list(a=a.1), filename=filename)
   a.2 <- read.mat(filename)[['a']]
 
-  expect_identical(a.2, a.1)
+  expect_identical(a.2, list(list("a", "bb"), list("c", "dd")))
+})
+
+test_that("cell: case-15", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(c("a", "bb"), list(c('d', 'eee')))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, list(list("a", "bb"),
+                             list(list(list("d", "eee")))))
+})
+
+test_that("cell: case-16", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
+
+  a.1 <- list(c("a", "bb"), Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                     0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                     nrow=3,
+                                     ncol=9,
+                                     byrow=TRUE,
+                                     sparse=TRUE))
+
+  write.mat(list(a=a.1), filename=filename)
+  a.2 <- read.mat(filename)[['a']]
+
+  expect_identical(a.2, list(list("a", "bb"),
+                             list(Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                           0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                           0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                         nrow=3,
+                                         ncol=9,
+                                         byrow=TRUE,
+                                         sparse=TRUE))))
 })
