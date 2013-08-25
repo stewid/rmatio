@@ -4,7 +4,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Christopher", "Hulbert",
     role = c("aut"),
-    comment = "Author of the C-library matio, http://sourceforge.net/projects/matio/")
+    comment = "Author of the C-library matio, http://sourceforge.net/projects/matio/"),
     person("Stefan", "Widgren",
     role = c("aut", "cre"),
     email = "stefan.widgren@sva.se",
