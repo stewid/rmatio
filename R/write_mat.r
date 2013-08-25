@@ -19,7 +19,7 @@
 ##' Writes the values in the list to a mat-file using the C library
 ##' MATIO. All values in the list must have unique names. The
 ##' following data structures are implemented.\cr
-##' 
+##'
 ##' \strong{Vectors and matrices}
 ##' \tabular{lllll}{
 ##'   \bold{R data structure} \tab \bold{R storage mode} \tab \bold{MATIO CLASS} \tab \bold{MATIO TYPE} \tab \bold{Dimension}\cr
@@ -34,7 +34,7 @@
 ##'   \bold{R data structure} \tab \bold{MATIO CLASS} \tab \bold{MATIO TYPE} \tab \bold{Dimension}\cr
 ##'   \code{\link[=dgCMatrix-class]{dgCMatrix}} \tab MAT_C_SPARSE \tab MAT_T_DOUBLE \tab row x col \cr
 ##' }
-##' 
+##'
 ##' @name write.mat-methods
 ##' @aliases write.mat
 ##' @aliases write.mat-methods
@@ -43,6 +43,7 @@
 ##' @title Write Matlab file
 ##' @param object The \code{object} to write.
 ##' @param filename The MAT file to write.
+##' @param compression Use compression when writing variables. Defaults to TRUE.
 ##' @param version MAT file version to create. Currently only support
 ##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
@@ -56,13 +57,13 @@
 ##' @examples
 ##' \dontrun{
 ##' filename <- tempfile(fileext = ".mat")
-##' 
+##'
 ##' ## Example how to read and write an integer vector with rmatio
 ##' write.mat(list(a=1:5), filename=filename)
 ##' a <- as.integer(read.mat(filename)[["a"]])
-##' 
+##'
 ##' stopifnot(identical(a, 1:5))
-##' 
+##'
 ##' unlink(filename)
 ##'
 ##' ## Example how to read and write a S4 class with rmatio
@@ -72,7 +73,7 @@
 ##'                         b = "integer",
 ##'                         c = "matrix",
 ##'                         d = "numeric"))
-##' 
+##'
 ##' ## Create a function to coerce a 'DemoS4Mat' object to a list.
 ##' setAs(from="DemoS4Mat",
 ##'       to="list",
@@ -84,7 +85,7 @@
 ##'                     d=from@@d))
 ##'       }
 ##' )
-##' 
+##'
 ##' ## Create a function to coerce a list to a 'DemoS4Mat' object.
 ##' setAs(from="list",
 ##'       to="DemoS4Mat",
@@ -97,7 +98,7 @@
 ##'                     d=from[["d"]]))
 ##'       }
 ##' )
-##' 
+##'
 ##' ## Define a method to write a 'DemoS4Mat' object to a MAT file.
 ##' setMethod("write.mat",
 ##'           signature(object = "DemoS4Mat"),
@@ -141,12 +142,14 @@ setGeneric("write.mat",
            signature = "object",
            function(object,
                     filename = NULL,
+                    compression = TRUE,
                     version = c('MAT5')) standardGeneric("write.mat"))
 
 setMethod("write.mat",
           signature(object = "list"),
           function(object,
                    filename,
+                   compression,
                    version)
           {
             ## Check filename
@@ -154,6 +157,18 @@ setMethod("write.mat",
                    !identical(length(filename), 1L),
                    nchar(filename) < 1)) {
               stop("'filename' must be a character vector of length one")
+            }
+
+            ## Check compression
+            if(any(!is.logical(compression),
+                   !identical(length(compression), 1L))) {
+              stop("'compression' must be a logical vector of length one")
+            }
+
+            if(identical(compression, TRUE)) {
+                compression = 1L
+            } else {
+                compression = 0L
             }
 
             ## Check version
@@ -166,14 +181,14 @@ setMethod("write.mat",
               stop('Undefined version')
             }
 
-            ## Check names in object          
+            ## Check names in object
             if(any(is.null(names(object)),
                    !all(nchar(names(object))),
                    any(duplicated(names(object))))) {
               stop("All values in the list must have a unique name")
-            }                        
-            
-            .Call("write_mat", object, filename, version)
+            }
+
+            .Call("write_mat", object, filename, compression, version)
 
             invisible(NULL)
           }

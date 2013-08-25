@@ -3212,12 +3212,12 @@ SEXP read_mat(const SEXP filename)
 SEXP
 write_mat(const SEXP list,
           const SEXP filename,
+          const SEXP compression,
           const SEXP version)
 {
     SEXP names;    /* names in list */
     mat_t *mat;
     int use_compression = MAT_COMPRESSION_NONE;
-    const SEXP compression = R_NilValue;
 
     if (list == R_NilValue)
         error("'list' equals R_NilValue.");
@@ -3234,7 +3234,7 @@ write_mat(const SEXP list,
     if (!mat)
         error("Unable to open file.");
 
-    if (R_NilValue != compression)
+    if (INTEGER(compression)[0])
         use_compression = MAT_COMPRESSION_ZLIB;
 
     names = getAttrib(list, R_NamesSymbol);
@@ -3261,7 +3261,7 @@ write_mat(const SEXP list,
 static const R_CallMethodDef callMethods[] =
 {
     {"read_mat", (DL_FUNC)&read_mat, 1},
-    {"write_mat", (DL_FUNC)&write_mat, 3},
+    {"write_mat", (DL_FUNC)&write_mat, 4},
     {NULL, NULL, 0}
 };
 

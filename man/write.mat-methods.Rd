@@ -25,6 +25,9 @@
 
   \item{filename}{The MAT file to write.}
 
+  \item{compression}{Use compression when writing
+  variables. Defaults to TRUE.}
+
   \item{version}{MAT file version to create. Currently only
   support for Matlab level-5 file (MAT5) from rmatio
   package.}
