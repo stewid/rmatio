@@ -733,13 +733,12 @@ test_that("struct: case-9", {
   a.2 <- read.mat(filename)[['a']]
   expect_identical(a.2, a.1)
 
-  ## FIXME: Segfault
-  ## write.mat(list(a=a.1),
-  ##           filename=filename,
-  ##           compression=TRUE,
-  ##           version='MAT5')
-  ## a.2 <- read.mat(filename)[['a']]
-  ## expect_identical(a.2, a.1)
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
 })
 
 test_that("struct: case-10 (Structure array with empty fields)", {
@@ -853,13 +852,12 @@ test_that("struct: case-13", {
   a.2 <- read.mat(filename)
   expect_identical(a.2, a.1)
 
-  ## FIXME: Segfault
-  ## write.mat(a.1,
-  ##           filename=filename,
-  ##           compression=TRUE,
-  ##           version='MAT5')
-  ## a.2 <- read.mat(filename)
-  ## expect_identical(a.2, a.1)
+  write.mat(a.1,
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)
+  expect_identical(a.2, a.1)
 })
 
 test_that("struct: case-14", {
@@ -1218,29 +1216,47 @@ test_that("struct: case-27", {
                                  sparse=TRUE))))
 })
 
-## test_that("struct: case-28", {
-##   filename <- tempfile(fileext = ".mat")
-##   on.exit(unlink(filename))
+test_that("struct: case-28", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
 
-##   a.1 <- list(y=list(c("a", "bb")), z=list())
+  a.1 <- list(y=list(c("a", "bb")), z=list())
 
-##   write.mat(list(a=a.1), filename=filename,
-##   a.2 <- read.mat(filename)[['a']]
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=FALSE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
 
-##   expect_identical(a.2, a.1)
-## })
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
+})
 
-## test_that("struct: case-29", {
-##   filename <- tempfile(fileext = ".mat")
-##   on.exit(unlink(filename))
+test_that("struct: case-29", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
 
-##   a.1 <- list(y=list(c("a", "bb")), z=list())
+  a.1 <- list(y=list(c("a", "bb")), z=list())
 
-##   write.mat(a.1, filename=filename,
-##   a.2 <- read.mat(filename)[['a']]
+  write.mat(a.1,
+            filename=filename,
+            compression=FALSE,
+            version='MAT5')
+  a.2 <- read.mat(filename)
+  expect_identical(a.2, list(y = list(list("a", "bb")), z = list()))
 
-##   expect_identical(a.2, a.1)
-## })
+  write.mat(a.1,
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)
+  expect_identical(a.2, list(y = list(list("a", "bb")), z = list()))
+})
 
 context("cell")
 
@@ -1408,13 +1424,12 @@ test_that("cell: case-7", {
   a.2 <- read.mat(filename)[['a']]
   expect_identical(a.2, a.1)
 
-  ## FIXME: Segfault
-  ## write.mat(list(a=a.1),
-  ##           filename=filename,
-  ##           compression=TRUE,
-  ##           version='MAT5')
-  ## a.2 <- read.mat(filename)[['a']]
-  ## expect_identical(a.2, a.1)
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
 })
 
 test_that("cell: case-8", {
@@ -1623,13 +1638,12 @@ test_that("cell: case-11", {
   a.2 <- read.mat(filename)[['a']]
   expect_identical(a.2, a.1)
 
-  ## FIXME: Segfault
-  ## write.mat(list(a=a.1),
-  ##           filename=filename,
-  ##           compression=TRUE,
-  ##           version='MAT5')
-  ## a.2 <- read.mat(filename)[['a']]
-  ## expect_identical(a.2, a.1)
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
 })
 
 test_that("cell: case-12", {
@@ -1695,13 +1709,12 @@ test_that("cell: case-13", {
   a.2 <- read.mat(filename)[['a']]
   expect_identical(a.2, a.1)
 
-  ## FIXME: Segfault
-  ## write.mat(list(a=a.1),
-  ##           filename=filename,
-  ##           compression=TRUE,
-  ##           version='MAT5')
-  ## a.2 <- read.mat(filename)[['a']]
-  ## expect_identical(a.2, a.1)
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
 })
 
 test_that("cell: case-14", {
@@ -1789,24 +1802,23 @@ test_that("cell: case-16", {
                                          sparse=TRUE))))
 })
 
-## FIXME
-## test_that("cell: case-17", {
-##   filename <- tempfile(fileext = ".mat")
-##   on.exit(unlink(filename))
+test_that("cell: case-17", {
+  filename <- tempfile(fileext = ".mat")
+  on.exit(unlink(filename))
 
-##   a.1 <- list(list(c("a", "bb")), list())
+  a.1 <- list(list(c("a", "bb")), list())
 
-##   write.mat(list(a=a.1),
-##             filename=filename,
-##             compression=FALSE,
-##             version='MAT5')
-##   a.2 <- read.mat(filename)[['a']]
-##   expect_identical(a.2, a.1)
-##
-##   write.mat(list(a=a.1),
-##             filename=filename,
-##             compression=TRUE,
-##             version='MAT5')
-##   a.2 <- read.mat(filename)[['a']]
-##   expect_identical(a.2, a.1)
-## })
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=FALSE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
+
+  write.mat(list(a=a.1),
+            filename=filename,
+            compression=TRUE,
+            version='MAT5')
+  a.2 <- read.mat(filename)[['a']]
+  expect_identical(a.2, a.1)
+})

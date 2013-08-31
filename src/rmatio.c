@@ -436,7 +436,7 @@ Mat_VarCreateEmpty(const SEXP elmt)
     case STRSXP:
         return Mat_VarCreate(NULL,
                              MAT_C_CHAR,
-                             MAT_T_UINT8,
+                             MAT_T_UINT16,
                              rank,
                              dims_0_1,
                              NULL,
@@ -508,6 +508,7 @@ write_charsxp(const SEXP elmt,
     size_t dims[2];
     const int rank = 2;
     matvar_t *matvar;
+    mat_uint16_t *buf;
 
     if (R_NilValue == elmt
         || CHARSXP != TYPEOF(elmt))
@@ -516,13 +517,21 @@ write_charsxp(const SEXP elmt,
     dims[0] = 1;
     dims[1] = LENGTH(elmt);
 
+    buf = malloc(dims[1]*sizeof(mat_uint16_t));
+    if (NULL == buf)
+        return 1;
+    for (size_t i=0;i<dims[1];i++)
+        buf[i] = CHAR(elmt)[i];
+
     matvar = Mat_VarCreate(name,
                            MAT_C_CHAR,
-                           MAT_T_UINT8,
+                           MAT_T_UINT16,
                            rank,
                            dims,
-                           (void*)CHAR(elmt),
+                           (void*)buf,
                            0);
+
+    free(buf);
 
     if (NULL == matvar)
         return 1;
@@ -850,7 +859,7 @@ write_strsxp(const SEXP elmt,
         dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
     if (all_strings_have_equal_length(elmt)) {
-        mat_uint8_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint8_t));
+        mat_uint16_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint16_t));
         if (NULL == buf)
             return 1;
 
@@ -861,10 +870,10 @@ write_strsxp(const SEXP elmt,
 
         matvar = Mat_VarCreate(name,
                                MAT_C_CHAR,
-                               MAT_T_UINT8,
+                               MAT_T_UINT16,
                                rank,
                                dims,
-                               buf,
+                               (void*)buf,
                                0);
 
         free(buf);
