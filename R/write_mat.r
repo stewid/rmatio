@@ -175,6 +175,10 @@ setMethod("write.mat",
             version <- match.arg(version)
             if(identical(version, 'MAT5')) {
               version <- 0x0100L
+              header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
+                                R.version$platform[[1]],
+                                packageVersion('rmatio'),
+                                date())
             ## } else if(identical(version, 'MAT73')) {
             ##   version <- 0x0200L
             } else {
@@ -188,7 +192,7 @@ setMethod("write.mat",
               stop("All values in the list must have a unique name")
             }
 
-            .Call("write_mat", object, filename, compression, version)
+            .Call("write_mat", object, filename, compression, version, header)
 
             invisible(NULL)
           }

@@ -3222,23 +3222,30 @@ SEXP
 write_mat(const SEXP list,
           const SEXP filename,
           const SEXP compression,
-          const SEXP version)
+          const SEXP version,
+          const SEXP header)
 {
     SEXP names;    /* names in list */
     mat_t *mat;
     int use_compression = MAT_COMPRESSION_NONE;
 
-    if (list == R_NilValue)
+    if (R_NilValue == list)
         error("'list' equals R_NilValue.");
-    if (filename == R_NilValue)
+    if (R_NilValue == filename)
         error("'filename' equals R_NilValue.");
+    if (R_NilValue == compression)
+        error("'compression' equals R_NilValue.");
+    if (R_NilValue == version)
+        error("'version' equals R_NilValue.");
+    if (R_NilValue == header)
+        error("'header' equals R_NilValue.");
     if (!isNewList(list))
         error("'list' must be a list.");
     if (!isString(filename))
         error("'filename' must be a string.");
 
     mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)),
-                        NULL,
+                        CHAR(STRING_ELT(header, 0)),
                         INTEGER(version)[0]);
     if (!mat)
         error("Unable to open file.");
@@ -3270,7 +3277,7 @@ write_mat(const SEXP list,
 static const R_CallMethodDef callMethods[] =
 {
     {"read_mat", (DL_FUNC)&read_mat, 1},
-    {"write_mat", (DL_FUNC)&write_mat, 4},
+    {"write_mat", (DL_FUNC)&write_mat, 5},
     {NULL, NULL, 0}
 };
 
