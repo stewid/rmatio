@@ -111,12 +111,14 @@ setMethod("write.mat",
           signature(object = "DemoS4Mat"),
           function(object,
                    filename,
+                   compression,
                    version)
           {
             ## Coerce the 'DemoS4Mat' object to a list and
             ## call 'rmatio' 'write.mat' with the list.
             return(write.mat(as(object, "list"),
                              filename,
+                             compression,
                              version))
           }
 )
