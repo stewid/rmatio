@@ -28,6 +28,7 @@ Read a compressed version 5 MAT file from an URL
     m <- read.mat("http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/matio_test_cases_compressed_le.mat?format=raw")
 
 View content
+
     str(m)
 
 Write an uncompressed version 5 MAT file
