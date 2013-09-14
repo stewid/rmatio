@@ -2654,8 +2654,7 @@ read_empty_cell_array(SEXP list,
         || MAT_T_CELL != matvar->data_type
         || 2 != matvar->rank
         || NULL == matvar->dims
-        || 0 != matvar->dims[0]
-        || 0 != matvar->dims[1])
+        || 0 != matvar->dims[0])
         return 1;
 
     PROTECT(cell = allocVector(VECSXP, 0));
@@ -3025,7 +3024,7 @@ read_mat_cell(SEXP list,
         || NULL == matvar->dims)
         return 1;
 
-    if (matvar->dims[0] == 0 && matvar->dims[1] >= 0) {
+    if (0 == matvar->dims[0]) {
         return read_empty_cell_array(list, index, matvar);
     } else if (matvar->dims[0] && matvar->dims[1]) {
         matvar_t *cell = Mat_VarGetCell(matvar, 0);
@@ -3033,13 +3032,13 @@ read_mat_cell(SEXP list,
         if (NULL == cell || NULL == cell->dims)
             return 1;
 
-        if (cell->class_type == MAT_C_CELL
-            && cell->dims[0] == 0
-            && cell->dims[1] == 1) {
+        if (MAT_C_CELL == cell->class_type
+            && 0 == cell->dims[0]
+            && 1 == cell->dims[1]) {
             return read_cell_array_with_empty_arrays(list, index, matvar);
-        } else if (cell->class_type == MAT_C_STRUCT
-                   && cell->dims[0] == 1
-                   && cell->dims[1] == 1) {
+        } else if (MAT_C_STRUCT == cell->class_type
+                   && 1 == cell->dims[0]
+                   && 1 == cell->dims[1]) {
 
             if(Mat_VarGetNumberOfFields(cell))
                 return read_cell_array_with_arrays(list, index, matvar);
