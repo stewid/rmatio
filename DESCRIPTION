@@ -2,6 +2,10 @@ Package: rmatio
 Title: A R package to read and write matlab files
 Version: 0.1.0
 Authors@R: c(
+    person("Stefan", "Widgren",
+    role = c("aut", "cre"),
+    email = "stefan.widgren@sva.se",
+    comment = "Author of the R interface to the C-library matio"),
     person("Christopher", "Hulbert",
     role = c("aut"),
     comment = "Author of the C-library matio, http://sourceforge.net/projects/matio/"),
@@ -10,11 +14,7 @@ Authors@R: c(
     comment = "Author of the zlib library, http://www.zlib.net/"),
     person("Mark", "Adler",
     role = c("aut"),
-    comment = "Author of the zlib library, http://www.zlib.net/"),
-    person("Stefan", "Widgren",
-    role = c("aut", "cre"),
-    email = "stefan.widgren@sva.se",
-    comment = "Author of the R interface to the C-library matio"))
+    comment = "Author of the zlib library, http://www.zlib.net/"))
 Description: rmatio is a package for reading and writing Matlab MAT
              files from R, using the C MAT File I/O Library matio
              written by Christopher Hulbert
@@ -47,3 +47,4 @@ Suggests:
 Collate:
     'read_mat.r'
     'write_mat.r'
+    'rmatio.r'
