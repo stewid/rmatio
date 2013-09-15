@@ -1227,14 +1227,14 @@ test_that("struct: case-28", {
             compression=FALSE,
             version='MAT5')
   a.2 <- read.mat(filename)[['a']]
-  expect_identical(a.2, a.1)
+  expect_identical(a.2, list(y=list(list(list("a", "bb"))), z=list()))
 
   write.mat(list(a=a.1),
             filename=filename,
             compression=TRUE,
             version='MAT5')
   a.2 <- read.mat(filename)[['a']]
-  expect_identical(a.2, a.1)
+  expect_identical(a.2, list(y=list(list(list("a", "bb"))), z=list()))
 })
 
 test_that("struct: case-29", {
@@ -1813,12 +1813,12 @@ test_that("cell: case-17", {
             compression=FALSE,
             version='MAT5')
   a.2 <- read.mat(filename)[['a']]
-  expect_identical(a.2, a.1)
+  expect_identical(a.2, list(list(list(list("a", "bb"))), list()))
 
   write.mat(list(a=a.1),
             filename=filename,
             compression=TRUE,
             version='MAT5')
   a.2 <- read.mat(filename)[['a']]
-  expect_identical(a.2, a.1)
+  expect_identical(a.2, list(list(list(list("a", "bb"))), list()))
 })
