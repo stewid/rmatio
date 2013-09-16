@@ -30,23 +30,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Changes in the R package rmatio:
- * 
- * - The io routines have been adopted to use R printing and error routines.
- *   See the R manual Writing R Extensions 
- *
- * - The following two functions have been moved to io.c
- *   void Mat_PrintNumber(enum matio_types type, void *data);
- *   void Mat_VarPrint( matvar_t *matvar, int printdata );
- */
-
 /* FIXME: Implement Unicode support */
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#if defined(_WIN64) || defined(_WIN32)
+#   include <io.h>
+#   define mktemp _mktemp
+#endif
+#ifdef _MSC_VER
+#   define SIZE_T_FMTSTR "Iu"
+#else
+#   define SIZE_T_FMTSTR "zu"
+#endif
 #include "matio_private.h"
 #include "mat5.h"
 #include "mat4.h"
@@ -68,6 +66,49 @@ ReadData(mat_t *mat, matvar_t *matvar)
     else if ( mat->version == MAT_FT_MAT4 )
         Read4(mat,matvar);
     return;
+}
+
+static void
+Mat_PrintNumber(enum matio_types type, void *data)
+{
+    switch ( type ) {
+        case MAT_T_DOUBLE:
+            printf("%g",*(double*)data);
+            break;
+        case MAT_T_SINGLE:
+            printf("%g",*(float*)data);
+            break;
+#ifdef HAVE_MAT_INT64_T
+        case MAT_T_INT64:
+            printf("%lld",*(mat_int64_t*)data);
+            break;
+#endif
+#ifdef HAVE_MAT_UINT64_T
+        case MAT_T_UINT64:
+            printf("%llu",*(mat_uint64_t*)data);
+            break;
+#endif
+        case MAT_T_INT32:
+            printf("%d",*(mat_int32_t*)data);
+            break;
+        case MAT_T_UINT32:
+            printf("%u",*(mat_uint32_t*)data);
+            break;
+        case MAT_T_INT16:
+            printf("%hd",*(mat_int16_t*)data);
+            break;
+        case MAT_T_UINT16:
+            printf("%hu",*(mat_uint16_t*)data);
+            break;
+        case MAT_T_INT8:
+            printf("%hhd",*(mat_int8_t*)data);
+            break;
+        case MAT_T_UINT8:
+            printf("%hhu",*(mat_uint8_t*)data);
+            break;
+        default:
+            break;
+    }
 }
 
 /*
@@ -112,18 +153,20 @@ Mat_GetLibraryVersion(int *major,int *minor,int *release)
 mat_t *
 Mat_CreateVer(const char *matname,const char *hdr_str,enum mat_ft mat_file_ver)
 {
-    mat_t *mat;
+    mat_t *mat = NULL;
 
-    if ( MAT_FT_MAT5 == mat_file_ver )
-        mat = Mat_Create5(matname,hdr_str);
-    else if ( MAT_FT_MAT73 == mat_file_ver )
+    switch ( mat_file_ver ) {
+        case MAT_FT_MAT4:
+            break;
+        case MAT_FT_MAT5:
+            mat = Mat_Create5(matname,hdr_str);
+            break;
+        case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
-        mat = Mat_Create73(matname,hdr_str);
-#else
-        mat = NULL;
+            mat = Mat_Create73(matname,hdr_str);
 #endif
-    else
-        mat = Mat_Create5(matname,hdr_str);
+            break;
+    }
 
     return mat;
 }
@@ -142,8 +185,8 @@ Mat_Open(const char *matname,int mode)
 {
     FILE *fp = NULL;
     mat_int16_t tmp, tmp2;
-    int     err;
     mat_t *mat = NULL;
+    size_t bytesread = 0;
 
     if ( (mode & 0x00000001) == MAT_ACC_RDONLY ) {
         fp = fopen( matname, "rb" );
@@ -172,27 +215,35 @@ Mat_Open(const char *matname,int mode)
     mat->subsys_offset = calloc(8,1);
     mat->filename      = NULL;
     mat->byteswap      = 0;
+    mat->version       = 0;
 
-    err = fread(mat->header,1,116,fp);
+    bytesread += fread(mat->header,1,116,fp);
     mat->header[116] = '\0';
-    err = fread(mat->subsys_offset,1,8,fp);
-    err = fread(&tmp2,2,1,fp);
-    fread(&tmp,1,2,fp);
+    bytesread += fread(mat->subsys_offset,1,8,fp);
+    bytesread += 2*fread(&tmp2,2,1,fp);
+    bytesread += fread(&tmp,1,2,fp);
 
-    mat->byteswap = -1;
-    if (tmp == 0x4d49)
-        mat->byteswap = 0;
-    else if (tmp == 0x494d) {
-        mat->byteswap = 1;
-        Mat_int16Swap(&tmp2);
+    if ( 128 == bytesread ) {
+        /* v5 and v7.3 files have at least 128 byte header */
+        mat->byteswap = -1;
+        if (tmp == 0x4d49)
+            mat->byteswap = 0;
+        else if (tmp == 0x494d) {
+            mat->byteswap = 1;
+            Mat_int16Swap(&tmp2);
+        }
+
+        mat->version = (int)tmp2;
+        if ( (mat->version == 0x0100 || mat->version == 0x0200) &&
+             -1 != mat->byteswap ) {
+            mat->bof = ftell(mat->fp);
+            mat->next_index    = 0;
+        } else {
+            mat->version = 0;
+        }
     }
 
-    mat->version = (int)tmp2;
-    if ( (mat->version == 0x0100 || mat->version == 0x0200) &&
-         -1 != mat->byteswap ) {
-        mat->bof = ftell(mat->fp);
-        mat->next_index    = 0;
-    } else {
+    if ( 0 == mat->version ) {
         /* Maybe a V4 MAT file */
         matvar_t *var;
         if ( NULL != mat->header )
@@ -211,15 +262,9 @@ Mat_Open(const char *matname,int mode)
 
         Mat_Rewind(mat);
         var = Mat_VarReadNextInfo4(mat);
-        /* Check sanity of variable information */
-        if ( NULL == var || NULL == var->name ||
-            (var->class_type != MAT_C_DOUBLE  &&
-             var->class_type != MAT_C_SPARSE &&
-             var->class_type != MAT_C_CHAR) ) {
+        if ( NULL == var ) {
             /* Does not seem to be a valid V4 file */
             Mat_Critical("%s does not seem to be a valid MAT file",matname);
-            if ( NULL != var )
-                Mat_VarFree(var);
             Mat_Close(mat);
             mat = NULL;
         } else {
@@ -255,6 +300,8 @@ Mat_Open(const char *matname,int mode)
         mat->fp = NULL;
         Mat_Close(mat);
         mat = NULL;
+        Mat_Critical("No HDF5 support which is required to read the v7.3 "
+                     "MAT file \"%s\"",matname);
 #endif
     }
 
@@ -1177,6 +1224,215 @@ Mat_VarGetSize(matvar_t *matvar)
     return bytes;
 }
 
+/** @brief Prints the variable information
+ *
+ * Prints to stdout the values of the @ref matvar_t structure
+ * @ingroup MAT
+ * @param matvar Pointer to the matvar_t structure
+ * @param printdata set to 1 if the Variables data should be printed, else 0
+ */
+void
+Mat_VarPrint( matvar_t *matvar, int printdata )
+{
+    size_t nmemb;
+    int i, j;
+    const char *class_type_desc[16] = {"Undefined","Cell Array","Structure",
+       "Object","Character Array","Sparse Array","Double Precision Array",
+       "Single Precision Array", "8-bit, signed integer array",
+       "8-bit, unsigned integer array","16-bit, signed integer array",
+       "16-bit, unsigned integer array","32-bit, signed integer array",
+       "32-bit, unsigned integer array","64-bit, signed integer array",
+       "64-bit, unsigned integer array"};
+    const char *data_type_desc[23] = {"Unknown","8-bit, signed integer",
+       "8-bit, unsigned integer","16-bit, signed integer",
+       "16-bit, unsigned integer","32-bit, signed integer",
+       "32-bit, unsigned integer","IEEE 754 single-precision","RESERVED",
+       "IEEE 754 double-precision","RESERVED","RESERVED",
+       "64-bit, signed integer","64-bit, unsigned integer", "Matlab Array",
+       "Compressed Data","Unicode UTF-8 Encoded Character Data",
+       "Unicode UTF-16 Encoded Character Data",
+       "Unicode UTF-32 Encoded Character Data","","String","Cell Array",
+       "Structure"};
+
+    if ( matvar == NULL )
+        return;
+    if ( matvar->name )
+        printf("      Name: %s\n", matvar->name);
+    printf("      Rank: %d\n", matvar->rank);
+    if ( matvar->rank == 0 )
+        return;
+    printf("Dimensions: %" SIZE_T_FMTSTR,matvar->dims[0]);
+    nmemb = matvar->dims[0];
+    for ( i = 1; i < matvar->rank; i++ ) {
+        printf(" x %" SIZE_T_FMTSTR,matvar->dims[i]);
+        nmemb *= matvar->dims[i];
+    }
+    printf("\n");
+    printf("Class Type: %s",class_type_desc[matvar->class_type]);
+    if ( matvar->isComplex )
+        printf(" (complex)");
+    else if ( matvar->isLogical )
+        printf(" (logical)");
+    printf("\n");
+    if ( matvar->data_type )
+        printf(" Data Type: %s\n", data_type_desc[matvar->data_type]);
+
+    if ( MAT_C_STRUCT == matvar->class_type ) {
+        matvar_t **fields = (matvar_t **)matvar->data;
+        int nfields = matvar->internal->num_fields;
+        if ( nmemb*nfields > 0 ) {
+            printf("Fields[%" SIZE_T_FMTSTR "] {\n", nfields*nmemb);
+            for ( i = 0; i < nfields*nmemb; i++ ) {
+                if ( NULL == fields[i] ) {
+                    printf("      Name: %s\n      Rank: %d\n",
+                           matvar->internal->fieldnames[i%nfields],0);
+                } else {
+                    Mat_VarPrint(fields[i],printdata);
+                }
+            }
+            printf("}\n");
+        } else {
+            printf("Fields[%d] {\n", nfields);
+            for ( i = 0; i < nfields; i++ )
+                printf("      Name: %s\n      Rank: %d\n",
+                       matvar->internal->fieldnames[i],0);
+            printf("}\n");
+        }
+        return;
+    } else if ( matvar->data == NULL || matvar->data_size < 1 ) {
+        return;
+    } else if ( MAT_C_CELL == matvar->class_type ) {
+        matvar_t **cells = (matvar_t **)matvar->data;
+        int ncells = matvar->nbytes / matvar->data_size;
+        printf("{\n");
+        for ( i = 0; i < ncells; i++ )
+            Mat_VarPrint(cells[i],printdata);
+        printf("}\n");
+        return;
+    } else if ( !printdata ) {
+        return;
+    }
+
+    printf("{\n");
+
+    if ( matvar->rank > 2 ) {
+        printf("I can't print more than 2 dimensions\n");
+    } else if ( matvar->rank == 1 && matvar->dims[0] > 15 ) {
+        printf("I won't print more than 15 elements in a vector\n");
+    } else if ( matvar->rank==2 ) {
+        switch( matvar->class_type ) {
+            case MAT_C_DOUBLE:
+            case MAT_C_SINGLE:
+#ifdef HAVE_MAT_INT64_T
+            case MAT_C_INT64:
+#endif
+#ifdef HAVE_MAT_UINT64_T
+            case MAT_C_UINT64:
+#endif
+            case MAT_C_INT32:
+            case MAT_C_UINT32:
+            case MAT_C_INT16:
+            case MAT_C_UINT16:
+            case MAT_C_INT8:
+            case MAT_C_UINT8:
+            {
+                size_t stride = Mat_SizeOf(matvar->data_type);
+                if ( matvar->isComplex ) {
+                    mat_complex_split_t *complex_data = matvar->data;
+                    char *rp = complex_data->Re;
+                    char *ip = complex_data->Im;
+                   for ( i = 0; i < matvar->dims[0] && i < 15; i++ ) {
+                        for ( j = 0; j < matvar->dims[1] && j < 15; j++ ) {
+                            size_t idx = matvar->dims[0]*j+i;
+                            Mat_PrintNumber(matvar->data_type,rp+idx*stride);
+                            printf(" + ");
+                            Mat_PrintNumber(matvar->data_type,ip+idx*stride);
+                            printf("i ");
+                        }
+                        if ( j < matvar->dims[1] )
+                            printf("...");
+                        printf("\n");
+                    }
+                    if ( i < matvar->dims[0] )
+                        printf(".\n.\n.\n");
+               } else {
+                   char *data = matvar->data;
+                   for ( i = 0; i < matvar->dims[0] && i < 15; i++ ) {
+                        for ( j = 0; j < matvar->dims[1] && j < 15; j++ ) {
+                            size_t idx = matvar->dims[0]*j+i;
+                            Mat_PrintNumber(matvar->data_type,
+                                            data+idx*stride);
+                            printf(" ");
+                        }
+                        if ( j < matvar->dims[1] )
+                            printf("...");
+                        printf("\n");
+                    }
+                    if ( i < matvar->dims[0] )
+                        printf(".\n.\n.\n");
+                }
+                break;
+            }
+            case MAT_C_CHAR:
+            {
+                char *data = matvar->data;
+                if ( !printdata )
+                    break;
+                for ( i = 0; i < matvar->dims[0]; i++ ) {
+                    for ( j = 0; j < matvar->dims[1]; j++ )
+                        printf("%c",data[j*matvar->dims[0]+i]);
+                    printf("\n");
+                }
+                break;
+            }
+            case MAT_C_SPARSE:
+            {
+                mat_sparse_t *sparse;
+                size_t stride = Mat_SizeOf(matvar->data_type);
+#if !defined(EXTENDED_SPARSE)
+                if ( MAT_T_DOUBLE != matvar->data_type )
+                    break;
+#endif
+                sparse = matvar->data;
+                if ( matvar->isComplex ) {
+                    mat_complex_split_t *complex_data = sparse->data;
+                    char *re,*im;
+                    re = complex_data->Re;
+                    im = complex_data->Im;
+                    for ( i = 0; i < sparse->njc-1; i++ ) {
+                        for (j = sparse->jc[i];
+                             j<sparse->jc[i+1] && j<sparse->ndata;j++ ) {
+                            printf("    (%d,%d)  ",sparse->ir[j]+1,i+1);
+                            Mat_PrintNumber(matvar->data_type,re+j*stride);
+                            printf(" + ");
+                            Mat_PrintNumber(matvar->data_type,im+j*stride);
+                            printf("i\n");
+                        }
+                    }
+                } else {
+                    char *data;
+                    data = sparse->data;
+                    for ( i = 0; i < sparse->njc-1; i++ ) {
+                        for (j = sparse->jc[i];
+                             j<sparse->jc[i+1] && j<sparse->ndata;j++ ){
+                            printf("    (%d,%d)  ",sparse->ir[j]+1,i+1);
+                            Mat_PrintNumber(matvar->data_type,data+j*stride);
+                            printf("\n");
+                        }
+                    }
+                }
+                break;
+            } /* case MAT_C_SPARSE: */
+            default:
+                break;
+        } /* switch( matvar->class_type ) */
+    }
+
+    printf("}\n");
+
+    return;
+}
+
 /** @brief Reads MAT variable data from a file
  *
  * Reads data from a MAT variable.  The variable must have been read by
@@ -1252,10 +1508,10 @@ Mat_VarReadDataAll(mat_t *mat,matvar_t *matvar)
     return err;
 }
 
-/** @brief Reads MAT variable data from a file
+/** @brief Reads a subset of a MAT variable using a 1-D indexing
  *
- * Reads data from a MAT variable using a linear indexingmode. The variable
- * must have been read by Mat_VarReadInfo.
+ * Reads data from a MAT variable using a linear (1-D) indexing mode. The
+ * variable must have been read by Mat_VarReadInfo.
  * @ingroup MAT
  * @param mat MAT file to read data from
  * @param matvar MAT variable information
@@ -1269,160 +1525,37 @@ int
 Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
     int stride,int edge)
 {
-    int err = 0, nmemb = 1, i, real_bytes = 0;
-    mat_int32_t tag[2];
-#if defined(HAVE_ZLIB)
-    z_stream z;
-#endif
+    int err = 0;
 
-    if ( mat->version == MAT_FT_MAT4 )
-        return -1;
-    fseek(mat->fp,matvar->internal->datapos,SEEK_SET);
-    if ( matvar->compression == MAT_COMPRESSION_NONE ) {
-        fread(tag,4,2,mat->fp);
-        if ( mat->byteswap ) {
-            Mat_int32Swap(tag);
-            Mat_int32Swap(tag+1);
-        }
-        matvar->data_type = tag[0] & 0x000000ff;
-        if ( tag[0] & 0xffff0000 ) { /* Data is packed in the tag */
-            fseek(mat->fp,-4,SEEK_CUR);
-            real_bytes = 4+(tag[0] >> 16);
-        } else {
-            real_bytes = 8+tag[1];
-        }
-#if defined(HAVE_ZLIB)
-    } else if ( matvar->compression == MAT_COMPRESSION_ZLIB ) {
-        matvar->internal->z->avail_in = 0;
-        err = inflateCopy(&z,matvar->internal->z);
-        InflateDataType(mat,&z,tag);
-        if ( mat->byteswap ) {
-            Mat_int32Swap(tag);
-            Mat_int32Swap(tag+1);
-        }
-        matvar->data_type = tag[0] & 0x000000ff;
-        if ( !(tag[0] & 0xffff0000) ) {/* Data is NOT packed in the tag */
-            /* We're cheating, but InflateDataType just inflates 4 bytes */
-            InflateDataType(mat,&z,tag+1);
-            if ( mat->byteswap ) {
-                Mat_int32Swap(tag+1);
-            }
-            real_bytes = 8+tag[1];
-        } else {
-            real_bytes = 4+(tag[0] >> 16);
-        }
-#endif
-    }
-    if ( real_bytes % 8 )
-        real_bytes += (8-(real_bytes % 8));
-
-    for ( i = 0; i < matvar->rank; i++ )
-        nmemb *= matvar->dims[i];
-
-    if ( stride*(edge-1)+start+1 > nmemb ) {
-        err = 1;
-    } else if ( matvar->compression == MAT_COMPRESSION_NONE ) {
-        if ( matvar->isComplex ) {
-            mat_complex_split_t *complex_data = data;
-
-            ReadDataSlab1(mat,complex_data->Re,matvar->class_type,
-                matvar->data_type,start,stride,edge);
-            fseek(mat->fp,matvar->internal->datapos+real_bytes,SEEK_SET);
-            fread(tag,4,2,mat->fp);
-            if ( mat->byteswap ) {
-                Mat_int32Swap(tag);
-                Mat_int32Swap(tag+1);
-            }
-            matvar->data_type = tag[0] & 0x000000ff;
-            if ( tag[0] & 0xffff0000 ) { /* Data is packed in the tag */
-                fseek(mat->fp,-4,SEEK_CUR);
-            }
-            ReadDataSlab1(mat,complex_data->Im,matvar->class_type,
-                          matvar->data_type,start,stride,edge);
-        } else {
-            ReadDataSlab1(mat,data,matvar->class_type,
-                matvar->data_type,start,stride,edge);
-        }
-#if defined(HAVE_ZLIB)
-    } else if ( matvar->compression == MAT_COMPRESSION_ZLIB ) {
-        if ( matvar->isComplex ) {
-            mat_complex_split_t *complex_data = data;
-
-            ReadCompressedDataSlab1(mat,&z,complex_data->Re,
-                matvar->class_type,matvar->data_type,start,stride,edge);
-
-            fseek(mat->fp,matvar->internal->datapos,SEEK_SET);
-
-            /* Reset zlib knowledge to before reading real tag */
-            inflateEnd(&z);
-            err = inflateCopy(&z,matvar->internal->z);
-            InflateSkip(mat,&z,real_bytes);
-            z.avail_in = 0;
-            InflateDataType(mat,&z,tag);
-            if ( mat->byteswap ) {
-                Mat_int32Swap(tag);
-            }
-            matvar->data_type = tag[0] & 0x000000ff;
-            if ( !(tag[0] & 0xffff0000) ) {/*Data is NOT packed in the tag*/
-                InflateSkip(mat,&z,4);
-            }
-            ReadCompressedDataSlab1(mat,&z,complex_data->Im,
-                matvar->class_type,matvar->data_type,start,stride,edge);
-            inflateEnd(&z);
-        } else {
-            ReadCompressedDataSlab1(mat,&z,data,matvar->class_type,
-                matvar->data_type,start,stride,edge);
-            inflateEnd(&z);
-        }
-#endif
-    }
-
-    switch(matvar->class_type) {
+    switch ( matvar->class_type ) {
         case MAT_C_DOUBLE:
-            matvar->data_type = MAT_T_DOUBLE;
-            matvar->data_size = sizeof(double);
-            break;
         case MAT_C_SINGLE:
-            matvar->data_type = MAT_T_SINGLE;
-            matvar->data_size = sizeof(float);
-            break;
-#ifdef HAVE_MAT_INT64_T
         case MAT_C_INT64:
-            matvar->data_type = MAT_T_INT64;
-            matvar->data_size = sizeof(mat_int64_t);
-            break;
-#endif /* HAVE_MAT_INT64_T */
-#ifdef HAVE_MAT_UINT64_T
         case MAT_C_UINT64:
-            matvar->data_type = MAT_T_UINT64;
-            matvar->data_size = sizeof(mat_uint64_t);
-            break;
-#endif /* HAVE_MAT_UINT64_T */
         case MAT_C_INT32:
-            matvar->data_type = MAT_T_INT32;
-            matvar->data_size = sizeof(mat_int32_t);
-            break;
         case MAT_C_UINT32:
-            matvar->data_type = MAT_T_UINT32;
-            matvar->data_size = sizeof(mat_uint32_t);
-            break;
         case MAT_C_INT16:
-            matvar->data_type = MAT_T_INT16;
-            matvar->data_size = sizeof(mat_int16_t);
-            break;
         case MAT_C_UINT16:
-            matvar->data_type = MAT_T_UINT16;
-            matvar->data_size = sizeof(mat_uint16_t);
-            break;
         case MAT_C_INT8:
-            matvar->data_type = MAT_T_INT8;
-            matvar->data_size = sizeof(mat_int8_t);
-            break;
         case MAT_C_UINT8:
-            matvar->data_type = MAT_T_UINT8;
-            matvar->data_size = sizeof(mat_uint8_t);
             break;
         default:
+            return -1;
+    }
+
+    switch ( mat->version ) {
+        case MAT_FT_MAT73:
+#if defined(MAT73) && MAT73
+            err = Mat_VarReadDataLinear73(mat,matvar,data,start,stride,edge);
+#else
+            err = 1;
+#endif
+            break;
+        case MAT_FT_MAT5:
+            err = Mat_VarReadDataLinear5(mat,matvar,data,start,stride,edge);
+            break;
+        case MAT_FT_MAT4:
+            err = Mat_VarReadDataLinear4(mat,matvar,data,start,stride,edge);
             break;
     }
 
@@ -1442,18 +1575,25 @@ Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
 matvar_t *
 Mat_VarReadNextInfo( mat_t *mat )
 {
+    matvar_t *matvar = NULL;
     if( mat == NULL )
         return NULL;
-    else if ( mat->version == MAT_FT_MAT5 )
-        return Mat_VarReadNextInfo5(mat);
-#if defined(MAT73) && MAT73
-    else if ( mat->version == MAT_FT_MAT73 )
-        return Mat_VarReadNextInfo73(mat);
-#endif
-    else
-        return Mat_VarReadNextInfo4(mat);
 
-    return NULL;
+    switch ( mat->version ) {
+        case MAT_FT_MAT5:
+            matvar = Mat_VarReadNextInfo5(mat);
+            break;
+        case MAT_FT_MAT73:
+#if defined(MAT73) && MAT73
+            matvar = Mat_VarReadNextInfo73(mat);
+#endif
+            break;
+        case MAT_FT_MAT4:
+            matvar = Mat_VarReadNextInfo4(mat);
+            break;
+    }
+
+    return matvar;
 }
 
 /** @brief Reads the information of a variable with the given name from a MAT file
@@ -1510,7 +1650,7 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
                 Mat_Critical("An error occurred in reading the MAT file");
                 break;
             }
-        } while ( !matvar && !feof(mat->fp) );
+        } while ( !matvar && !feof(((FILE *)mat->fp)) );
 
         fseek(mat->fp,fpos,SEEK_SET);
     }
@@ -1562,7 +1702,7 @@ Mat_VarReadNext( mat_t *mat )
     matvar_t *matvar = NULL;
 
     if ( mat->version != MAT_FT_MAT73 ) {
-        if ( feof(mat->fp) )
+        if ( feof(((FILE *)mat->fp)) )
             return NULL;
         /* Read position so we can reset the file position if an error occurs */
         fpos = ftell(mat->fp);
