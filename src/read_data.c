@@ -30,10 +30,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Changes in the R package rmatio:
+ *
+ * - The io routines have been adopted to use R printing and error routines.
+ *   See the R manual Writing R Extensions
+ *
+ */
+
+#include <R.h>
+
 /* FIXME: Implement Unicode support */
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
+/* #include <stdio.h> */
 #include <math.h>
 #include <time.h>
 #include "matio_private.h"
@@ -3708,7 +3718,7 @@ ReadCompressedCharData(mat_t *mat,z_stream *z,char *data,
             break;
         }
         default:
-            printf("Character data not supported type: %d",data_type);
+            Rprintf("Character data not supported type: %d",data_type);
             break;
     }
     nBytes = len*data_size;
@@ -3753,7 +3763,7 @@ ReadCharData(mat_t *mat,char *data,enum matio_types data_type,int len)
             break;
         }
         default:
-            printf("Character data not supported type: %d",data_type);
+            Rprintf("Character data not supported type: %d",data_type);
             break;
     }
     bytesread *= data_size;
