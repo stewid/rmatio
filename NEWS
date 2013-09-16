@@ -1,3 +1,18 @@
+rmatio 0.2.0
+-------------
+
+NEW FEATURES
+
+* Supports reading MAT version 4, MAT version 5 and MAT compressed
+  version 5.
+
+* Supports writing version 5 MAT files and version 5 files with
+  variable compression.
+
+* Added compression with zlib.
+
+* Updated matio to ver 1.5.2
+
 rmatio 0.1.0
 -------------
 
