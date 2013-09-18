@@ -33,4 +33,12 @@ View content
 
 Write an uncompressed version 5 MAT file
 
-    write.mat(m, filename="test.mat", compression=FALSE, version="MAT5")
+    write.mat(m, filename="test-uncompressed.mat", compression=FALSE, version="MAT5")
+
+Write a compressed version 5 MAT file
+
+    write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
+
+Check that the content of the files are identical
+
+    identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
