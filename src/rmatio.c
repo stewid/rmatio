@@ -3054,6 +3054,19 @@ read_mat_cell(SEXP list,
     return 1;
 }
 
+/** @brief Error function to interface matio
+ *
+ *
+ * @ingroup
+ * @param log_level
+ * @param message
+ */
+static void
+rmatio_error_func(int log_level, char *message)
+{
+    error(message);
+}
+
 /*
  * -------------------------------------------------------------
  *   Functions to interface R
@@ -3104,6 +3117,9 @@ SEXP read_mat(const SEXP filename)
         error("'filename' equals R_NilValue.");
     if (!isString(filename))
         error("'filename' must be a string.");
+
+    if (Mat_LogInitFunc("rmatio", rmatio_error_func))
+        error("Unable to initialize matio logging system.");
 
     mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDONLY);
     if (!mat)
@@ -3242,6 +3258,9 @@ write_mat(const SEXP list,
         error("'list' must be a list.");
     if (!isString(filename))
         error("'filename' must be a string.");
+
+    if (Mat_LogInitFunc("rmatio", rmatio_error_func))
+        error("Unable to initialize matio logging system.");
 
     mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)),
                         CHAR(STRING_ELT(header, 0)),
