@@ -57,7 +57,7 @@ write_elmt(const SEXP elmt,
 /** @brief Map the dimensions and rank from an R object
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt
  * @param rank
  * @param dims
@@ -93,7 +93,7 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt
  * @param empty
  * @return 0 on succes or 1 on failure.
@@ -165,7 +165,7 @@ map_vec_len(const SEXP elmt,
 /** @brief Set the dim for a a cell or structure array from an R object
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt
  * @param dims
  * @param empty
@@ -214,7 +214,7 @@ map_R_object_dims(const SEXP elmt, const SEXP names, size_t *dims)
 /** @brief Set the dim for a a cell or structure array from an R object
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt
  * @param dims
  * @param empty
@@ -287,7 +287,7 @@ map_R_vecsxp_dims(const SEXP elmt,
 /** @brief Check if all strings have equal length
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to check
  * @return 1 if all lengths are equal else 0.
  */
@@ -312,7 +312,7 @@ all_strings_have_equal_length(const SEXP elmt)
  * length
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt
  * @param ragged
  * @return 0 on succes or 1 on failure.
@@ -387,7 +387,7 @@ check_ragged(const SEXP elmt, int *ragged)
 /** @brief Create matvar_t pointer to an empty data structure
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to create empty mat variable from
  * @return
  */
@@ -449,9 +449,9 @@ Mat_VarCreateEmpty(const SEXP elmt)
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param mat MAT file pointer
- * @param matvar
+ * @param matvar MAT variable pointer
  * @param mat_struct
  * @param mat_cell
  * @param field_index
@@ -485,7 +485,7 @@ write_matvar(mat_t *mat,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -548,7 +548,7 @@ write_charsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -602,7 +602,7 @@ write_realsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -656,7 +656,7 @@ write_intsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -735,7 +735,7 @@ write_cplxsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -804,7 +804,7 @@ write_lglsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -922,7 +922,7 @@ write_strsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -981,7 +981,7 @@ write_dgCMatrix(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -1048,7 +1048,7 @@ write_lgCMatrix(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param names
  * @param matvar
@@ -1160,7 +1160,7 @@ write_ragged(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param names
  * @param matvar
@@ -1230,7 +1230,7 @@ write_vecsxp_data(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat_cell
  * @return 0 on succes or 1 on failure.
@@ -1349,7 +1349,7 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -1430,7 +1430,7 @@ write_vecsxp_as_cell(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param names
  * @param mat_struct
@@ -1467,7 +1467,7 @@ write_structure_array_with_empty_fields(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param names
  * @param mat MAT file pointer
@@ -1568,7 +1568,7 @@ write_vecsxp_as_struct(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -1616,7 +1616,7 @@ write_vecsxp(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param elmt R object to write
  * @param mat MAT file pointer
  * @param name Name of the variable to write
@@ -1737,9 +1737,9 @@ write_elmt(const SEXP elmt,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param m
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1766,10 +1766,10 @@ set_dim(SEXP m,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1829,10 +1829,10 @@ read_mat_char(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -1933,10 +1933,10 @@ read_sparse(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2057,10 +2057,10 @@ read_mat_complex(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2181,10 +2181,10 @@ read_mat_data(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2233,10 +2233,10 @@ read_logical(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2272,10 +2272,10 @@ read_empty_structure_array(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2335,10 +2335,10 @@ read_empty_structure_array_with_fields(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2427,10 +2427,10 @@ read_structure_array_with_empty_fields(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2584,10 +2584,10 @@ read_structure_array_with_fields(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2636,10 +2636,10 @@ read_mat_struct(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2669,10 +2669,10 @@ read_empty_cell_array(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -2890,10 +2890,10 @@ read_cell_array_with_empty_arrays(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -3007,10 +3007,10 @@ read_cell_array_with_arrays(SEXP list,
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list
  * @param index
- * @param matvar
+ * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -3057,7 +3057,7 @@ read_mat_cell(SEXP list,
 /** @brief Error function to interface matio
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param log_level
  * @param message
  */
@@ -3076,7 +3076,7 @@ rmatio_error_func(int log_level, char *message)
 /** @brief Number of variables in MAT-file
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param mat MAT file pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -3102,7 +3102,7 @@ number_of_variables(mat_t *mat)
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param filename
  * @return a named list (VECSXP).
  */
@@ -3226,7 +3226,7 @@ SEXP read_mat(const SEXP filename)
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param list List of variables to write
  * @param filename Name of MAT file to create
  * @param version MAT file version to create
@@ -3302,7 +3302,7 @@ static const R_CallMethodDef callMethods[] =
 /** @brief
  *
  *
- * @ingroup
+ * @ingroup rmatio
  * @param info
  */
 void
