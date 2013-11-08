@@ -1767,8 +1767,8 @@ set_dim(SEXP m,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -1830,8 +1830,8 @@ read_mat_char(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -1934,8 +1934,8 @@ read_sparse(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2058,8 +2058,8 @@ read_mat_complex(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2182,8 +2182,8 @@ read_mat_data(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2234,8 +2234,8 @@ read_logical(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2273,8 +2273,8 @@ read_empty_structure_array(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2336,8 +2336,8 @@ read_empty_structure_array_with_fields(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2428,8 +2428,8 @@ read_structure_array_with_empty_fields(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2585,8 +2585,8 @@ read_structure_array_with_fields(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2637,8 +2637,8 @@ read_mat_struct(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2670,8 +2670,8 @@ read_empty_cell_array(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -2891,8 +2891,8 @@ read_cell_array_with_empty_arrays(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
@@ -3008,8 +3008,8 @@ read_cell_array_with_arrays(SEXP list,
  *
  *
  * @ingroup rmatio
- * @param list
- * @param index
+ * @param list The list to hold the read data
+ * @param index The position in the list where to store the read data
  * @param matvar MAT variable pointer
  * @return 0 on succes or 1 on failure.
  */
