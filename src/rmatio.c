@@ -446,14 +446,18 @@ Mat_VarCreateEmpty(const SEXP elmt)
     }
 }
 
-/** @brief
+/** @brief Write the matvar data
  *
  *
  * @ingroup rmatio
- * @param mat MAT file pointer
- * @param matvar MAT variable pointer
- * @param mat_struct
- * @param mat_cell
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
+ * @param matvar MAT variable pointer to write
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @return 0 on succes or 1 on failure.
@@ -487,10 +491,14 @@ write_matvar(mat_t *mat,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @return 0 on succes or 1 on failure.
@@ -550,10 +558,14 @@ write_charsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -604,10 +616,14 @@ write_realsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -658,10 +674,14 @@ write_intsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -737,10 +757,14 @@ write_cplxsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -806,10 +830,14 @@ write_lglsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param ragged
@@ -924,10 +952,14 @@ write_strsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -983,10 +1015,14 @@ write_dgCMatrix(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -1351,10 +1387,14 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -1470,10 +1510,14 @@ write_structure_array_with_empty_fields(const SEXP elmt,
  * @ingroup rmatio
  * @param elmt R object to write
  * @param names
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -1570,10 +1614,14 @@ write_vecsxp_as_struct(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
@@ -1618,10 +1666,14 @@ write_vecsxp(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to write
- * @param mat MAT file pointer
+ * @param mat MAT file pointer. If mat_struct and mat_cell
+ *  equals NULL, then the matvar data are written to the mat
+ *  file.
  * @param name Name of the variable to write
- * @param mat_struct
- * @param mat_cell
+ * @param mat_struct MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_struct.
+ * @param mat_cell MAT variable pointer to a struct field.
+ *  If non-zero, the matvar data is written to the mat_cell.
  * @param field_index
  * @param index
  * @param compression Write the file with compression or not
