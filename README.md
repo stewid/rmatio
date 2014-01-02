@@ -42,3 +42,11 @@ Write a compressed version 5 MAT file
 Check that the content of the files are identical
 
     identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
+
+License
+-------
+
+The `rmatio` package is licensed under the GPLv3. See these files for additional details:
+
+- LICENSE     - `rmatio` package license (GPLv3)
+- inst/NOTICE - Copyright notices for additional included software
