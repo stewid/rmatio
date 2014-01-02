@@ -2939,7 +2939,7 @@ read_cell_array_with_empty_arrays(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read cell array with arrays
  *
  *
  * @ingroup rmatio
@@ -3056,7 +3056,7 @@ read_cell_array_with_arrays(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read cell
  *
  *
  * @ingroup rmatio
@@ -3151,19 +3151,26 @@ number_of_variables(mat_t *mat)
     return len;
 }
 
-/** @brief
+/** @brief Read matlab file
  *
  *
  * @ingroup rmatio
- * @param filename
+ * @param filename The file to read
  * @return a named list (VECSXP).
  */
 SEXP read_mat(const SEXP filename)
 {
-    mat_t *mat;
-    matvar_t *matvar;
-    int i=0, n, err;
-    SEXP list, names;
+    mat_t *mat = NULL;
+    matvar_t *matvar = NULL;
+    int i = 0, n = 0, err = 0;
+    SEXP list = R_NilValue, names = R_NilValue;
+    size_t protected = 0;
+
+    const char err_reading_mat_file[] = "Error reading MAT file";
+    const char err_mat_c_empty[] = "Not implemented support to read matio class type MAT_C_EMPTY";
+    const char err_mat_c_object[] = "Not implemented support to read matio class type MAT_C_OBJECT";
+    const char err_mat_c_function[] = "Not implemented support to read matio class type MAT_C_FUNCTION";
+    const char *err_msg = NULL;
 
     if (filename == R_NilValue)
         error("'filename' equals R_NilValue.");
@@ -3180,20 +3187,24 @@ SEXP read_mat(const SEXP filename)
     n = number_of_variables(mat);
     PROTECT(list = allocVector(VECSXP, n));
     if (R_NilValue == list) {
-        Mat_Close(mat);
-        error("Error reading MAT file");
+        err = 1;
+        err_msg = err_reading_mat_file;
+        goto cleanup;
     }
+    protected++;
+
     PROTECT(names = allocVector(STRSXP, n));
     if (R_NilValue == names) {
-        Mat_Close(mat);
-        UNPROTECT(1);
-        error("Error reading MAT file");
+        err = 1;
+        err_msg = err_reading_mat_file;
+        goto cleanup;
     }
+    protected++;
 
     if (Mat_Rewind(mat)) {
-        Mat_Close(mat);
-        UNPROTECT(2);
-        error("Error reading MAT file");
+        err = 1;
+        err_msg = err_reading_mat_file;
+        goto cleanup;
     }
 
     while ((matvar = Mat_VarReadNext(mat)) != NULL) {
@@ -3201,10 +3212,9 @@ SEXP read_mat(const SEXP filename)
 
         switch (matvar->class_type) {
         case MAT_C_EMPTY:
-            Mat_VarFree(matvar);
-            Mat_Close(mat);
-            UNPROTECT(2);
-            error("Not implemented support to read matio class type MAT_C_EMPTY");
+            err = 1;
+            err_msg = err_mat_c_empty;
+            goto cleanup;
 
         case MAT_C_CELL:
             err = read_mat_cell(list, i, matvar);
@@ -3215,10 +3225,9 @@ SEXP read_mat(const SEXP filename)
             break;
 
         case MAT_C_OBJECT:
-            Mat_VarFree(matvar);
-            Mat_Close(mat);
-            UNPROTECT(2);
-            error("Not implemented support to read matio class type MAT_C_OBJECT");
+            err = 1;
+            err_msg = err_mat_c_object;
+            goto cleanup;
 
         case MAT_C_CHAR:
             err = read_mat_char(list, i, matvar);
@@ -3247,20 +3256,18 @@ SEXP read_mat(const SEXP filename)
             break;
 
         case MAT_C_FUNCTION:
-            Mat_VarFree(matvar);
-            Mat_Close(mat);
-            UNPROTECT(2);
-            error("Not implemented support to read matio class type MAT_C_FUNCTION");
+            err = 1;
+            err_msg = err_mat_c_function;
+            goto cleanup;
 
         default:
             err = 1;
+            break;
         }
 
         if (err) {
-            Mat_VarFree(matvar);
-            Mat_Close(mat);
-            UNPROTECT(2);
-            error("Error reading MAT file");
+            err_msg = err_reading_mat_file;
+            goto cleanup;
         }
 
         Mat_VarFree(matvar);
@@ -3269,13 +3276,21 @@ SEXP read_mat(const SEXP filename)
     }
 
     setAttrib(list, R_NamesSymbol, names);
-    Mat_Close(mat);
-    UNPROTECT(2);
+
+cleanup:
+    if (matvar)
+        Mat_VarFree(matvar);
+    if (mat)
+        Mat_Close(mat);
+    if (protected)
+        UNPROTECT(protected);
+    if (err)
+        error("Error reading MAT file");
 
     return list;
 }
 
-/** @brief
+/** @brief Write matlab file
  *
  *
  * @ingroup rmatio
@@ -3351,11 +3366,11 @@ static const R_CallMethodDef callMethods[] =
     {NULL, NULL, 0}
 };
 
-/** @brief
+/** @brief Register routines to R
  *
  *
  * @ingroup rmatio
- * @param info
+ * @param info Information about the DLL being loaded
  */
 void
 R_init_rmatio(DllInfo *info)
