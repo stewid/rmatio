@@ -3285,7 +3285,7 @@ cleanup:
     if (protected)
         UNPROTECT(protected);
     if (err)
-        error("Error reading MAT file");
+        error(err_msg);
 
     return list;
 }
