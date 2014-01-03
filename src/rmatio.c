@@ -1815,7 +1815,7 @@ set_dim(SEXP m,
     return 0;
 }
 
-/** @brief
+/** @brief Read character data
  *
  *
  * @ingroup rmatio
@@ -1878,7 +1878,7 @@ read_mat_char(SEXP list,
  * -------------------------------------------------------------
  */
 
-/** @brief
+/** @brief Read sparse data
  *
  *
  * @ingroup rmatio
@@ -1982,7 +1982,7 @@ read_sparse(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read complex data
  *
  *
  * @ingroup rmatio
@@ -2106,7 +2106,7 @@ read_mat_complex(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read data
  *
  *
  * @ingroup rmatio
@@ -2230,7 +2230,7 @@ read_mat_data(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read logical data
  *
  *
  * @ingroup rmatio
@@ -2282,7 +2282,7 @@ read_logical(SEXP list,
  * -------------------------------------------------------------
  */
 
-/** @brief
+/** @brief Read empty structure array
  *
  *
  * @ingroup rmatio
@@ -2296,7 +2296,8 @@ read_empty_structure_array(SEXP list,
                            int index,
                            matvar_t *matvar)
 {
-    SEXP names, struc;
+    SEXP names = R_NilValue;
+    SEXP struc = R_NilValue;
 
     if (NULL == matvar
         || matvar->class_type != MAT_C_STRUCT
