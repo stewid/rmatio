@@ -16,25 +16,15 @@
 
 ##' Writes the values in a list to a mat-file.
 ##'
-##' Writes the values in the list to a mat-file using the C library
-##' MATIO. All values in the list must have unique names. The
-##' following data structures are implemented.\cr
+##' Writes the values in the list to a mat-file. All values in the
+##' list must have unique names.
+##' @note
+##' \itemize{
+##'   \item A vector is saved as a \code{1 x length} array
 ##'
-##' \strong{Vectors and matrices}
-##' \tabular{lllll}{
-##'   \bold{R data structure} \tab \bold{R storage mode} \tab \bold{MATIO CLASS} \tab \bold{MATIO TYPE} \tab \bold{Dimension}\cr
-##'   \code{\link[base:integer]{vector}} \tab integer \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab 1 x length \cr
-##'   \code{\link[base:double]{vector}} \tab double  \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab 1 x length \cr
-##'   \code{\link[base:matrix]{matrix}} \tab integer \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab row x col  \cr
-##'   \code{\link[base:matrix]{matrix}} \tab double  \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab row x col  \cr
+##'   \item Support for writing a sparse matrix of type 'dgCMatrix' or 'lgCMatrix'
+##'     to file
 ##' }
-##'
-##' \strong{Sparse numeric matrices}
-##' \tabular{lllll}{
-##'   \bold{R data structure} \tab \bold{MATIO CLASS} \tab \bold{MATIO TYPE} \tab \bold{Dimension}\cr
-##'   \code{\link[=dgCMatrix-class]{dgCMatrix}} \tab MAT_C_SPARSE \tab MAT_T_DOUBLE \tab row x col \cr
-##' }
-##'
 ##' @name write.mat-methods
 ##' @aliases write.mat
 ##' @aliases write.mat-methods
@@ -47,10 +37,6 @@
 ##' @param version MAT file version to create. Currently only support
 ##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
-##' @references \itemize{
-##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.1.\cr
-##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.1/matio_user_guide.pdf}
-##' }
 ##' @keywords methods
 ##' @export
 ##' @useDynLib rmatio

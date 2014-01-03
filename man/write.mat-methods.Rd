@@ -1,19 +1,3 @@
-% rmatio, a R interface to the C library matio, MAT File I/O Library.
-% Copyright (C) 2013  Stefan Widgren
-%
-% This program is free software: you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation, either version 3 of the License, or
-% (at your option) any later version.
-%
-% rmatio is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 \docType{methods}
 \name{write.mat-methods}
 \alias{write.mat}
@@ -39,27 +23,15 @@
   Writes the values in a list to a mat-file.
 }
 \details{
-  Writes the values in the list to a mat-file using the C
-  library MATIO. All values in the list must have unique
-  names. The following data structures are implemented.\cr
+  Writes the values in the list to a mat-file. All values
+  in the list must have unique names.
+}
+\note{
+  \itemize{ \item A vector is saved as a \code{1 x length}
+  array
 
-  \strong{Vectors and matrices} \tabular{lllll}{ \bold{R
-  data structure} \tab \bold{R storage mode} \tab
-  \bold{MATIO CLASS} \tab \bold{MATIO TYPE} \tab
-  \bold{Dimension}\cr \code{\link[base:integer]{vector}}
-  \tab integer \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab 1 x
-  length \cr \code{\link[base:double]{vector}} \tab double
-  \tab MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab 1 x length \cr
-  \code{\link[base:matrix]{matrix}} \tab integer \tab
-  MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab row x col \cr
-  \code{\link[base:matrix]{matrix}} \tab double \tab
-  MAT_C_DOUBLE \tab MAT_T_DOUBLE \tab row x col \cr }
-
-  \strong{Sparse numeric matrices} \tabular{lllll}{ \bold{R
-  data structure} \tab \bold{MATIO CLASS} \tab \bold{MATIO
-  TYPE} \tab \bold{Dimension}\cr
-  \code{\link[=dgCMatrix-class]{dgCMatrix}} \tab
-  MAT_C_SPARSE \tab MAT_T_DOUBLE \tab row x col \cr }
+  \item Support for writing a sparse matrix of type
+  'dgCMatrix' or 'lgCMatrix' to file }
 }
 \examples{
 \dontrun{
@@ -147,12 +119,6 @@ stopifnot(identical(demoS4mat, demoS4mat.2))
 
 unlink(filename)
 }
-}
-\references{
-  \itemize{ \item Christopher C. Hulbert, MATIO User Manual
-  for version 1.5.1.\cr
-  \url{http://sourceforge.net/projects/matio/files/matio/1.5.1/matio_user_guide.pdf}
-  }
 }
 \keyword{methods}
 
