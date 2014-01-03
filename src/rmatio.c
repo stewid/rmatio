@@ -486,7 +486,7 @@ write_matvar(mat_t *mat,
     return 0;
 }
 
-/** @brief
+/** @brief Write CHARSXP
  *
  *
  * @ingroup rmatio
@@ -553,7 +553,7 @@ write_charsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write REALSXP
  *
  *
  * @ingroup rmatio
@@ -611,7 +611,7 @@ write_realsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write INTSXP
  *
  *
  * @ingroup rmatio
@@ -669,7 +669,7 @@ write_intsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write CPLXSXP
  *
  *
  * @ingroup rmatio
@@ -752,7 +752,7 @@ write_cplxsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write LGLSXP
  *
  *
  * @ingroup rmatio
@@ -825,7 +825,7 @@ write_lglsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write STRSXP
  *
  *
  * @ingroup rmatio
@@ -947,7 +947,7 @@ write_strsxp(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write dgCMatrix
  *
  *
  * @ingroup rmatio
@@ -1010,7 +1010,7 @@ write_dgCMatrix(const SEXP elmt,
                         compression);
 }
 
-/** @brief
+/** @brief Write lgCMatrix
  *
  *
  * @ingroup rmatio
