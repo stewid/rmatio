@@ -2384,7 +2384,7 @@ read_empty_structure_array_with_fields(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read structure array with empty fields
  *
  *
  * @ingroup rmatio
@@ -2398,9 +2398,11 @@ read_structure_array_with_empty_fields(SEXP list,
                                        int index,
                                        matvar_t *matvar)
 {
-    SEXP names, struc, s;
+    SEXP names = R_NilValue;
+    SEXP struc = R_NilValue;
     char * const * field_names;
-    matvar_t *field;
+    int err = 0;
+    size_t protected = 0;
 
     if (NULL == matvar
         || matvar->class_type != MAT_C_STRUCT
@@ -2413,21 +2415,30 @@ read_structure_array_with_empty_fields(SEXP list,
     PROTECT(struc = allocVector(VECSXP, matvar->dims[1]));
     if (R_NilValue == struc)
         return 1;
+    protected++;
     PROTECT(names = allocVector(STRSXP, matvar->dims[1]));
     if (R_NilValue == names) {
-        UNPROTECT(1);
-        return 1;
+        err = 1;
+        goto cleanup;
     }
+    protected++;
 
     for (size_t i=0;i<matvar->dims[1];i++) {
-        if (field_names[i]) {
-            SET_STRING_ELT(names, i, mkChar(field_names[i]));
-        } else {
-            UNPROTECT(2);
-            return 1;
+        SEXP s = R_NilValue;
+        matvar_t *field = NULL;
+
+        if (!field_names[i]) {
+            err = 1;
+            goto cleanup;
         }
+        SET_STRING_ELT(names, i, mkChar(field_names[i]));
 
         field = Mat_VarGetStructFieldByIndex(matvar, i, 0);
+        if (NULL == field) {
+            err = 1;
+            goto cleanup;
+        }
+
         if (field->isComplex) {
             PROTECT(s = allocVector(CPLXSXP, 0));
         } else if (field->isLogical) {
@@ -2455,14 +2466,14 @@ read_structure_array_with_empty_fields(SEXP list,
                 break;
 
             default:
-                UNPROTECT(2);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
         }
 
         if (R_NilValue == s) {
-            UNPROTECT(2);
-            return 1;
+            err = 1;
+            goto cleanup;
         }
 
         SET_VECTOR_ELT(struc, i, s);
@@ -2471,9 +2482,12 @@ read_structure_array_with_empty_fields(SEXP list,
 
     setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
-    UNPROTECT(2);
 
-    return 0;
+cleanup:
+    if (protected)
+        UNPROTECT(protected);
+
+    return err;
 }
 
 /** @brief Read structure array with fields
