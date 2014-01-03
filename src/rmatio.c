@@ -2476,7 +2476,7 @@ read_structure_array_with_empty_fields(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read structure array with fields
  *
  *
  * @ingroup rmatio
@@ -2490,10 +2490,13 @@ read_structure_array_with_fields(SEXP list,
                                  int index,
                                  matvar_t *matvar)
 {
-    SEXP names, struc, s;
+    SEXP names = R_NilValue;
+    SEXP struc = R_NilValue;
     char * const * fieldnames;
-    size_t nfields, fieldlen;
+    size_t nfields = 0;
+    size_t fieldlen = 0;
     int err = 0;
+    size_t protected = 0;
 
     if (NULL == matvar
         || MAT_C_STRUCT != matvar->class_type
@@ -2522,13 +2525,17 @@ read_structure_array_with_fields(SEXP list,
     PROTECT(struc = allocVector(VECSXP, nfields));
     if (R_NilValue == struc)
         return 1;
+    protected++;
     PROTECT(names = allocVector(STRSXP, nfields));
     if (R_NilValue == names) {
-        UNPROTECT(1);
-        return 1;
+        err = 1;
+        goto cleanup;
     }
+    protected++;
 
     for (size_t i=0;i<nfields;i++) {
+        SEXP s = R_NilValue;
+
         if (fieldnames[i])
             SET_STRING_ELT(names, i, mkChar(fieldnames[i]));
 
@@ -2536,9 +2543,10 @@ read_structure_array_with_fields(SEXP list,
         case MAT_C_CHAR:
             PROTECT(s = allocVector(STRSXP, fieldlen));
             if (R_NilValue == s) {
-                UNPROTECT(2);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
+            protected++;
             break;
 
         case MAT_C_CELL:
@@ -2548,14 +2556,19 @@ read_structure_array_with_fields(SEXP list,
         default:
             PROTECT(s = allocVector(VECSXP, fieldlen));
             if (R_NilValue == s) {
-                UNPROTECT(2);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
+            protected++;
             break;
         }
 
         for (size_t j=0;j<fieldlen;j++) {
             matvar_t *field = Mat_VarGetStructFieldByIndex(matvar, i, j);
+            if (NULL == field) {
+                err = 1;
+                goto cleanup;
+            }
 
             switch (field->class_type) {
             case MAT_C_DOUBLE:
@@ -2588,20 +2601,19 @@ read_structure_array_with_fields(SEXP list,
                     char* buf = (char*)malloc((field->dims[1]+1)*sizeof(char));
                     if (NULL == buf) {
                         err = 1;
-                    } else {
-                        for (size_t k=0;k<field->dims[1];k++)
-                            buf[k] = ((char*)field->data)[k];
-                        buf[field->dims[1]] = 0;
-                        SET_STRING_ELT(s, j, mkChar(buf));
-                        free(buf);
-                        err = 0;
+                        goto cleanup;
                     }
+                    for (size_t k=0;k<field->dims[1];k++)
+                        buf[k] = ((char*)field->data)[k];
+                    buf[field->dims[1]] = 0;
+                    SET_STRING_ELT(s, j, mkChar(buf));
+                    free(buf);
                     break;
                 }
 
                 default:
                     err = 1;
-                    break;
+                    goto cleanup;
                 }
                 break;
 
@@ -2611,29 +2623,36 @@ read_structure_array_with_fields(SEXP list,
 
             default:
                 err = 1;
-                break;
+                goto cleanup;
             }
+
+            if (err)
+                goto cleanup;
         }
 
         if (R_NilValue != s) {
             SET_VECTOR_ELT(struc, i, s);
-            UNPROTECT(1);
-        }
-
-        if (err) {
-            UNPROTECT(2);
-            return 1;
+            if (protected) {
+                UNPROTECT(1);
+                protected--;
+            } else {
+                err = 1;
+                goto cleanup;
+            }
         }
     }
 
     setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
-    UNPROTECT(2);
 
-    return 0;
+cleanup:
+    if (protected)
+        UNPROTECT(protected);
+
+    return err;
 }
 
-/** @brief
+/** @brief Read struct
  *
  *
  * @ingroup rmatio
@@ -2685,7 +2704,7 @@ read_mat_struct(SEXP list,
  * -------------------------------------------------------------
  */
 
-/** @brief
+/** @brief Read empty cell array
  *
  *
  * @ingroup rmatio
