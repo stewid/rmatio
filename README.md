@@ -1,11 +1,9 @@
 rmatio
 ======
 
-R interface to the C-library matio
+`rmatio` is a package for reading and writing Matlab MAT files from R. `rmatio` supports reading MAT version 4, MAT version 5 and MAT compressed version 5. `rmatio` can write version 5 MAT files and version 5 files with variable compression.
 
-rmatio is a package for reading and writing Matlab MAT files from R,
-using the C library matio written by Christopher Hulbert
-(http://sourceforge.net/projects/matio/).
+Internally, the `rmatio` package uses the C library [matio](http://sourceforge.net/projects/matio/) for reading/writing MATLAB MAT files.
 
 You can track (and contribute to) development of `rmatio`
 at https://github.com/stewid/rmatio.
@@ -42,6 +40,13 @@ Write a compressed version 5 MAT file
 Check that the content of the files are identical
 
     identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
+
+Included software
+-----------------
+
+- The C library [matio](http://sourceforge.net/projects/matio/) written by Christopher Hulbert
+
+- The C library [zlib](http://www.zlib.net/) written by Jean-loup Gailly and Mark Adler
 
 License
 -------
