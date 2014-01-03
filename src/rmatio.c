@@ -2954,7 +2954,8 @@ read_cell_array_with_arrays(SEXP list,
                             matvar_t *matvar)
 {
     SEXP cell;
-    int err;
+    int err = 0;
+    size_t protected = 0;
 
     if (NULL == matvar
         || NULL == matvar->dims)
@@ -2963,19 +2964,25 @@ read_cell_array_with_arrays(SEXP list,
     PROTECT(cell = allocVector(VECSXP, matvar->dims[0]));
     if (R_NilValue == cell)
         return 1;
+    protected++;
 
     for (size_t i=0;i<matvar->dims[0];i++) {
-        SEXP cell_row = R_NilValue;;
+        SEXP cell_row = R_NilValue;
         if (matvar->dims[1] > 1) {
             PROTECT(cell_row = allocVector(VECSXP, matvar->dims[1]));
             if (R_NilValue == cell_row) {
-                UNPROTECT(1);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
+            protected++;
         }
 
         for (size_t j=0;j<matvar->dims[1];j++) {
             matvar_t *mat_cell = Mat_VarGetCell(matvar, j*matvar->dims[0] + i);
+            if (NULL == mat_cell) {
+                err = 1;
+                goto cleanup;
+            }
 
             switch (mat_cell->class_type) {
             case MAT_C_DOUBLE:
@@ -3038,22 +3045,25 @@ read_cell_array_with_arrays(SEXP list,
                 break;
             }
 
-            if (err) {
-                UNPROTECT(1);
-                return 1;
-            }
+            if (err)
+                goto cleanup;
         }
 
         if (R_NilValue != cell_row) {
             SET_VECTOR_ELT(cell, i, cell_row);
-            UNPROTECT(1);
+            if (protected)
+                UNPROTECT(1);
+            protected--;
         }
     }
 
     SET_VECTOR_ELT(list, index, cell);
-    UNPROTECT(1);
 
-    return 0;
+cleanup:
+    if (protected)
+        UNPROTECT(protected);
+
+    return err;
 }
 
 /** @brief Read cell
