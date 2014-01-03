@@ -1,42 +1,35 @@
 Package: rmatio
 Title: A R package to read and write matlab files
-Version: 0.2.0
-Authors@R: c(
-    person("Stefan", "Widgren",
-    role = c("aut", "cre"),
-    email = "stefan.widgren@sva.se",
-    comment = "Author of the R interface to the C-library matio"),
-    person("Christopher", "Hulbert",
-    role = c("aut"),
-    comment = "Author of the C-library matio, http://sourceforge.net/projects/matio/"),
-    person("Jean-loup", "Gailly",
-    role = c("aut"),
-    comment = "Author of the zlib library, http://www.zlib.net/"),
-    person("Mark", "Adler",
-    role = c("aut"),
-    comment = "Author of the zlib library, http://www.zlib.net/"))
+Version: 0.3.0
+Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"), email =
+    "stefan.widgren@sva.se", comment = "Author of the R interface to the
+    C-library matio"), person("Christopher", "Hulbert", role = c("aut"),
+    comment = "Author of the C-library matio,
+    http://sourceforge.net/projects/matio/"), person("Jean-loup", "Gailly",
+    role = c("aut"), comment = "Author of the zlib library,
+    http://www.zlib.net/"), person("Mark", "Adler", role = c("aut"), comment =
+    "Author of the zlib library, http://www.zlib.net/"))
 Description: rmatio is a package for reading and writing Matlab MAT
-             files from R, using the C MAT File I/O Library matio
-             written by Christopher Hulbert
-             (http://sourceforge.net/projects/matio/).
-             The package contains zlib written by Jean-loup Gailly
-             and Mark Adler (http://www.zlib.net/).
+    files from R. The rmatio package supports reading MAT version 4,
+    MAT version 5 and MAT compressed version 5. The rmatio package can
+    write version 5 MAT files and version 5 files with variable
+    compression.
 Copyright: The package uses the source code of matio written by
-           Christopher Hulbert (http://sourceforge.net/projects/matio/)
-           (License: Simplified BSD). The matio io routines have been
-           adopted to use R printing and error routines. The matio
-           inflate.c have been renamed to matio-inflate.c to avoid
-           name collision with zlib inflate.c.
-           The package uses the source code of zlib written by
-           Jean-loup Gailly and Mark Adler (http://www.zlib.net/)
-           (License: http://zlib.net/zlib_license.html).
-           The ZLIB_VERSION, ZLIB_VERNUM and ZLIB_VER_SUBREVISION have
-           been changed to comply with zlib license requirement.
+    Christopher Hulbert (http://sourceforge.net/projects/matio/)
+    (License: Simplified BSD). The matio io routines have been
+    adopted to use R printing and error routines. The matio
+    inflate.c have been renamed to matio-inflate.c to avoid
+    name collision with zlib inflate.c.
+    The package uses the source code of zlib written by
+    Jean-loup Gailly and Mark Adler (http://www.zlib.net/)
+    (License: http://zlib.net/zlib_license.html).
+    The ZLIB_VERSION, ZLIB_VERNUM and ZLIB_VER_SUBREVISION have
+    been changed to comply with zlib license requirement.
 License: GPL-3
 URL: https://github.com/stewid/rmatio
 Type: Package
 LazyLoad: yes
-Date: 2013-09-16
+Date: 2014-01-03
 Depends:
     R(>= 2.15.2),
     Matrix,
