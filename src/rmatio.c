@@ -2718,7 +2718,7 @@ read_empty_cell_array(SEXP list,
     return 0;
 }
 
-/** @brief
+/** @brief Read cell array with empty arrays
  *
  *
  * @ingroup rmatio
@@ -2732,8 +2732,10 @@ read_cell_array_with_empty_arrays(SEXP list,
                                   int index,
                                   matvar_t *matvar)
 {
-    SEXP cell_array, cell_item, field_item;
+    SEXP cell_array;
     char * const * fieldnames;
+    int err = 0;
+    size_t protected = 0;
 
     if (NULL == matvar
         || MAT_C_CELL != matvar->class_type
@@ -2747,40 +2749,46 @@ read_cell_array_with_empty_arrays(SEXP list,
     PROTECT(cell_array = allocVector(VECSXP, matvar->dims[1]));
     if (R_NilValue == cell_array)
         return 1;
+    protected++;
 
     for (size_t i=0;i<matvar->dims[1];i++) {
-        matvar_t *cell = Mat_VarGetCell(matvar, i);
+        SEXP cell_item = R_NilValue;
         SEXP names = R_NilValue;
+        matvar_t *cell = Mat_VarGetCell(matvar, i);
 
         if (cell->isComplex) {
             PROTECT(cell_item = allocVector(CPLXSXP, 0));
             if (R_NilValue == cell_item) {
-                UNPROTECT(1);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
+            protected++;
         } else if (cell->isLogical) {
             PROTECT(cell_item = allocVector(LGLSXP, 0));
             if (R_NilValue == cell_item) {
-                UNPROTECT(1);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
+            protected++;
         } else {
             switch (cell->class_type) {
             case MAT_C_CHAR:
                 PROTECT(cell_item = allocVector(STRSXP, 0));
                 if (R_NilValue == cell_item) {
-                    UNPROTECT(1);
-                    return 1;
+                    err = 1;
+                    goto cleanup;
                 }
+                protected++;
                 break;
 
             case MAT_C_DOUBLE:
             case MAT_C_SINGLE:
                 PROTECT(cell_item = allocVector(REALSXP, 0));
                 if (R_NilValue == cell_item) {
-                    UNPROTECT(1);
-                    return 1;
+                    err = 1;
+                    goto cleanup;
                 }
+                protected++;
                 break;
 
             case MAT_C_INT64:
@@ -2793,9 +2801,10 @@ read_cell_array_with_empty_arrays(SEXP list,
             case MAT_C_UINT8:
                 PROTECT(cell_item = allocVector(INTSXP, 0));
                 if (R_NilValue == cell_item) {
-                    UNPROTECT(1);
-                    return 1;
+                    err = 1;
+                    goto cleanup;
                 }
+                protected++;
                 break;
 
             case MAT_C_STRUCT:
@@ -2803,62 +2812,82 @@ read_cell_array_with_empty_arrays(SEXP list,
                     PROTECT(cell_item = allocVector(VECSXP,
                                                     Mat_VarGetNumberOfFields(cell)));
                     if (R_NilValue == cell_item) {
-                        UNPROTECT(1);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
+
                     PROTECT(names = allocVector(STRSXP,
                                                 Mat_VarGetNumberOfFields(cell)));
                     if (R_NilValue == names) {
-                        UNPROTECT(2);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
                     setAttrib(cell_item, R_NamesSymbol, names);
-                    UNPROTECT(1);
+                    if (protected)
+                        UNPROTECT(1);
+                    protected--;
 
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     for (size_t j=0;j<Mat_VarGetNumberOfFields(cell);j++) {
+                        SEXP field_item = R_NilValue;
                         SET_STRING_ELT(names, j, mkChar(fieldnames[j]));
                         PROTECT(field_item = allocVector(VECSXP, 0));
                         if (R_NilValue == field_item) {
-                            UNPROTECT(3);
-                            return 1;
+                            err = 1;
+                            goto cleanup;
                         }
+                        protected++;
                         SET_VECTOR_ELT(cell_item, j, field_item);
-                        UNPROTECT(1);
+                        if (protected)
+                            UNPROTECT(1);
+                        protected--;
                     }
                 } else if (cell->dims[0] == 1 && cell->dims[1] == 1) {
                     PROTECT(cell_item = allocVector(VECSXP, 0));
                     if (R_NilValue == cell_item) {
-                        UNPROTECT(1);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
+
                     PROTECT(names = allocVector(STRSXP, 0));
                     if (R_NilValue == names) {
-                        UNPROTECT(2);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
                     setAttrib(cell_item, R_NamesSymbol, names);
-                    UNPROTECT(1);
+                    if (protected)
+                        UNPROTECT(1);
+                    protected--;
                 } else if (cell->dims[0] == 1 && cell->dims[1] > 1) {
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     PROTECT(cell_item = allocVector(VECSXP, cell->dims[1]));
                     if (R_NilValue == cell_item) {
-                        UNPROTECT(1);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
+
                     PROTECT(names = allocVector(STRSXP, cell->dims[1]));
                     if (R_NilValue == names) {
-                        UNPROTECT(2);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
                     setAttrib(cell_item, R_NamesSymbol, names);
-                    UNPROTECT(1);
+                    if (protected)
+                        UNPROTECT(1);
+                    protected--;
 
                     for (size_t j=0;j<cell->dims[1];j++) {
+                        SEXP field_item = R_NilValue;
                         matvar_t *field = Mat_VarGetStructFieldByIndex(cell, j, 0);
                         if (NULL == field) {
-                            UNPROTECT(2);
-                            return 1;
+                            err = 1;
+                            goto cleanup;
                         }
 
                         if (fieldnames[j])
@@ -2891,22 +2920,25 @@ read_cell_array_with_empty_arrays(SEXP list,
                                 break;
 
                             default:
-                                field_item = R_NilValue;
-                                break;
+                                err = 1;
+                                goto cleanup;
                             }
                         }
 
                         if (R_NilValue == field_item) {
-                            UNPROTECT(2);
-                            return 1;
+                            err = 1;
+                            goto cleanup;
                         }
+                        protected++;
 
                         SET_VECTOR_ELT(cell_item, j, field_item);
-                        UNPROTECT(1);
+                        if (protected)
+                            UNPROTECT(1);
+                        protected--;
                     }
                 } else {
-                    UNPROTECT(1);
-                    return 1;
+                    err = 1;
+                    goto cleanup;
                 }
                 break;
 
@@ -2914,29 +2946,35 @@ read_cell_array_with_empty_arrays(SEXP list,
                 if (cell->dims[0] == 0 && cell->dims[1] == 1) {
                     PROTECT(cell_item = allocVector(VECSXP, 0));
                     if (R_NilValue == cell_item) {
-                        UNPROTECT(1);
-                        return 1;
+                        err = 1;
+                        goto cleanup;
                     }
+                    protected++;
                 } else {
-                    UNPROTECT(1);
-                    return 1;
+                    err = 1;
+                    goto cleanup;
                 }
                 break;
 
             default:
-                UNPROTECT(1);
-                return 1;
+                err = 1;
+                goto cleanup;
             }
         }
 
         SET_VECTOR_ELT(cell_array, i, cell_item);
-        UNPROTECT(1);
+        if (protected)
+            UNPROTECT(1);
+        protected--;
     }
 
     SET_VECTOR_ELT(list, index, cell_array);
-    UNPROTECT(1);
 
-    return 0;
+cleanup:
+    if (protected)
+        UNPROTECT(protected);
+
+    return err;
 }
 
 /** @brief Read cell array with arrays
