@@ -2,10 +2,10 @@ AC_INIT(rmatio, see.DESCRIPTION.file)
 
 AC_DEFINE_UNQUOTED([MATIO_MAJOR_VERSION],1,[Matio major version number])
 AC_DEFINE_UNQUOTED([MATIO_MINOR_VERSION],5,[Matio minor version number])
-AC_DEFINE_UNQUOTED([MATIO_RELEASE_LEVEL],0,[Matio release level number])
-AC_DEFINE_UNQUOTED([MATIO_VERSION],150,[Matio version number])
+AC_DEFINE_UNQUOTED([MATIO_RELEASE_LEVEL],2,[Matio release level number])
+AC_DEFINE_UNQUOTED([MATIO_VERSION],152,[Matio version number])
 
-AC_CONFIG_HEADERS([src/matioConfig.h src/matio_pubconf.h])
+AC_CONFIG_HEADERS([src/matio/matioConfig.h src/matio/matio_pubconf.h])
 AC_STDC_HEADERS
 AC_CHECK_HEADER([inttypes.h],[AC_DEFINE_UNQUOTED([MATIO_HAVE_INTTYPES_H],[1],[Matio has access to inttypes.h])])
 AC_CHECK_HEADER([stdint.h],[AC_DEFINE_UNQUOTED([MATIO_HAVE_STDINT_H],[1],[Matio has access to stdint.h])])
