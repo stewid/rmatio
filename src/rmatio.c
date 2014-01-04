@@ -3254,9 +3254,6 @@ SEXP read_mat(const SEXP filename)
     if (!isString(filename))
         error("'filename' must be a string.");
 
-    if (Mat_LogInitFunc("rmatio", rmatio_error_func))
-        error("Unable to initialize matio logging system.");
-
     mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDONLY);
     if (!mat)
         error("Unable to open file.");
@@ -3402,9 +3399,6 @@ write_mat(const SEXP list,
         error("'list' must be a list.");
     if (!isString(filename))
         error("'filename' must be a string.");
-
-    if (Mat_LogInitFunc("rmatio", rmatio_error_func))
-        error("Unable to initialize matio logging system.");
 
     mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)),
                         CHAR(STRING_ELT(header, 0)),

@@ -2157,7 +2157,9 @@ Mat_Create73(const char *matname,const char *hdr_str)
     mat->refs_id          = -1;
 
     t = time(NULL);
-    mat->filename = strdup_printf("%s",matname);
+    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+    /* mat->filename = strdup_printf("%s",matname); */
+    mat->filename = strdup(matname);
     mat->mode     = MAT_ACC_RDWR;
     mat->byteswap = 0;
     mat->header   = calloc(1,128);

@@ -32,9 +32,9 @@
 
 /*
  * Changes in the R package rmatio:
- * 
+ *
  * - The io routines have been adopted to use R printing and error routines.
- *   See the R manual Writing R Extensions 
+ *   See the R manual Writing R Extensions
  */
 
 #ifndef MATIO_H
@@ -230,26 +230,28 @@ typedef struct mat_sparse_t {
 /* Library function */
 EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
 
+/* Stefan Widgren 2014-01-01: Not used by rmatio */
 /*     io.c         */
-EXTERN char  *strdup_vprintf(const char *format, va_list ap);
-EXTERN char  *strdup_printf(const char *format, ...);
-EXTERN int    Mat_SetVerbose( int verb, int s );
-EXTERN int    Mat_SetDebug( int d );
-EXTERN void   Mat_Critical( const char *format, ... );
-EXTERN void   Mat_Error( const char *format, ... );
-EXTERN void   Mat_Help( const char *helpstr[] );
-EXTERN int    Mat_LogInit( const char *progname );
-EXTERN int    Mat_LogClose(void);
-EXTERN int    Mat_LogInitFunc(const char *prog_name,
-                    void (*log_func)(int log_level, char *message) );
-EXTERN int    Mat_Message( const char *format, ... );
-EXTERN int    Mat_DebugMessage( int level, const char *format, ... );
-EXTERN int    Mat_VerbMessage( int level, const char *format, ... );
-EXTERN void   Mat_Warning( const char *format, ... );
+/* EXTERN char  *strdup_vprintf(const char *format, va_list ap); */
+/* EXTERN char  *strdup_printf(const char *format, ...); */
+/* EXTERN int    Mat_SetVerbose( int verb, int s ); */
+/* EXTERN int    Mat_SetDebug( int d ); */
+/* EXTERN void   Mat_Critical( const char *format, ... ); */
+/* EXTERN void   Mat_Error( const char *format, ... ); */
+/* EXTERN void   Mat_Help( const char *helpstr[] ); */
+/* EXTERN int    Mat_LogInit( const char *progname ); */
+/* EXTERN int    Mat_LogClose(void); */
+/* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
+/*                     void (*log_func)(int log_level, char *message) ); */
+/* EXTERN int    Mat_Message( const char *format, ... ); */
+/* EXTERN int    Mat_DebugMessage( int level, const char *format, ... ); */
+/* EXTERN int    Mat_VerbMessage( int level, const char *format, ... ); */
+/* EXTERN void   Mat_Warning( const char *format, ... ); */
+/* EXTERN void   Mat_PrintNumber(enum matio_types type, void *data); */
+/* EXTERN void   Mat_VarPrint( matvar_t *matvar, int printdata ); */
+
 EXTERN size_t Mat_SizeOf(enum matio_types data_type);
 EXTERN size_t Mat_SizeOfClass(int class_type);
-EXTERN void   Mat_PrintNumber(enum matio_types type, void *data);
-EXTERN void   Mat_VarPrint( matvar_t *matvar, int printdata );
 
 /*   MAT File functions   */
 #define            Mat_Create(a,b) Mat_CreateVer(a,b,MAT_FT_DEFAULT)

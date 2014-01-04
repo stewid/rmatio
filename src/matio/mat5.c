@@ -30,6 +30,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Changes in the R package rmatio:
+ *
+ * - The io routines have been adopted to use R printing and error routines.
+ *   See the R manual Writing R Extensions
+ *
+ */
+
+#include <Rdefines.h>
+#define Mat_Critical error
+
 /* FIXME: Implement Unicode support */
 #include <stdlib.h>
 #include <string.h>
@@ -481,22 +492,28 @@ Mat_Create5(const char *matname,const char *hdr_str)
 
     t = time(NULL);
     mat->fp = fp;
-    mat->filename = strdup_printf("%s",matname);
+    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+    /* mat->filename = strdup_printf("%s",matname); */
+    mat->filename = strdup(matname);
     mat->mode     = MAT_ACC_RDWR;
     mat->byteswap = 0;
     mat->header   = calloc(1,128);
     mat->subsys_offset = calloc(1,16);
     memset(mat->header,' ',128);
     if ( hdr_str == NULL ) {
-        err = mat_snprintf(mat->header,116,"MATLAB 5.0 MAT-file, Platform: %s, "
-                "Created By: libmatio v%d.%d.%d on %s", MATIO_PLATFORM,
-                MATIO_MAJOR_VERSION, MATIO_MINOR_VERSION, MATIO_RELEASE_LEVEL,
-                ctime(&t));
-        mat->header[115] = '\0';    /* Just to make sure it's NULL terminated */    } else {
-        err = mat_snprintf(mat->header,116,"%s",hdr_str);
+        /* Stefan Widgren 2014-01-04: Replaced mat_snprintf with snprintf */
+        err = snprintf(mat->header,116,"MATLAB 5.0 MAT-file, Platform: %s, "
+                       "Created By: libmatio v%d.%d.%d on %s", MATIO_PLATFORM,
+                       MATIO_MAJOR_VERSION, MATIO_MINOR_VERSION, MATIO_RELEASE_LEVEL,
+                       ctime(&t));
+        mat->header[115] = '\0';    /* Just to make sure it's NULL terminated */
+    } else {
+        /* Stefan Widgren 2014-01-04: Replaced mat_snprintf with snprintf */
+        err = snprintf(mat->header,116,"%s",hdr_str);
     }
     mat->header[err] = ' ';
-    mat_snprintf(mat->subsys_offset,15,"            ");
+    /* Stefan Widgren 2014-01-04: Replaced mat_snprintf with snprintf */
+    snprintf(mat->subsys_offset,15,"            ");
     mat->version = (int)0x0100;
     endian = 0x4d49;
 
@@ -1855,7 +1872,9 @@ ReadNextStructField( mat_t *mat, matvar_t *matvar )
         if ( (uncomp_buf[0] & 0x0000ffff) == MAT_T_INT32 ) {
             fieldname_size = uncomp_buf[1];
         } else {
-            Mat_Warning("Error getting fieldname size");
+            /* Stefan Widgren 2014-01-04: Replaced Mat_Warning with error */
+            /* Mat_Warning("Error getting fieldname size"); */
+            error("Error getting fieldname size");
             return bytesread;
         }
 
@@ -2005,7 +2024,9 @@ ReadNextStructField( mat_t *mat, matvar_t *matvar )
         if ( (buf[0] & 0x0000ffff) == MAT_T_INT32 ) {
             fieldname_size = buf[1];
         } else {
-            Mat_Warning("Error getting fieldname size");
+            /* Stefan Widgren 2014-01-04: Replaced Mat_Warning with error */
+            /* Mat_Warning("Error getting fieldname size"); */
+            error("Error getting fieldname size");
             return bytesread;
         }
         bytesread+=fread(buf,4,2,mat->fp);

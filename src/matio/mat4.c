@@ -29,6 +29,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
+/*
+ * Changes in the R package rmatio:
+ *
+ * - The io routines have been adopted to use R printing and error routines.
+ *   See the R manual Writing R Extensions
+ *
+ */
+
+#include <Rdefines.h>
+#define Mat_Critical error
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

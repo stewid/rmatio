@@ -36,10 +36,11 @@
  * - The io routines have been adopted to use R printing and error routines.
  *   See the R manual Writing R Extensions
  *
- * - The following two functions have been moved to io.c
- *   void Mat_PrintNumber(enum matio_types type, void *data);
- *   void Mat_VarPrint( matvar_t *matvar, int printdata );
  */
+
+#include <Rdefines.h>
+#define Mat_Critical error
+#define Mat_Error error
 
 /* FIXME: Implement Unicode support */
 #include <stdlib.h>
@@ -77,6 +78,47 @@ ReadData(mat_t *mat, matvar_t *matvar)
     else if ( mat->version == MAT_FT_MAT4 )
         Read4(mat,matvar);
     return;
+}
+
+/* Stefan Widgren 2014-01-04: Mat_SizeOf moved from io.c */
+
+/** @brief Calculate the size of MAT data types
+ *
+ * @ingroup mat_util
+ * @param data_type Data type enumeration
+ * @return size of the data type in bytes
+ */
+size_t
+Mat_SizeOf(enum matio_types data_type)
+{
+    switch (data_type) {
+        case MAT_T_DOUBLE:
+            return sizeof(double);
+        case MAT_T_SINGLE:
+            return sizeof(float);
+#ifdef HAVE_MAT_INT64_T
+        case MAT_T_INT64:
+            return sizeof(mat_int64_t);
+#endif
+#ifdef HAVE_MAT_INT64_T
+        case MAT_T_UINT64:
+            return sizeof(mat_uint64_t);
+#endif
+        case MAT_T_INT32:
+            return sizeof(mat_int32_t);
+        case MAT_T_UINT32:
+            return sizeof(mat_uint32_t);
+        case MAT_T_INT16:
+            return sizeof(mat_int16_t);
+        case MAT_T_UINT16:
+            return sizeof(mat_uint16_t);
+        case MAT_T_INT8:
+            return sizeof(mat_int8_t);
+        case MAT_T_UINT8:
+            return sizeof(mat_uint8_t);
+        default:
+            return 0;
+    }
 }
 
 /*
@@ -155,6 +197,7 @@ Mat_Open(const char *matname,int mode)
     mat_int16_t tmp, tmp2;
     mat_t *mat = NULL;
     size_t bytesread = 0;
+    size_t len = 0;
 
     if ( (mode & 0x00000001) == MAT_ACC_RDONLY ) {
         fp = fopen( matname, "rb" );
@@ -244,7 +287,9 @@ Mat_Open(const char *matname,int mode)
     if ( NULL == mat )
         return mat;
 
-    mat->filename = strdup_printf("%s",matname);
+    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+    /* mat->filename = strdup_printf("%s",matname); */
+    mat->filename = strdup(matname);
     mat->mode = mode;
 
     if ( mat->version == 0x0200 ) {
@@ -536,8 +581,11 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
     matvar->isComplex   = opt & MAT_F_COMPLEX;
     matvar->isGlobal    = opt & MAT_F_GLOBAL;
     matvar->isLogical   = opt & MAT_F_LOGICAL;
+    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+    /* if ( name ) */
+    /*     matvar->name = strdup_printf("%s",name); */
     if ( name )
-        matvar->name = strdup_printf("%s",name);
+        matvar->name = strdup(name);
     matvar->rank = rank;
     matvar->dims = malloc(matvar->rank*sizeof(*matvar->dims));
     for ( i = 0; i < matvar->rank; i++ ) {
@@ -729,7 +777,9 @@ Mat_VarDelete(mat_t *mat, const char *name)
             break;
     }
 
-    temp     = strdup_printf("XXXXXX");
+    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+    /* temp     = strdup_printf("XXXXXX"); */
+    temp     = strdup("XXXXXX");
     tmp_name = mktemp(temp);
     tmp      = Mat_CreateVer(tmp_name,mat->header,mat_file_ver);
     if ( tmp != NULL ) {
@@ -741,7 +791,9 @@ Mat_VarDelete(mat_t *mat, const char *name)
             Mat_VarFree(matvar);
         }
         /* FIXME: Memory leak */
-        new_name = strdup_printf("%s",mat->filename);
+        /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
+        /* new_name = strdup_printf("%s",mat->filename); */
+        new_name = strdup(mat->filename);
         fclose(mat->fp);
 
         if ( (err = remove(new_name)) == -1 ) {
