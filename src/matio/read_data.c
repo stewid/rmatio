@@ -38,18 +38,21 @@
  *
  */
 
+/* Stefan Widgren 2014-01-04: Include files for rmatio package */
 #include <R.h>
+#include "matio_private.h"
 
 /* FIXME: Implement Unicode support */
-#include <stdlib.h>
-#include <string.h>
+/* #include <stdlib.h> */
+/* #include <string.h> */
 /* #include <stdio.h> */
-#include <math.h>
-#include <time.h>
-#include "matio_private.h"
-#if defined(HAVE_ZLIB)
-#   include <zlib.h>
-#endif
+/* #include <math.h> */
+/* #include <time.h> */
+/* #include "matio_private.h" */
+
+/* #if defined(HAVE_ZLIB) */
+/* #   include <zlib.h> */
+/* #endif */
 
 /*
  * --------------------------------------------------------------------------

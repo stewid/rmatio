@@ -41,7 +41,6 @@
 #include <Rdefines.h>
 #define Mat_Critical error
 
-#include <stdlib.h>
 #include "matio_private.h"
 
 #if HAVE_ZLIB

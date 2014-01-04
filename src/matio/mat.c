@@ -43,15 +43,15 @@
 #define Mat_Error error
 
 /* FIXME: Implement Unicode support */
-#include <stdlib.h>
-#include <string.h>
-/* #include <stdio.h> */
-#include <math.h>
-#include <time.h>
-#if defined(_WIN64) || defined(_WIN32)
-#   include <io.h>
-#   define mktemp _mktemp
-#endif
+/* #include <stdlib.h> */
+/* #include <string.h> */
+/* /\* #include <stdio.h> *\/ */
+/* #include <math.h> */
+/* #include <time.h> */
+/* #if defined(_WIN64) || defined(_WIN32) */
+/* #   include <io.h> */
+/* #   define mktemp _mktemp */
+/* #endif */
 /* #ifdef _MSC_VER
 /* #   define SIZE_T_FMTSTR "Iu" */
 /* #else */
