@@ -14,15 +14,13 @@ Description: rmatio is a package for reading and writing Matlab MAT
     MAT version 5 and MAT compressed version 5. The rmatio package can
     write version 5 MAT files and version 5 files with variable
     compression.
-Copyright: The package uses the source code of matio written by
+Copyright: The package includes the source code of matio written by
     Christopher Hulbert (http://sourceforge.net/projects/matio/)
     (License: Simplified BSD). The matio io routines have been
     adopted to use R printing and error routines.
-    The package uses the source code of zlib written by
+    The package includes the source code of zlib written by
     Jean-loup Gailly and Mark Adler (http://www.zlib.net/)
     (License: http://zlib.net/zlib_license.html).
-    The ZLIB_VERSION, ZLIB_VERNUM and ZLIB_VER_SUBREVISION have
-    been changed to comply with zlib license requirement.
 License: GPL-3
 URL: https://github.com/stewid/rmatio
 Type: Package
