@@ -1,17 +1,31 @@
 MATIO_PLATFORM=\"`$(R_HOME)/bin$(R_ARCH_BIN)/Rscript -e "cat(R.version$$platform[[1]])"`\"
 
-COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matioConfig.h.win', 'matioConfig.h', overwrite=TRUE))")
+COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/matioConfig.h.win', 'matio/matioConfig.h', overwrite=TRUE))")
 ifneq ($(COPY_MATIO_CONFIG_H), TRUE)
 $(error Unable to create matioConfig.h)
 endif
 
-COPY_MATIO_PUBCONF_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio_pubconf.h.win', 'matio_pubconf.h', overwrite=TRUE))")
+COPY_MATIO_PUBCONF_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/matio_pubconf.h.win', 'matio/matio_pubconf.h', overwrite=TRUE))")
 ifneq ($(COPY_MATIO_PUBCONF_H), TRUE)
 $(error Unable to create matio_pubconf.h)
 endif
 
 ifeq "$(WIN)" "64"
-PKG_CFLAGS = -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
+PKG_CFLAGS = -Imatio -Izlib -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
 else
-PKG_CFLAGS = -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
+PKG_CFLAGS = -Imatio -Izlib -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
 endif
+
+OBJECTS.matio = matio/endian.o matio/inflate.o matio/io.o \
+                matio/mat4.o matio/mat5.o matio/mat73.o \
+                matio/mat.o matio/matvar_cell.o matio/matvar_struct.o \
+                matio/read_data.o matio/snprintf.o
+
+OBJECTS.zlib = zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o \
+               zlib/gzclose.o zlib/gzlib.o zlib/gzread.o zlib/gzwrite.o \
+               zlib/infback.o zlib/inffast.o zlib/inflate.o zlib/inftrees.o \
+               zlib/trees.o zlib/uncompr.o zlib/zutil.o
+
+OBJECTS.root = rmatio.o
+
+OBJECTS = $(OBJECTS.matio) $(OBJECTS.zlib) $(OBJECTS.root)
