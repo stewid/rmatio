@@ -16,10 +16,10 @@ else
 PKG_CFLAGS = -Imatio -Izlib -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
 endif
 
-OBJECTS.matio = matio/endian.o matio/inflate.o matio/io.o \
-                matio/mat4.o matio/mat5.o matio/mat73.o \
-                matio/mat.o matio/matvar_cell.o matio/matvar_struct.o \
-                matio/read_data.o matio/snprintf.o
+OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
+                matio/mat5.o matio/mat73.o matio/mat.o \
+                matio/matvar_cell.o matio/matvar_struct.o \
+                matio/read_data.o
 
 OBJECTS.zlib = zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o \
                zlib/gzclose.o zlib/gzlib.o zlib/gzread.o zlib/gzwrite.o \
