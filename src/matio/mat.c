@@ -197,7 +197,8 @@ Mat_Open(const char *matname,int mode)
     mat_int16_t tmp, tmp2;
     mat_t *mat = NULL;
     size_t bytesread = 0;
-    size_t len = 0;
+    /* Stefan Widgren 2014-01-05: Removed unused variable */
+    /* size_t len = 0; */
 
     if ( (mode & 0x00000001) == MAT_ACC_RDONLY ) {
         fp = fopen( matname, "rb" );
