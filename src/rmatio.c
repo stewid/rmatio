@@ -3183,19 +3183,6 @@ read_mat_cell(SEXP list,
     return 1;
 }
 
-/** @brief Error function to interface matio
- *
- *
- * @ingroup rmatio
- * @param log_level
- * @param message
- */
-static void
-rmatio_error_func(int log_level, char *message)
-{
-    error(message);
-}
-
 /*
  * -------------------------------------------------------------
  *   Functions to interface R
