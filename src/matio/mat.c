@@ -52,7 +52,7 @@
 /* #   include <io.h> */
 /* #   define mktemp _mktemp */
 /* #endif */
-/* #ifdef _MSC_VER
+/* #ifdef _MSC_VER */
 /* #   define SIZE_T_FMTSTR "Iu" */
 /* #else */
 /* #   define SIZE_T_FMTSTR "zu" */
