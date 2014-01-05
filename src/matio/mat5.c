@@ -75,8 +75,10 @@ static size_t Mat_WriteEmptyVariable5(mat_t *mat,const char *name,int rank,
 #if defined(HAVE_ZLIB)
 static size_t WriteCompressedCharData(mat_t *mat,z_stream *z,void *data,int N,
                   enum matio_types data_type);
-static int    WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N,
-                  enum matio_types data_type);
+/* Stefan Widgren 2014-01-05: Commented out to silent compiler warning
+ * unused function */
+/* static int    WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N, */
+/*                   enum matio_types data_type); */
 static size_t WriteCompressedData(mat_t *mat,z_stream *z,void *data,int N,
                   enum matio_types data_type);
 static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar,
@@ -998,161 +1000,163 @@ WriteEmptyData(mat_t *mat,int N,enum matio_types data_type)
     return nBytes;
 }
 
-#if defined(HAVE_ZLIB)
-static int
-WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N,
-    enum matio_types data_type)
-{
-    int nBytes = 0, data_size, i, err, byteswritten = 0;
+/* Stefan Widgren 2014-01-05: Commented out to silent compiler warning
+ * unused function */
+/* #if defined(HAVE_ZLIB) */
+/* static int */
+/* WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N, */
+/*     enum matio_types data_type) */
+/* { */
+/*     int nBytes = 0, data_size, i, err, byteswritten = 0; */
 
-    if ( (mat == NULL) || (mat->fp == NULL) )
-        return 0;
+/*     if ( (mat == NULL) || (mat->fp == NULL) ) */
+/*         return 0; */
 
-    switch ( data_type ) {
-        case MAT_T_DOUBLE:
-        {
-            mat_uint32_t uncomp_buf[32] = {0,};
-            mat_uint32_t comp_buf[32] = {0,};
-            double data_uncomp_buf[4] = {0.0,};
+/*     switch ( data_type ) { */
+/*         case MAT_T_DOUBLE: */
+/*         { */
+/*             mat_uint32_t uncomp_buf[32] = {0,}; */
+/*             mat_uint32_t comp_buf[32] = {0,}; */
+/*             double data_uncomp_buf[4] = {0.0,}; */
 
-            data_size = sizeof(double);
-            nBytes = N*data_size;
-            uncomp_buf[0] = data_type;
-            uncomp_buf[1] = 0;
-            z->next_out  = ZLIB_BYTE_PTR(comp_buf);
-            z->next_in   = ZLIB_BYTE_PTR(uncomp_buf);
-            z->avail_out = 32*sizeof(*comp_buf);
-            z->avail_in  = 8;
-            err = deflate(z,Z_NO_FLUSH);
-            byteswritten += fwrite(comp_buf,1,32*sizeof(*comp_buf)-z->avail_out,mat->fp);
-            for ( i = 0; i < N; i++ ) {
-                z->next_out  = ZLIB_BYTE_PTR(comp_buf);
-                z->next_in   = ZLIB_BYTE_PTR(data_uncomp_buf);
-                z->avail_out = 32*sizeof(*comp_buf);
-                z->avail_in  = 8;
-                err = deflate(z,Z_NO_FLUSH);
-                byteswritten += fwrite(comp_buf,32*sizeof(*comp_buf)-z->avail_out,1,mat->fp);
-            }
-            break;
-        }
-        case MAT_T_SINGLE:
-        {
-            float f = 0.0;
+/*             data_size = sizeof(double); */
+/*             nBytes = N*data_size; */
+/*             uncomp_buf[0] = data_type; */
+/*             uncomp_buf[1] = 0; */
+/*             z->next_out  = ZLIB_BYTE_PTR(comp_buf); */
+/*             z->next_in   = ZLIB_BYTE_PTR(uncomp_buf); */
+/*             z->avail_out = 32*sizeof(*comp_buf); */
+/*             z->avail_in  = 8; */
+/*             err = deflate(z,Z_NO_FLUSH); */
+/*             byteswritten += fwrite(comp_buf,1,32*sizeof(*comp_buf)-z->avail_out,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) { */
+/*                 z->next_out  = ZLIB_BYTE_PTR(comp_buf); */
+/*                 z->next_in   = ZLIB_BYTE_PTR(data_uncomp_buf); */
+/*                 z->avail_out = 32*sizeof(*comp_buf); */
+/*                 z->avail_in  = 8; */
+/*                 err = deflate(z,Z_NO_FLUSH); */
+/*                 byteswritten += fwrite(comp_buf,32*sizeof(*comp_buf)-z->avail_out,1,mat->fp); */
+/*             } */
+/*             break; */
+/*         } */
+/*         case MAT_T_SINGLE: */
+/*         { */
+/*             float f = 0.0; */
 
-            data_size = sizeof(float);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&f,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_INT8:
-        {
-            mat_int8_t i8 = 0;
+/*             data_size = sizeof(float); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&f,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_INT8: */
+/*         { */
+/*             mat_int8_t i8 = 0; */
 
-            data_size = sizeof(mat_int8_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&i8,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_UINT8:
-        {
-            mat_uint8_t ui8 = 0;
+/*             data_size = sizeof(mat_int8_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&i8,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_UINT8: */
+/*         { */
+/*             mat_uint8_t ui8 = 0; */
 
-            data_size = sizeof(mat_uint8_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&ui8,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_INT16:
-        {
-            mat_int16_t i16 = 0;
+/*             data_size = sizeof(mat_uint8_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&ui8,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_INT16: */
+/*         { */
+/*             mat_int16_t i16 = 0; */
 
-            data_size = sizeof(mat_int16_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&i16,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_UINT16:
-        {
-            mat_uint16_t ui16 = 0;
+/*             data_size = sizeof(mat_int16_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&i16,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_UINT16: */
+/*         { */
+/*             mat_uint16_t ui16 = 0; */
 
-            data_size = sizeof(mat_uint16_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&ui16,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_INT32:
-        {
-            mat_int32_t i32 = 0;
+/*             data_size = sizeof(mat_uint16_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&ui16,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_INT32: */
+/*         { */
+/*             mat_int32_t i32 = 0; */
 
-            data_size = sizeof(mat_int32_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&i32,data_size,1,mat->fp);
-            break;
-        }
-        case MAT_T_UINT32:
-        {
-            mat_uint32_t ui32 = 0;
+/*             data_size = sizeof(mat_int32_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&i32,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/*         case MAT_T_UINT32: */
+/*         { */
+/*             mat_uint32_t ui32 = 0; */
 
-            data_size = sizeof(mat_uint32_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&ui32,data_size,1,mat->fp);
-            break;
-        }
-#ifdef HAVE_MAT_INT64_T
-        case MAT_T_INT64:
-        {
-            mat_int64_t i64 = 0;
+/*             data_size = sizeof(mat_uint32_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&ui32,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/* #ifdef HAVE_MAT_INT64_T */
+/*         case MAT_T_INT64: */
+/*         { */
+/*             mat_int64_t i64 = 0; */
 
-            data_size = sizeof(mat_int64_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&i64,data_size,1,mat->fp);
-            break;
-        }
-#endif
-#ifdef HAVE_MAT_UINT64_T
-        case MAT_T_UINT64:
-        {
-            mat_uint64_t ui64 = 0;
+/*             data_size = sizeof(mat_int64_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&i64,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/* #endif */
+/* #ifdef HAVE_MAT_UINT64_T */
+/*         case MAT_T_UINT64: */
+/*         { */
+/*             mat_uint64_t ui64 = 0; */
 
-            data_size = sizeof(mat_uint64_t);
-            nBytes = N*data_size;
-            fwrite(&data_type,4,1,mat->fp);
-            fwrite(&nBytes,4,1,mat->fp);
-            for ( i = 0; i < N; i++ )
-                fwrite(&ui64,data_size,1,mat->fp);
-            break;
-        }
-#endif
-        default:
-            nBytes = 0;
-    }
-    return byteswritten;
-}
-#endif
+/*             data_size = sizeof(mat_uint64_t); */
+/*             nBytes = N*data_size; */
+/*             fwrite(&data_type,4,1,mat->fp); */
+/*             fwrite(&nBytes,4,1,mat->fp); */
+/*             for ( i = 0; i < N; i++ ) */
+/*                 fwrite(&ui64,data_size,1,mat->fp); */
+/*             break; */
+/*         } */
+/* #endif */
+/*         default: */
+/*             nBytes = 0; */
+/*     } */
+/*     return byteswritten; */
+/* } */
+/* #endif */
 
 /** @if mat_devman
  * @param Writes a 2-D slab of data to the MAT file
