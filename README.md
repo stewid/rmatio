@@ -46,8 +46,6 @@ Included software
 
 - The C library [matio](http://sourceforge.net/projects/matio/) written by Christopher Hulbert
 
-- The C library [zlib](http://www.zlib.net/) written by Jean-loup Gailly and Mark Adler
-
 License
 -------
 

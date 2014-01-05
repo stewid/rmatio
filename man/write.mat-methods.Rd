@@ -120,5 +120,8 @@ stopifnot(identical(demoS4mat, demoS4mat.2))
 unlink(filename)
 }
 }
+\author{
+  Stefan Widgren
+}
 \keyword{methods}
 

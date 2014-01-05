@@ -1,3 +1,11 @@
+rmatio 0.5.0
+-------------
+
+CHANGES
+
+* Removed bundled zlib in src/zlib and instead link against zlib
+  shipped with R.
+
 rmatio 0.4.0
 -------------
 

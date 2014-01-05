@@ -1,14 +1,11 @@
 Package: rmatio
-Title: A R package to read and write matlab files
-Version: 0.4.0
-Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"), email =
-    "stefan.widgren@sva.se", comment = "Author of the R interface to the
-    C-library matio"), person("Christopher", "Hulbert", role = c("aut"),
-    comment = "Author of the C-library matio,
-    http://sourceforge.net/projects/matio/"), person("Jean-loup", "Gailly",
-    role = c("aut"), comment = "Author of the zlib library,
-    http://www.zlib.net/"), person("Mark", "Adler", role = c("aut"), comment =
-    "Author of the zlib library, http://www.zlib.net/"))
+Title: Read and write matlab files
+Version: 0.5.0
+Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"),
+    email = "stefan.widgren@sva.se", comment = "Author of the R
+    interface to the C-library matio"), person("Christopher",
+    "Hulbert", role = c("aut"), comment = "Author of the C-library
+    matio, http://sourceforge.net/projects/matio/"))
 Description: rmatio is a package for reading and writing Matlab MAT
     files from R. The rmatio package supports reading MAT version 4,
     MAT version 5 and MAT compressed version 5. The rmatio package can
@@ -16,16 +13,13 @@ Description: rmatio is a package for reading and writing Matlab MAT
     compression.
 Copyright: The package includes the source code of matio written by
     Christopher Hulbert (http://sourceforge.net/projects/matio/)
-    (License: Simplified BSD). The matio io routines have been
-    adopted to use R printing and error routines.
-    The package includes the source code of zlib written by
-    Jean-loup Gailly and Mark Adler (http://www.zlib.net/)
-    (License: http://zlib.net/zlib_license.html).
+    (License: Simplified BSD). The matio io routines have been adopted
+    to use R printing and error routines.
 License: GPL-3
 URL: https://github.com/stewid/rmatio
 Type: Package
 LazyLoad: yes
-Date: 2014-01-04
+Date: 2014-01-05
 Depends:
     R(>= 2.15.2),
     Matrix,

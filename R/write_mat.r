@@ -40,6 +40,7 @@
 ##' @keywords methods
 ##' @export
 ##' @useDynLib rmatio
+##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
 ##' filename <- tempfile(fileext = ".mat")
