@@ -270,7 +270,12 @@ EXTERN matvar_t  *Mat_VarCreate(const char *name,enum matio_classes class_type,
                       void *data,int opt);
 EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                       const char **fields,unsigned nfields);
-EXTERN int        Mat_VarDelete(mat_t *mat, const char *name);
+
+/* Stefan Widgren 2014-01-05: Commented out the following unused
+ * function in the rmatio package to silent compiler warning (implicit
+ * declaration of mktemp) on windows. */
+/* EXTERN int        Mat_VarDelete(mat_t *mat, const char *name); */
+
 EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
 EXTERN void       Mat_VarFree(matvar_t *matvar);
 EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);

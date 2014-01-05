@@ -42,6 +42,9 @@
 #define Mat_Critical error
 #define Mat_Error error
 
+/* Stefan Widgren 2014-01-05: Include only header files neccessary to
+ * build the rmatio package */
+
 /* FIXME: Implement Unicode support */
 /* #include <stdlib.h> */
 /* #include <string.h> */
@@ -57,6 +60,7 @@
 /* #else */
 /* #   define SIZE_T_FMTSTR "zu" */
 /* #endif */
+
 #include "matio_private.h"
 #include "mat5.h"
 #include "mat4.h"
@@ -754,65 +758,70 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
  * @param name Name of the variable to delete
  * @returns 0 on success
  */
-int
-Mat_VarDelete(mat_t *mat, const char *name)
-{
-    int   err = 1;
-    enum mat_ft mat_file_ver = MAT_FT_DEFAULT;
-    char *tmp_name, *new_name, *temp;
-    mat_t *tmp;
-    matvar_t *matvar;
 
-    if ( NULL == mat || NULL == name )
-        return err;
+/* Stefan Widgren 2014-01-05: Commented out the following unused
+ * function in the rmatio package to silent compiler warning (implicit
+ * declaration of mktemp) on windows. */
 
-    switch ( mat->version ) {
-        case 0x0200:
-            mat_file_ver = MAT_FT_MAT73;
-            break;
-        case 0x0100:
-            mat_file_ver = MAT_FT_MAT5;
-            break;
-        case 0x0010:
-            mat_file_ver = MAT_FT_MAT4;
-            break;
-    }
+/* int */
+/* Mat_VarDelete(mat_t *mat, const char *name) */
+/* { */
+/*     int   err = 1; */
+/*     enum mat_ft mat_file_ver = MAT_FT_DEFAULT; */
+/*     char *tmp_name, *new_name, *temp; */
+/*     mat_t *tmp; */
+/*     matvar_t *matvar; */
 
-    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-    /* temp     = strdup_printf("XXXXXX"); */
-    temp     = strdup("XXXXXX");
-    tmp_name = mktemp(temp);
-    tmp      = Mat_CreateVer(tmp_name,mat->header,mat_file_ver);
-    if ( tmp != NULL ) {
-        while ( NULL != (matvar = Mat_VarReadNext(mat)) ) {
-            if ( strcmp(matvar->name,name) )
-                Mat_VarWrite(tmp,matvar,0);
-            else
-                err = 0;
-            Mat_VarFree(matvar);
-        }
-        /* FIXME: Memory leak */
-        /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-        /* new_name = strdup_printf("%s",mat->filename); */
-        new_name = strdup(mat->filename);
-        fclose(mat->fp);
+/*     if ( NULL == mat || NULL == name ) */
+/*         return err; */
 
-        if ( (err = remove(new_name)) == -1 ) {
-            Mat_Critical("remove of %s failed",new_name);
-        } else if ( !Mat_Close(tmp) && (err=rename(tmp_name,new_name))==-1) {
-            Mat_Critical("rename failed oldname=%s,newname=%s",tmp_name,
-                new_name);
-        } else {
-            tmp = Mat_Open(new_name,mat->mode);
-            if ( NULL != tmp )
-                memcpy(mat,tmp,sizeof(mat_t));
-        }
-        free(tmp);
-        free(new_name);
-    }
-    free(temp);
-    return err;
-}
+/*     switch ( mat->version ) { */
+/*         case 0x0200: */
+/*             mat_file_ver = MAT_FT_MAT73; */
+/*             break; */
+/*         case 0x0100: */
+/*             mat_file_ver = MAT_FT_MAT5; */
+/*             break; */
+/*         case 0x0010: */
+/*             mat_file_ver = MAT_FT_MAT4; */
+/*             break; */
+/*     } */
+
+/*     /\* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup *\/ */
+/*     /\* temp     = strdup_printf("XXXXXX"); *\/ */
+/*     temp     = strdup("XXXXXX"); */
+/*     tmp_name = mktemp(temp); */
+/*     tmp      = Mat_CreateVer(tmp_name,mat->header,mat_file_ver); */
+/*     if ( tmp != NULL ) { */
+/*         while ( NULL != (matvar = Mat_VarReadNext(mat)) ) { */
+/*             if ( strcmp(matvar->name,name) ) */
+/*                 Mat_VarWrite(tmp,matvar,0); */
+/*             else */
+/*                 err = 0; */
+/*             Mat_VarFree(matvar); */
+/*         } */
+/*         /\* FIXME: Memory leak *\/ */
+/*         /\* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup *\/ */
+/*         /\* new_name = strdup_printf("%s",mat->filename); *\/ */
+/*         new_name = strdup(mat->filename); */
+/*         fclose(mat->fp); */
+
+/*         if ( (err = remove(new_name)) == -1 ) { */
+/*             Mat_Critical("remove of %s failed",new_name); */
+/*         } else if ( !Mat_Close(tmp) && (err=rename(tmp_name,new_name))==-1) { */
+/*             Mat_Critical("rename failed oldname=%s,newname=%s",tmp_name, */
+/*                 new_name); */
+/*         } else { */
+/*             tmp = Mat_Open(new_name,mat->mode); */
+/*             if ( NULL != tmp ) */
+/*                 memcpy(mat,tmp,sizeof(mat_t)); */
+/*         } */
+/*         free(tmp); */
+/*         free(new_name); */
+/*     } */
+/*     free(temp); */
+/*     return err; */
+/* } */
 
 /** @brief Duplicates a matvar_t structure
  *
