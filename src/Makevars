@@ -1,4 +1,7 @@
-MATIO_PLATFORM=\"`Rscript -e "cat(R.version$$platform[[1]])"`\"
+# MATIO_PLATFORM is defined to "rmatio" when building. The define is not
+# really used, since rmatio always use the argument hdr_str initialized
+# from R with the correct platform when calling Mat_CreateVer
+MATIO_PLATFORM=\"rmatio\"
 
 PKG_CFLAGS = -Imatio -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB
 
