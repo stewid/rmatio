@@ -32,19 +32,33 @@ dnl Stefan Widgren
 dnl Included several of the configure script from matio into this file
 dnl Modified to be used to configure matio to build in the rmatio R package
 
-AC_INIT(rmatio, see.DESCRIPTION.file)
+AC_PREREQ([2.69])
+AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
 
 AC_DEFINE_UNQUOTED([MATIO_MAJOR_VERSION],1,[Matio major version number])
 AC_DEFINE_UNQUOTED([MATIO_MINOR_VERSION],5,[Matio minor version number])
 AC_DEFINE_UNQUOTED([MATIO_RELEASE_LEVEL],2,[Matio release level number])
 AC_DEFINE_UNQUOTED([MATIO_VERSION],152,[Matio version number])
 
-AC_CONFIG_HEADERS([src/matio/matioConfig.h src/matio/matio_pubconf.h])
-AC_STDC_HEADERS
-AC_CHECK_HEADER([inttypes.h],[AC_DEFINE_UNQUOTED([MATIO_HAVE_INTTYPES_H],[1],[Matio has access to inttypes.h])])
-AC_CHECK_HEADER([stdint.h],[AC_DEFINE_UNQUOTED([MATIO_HAVE_STDINT_H],[1],[Matio has access to stdint.h])])
-AC_CHECK_HEADER([strings.h],[AC_DEFINE_UNQUOTED([HAVE_STRINGS_H],[1],[Matio has access to strings.h])])
-AC_CHECK_HEADER([unistd.h],[AC_DEFINE_UNQUOTED([HAVE_UNISTD_H],[1],[Matio has access to unistd.h])])
+AC_CONFIG_HEADERS([src/matio/config.h])
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([floor memset strdup])
 
 AC_CHECK_SIZEOF([char])
 AC_CHECK_SIZEOF([short])
