@@ -1,3 +1,37 @@
+dnl  configure.ac
+dnl
+dnl  NOTE:  Process this file with GNU autoconf to produce a configure script.
+dnl
+dnl Copyright (C) 2005-2013   Christopher C. Hulbert
+dnl
+dnl All rights reserved.
+dnl
+dnl Redistribution and use in source and binary forms, with or without
+dnl modification, are permitted provided that the following conditions are met:
+dnl
+dnl    1. Redistributions of source code must retain the above copyright notice,
+dnl       this list of conditions and the following disclaimer.
+dnl
+dnl    2. Redistributions in binary form must reproduce the above copyright
+dnl       notice, this list of conditions and the following disclaimer in the
+dnl       documentation and/or other materials provided with the distribution.
+dnl
+dnl THIS SOFTWARE IS PROVIDED BY CHRISTOPHER C. HULBERT ``AS IS'' AND ANY
+dnl EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+dnl WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+dnl DISCLAIMED. IN NO EVENT SHALL CHRISTOPHER C. HULBERT OR CONTRIBUTORS BE
+dnl LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+dnl CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+dnl SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+dnl INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+dnl CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+dnl ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+dnl POSSIBILITY OF SUCH DAMAGE.
+
+dnl Stefan Widgren
+dnl Included several of the configure script from matio into this file
+dnl Modified to be used to configure matio to build in the rmatio R package
+
 AC_INIT(rmatio, see.DESCRIPTION.file)
 
 AC_DEFINE_UNQUOTED([MATIO_MAJOR_VERSION],1,[Matio major version number])
