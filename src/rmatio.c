@@ -1804,8 +1804,6 @@ set_dim(SEXP m,
     /* the rank is two and one of the dimensions is <= 1  */
     if (!(matvar->rank == 2 && (matvar->dims[0] <= 1 || matvar->dims[1] <= 1))) {
         PROTECT(dim = allocVector(INTSXP, matvar->rank));
-        if (R_NilValue == dim)
-            return 1;
         for (size_t j=0;j<matvar->rank;j++)
             INTEGER(dim)[j] = matvar->dims[j];
         setAttrib(m, R_DimSymbol, dim);
@@ -1839,8 +1837,6 @@ read_mat_char(SEXP list,
         return 1;
 
     PROTECT(c = allocVector(STRSXP, matvar->dims[0]));
-    if (R_NilValue == c)
-        return 1;
 
     switch (matvar->data_type) {
     case MAT_T_UINT8:
@@ -1918,8 +1914,6 @@ read_sparse(SEXP list,
 
         len = matvar->dims[0] * matvar->dims[1];
         PROTECT(m = allocVector(CPLXSXP, len));
-        if (R_NilValue == m)
-            return 1;
 
         for (size_t j=0;j<len;j++) {
             COMPLEX(m)[j].r = 0;
@@ -1945,9 +1939,6 @@ read_sparse(SEXP list,
             PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
         else
             PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
-
-        if (R_NilValue == m)
-            return 1;
 
         dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
         dims[0] = matvar->dims[0];
@@ -2016,8 +2007,6 @@ read_mat_complex(SEXP list,
         len *= matvar->dims[j];
 
     PROTECT(m = allocVector(CPLXSXP, len));
-    if (R_NilValue == m)
-        return 1;
 
     switch (matvar->data_type) {
     case MAT_T_SINGLE:
@@ -2137,80 +2126,60 @@ read_mat_data(SEXP list,
     switch (matvar->data_type) {
     case MAT_T_SINGLE:
         PROTECT(m = allocVector(REALSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             REAL(m)[j] = ((float*)matvar->data)[j];
         break;
 
     case MAT_T_DOUBLE:
         PROTECT(m = allocVector(REALSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             REAL(m)[j] = ((double*)matvar->data)[j];
         break;
 
     case MAT_T_INT64:
         PROTECT(m = allocVector(REALSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             REAL(m)[j] = ((mat_int64_t*)matvar->data)[j];
         break;
 
     case MAT_T_INT32:
         PROTECT(m = allocVector(INTSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             INTEGER(m)[j] = ((mat_int32_t*)matvar->data)[j];
         break;
 
     case MAT_T_INT16:
         PROTECT(m = allocVector(INTSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             INTEGER(m)[j] = ((mat_int16_t*)matvar->data)[j];
         break;
 
     case MAT_T_INT8:
         PROTECT(m = allocVector(INTSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             INTEGER(m)[j] = ((mat_int8_t*)matvar->data)[j];
         break;
 
     case MAT_T_UINT64:
         PROTECT(m = allocVector(REALSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             REAL(m)[j] = ((mat_uint64_t*)matvar->data)[j];
         break;
 
     case MAT_T_UINT32:
         PROTECT(m = allocVector(REALSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             REAL(m)[j] = ((mat_uint32_t*)matvar->data)[j];
         break;
 
     case MAT_T_UINT16:
         PROTECT(m = allocVector(INTSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             INTEGER(m)[j] = ((mat_uint16_t*)matvar->data)[j];
         break;
 
     case MAT_T_UINT8:
         PROTECT(m = allocVector(INTSXP, len));
-        if (R_NilValue == m)
-            return 1;
         for (size_t j=0;j<len;j++)
             INTEGER(m)[j] = ((mat_uint8_t*)matvar->data)[j];
         break;
@@ -2260,8 +2229,6 @@ read_logical(SEXP list,
         len *= matvar->dims[j];
 
     PROTECT(m = allocVector(LGLSXP, len));
-    if (R_NilValue == m)
-        return 1;
     for (size_t j=0;j<len;j++)
         LOGICAL(m)[j] = (0 != ((mat_uint8_t*)matvar->data)[j]);
 
@@ -2296,8 +2263,8 @@ read_empty_structure_array(SEXP list,
                            int index,
                            matvar_t *matvar)
 {
-    SEXP names = R_NilValue;
-    SEXP struc = R_NilValue;
+    SEXP names;
+    SEXP struc;
 
     if (NULL == matvar
         || matvar->class_type != MAT_C_STRUCT
@@ -2308,13 +2275,7 @@ read_empty_structure_array(SEXP list,
         return 1;
 
     PROTECT(struc = allocVector(VECSXP, 0));
-    if (R_NilValue == struc)
-        return 1;
     PROTECT(names = allocVector(STRSXP, 0));
-    if (R_NilValue == names) {
-        UNPROTECT(1);
-        return 1;
-    }
     setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
     UNPROTECT(2);
@@ -2336,12 +2297,11 @@ read_empty_structure_array_with_fields(SEXP list,
                                        int index,
                                        matvar_t *matvar)
 {
-    SEXP names = R_NilValue;
-    SEXP struc = R_NilValue;
+    SEXP names;
+    SEXP struc;
     size_t nfields = 0;
     char * const * fieldnames;
     int err = 0;
-    size_t protected = 0;
 
     if (NULL == matvar
         || MAT_C_STRUCT != matvar->class_type
@@ -2356,30 +2316,17 @@ read_empty_structure_array_with_fields(SEXP list,
 
     fieldnames = Mat_VarGetStructFieldnames(matvar);
     PROTECT(struc = allocVector(VECSXP, nfields));
-    if (R_NilValue == struc)
-        return 1;
-    protected++;
     PROTECT(names = allocVector(STRSXP, nfields));
-    if (R_NilValue == names) {
-        err = 1;
-        goto cleanup;
-    }
-    protected++;
 
     for (size_t i=0;i<nfields;i++) {
-        SEXP s = R_NilValue;
+        SEXP s;
 
         if (!fieldnames[i]) {
             err = 1;
             goto cleanup;
         }
         SET_STRING_ELT(names, i, mkChar(fieldnames[i]));
-
         PROTECT(s = allocVector(VECSXP, 0));
-        if (R_NilValue == s) {
-            err = 1;
-            goto cleanup;
-        }
         SET_VECTOR_ELT(struc, i, s);
         UNPROTECT(1);
     }
@@ -2388,8 +2335,7 @@ read_empty_structure_array_with_fields(SEXP list,
     SET_VECTOR_ELT(list, index, struc);
 
 cleanup:
-    if (protected)
-        UNPROTECT(protected);
+    UNPROTECT(2);
 
     return err;
 }
@@ -2408,11 +2354,10 @@ read_structure_array_with_empty_fields(SEXP list,
                                        int index,
                                        matvar_t *matvar)
 {
-    SEXP names = R_NilValue;
-    SEXP struc = R_NilValue;
+    SEXP names;
+    SEXP struc;
     char * const * field_names;
     int err = 0;
-    size_t protected = 0;
 
     if (NULL == matvar
         || matvar->class_type != MAT_C_STRUCT
@@ -2423,18 +2368,10 @@ read_structure_array_with_empty_fields(SEXP list,
 
     field_names = Mat_VarGetStructFieldnames(matvar);
     PROTECT(struc = allocVector(VECSXP, matvar->dims[1]));
-    if (R_NilValue == struc)
-        return 1;
-    protected++;
     PROTECT(names = allocVector(STRSXP, matvar->dims[1]));
-    if (R_NilValue == names) {
-        err = 1;
-        goto cleanup;
-    }
-    protected++;
 
     for (size_t i=0;i<matvar->dims[1];i++) {
-        SEXP s = R_NilValue;
+        SEXP s;
         matvar_t *field = NULL;
 
         if (!field_names[i]) {
@@ -2481,11 +2418,6 @@ read_structure_array_with_empty_fields(SEXP list,
             }
         }
 
-        if (R_NilValue == s) {
-            err = 1;
-            goto cleanup;
-        }
-
         SET_VECTOR_ELT(struc, i, s);
         UNPROTECT(1);
     }
@@ -2494,8 +2426,7 @@ read_structure_array_with_empty_fields(SEXP list,
     SET_VECTOR_ELT(list, index, struc);
 
 cleanup:
-    if (protected)
-        UNPROTECT(protected);
+    UNPROTECT(2);
 
     return err;
 }
@@ -2514,8 +2445,8 @@ read_structure_array_with_fields(SEXP list,
                                  int index,
                                  matvar_t *matvar)
 {
-    SEXP names = R_NilValue;
-    SEXP struc = R_NilValue;
+    SEXP names;
+    SEXP struc;
     char * const * fieldnames;
     size_t nfields = 0;
     size_t fieldlen = 0;
@@ -2547,14 +2478,8 @@ read_structure_array_with_fields(SEXP list,
 
     fieldnames = Mat_VarGetStructFieldnames(matvar);
     PROTECT(struc = allocVector(VECSXP, nfields));
-    if (R_NilValue == struc)
-        return 1;
     protected++;
     PROTECT(names = allocVector(STRSXP, nfields));
-    if (R_NilValue == names) {
-        err = 1;
-        goto cleanup;
-    }
     protected++;
 
     for (size_t i=0;i<nfields;i++) {
@@ -2566,10 +2491,6 @@ read_structure_array_with_fields(SEXP list,
         switch (Mat_VarGetStructFieldByIndex(matvar, i, 0)->class_type) {
         case MAT_C_CHAR:
             PROTECT(s = allocVector(STRSXP, fieldlen));
-            if (R_NilValue == s) {
-                err = 1;
-                goto cleanup;
-            }
             protected++;
             break;
 
@@ -2579,10 +2500,6 @@ read_structure_array_with_fields(SEXP list,
 
         default:
             PROTECT(s = allocVector(VECSXP, fieldlen));
-            if (R_NilValue == s) {
-                err = 1;
-                goto cleanup;
-            }
             protected++;
             break;
         }
@@ -2656,13 +2573,8 @@ read_structure_array_with_fields(SEXP list,
 
         if (R_NilValue != s) {
             SET_VECTOR_ELT(struc, i, s);
-            if (protected) {
-                UNPROTECT(1);
-                protected--;
-            } else {
-                err = 1;
-                goto cleanup;
-            }
+            UNPROTECT(1);
+            protected--;
         }
     }
 
@@ -2753,8 +2665,6 @@ read_empty_cell_array(SEXP list,
         return 1;
 
     PROTECT(cell = allocVector(VECSXP, 0));
-    if (R_NilValue == cell)
-        return 1;
     SET_VECTOR_ELT(list, index, cell);
     UNPROTECT(1);
 
@@ -2790,47 +2700,29 @@ read_cell_array_with_empty_arrays(SEXP list,
         return 1;
 
     PROTECT(cell_array = allocVector(VECSXP, matvar->dims[1]));
-    if (R_NilValue == cell_array)
-        return 1;
     protected++;
 
     for (size_t i=0;i<matvar->dims[1];i++) {
-        SEXP cell_item = R_NilValue;
-        SEXP names = R_NilValue;
+        SEXP cell_item;
+        SEXP names;
         matvar_t *cell = Mat_VarGetCell(matvar, i);
 
         if (cell->isComplex) {
             PROTECT(cell_item = allocVector(CPLXSXP, 0));
-            if (R_NilValue == cell_item) {
-                err = 1;
-                goto cleanup;
-            }
             protected++;
         } else if (cell->isLogical) {
             PROTECT(cell_item = allocVector(LGLSXP, 0));
-            if (R_NilValue == cell_item) {
-                err = 1;
-                goto cleanup;
-            }
             protected++;
         } else {
             switch (cell->class_type) {
             case MAT_C_CHAR:
                 PROTECT(cell_item = allocVector(STRSXP, 0));
-                if (R_NilValue == cell_item) {
-                    err = 1;
-                    goto cleanup;
-                }
                 protected++;
                 break;
 
             case MAT_C_DOUBLE:
             case MAT_C_SINGLE:
                 PROTECT(cell_item = allocVector(REALSXP, 0));
-                if (R_NilValue == cell_item) {
-                    err = 1;
-                    goto cleanup;
-                }
                 protected++;
                 break;
 
@@ -2843,10 +2735,6 @@ read_cell_array_with_empty_arrays(SEXP list,
             case MAT_C_UINT16:
             case MAT_C_UINT8:
                 PROTECT(cell_item = allocVector(INTSXP, 0));
-                if (R_NilValue == cell_item) {
-                    err = 1;
-                    goto cleanup;
-                }
                 protected++;
                 break;
 
@@ -2854,67 +2742,37 @@ read_cell_array_with_empty_arrays(SEXP list,
                 if (cell->dims[0] == 0 && cell->dims[1] == 1) {
                     PROTECT(cell_item = allocVector(VECSXP,
                                                     Mat_VarGetNumberOfFields(cell)));
-                    if (R_NilValue == cell_item) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     protected++;
 
                     PROTECT(names = allocVector(STRSXP,
                                                 Mat_VarGetNumberOfFields(cell)));
-                    if (R_NilValue == names) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
 
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     for (size_t j=0;j<Mat_VarGetNumberOfFields(cell);j++) {
-                        SEXP field_item = R_NilValue;
+                        SEXP field_item;
                         SET_STRING_ELT(names, j, mkChar(fieldnames[j]));
                         PROTECT(field_item = allocVector(VECSXP, 0));
-                        if (R_NilValue == field_item) {
-                            err = 1;
-                            goto cleanup;
-                        }
                         SET_VECTOR_ELT(cell_item, j, field_item);
                         UNPROTECT(1);
                     }
                 } else if (cell->dims[0] == 1 && cell->dims[1] == 1) {
                     PROTECT(cell_item = allocVector(VECSXP, 0));
-                    if (R_NilValue == cell_item) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     protected++;
-
                     PROTECT(names = allocVector(STRSXP, 0));
-                    if (R_NilValue == names) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
                 } else if (cell->dims[0] == 1 && cell->dims[1] > 1) {
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     PROTECT(cell_item = allocVector(VECSXP, cell->dims[1]));
-                    if (R_NilValue == cell_item) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     protected++;
-
                     PROTECT(names = allocVector(STRSXP, cell->dims[1]));
-                    if (R_NilValue == names) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
 
                     for (size_t j=0;j<cell->dims[1];j++) {
-                        SEXP field_item = R_NilValue;
+                        SEXP field_item;
                         matvar_t *field = Mat_VarGetStructFieldByIndex(cell, j, 0);
                         if (NULL == field) {
                             err = 1;
@@ -2956,10 +2814,6 @@ read_cell_array_with_empty_arrays(SEXP list,
                             }
                         }
 
-                        if (R_NilValue == field_item) {
-                            err = 1;
-                            goto cleanup;
-                        }
                         SET_VECTOR_ELT(cell_item, j, field_item);
                         UNPROTECT(1);
                     }
@@ -2972,10 +2826,6 @@ read_cell_array_with_empty_arrays(SEXP list,
             case MAT_C_CELL:
                 if (cell->dims[0] == 0 && cell->dims[1] == 1) {
                     PROTECT(cell_item = allocVector(VECSXP, 0));
-                    if (R_NilValue == cell_item) {
-                        err = 1;
-                        goto cleanup;
-                    }
                     protected++;
                 } else {
                     err = 1;
@@ -2990,10 +2840,8 @@ read_cell_array_with_empty_arrays(SEXP list,
         }
 
         SET_VECTOR_ELT(cell_array, i, cell_item);
-        if (protected) {
-            UNPROTECT(1);
-            protected--;
-        }
+        UNPROTECT(1);
+        protected--;
     }
 
     SET_VECTOR_ELT(list, index, cell_array);
@@ -3028,18 +2876,12 @@ read_cell_array_with_arrays(SEXP list,
         return 1;
 
     PROTECT(cell = allocVector(VECSXP, matvar->dims[0]));
-    if (R_NilValue == cell)
-        return 1;
     protected++;
 
     for (size_t i=0;i<matvar->dims[0];i++) {
         SEXP cell_row = R_NilValue;
         if (matvar->dims[1] > 1) {
             PROTECT(cell_row = allocVector(VECSXP, matvar->dims[1]));
-            if (R_NilValue == cell_row) {
-                err = 1;
-                goto cleanup;
-            }
             protected++;
         }
 
@@ -3117,10 +2959,8 @@ read_cell_array_with_arrays(SEXP list,
 
         if (R_NilValue != cell_row) {
             SET_VECTOR_ELT(cell, i, cell_row);
-            if (protected) {
-                UNPROTECT(1);
-                protected--;
-            }
+            UNPROTECT(1);
+            protected--;
         }
     }
 
@@ -3227,8 +3067,7 @@ SEXP read_mat(const SEXP filename)
     mat_t *mat = NULL;
     matvar_t *matvar = NULL;
     int i = 0, n = 0, err = 0;
-    SEXP list = R_NilValue, names = R_NilValue;
-    size_t protected = 0;
+    SEXP list, names;
 
     const char err_reading_mat_file[] = "Error reading MAT file";
     const char err_mat_c_empty[] = "Not implemented support to read matio class type MAT_C_EMPTY";
@@ -3247,20 +3086,7 @@ SEXP read_mat(const SEXP filename)
 
     n = number_of_variables(mat);
     PROTECT(list = allocVector(VECSXP, n));
-    if (R_NilValue == list) {
-        err = 1;
-        err_msg = err_reading_mat_file;
-        goto cleanup;
-    }
-    protected++;
-
     PROTECT(names = allocVector(STRSXP, n));
-    if (R_NilValue == names) {
-        err = 1;
-        err_msg = err_reading_mat_file;
-        goto cleanup;
-    }
-    protected++;
 
     if (Mat_Rewind(mat)) {
         err = 1;
@@ -3343,8 +3169,7 @@ cleanup:
         Mat_VarFree(matvar);
     if (mat)
         Mat_Close(mat);
-    if (protected)
-        UNPROTECT(protected);
+    UNPROTECT(2);
     if (err)
         error(err_msg);
 
