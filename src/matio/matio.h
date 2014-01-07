@@ -42,9 +42,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "matio_pubconf.h"
-
-#include <stdarg.h>
+#include "config.h"
 
 #ifdef __cplusplus
 #   define EXTERN extern "C"

@@ -38,35 +38,20 @@
  *
  */
 
-#include <Rdefines.h>
-#define Mat_Critical error
-#define Mat_Error error
-
 /* Stefan Widgren 2014-01-05: Include only header files neccessary to
  * build the rmatio package */
 
-/* FIXME: Implement Unicode support */
-/* #include <stdlib.h> */
-/* #include <string.h> */
-/* /\* #include <stdio.h> *\/ */
-/* #include <math.h> */
-/* #include <time.h> */
-/* #if defined(_WIN64) || defined(_WIN32) */
-/* #   include <io.h> */
-/* #   define mktemp _mktemp */
-/* #endif */
-/* #ifdef _MSC_VER */
-/* #   define SIZE_T_FMTSTR "Iu" */
-/* #else */
-/* #   define SIZE_T_FMTSTR "zu" */
-/* #endif */
-
+#include <Rdefines.h>
+#include "config.h"
 #include "matio_private.h"
 #include "mat5.h"
 #include "mat4.h"
 #if defined(MAT73) && MAT73
 #   include "mat73.h"
 #endif
+
+#define Mat_Critical error
+#define Mat_Error error
 
 static void
 ReadData(mat_t *mat, matvar_t *matvar)

@@ -29,13 +29,12 @@
 #define MATIO_PRIVATE_H
 
 /* Stefan Widgren 2014-01-04 */
-#include "zlib.h"
-#include "matioConfig.h"
+#include "config.h"
 #include "matio.h"
 
-/* #if defined(HAVE_ZLIB) */
-/* #   include <zlib.h> */
-/* #endif */
+#if defined(HAVE_ZLIB)
+#   include <zlib.h>
+#endif
 
 #if defined(MAT73) && MAT73
 #   include <hdf5.h>
