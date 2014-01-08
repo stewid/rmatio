@@ -36,7 +36,7 @@ AC_PREREQ([2.69])
 AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
-AC_CONFIG_FILES([R/write_mat.r])
+AC_CONFIG_FILES([ R/write_mat.r inst/tests/test_rmatio.r])
 
 # Checks for programs.
 AC_PROG_CC

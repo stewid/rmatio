@@ -2332,7 +2332,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 ac_config_headers="$ac_config_headers src/matio/config.h"
 
-ac_config_files="$ac_config_files R/write_mat.r"
+ac_config_files="$ac_config_files R/write_mat.r inst/tests/test_rmatio.r"
 
 
 # Checks for programs.
@@ -7200,6 +7200,7 @@ do
   case $ac_config_target in
     "src/matio/config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/matio/config.h" ;;
     "R/write_mat.r") CONFIG_FILES="$CONFIG_FILES R/write_mat.r" ;;
+    "inst/tests/test_rmatio.r") CONFIG_FILES="$CONFIG_FILES inst/tests/test_rmatio.r" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
