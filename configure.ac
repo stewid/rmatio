@@ -36,11 +36,14 @@ AC_PREREQ([2.69])
 AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
+AC_CONFIG_FILES([R/write_mat.r])
 
 # Checks for programs.
 AC_PROG_CC
 
 # Checks for libraries.
+AC_CHECK_LIB(z, inflate, [HAVE_COMPRESSION=TRUE], [HAVE_COMPRESSION=FALSE])
+AC_SUBST(HAVE_COMPRESSION)
 
 # Checks for header files.
 AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])

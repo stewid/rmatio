@@ -35,6 +35,10 @@ setMethod("write.mat",
             }
 
             if(identical(compression, TRUE)) {
+                if(!@HAVE_COMPRESSION@) {
+                    stop(paste("Sorry, library ‘zlib’ is not available.",
+                               "Use 'compression=FALSE' or install with 'zlib'"))
+                }
                 compression = 1L
             } else {
                 compression = 0L
