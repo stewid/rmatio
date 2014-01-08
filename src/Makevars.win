@@ -1,30 +1,24 @@
-# MATIO_PLATFORM is defined to "rmatio" when building. The define is not
-# really used, since rmatio always use the argument hdr_str initialized
-# from R with the correct platform when calling Mat_CreateVer
-MATIO_PLATFORM=\"rmatio\"
-
-COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/matioConfig.h.win', 'matio/matioConfig.h', overwrite=TRUE))")
+COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/config.h.win', 'matio/config.h', overwrite=TRUE))")
 ifneq ($(COPY_MATIO_CONFIG_H), TRUE)
-$(error Unable to create matioConfig.h)
+$(error Unable to create config.h)
 endif
 
-COPY_MATIO_PUBCONF_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/matio_pubconf.h.win', 'matio/matio_pubconf.h', overwrite=TRUE))")
-ifneq ($(COPY_MATIO_PUBCONF_H), TRUE)
-$(error Unable to create matio_pubconf.h)
+COPY_TEST_RMATIO_R=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('../inst/tests/test_rmatio.r.win', '../inst/tests/test_rmatio.r', overwrite=TRUE))")
+ifneq ($(COPY_TEST_RMATIO_R), TRUE)
+$(error Unable to create test_rmatio.r)
 endif
 
 ifeq "$(WIN)" "64"
-PKG_CFLAGS = -Imatio -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
+PKG_CFLAGS = -Imatio -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
 else
-PKG_CFLAGS = -Imatio -DMATIO_PLATFORM=$(MATIO_PLATFORM) -DHAVE_ZLIB -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
+PKG_CFLAGS = -Imatio -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
 endif
 
 PKG_LIBS = $(ZLIB_LIBS)
 
 OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
-                matio/mat5.o matio/mat73.o matio/mat.o \
-                matio/matvar_cell.o matio/matvar_struct.o \
-                matio/read_data.o
+                matio/mat5.o matio/mat.o matio/matvar_cell.o \
+                matio/matvar_struct.o matio/read_data.o
 
 OBJECTS.root = rmatio.o
 
