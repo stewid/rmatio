@@ -1,12 +1,11 @@
-COPY_MATIO_CONFIG_H=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('matio/config.h.win', 'matio/config.h', overwrite=TRUE))")
-ifneq ($(COPY_MATIO_CONFIG_H), TRUE)
-$(error Unable to create config.h)
-endif
+"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e \
+  "file.copy('matio/config.h.win', 'matio/config.h', overwrite=TRUE)"
 
-COPY_TEST_RMATIO_R=$(shell "$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e "cat(file.copy('../inst/tests/test_rmatio.r.win', '../inst/tests/test_rmatio.r', overwrite=TRUE))")
-ifneq ($(COPY_TEST_RMATIO_R), TRUE)
-$(error Unable to create test_rmatio.r)
-endif
+"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e \
+  "writeLines(sub('@HAVE_COMPRESSION@', 'TRUE', readLines('../R/write_mat.r.in')), con='../R/write_mat.r')"
+
+"$(R_HOME)/bin$(R_ARCH_BIN)/Rscript" -e \
+  "writeLines(sub('@HAVE_COMPRESSION@', 'TRUE', readLines('../inst/tests/test_rmatio.r.in')), con='../inst/tests/test_rmatio.r')"
 
 ifeq "$(WIN)" "64"
 PKG_CFLAGS = -Imatio -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
