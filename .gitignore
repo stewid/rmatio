@@ -5,5 +5,6 @@
 *.Rproj
 config.log
 config.status
-src/matioConfig.h
-src/matio_pubconf.h
+/R/write_mat.r
+/inst/tests/test_rmatio.r
+/src/matio/config.h

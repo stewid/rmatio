@@ -28,6 +28,6 @@ Depends:
 Suggests:
     testthat
 Collate:
+    'rmatio.r'
     'read_mat.r'
     'write_mat.r'
-    'rmatio.r'

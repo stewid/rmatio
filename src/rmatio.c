@@ -20,7 +20,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
-#include "matio.h"
+#include "matio/matio.h"
 
 /*
  * -------------------------------------------------------------
