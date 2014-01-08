@@ -35,11 +35,6 @@ dnl Modified to be used to configure matio to build in the rmatio R package
 AC_PREREQ([2.69])
 AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
 
-AC_DEFINE_UNQUOTED([MATIO_MAJOR_VERSION],1,[Matio major version number])
-AC_DEFINE_UNQUOTED([MATIO_MINOR_VERSION],5,[Matio minor version number])
-AC_DEFINE_UNQUOTED([MATIO_RELEASE_LEVEL],2,[Matio release level number])
-AC_DEFINE_UNQUOTED([MATIO_VERSION],152,[Matio version number])
-
 AC_CONFIG_HEADERS([src/matio/config.h])
 
 # Checks for programs.

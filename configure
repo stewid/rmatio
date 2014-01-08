@@ -2329,27 +2329,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
-cat >>confdefs.h <<_ACEOF
-#define MATIO_MAJOR_VERSION 1
-_ACEOF
-
-
-cat >>confdefs.h <<_ACEOF
-#define MATIO_MINOR_VERSION 5
-_ACEOF
-
-
-cat >>confdefs.h <<_ACEOF
-#define MATIO_RELEASE_LEVEL 2
-_ACEOF
-
-
-cat >>confdefs.h <<_ACEOF
-#define MATIO_VERSION 152
-_ACEOF
-
-
 ac_config_headers="$ac_config_headers src/matio/config.h"
 
 

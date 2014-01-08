@@ -60,18 +60,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Matio major version number */
-#undef MATIO_MAJOR_VERSION
-
-/* Matio minor version number */
-#undef MATIO_MINOR_VERSION
-
-/* Matio release level number */
-#undef MATIO_RELEASE_LEVEL
-
-/* Matio version number */
-#undef MATIO_VERSION
-
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -168,6 +156,23 @@
 #ifdef _mat_uint8_t
     typedef _mat_uint8_t mat_uint8_t;
 #endif
+
+/* Matio major version number */
+#define MATIO_MAJOR_VERSION 1
+
+/* Matio minor version number */
+#define MATIO_MINOR_VERSION 5
+
+/* Matio release level number */
+#define MATIO_RELEASE_LEVEL 2
+
+/* Matio version number */
+#define MATIO_VERSION 152
+
+/* MATIO_PLATFORM is defined to "rmatio" when building. The define is not */
+/* really used, since rmatio always use the argument hdr_str initialized */
+/* from R with the correct platform when calling Mat_CreateVer */
+#define MATIO_PLATFORM "rmatio"
 
 #include "matio.h"
 
