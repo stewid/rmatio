@@ -1,0 +1,14 @@
+ZLIB_LIBS = @ZLIB_LIBS@
+
+PKG_CFLAGS = -Imatio
+
+PKG_LIBS = $(ZLIB_LIBS)
+
+OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
+                matio/mat5.o matio/mat73.o matio/mat.o \
+                matio/matvar_cell.o matio/matvar_struct.o \
+                matio/read_data.o
+
+OBJECTS.root = rmatio.o
+
+OBJECTS = $(OBJECTS.matio) $(OBJECTS.root)
