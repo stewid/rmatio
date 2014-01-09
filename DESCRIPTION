@@ -31,3 +31,4 @@ Collate:
     'rmatio.r'
     'read_mat.r'
     'write_mat.r'
+    'have_lib.r'
