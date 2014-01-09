@@ -1,0 +1,3 @@
+cp src/matio/config.h.win src/matio/config.h
+cp R/write_mat.r.win R/write_mat.r
+cp inst/tests/test_rmatio.r.win inst/tests/test_rmatio.r
