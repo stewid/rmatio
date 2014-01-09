@@ -3,5 +3,3 @@
 rm -f config.*
 rm -f src/Makevars
 rm -f src/config.h
-rm -f R/write_mat.r
-rm -f inst/tests/test_rmatio.r
