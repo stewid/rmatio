@@ -80,7 +80,7 @@ test_that("dgCMatrix: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -103,7 +103,7 @@ test_that("dgCMatrix: case-2", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -127,7 +127,7 @@ test_that("vector: case-1", {
     storage.mode(a) <- 'integer'
     expect_identical(a, 1:5)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=1:5),
                   filename=filename,
                   compression=TRUE,
@@ -149,7 +149,7 @@ test_that("vector: case-2", {
     a <- read.mat(filename)[['a']]
     expect_identical(a, c(1,2,3,4,5))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=c(1,2,3,4,5)),
                   filename=filename,
                   compression=TRUE,
@@ -170,7 +170,7 @@ test_that("vector: case-3", {
     a <- read.mat(filename)[['a']]
     expect_identical(a, 1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=1),
                   filename=filename,
                   compression=TRUE,
@@ -194,7 +194,7 @@ test_that("matrix: case-1", {
     storage.mode(a) <- 'integer'
     expect_identical(a, matrix(1:9, nrow=3))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=matrix(1:9, nrow=3)),
                   filename=filename,
                   compression=TRUE,
@@ -216,7 +216,7 @@ test_that("matrix: case-2", {
     a <- read.mat(filename)[['a']]
     expect_identical(a, matrix(c(1,2,3,4,5,6,7,8,9), nrow=3))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=matrix(c(1,2,3,4,5,6,7,8,9), nrow=3)),
                   filename=filename,
                   compression=TRUE,
@@ -242,7 +242,7 @@ test_that("array: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -266,7 +266,7 @@ test_that("array: case-2", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -292,7 +292,7 @@ test_that("array: case-3", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -316,7 +316,7 @@ test_that("array: case-4", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -341,7 +341,7 @@ test_that("array: case-5", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -366,7 +366,7 @@ test_that("array: case-6", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -389,7 +389,7 @@ test_that("array: case-7", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -414,7 +414,7 @@ test_that("complex: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -442,7 +442,7 @@ test_that("string: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -465,7 +465,7 @@ test_that("string: case-2", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list("a", "bb"))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -488,7 +488,7 @@ test_that("string: case-3", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(y=list('a', 'bb')))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -511,7 +511,7 @@ test_that("string: case-4", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(list("a", "bb")))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -541,7 +541,7 @@ test_that("logical: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -571,7 +571,7 @@ test_that("logical: case-2", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -596,7 +596,7 @@ test_that("struct: case-1 (Empty structure array)", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -619,7 +619,7 @@ test_that("struct: case-2 (Empty structure array with fields)", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -646,7 +646,7 @@ test_that("struct: case-3 (Structure array with empty fields)", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -671,7 +671,7 @@ test_that("struct: case-4", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -696,7 +696,7 @@ test_that("struct: case-5", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -725,7 +725,7 @@ test_that("struct: case-6", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -749,7 +749,7 @@ test_that("struct: case-7", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -779,7 +779,7 @@ test_that("struct: case-8", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -805,7 +805,7 @@ test_that("struct: case-9", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -828,7 +828,7 @@ test_that("struct: case-10 (Structure array with empty fields)", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -851,7 +851,7 @@ test_that("struct: case-11", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -896,7 +896,7 @@ test_that("struct: case-12", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -936,7 +936,7 @@ test_that("struct: case-13", {
     a.2 <- read.mat(filename)
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -959,7 +959,7 @@ test_that("struct: case-14", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(y = list("a", "bb"), z = list(c(1, 2))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -983,7 +983,7 @@ test_that("struct: case-15", {
     expect_identical(a.2, list(y = list("a", "bb"),
                                z = list("c", "dd")))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1008,7 +1008,7 @@ test_that("struct: case-16", {
     expect_identical(a.2, list(a = list(y = list("a", "b"),
                                    z = list(c(1, 2)))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1033,7 +1033,7 @@ test_that("struct: case-17", {
     expect_identical(a.2, list(a = list(y = list("a", "b"),
                                    z = list(c(1, 2, 3)))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1058,7 +1058,7 @@ test_that("struct: case-18", {
     expect_identical(a.2, list(a = list(y = list("a", "bb"),
                                    z = list(c(1, 2, 3)))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1083,7 +1083,7 @@ test_that("struct: case-19", {
     expect_identical(a.2, list(y = list('a', 'bb'),
                                z = c(1, 2)))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1108,7 +1108,7 @@ test_that("struct: case-20", {
     expect_identical(a.2, list(y = list("a", "bb"),
                                z = list("c", "dd")))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1133,7 +1133,7 @@ test_that("struct: case-21", {
     expect_identical(a.2, list(y = c("a", "b"),
                                z = c(1, 2)))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1158,7 +1158,7 @@ test_that("struct: case-22", {
     expect_identical(a.2, list(y = c("a", "b"),
                                z = c(1, 2, 3)))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1183,7 +1183,7 @@ test_that("struct: case-23", {
     expect_identical(a.2, list(y = list("a", "bb"),
                                z = c(1, 2, 3)))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1208,7 +1208,7 @@ test_that("struct: case-24", {
     expect_identical(a.2, list(a = list(y = list("a", "bb"),
                                    z = list(list(list("d", "eee"))))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1233,7 +1233,7 @@ test_that("struct: case-25", {
     expect_identical(a.2, list(y = list("a", "bb"),
                                z = list(list("d", "eee"))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1270,7 +1270,7 @@ test_that("struct: case-26", {
                                    byrow=TRUE,
                                    sparse=TRUE)))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1313,7 +1313,7 @@ test_that("struct: case-27", {
                                    byrow=TRUE,
                                    sparse=TRUE))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1343,7 +1343,7 @@ test_that("struct: case-28", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(y=list(list(list("a", "bb"))), z=list()))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1366,7 +1366,7 @@ test_that("struct: case-29", {
     a.2 <- read.mat(filename)
     expect_identical(a.2, list(y = list(list("a", "bb")), z = list()))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(a.1,
                   filename=filename,
                   compression=TRUE,
@@ -1391,7 +1391,7 @@ test_that("cell: case-1", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1418,7 +1418,7 @@ test_that("cell: case-2", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1446,7 +1446,7 @@ test_that("cell: case-3", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1474,7 +1474,7 @@ test_that("cell: case-4", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1498,7 +1498,7 @@ test_that("cell: case-5", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1528,7 +1528,7 @@ test_that("cell: case-6", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1554,7 +1554,7 @@ test_that("cell: case-7", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1582,7 +1582,7 @@ test_that("cell: case-8", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1714,7 +1714,7 @@ test_that("cell: case-9", {
   a.2 <- read.mat(filename)[['a']]
   expect_identical(a.2, a.1)
 
-  if(TRUE) {
+  if(have.zlib()) {
       write.mat(list(a=a.1),
                 filename=filename,
                 compression=TRUE,
@@ -1750,7 +1750,7 @@ test_that("cell: case-10", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1776,7 +1776,7 @@ test_that("cell: case-11", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1823,7 +1823,7 @@ test_that("cell: case-12", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1851,7 +1851,7 @@ test_that("cell: case-13", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, a.1)
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1874,7 +1874,7 @@ test_that("cell: case-14", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(list("a", "bb"), list("c", "dd")))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1898,7 +1898,7 @@ test_that("cell: case-15", {
     expect_identical(a.2, list(list("a", "bb"),
                                list(list(list("d", "eee")))))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1934,7 +1934,7 @@ test_that("cell: case-16", {
                                            ncol=9,
                                            byrow=TRUE,
                                            sparse=TRUE))))
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1964,7 +1964,7 @@ test_that("cell: case-17", {
     a.2 <- read.mat(filename)[['a']]
     expect_identical(a.2, list(list(list(list("a", "bb"))), list()))
 
-    if(TRUE) {
+    if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
@@ -1996,7 +1996,7 @@ test_that("matio_test_cases_compressed_le.mat", {
 context("Write MAT5 compressed: small_v4_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
@@ -2030,7 +2030,7 @@ test_that("matio_test_cases_compressed_be.mat", {
 context("Write MAT5 compressed: small_v4_be.mat")
 
 test_that("matio_test_cases_compressed_be.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
@@ -2099,7 +2099,7 @@ test_that("matio_test_cases_uncompressed_le.mat", {
 context("Write MAT5 compressed: matio_test_cases_v4_le.mat")
 
 test_that("matio_test_cases_uncompressed_le.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
@@ -2133,7 +2133,7 @@ test_that("matio_test_cases_uncompressed_be.mat", {
 context("Write MAT5 compressed: matio_test_cases_v4_be.mat")
 
 test_that("matio_test_cases_uncompressed_be.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
@@ -2793,7 +2793,7 @@ test_mat_v5_file <- function(filename) {
 context("Read: matio_test_cases_compressed_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         test_mat_v5_file('matio_test_cases_compressed_le.mat')
     }
 })
@@ -2801,7 +2801,7 @@ test_that("matio_test_cases_compressed_le.mat", {
 context("Write MAT5 uncompressed: matio_test_cases_compressed_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
@@ -2816,7 +2816,7 @@ test_that("matio_test_cases_compressed_le.mat", {
 context("Write MAT5 compressed: matio_test_cases_compressed_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
-    if(TRUE) {
+    if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
