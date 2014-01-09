@@ -8,3 +8,4 @@ config.status
 /R/write_mat.r
 /inst/tests/test_rmatio.r
 /src/matio/config.h
+/src/Makevars
