@@ -36,9 +36,6 @@ write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
 identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
 }
 }
-\author{
-  Stefan Widgren
-}
 \references{
   \itemize{ \item Christopher C. Hulbert, MATIO User Manual
   for version 1.5.2.\cr

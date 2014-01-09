@@ -42,9 +42,6 @@ url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
 m <- read.mat(url)
 }
 }
-\author{
-  Stefan Widgren
-}
 \seealso{
   See \code{\link[rmatio:write.mat]{write.mat}} for more
   details and examples.

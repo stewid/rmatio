@@ -37,7 +37,6 @@
 ##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 ##' @export
 ##' @useDynLib rmatio
-##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
 ##' ## Read a mat file from an URL
