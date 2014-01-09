@@ -36,7 +36,6 @@ AC_PREREQ([2.69])
 AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
-AC_CONFIG_FILES([ R/write_mat.r inst/tests/test_rmatio.r])
 
 # Checks for programs.
 AC_PROG_CC
@@ -1376,5 +1375,7 @@ CHECK_MATIO_INT16_T
 CHECK_MATIO_UINT16_T
 CHECK_MATIO_INT8_T
 CHECK_MATIO_UINT8_T
+
+AC_CONFIG_FILES([ R/write_mat.r inst/tests/test_rmatio.r])
 
 AC_OUTPUT
