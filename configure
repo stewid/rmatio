@@ -3163,9 +3163,19 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_inflate" >&5
 $as_echo "$ac_cv_lib_z_inflate" >&6; }
 if test "x$ac_cv_lib_z_inflate" = xyes; then :
-  HAVE_COMPRESSION=TRUE
+
+        HAVE_COMPRESSION=TRUE
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_ZLIB 1
+_ACEOF
+
+        LIBS="${LIBS} -lz"
+
 else
-  HAVE_COMPRESSION=FALSE
+
+        HAVE_COMPRESSION=FALSE
+
 fi
 
 

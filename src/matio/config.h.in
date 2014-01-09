@@ -157,6 +157,12 @@
     typedef _mat_uint8_t mat_uint8_t;
 #endif
 
+/* Have zlib */
+#undef HAVE_ZLIB
+
+/* MAT v7.3 file support */
+#undef MAT73
+
 /* Matio major version number */
 #define MATIO_MAJOR_VERSION 1
 

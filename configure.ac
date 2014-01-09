@@ -41,7 +41,15 @@ AC_CONFIG_HEADERS([src/matio/config.h])
 AC_PROG_CC
 
 # Checks for libraries.
-AC_CHECK_LIB(z, inflate, [HAVE_COMPRESSION=TRUE], [HAVE_COMPRESSION=FALSE])
+AC_CHECK_LIB(z, inflate,
+[
+        HAVE_COMPRESSION=TRUE
+        AC_DEFINE_UNQUOTED([HAVE_ZLIB],[1],[Have zlib])
+        LIBS="${LIBS} -lz"
+],
+[
+        HAVE_COMPRESSION=FALSE
+])
 AC_SUBST(HAVE_COMPRESSION)
 
 # Checks for header files.
