@@ -16,14 +16,12 @@
 
 ##' Is zlib available
 ##' @keywords internal
-##' @author Stefan Widgren
 have.zlib <- function() {
     TRUE
 }
 
 ##' Is hdf5lib available
 ##' @keywords internal
-##' @author Stefan Widgren
 have.hdf5lib <- function() {
     FALSE
 }
