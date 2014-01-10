@@ -53,6 +53,22 @@
 ##'
 ##' unlink(filename)
 ##'
+##' ## Read a compressed version 5 MAT file
+##' m <- read.mat(system.file("extdata/matio_test_cases_compressed_le.mat",
+##'                           package='rmatio'))
+##'
+##' ## Write an uncompressed version 5 MAT file
+##' write.mat(m, filename="test-uncompressed.mat", compression=FALSE, version="MAT5")
+##'
+##' ## Write a compressed version 5 MAT file
+##' write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
+##'
+##' ## Check that the content of the files are identical
+##' identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
+##'
+##' unlink("test-uncompressed.mat")
+##' unlink("test-compressed.mat")
+##'
 ##' ## Example how to read and write a S4 class with rmatio
 ##' ## Create 'DemoS4Mat' class
 ##' setClass("DemoS4Mat",

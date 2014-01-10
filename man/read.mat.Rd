@@ -35,11 +35,37 @@
 }
 \examples{
 \dontrun{
-## Read a mat file from an URL
+library(rmatio)
+
+## Read a version 4 MAT file with little-endian byte ordering
+filename <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
+m <- read.mat(filename)
+
+## View content
+str(m)
+
+## Read a version 4 MAT file with big-endian byte ordering.
+filename <- system.file('extdata/matio_test_cases_v4_be.mat', package='rmatio')
+m <- read.mat(filename)
+
+## View content
+str(m)
+
+## Read a compressed version 5 MAT file
+filename <- system.file('extdata/matio_test_cases_compressed_le.mat', package='rmatio')
+m <- read.mat(filename)
+
+## View content
+str(m)
+
+## Read a compressed version 5 MAT file
 url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
              "master/tree/matio_test_cases_compressed_le.mat?format=raw",
              sep="")
 m <- read.mat(url)
+
+## View content
+str(m)
 }
 }
 \seealso{

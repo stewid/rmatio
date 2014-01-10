@@ -35,26 +35,4 @@
 ##'   \url{http://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf}
 ##' }
 ##' @docType package
-##' @examples
-##' \dontrun{
-##' library(rmatio)
-##'
-##' ## Read a compressed version 5 MAT file from an URL
-##' url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
-##'              "master/tree/matio_test_cases_compressed_le.mat?format=raw",
-##'              sep="")
-##' m <- read.mat(url)
-##'
-##' ## View content
-##' str(m)
-##'
-##' ## Write an uncompressed version 5 MAT file
-##' write.mat(m, filename="test-uncompressed.mat", compression=FALSE, version="MAT5")
-##'
-##' ## Write a compressed version 5 MAT file
-##' write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
-##'
-##' ## Check that the content of the files are identical
-##' identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
-##' }
 NULL
