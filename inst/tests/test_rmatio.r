@@ -1977,7 +1977,7 @@ test_that("cell: case-17", {
 context("Read: small_v4_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
-  expect_identical(read.mat('small_v4_le.mat')$x, pi)
+  expect_identical(read.mat('../extdata/small_v4_le.mat')$x, pi)
 })
 
 context("Write MAT5 uncompressed: small_v4_le.mat")
@@ -1986,7 +1986,7 @@ test_that("matio_test_cases_compressed_le.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  write.mat(read.mat('small_v4_le.mat'),
+  write.mat(read.mat('../extdata/small_v4_le.mat'),
             filename=filename,
             compression=FALSE,
             version='MAT5')
@@ -2000,7 +2000,7 @@ test_that("matio_test_cases_compressed_le.mat", {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('small_v4_le.mat'),
+        write.mat(read.mat('../extdata/small_v4_le.mat'),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
@@ -2010,17 +2010,17 @@ test_that("matio_test_cases_compressed_le.mat", {
 
 context("Read: small_v4_be.mat")
 
-test_that("matio_test_cases_compressed_be.mat", {
-  expect_identical(read.mat('small_v4_be.mat')$x, pi)
+test_that("small_v4_be.mat", {
+  expect_identical(read.mat('../extdata/small_v4_be.mat')$x, pi)
 })
 
 context("Write MAT5 uncompressed: small_v4_be.mat")
 
-test_that("matio_test_cases_compressed_be.mat", {
+test_that("small_v4_be.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  write.mat(read.mat('small_v4_be.mat'),
+  write.mat(read.mat('../extdata/small_v4_be.mat'),
             filename=filename,
             compression=FALSE,
             version='MAT5')
@@ -2029,12 +2029,12 @@ test_that("matio_test_cases_compressed_be.mat", {
 
 context("Write MAT5 compressed: small_v4_be.mat")
 
-test_that("matio_test_cases_compressed_be.mat", {
+test_that("small_v4_be.mat", {
     if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('small_v4_be.mat'),
+        write.mat(read.mat('../extdata/small_v4_be.mat'),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
@@ -2080,7 +2080,7 @@ test_mat_v4_file <- function(filename) {
 context("Read: matio_test_cases_v4_le.mat")
 
 test_that("matio_test_cases_uncompressed_le.mat", {
-    test_mat_v4_file('matio_test_cases_v4_le.mat')
+    test_mat_v4_file('../extdata/matio_test_cases_v4_le.mat')
 })
 
 context("Write MAT5 uncompressed: matio_test_cases_v4_le.mat")
@@ -2089,7 +2089,7 @@ test_that("matio_test_cases_uncompressed_le.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  write.mat(read.mat('matio_test_cases_v4_le.mat'),
+  write.mat(read.mat('../extdata/matio_test_cases_v4_le.mat'),
             filename=filename,
             compression=FALSE,
             version='MAT5')
@@ -2103,7 +2103,7 @@ test_that("matio_test_cases_uncompressed_le.mat", {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('matio_test_cases_v4_le.mat'),
+        write.mat(read.mat('../extdata/matio_test_cases_v4_le.mat'),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
@@ -2114,7 +2114,7 @@ test_that("matio_test_cases_uncompressed_le.mat", {
 context("Read: matio_test_cases_v4_be.mat")
 
 test_that("matio_test_cases_uncompressed_be.mat", {
-    test_mat_v4_file('matio_test_cases_v4_be.mat')
+    test_mat_v4_file('../extdata/matio_test_cases_v4_be.mat')
 })
 
 context("Write MAT5 uncompressed: matio_test_cases_v4_be.mat")
@@ -2123,7 +2123,7 @@ test_that("matio_test_cases_uncompressed_be.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
-  write.mat(read.mat('matio_test_cases_v4_be.mat'),
+  write.mat(read.mat('../extdata/matio_test_cases_v4_be.mat'),
             filename=filename,
             compression=FALSE,
             version='MAT5')
@@ -2137,7 +2137,7 @@ test_that("matio_test_cases_uncompressed_be.mat", {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('matio_test_cases_v4_be.mat'),
+        write.mat(read.mat('../extdata/matio_test_cases_v4_be.mat'),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
@@ -2794,7 +2794,7 @@ context("Read: matio_test_cases_compressed_le.mat")
 
 test_that("matio_test_cases_compressed_le.mat", {
     if(have.zlib()) {
-        test_mat_v5_file('matio_test_cases_compressed_le.mat')
+        test_mat_v5_file('../extdata/matio_test_cases_compressed_le.mat')
     }
 })
 
@@ -2805,7 +2805,7 @@ test_that("matio_test_cases_compressed_le.mat", {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('matio_test_cases_compressed_le.mat'),
+        write.mat(read.mat('../extdata/matio_test_cases_compressed_le.mat'),
                   filename=filename,
                   compression=FALSE,
                   version='MAT5')
@@ -2820,7 +2820,7 @@ test_that("matio_test_cases_compressed_le.mat", {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
 
-        write.mat(read.mat('matio_test_cases_compressed_le.mat'),
+        write.mat(read.mat('../extdata/matio_test_cases_compressed_le.mat'),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
