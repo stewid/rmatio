@@ -180,6 +180,4 @@
 /* from R with the correct platform when calling Mat_CreateVer */
 #define MATIO_PLATFORM "rmatio"
 
-#include "matio.h"
-
 #endif

@@ -155,7 +155,7 @@ setMethod("write.mat",
             }
 
             if(identical(compression, TRUE)) {
-                if(!TRUE) {
+                if(!have.zlib()) {
                     stop(paste("Sorry, library 'zlib' is not available.",
                                "Use 'compression=FALSE' or install with 'zlib'"))
                 }
@@ -172,10 +172,8 @@ setMethod("write.mat",
                                 R.version$platform[[1]],
                                 packageVersion('rmatio'),
                                 date())
-            ## } else if(identical(version, 'MAT73')) {
-            ##   version <- 0x0200L
             } else {
-              stop('Undefined version')
+              stop('Unsupported version')
             }
 
             ## Check names in object

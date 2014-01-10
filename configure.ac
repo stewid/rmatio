@@ -84,10 +84,6 @@ AC_CHECK_LIB(z, inflate,
 ])
 AC_SUBST(RMATIO_HAVE_ZLIB)
 
-# Check for HDF5
-RMATIO_HAVE_HDF5LIB=FALSE
-AC_SUBST(RMATIO_HAVE_HDF5LIB)
-
 # Checks for header files.
 AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])
 

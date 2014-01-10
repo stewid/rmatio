@@ -635,7 +635,6 @@ LIBOBJS
 EGREP
 GREP
 CPP
-RMATIO_HAVE_HDF5LIB
 RMATIO_HAVE_ZLIB
 OBJEXT
 EXEEXT
@@ -3228,10 +3227,6 @@ else
 
 fi
 
-
-
-# Check for HDF5
-RMATIO_HAVE_HDF5LIB=FALSE
 
 
 # Checks for header files.

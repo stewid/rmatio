@@ -19,9 +19,3 @@
 have.zlib <- function() {
     @RMATIO_HAVE_ZLIB@
 }
-
-##' Is hdf5lib available
-##' @keywords internal
-have.hdf5lib <- function() {
-    @RMATIO_HAVE_HDF5LIB@
-}

@@ -1,13 +1,13 @@
 ifeq "$(WIN)" "64"
-PKG_CFLAGS = -Imatio -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
+PKG_CFLAGS = -I. -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8
 else
-PKG_CFLAGS = -Imatio -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
+PKG_CFLAGS = -I. -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
 endif
 
 PKG_LIBS = $(ZLIB_LIBS)
 
 OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
-                matio/mat5.o matio/mat73.o matio/mat.o \
+                matio/mat5.o matio/mat.o \
                 matio/matvar_cell.o matio/matvar_struct.o \
                 matio/read_data.o
 
