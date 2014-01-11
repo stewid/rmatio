@@ -18,6 +18,10 @@
 ##'
 ##' Writes the values in the list to a mat-file. All values in the
 ##' list must have unique names.
+##'
+##' The rmatio package can write version 5 MAT files, version 5 files
+##' with variable compression (if built with zlib), and an HDF5 format
+##' MAT file introduced in MATLAB version 7.3 (if built with hdf5).
 ##' @note
 ##' \itemize{
 ##'   \item A vector is saved as a \code{1 x length} array
@@ -34,8 +38,8 @@
 ##' @param object The \code{object} to write.
 ##' @param filename The MAT file to write.
 ##' @param compression Use compression when writing variables. Defaults to TRUE.
-##' @param version MAT file version to create. Currently only support
-##' for Matlab level-5 file (MAT5) from rmatio package.
+##' @param version MAT file version to create, 'MAT5' or
+##' 'MAT73'. Defaults to 'MAT5'
 ##' @return invisible NULL
 ##' @keywords methods
 ##' @export
@@ -148,7 +152,7 @@ setGeneric("write.mat",
            function(object,
                     filename = NULL,
                     compression = TRUE,
-                    version = c('MAT5')) standardGeneric("write.mat"))
+                    version = c('MAT5', 'MAT73')) standardGeneric("write.mat"))
 
 setMethod("write.mat",
           signature(object = "list"),
@@ -157,50 +161,60 @@ setMethod("write.mat",
                    compression,
                    version)
           {
-            ## Check filename
-            if(any(!is.character(filename),
-                   !identical(length(filename), 1L),
-                   nchar(filename) < 1)) {
-              stop("'filename' must be a character vector of length one")
-            }
+              ## Check filename
+              if(any(!is.character(filename),
+                     !identical(length(filename), 1L),
+                     nchar(filename) < 1)) {
+                  stop("'filename' must be a character vector of length one")
+              }
 
-            ## Check compression
-            if(any(!is.logical(compression),
-                   !identical(length(compression), 1L))) {
-              stop("'compression' must be a logical vector of length one")
-            }
+              ## Check compression
+              if(any(!is.logical(compression),
+                     !identical(length(compression), 1L))) {
+                  stop("'compression' must be a logical vector of length one")
+              }
 
-            if(identical(compression, TRUE)) {
-                if(!have.zlib()) {
-                    stop(paste("Sorry, library 'zlib' is not available.",
-                               "Use 'compression=FALSE' or install with 'zlib'"))
-                }
-                compression = 1L
-            } else {
-                compression = 0L
-            }
+              if(identical(compression, TRUE)) {
+                  if(!have.zlib()) {
+                      stop(paste("Sorry, library 'zlib' is not available.",
+                                 "Use 'compression=FALSE' or install with 'zlib'"))
+                  }
+                  compression = 1L
+              } else {
+                  compression = 0L
+              }
 
-            ## Check version
-            version <- match.arg(version)
-            if(identical(version, 'MAT5')) {
-              version <- 0x0100L
-              header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
-                                R.version$platform[[1]],
-                                packageVersion('rmatio'),
-                                date())
-            } else {
-              stop('Unsupported version')
-            }
+              ## Check version
+              version <- match.arg(version)
+              if(identical(version, 'MAT5')) {
+                  version <- 0x0100L
+                  header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
+                                    R.version$platform[[1]],
+                                    packageVersion('rmatio'),
+                                    date())
+              } else if(identical(version, 'MAT73')) {
+                  if(!have.hdf5lib()) {
+                      stop(paste("Sorry, library 'hdf5' is not available.",
+                                 "Use 'version=\"MAT5\"' or install with 'hdf5'"))
+                  }
+                  version <- 0x0200L
+                  header <- sprintf("MATLAB 7.3 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
+                                    R.version$platform[[1]],
+                                    packageVersion('rmatio'),
+                                    date())
+              } else {
+                  stop('Unsupported version')
+              }
 
-            ## Check names in object
-            if(any(is.null(names(object)),
-                   !all(nchar(names(object))),
-                   any(duplicated(names(object))))) {
-              stop("All values in the list must have a unique name")
-            }
+              ## Check names in object
+              if(any(is.null(names(object)),
+                     !all(nchar(names(object))),
+                     any(duplicated(names(object))))) {
+                  stop("All values in the list must have a unique name")
+              }
 
-            .Call("write_mat", object, filename, compression, version, header)
+              .Call("write_mat", object, filename, compression, version, header)
 
-            invisible(NULL)
+              invisible(NULL)
           }
 )
