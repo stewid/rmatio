@@ -635,6 +635,7 @@ LIBOBJS
 EGREP
 GREP
 CPP
+RMATIO_HAVE_HDF5LIB
 RMATIO_HAVE_ZLIB
 OBJEXT
 EXEEXT
@@ -686,6 +687,8 @@ ac_user_opts='
 enable_option_checking
 with_zlib_include
 with_zlib_lib
+with_hdf5_include
+with_hdf5_lib
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1308,6 +1311,10 @@ Optional Packages:
                           the location of zlib header files
   --with-zlib-lib=LIB_PATH
                           the location of zlib libraries
+  --with-hdf5-include=INCLUDE_PATH
+                          the location of hdf5 header files
+  --with-hdf5-lib=LIB_PATH
+                          the location of hdf5 libraries
 
 Some influential environment variables:
   CC          C compiler command
@@ -3157,6 +3164,27 @@ if test  -n "$zlib_lib_path"  ; then
   LIBS="-L${zlib_lib_path} ${LIBS}"
 fi
 
+# hdf5 include and library path
+
+# Check whether --with-hdf5-include was given.
+if test "${with_hdf5_include+set}" = set; then :
+  withval=$with_hdf5_include; hdf5_include_path=$withval
+fi
+
+if test  -n "$hdf5_include_path"  ; then
+  RMATIO_CPPFLAGS="-I${hdf5_include_path} ${RMATIO_CPPFLAGS}"
+fi
+
+
+# Check whether --with-hdf5-lib was given.
+if test "${with_hdf5_lib+set}" = set; then :
+  withval=$with_hdf5_lib; hdf5_lib_path=$withval
+fi
+
+if test  -n "$hdf5_lib_path"  ; then
+  LIBS="-L${hdf5_lib_path} ${LIBS}"
+fi
+
 # Find the compiler and compiler flags to use
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -3224,6 +3252,70 @@ _ACEOF
 else
 
         RMATIO_HAVE_ZLIB=FALSE
+
+fi
+
+
+
+# Check for hdf5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for H5open in -lhdf5" >&5
+$as_echo_n "checking for H5open in -lhdf5... " >&6; }
+if ${ac_cv_lib_hdf5_H5open+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lhdf5  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char H5open ();
+int
+main ()
+{
+return H5open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_hdf5_H5open=yes
+else
+  ac_cv_lib_hdf5_H5open=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_hdf5_H5open" >&5
+$as_echo "$ac_cv_lib_hdf5_H5open" >&6; }
+if test "x$ac_cv_lib_hdf5_H5open" = xyes; then :
+
+        RMATIO_HAVE_HDF5LIB=TRUE
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_HDF5 1
+_ACEOF
+
+        cat >>confdefs.h <<_ACEOF
+#define HDF5_LIBS -lhdf5
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define MAT73 1
+_ACEOF
+
+        LIBS="${LIBS} -lhdf5"
+
+else
+
+        RMATIO_HAVE_HDF5LIB=FALSE
 
 fi
 

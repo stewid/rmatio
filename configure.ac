@@ -59,6 +59,23 @@ if test [ -n "$zlib_lib_path" ] ; then
   LIBS="-L${zlib_lib_path} ${LIBS}"
 fi
 
+# hdf5 include and library path
+AC_ARG_WITH([hdf5-include],
+    AC_HELP_STRING([--with-hdf5-include=INCLUDE_PATH],
+                   [the location of hdf5 header files]),
+    [hdf5_include_path=$withval])
+if test [ -n "$hdf5_include_path" ] ; then
+  RMATIO_CPPFLAGS="-I${hdf5_include_path} ${RMATIO_CPPFLAGS}"
+fi
+
+AC_ARG_WITH([hdf5-lib],
+    AC_HELP_STRING([--with-hdf5-lib=LIB_PATH],
+                   [the location of hdf5 libraries]),
+    [hdf5_lib_path=$withval])
+if test [ -n "$hdf5_lib_path" ] ; then
+  LIBS="-L${hdf5_lib_path} ${LIBS}"
+fi
+
 # Find the compiler and compiler flags to use
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -83,6 +100,20 @@ AC_CHECK_LIB(z, inflate,
         RMATIO_HAVE_ZLIB=FALSE
 ])
 AC_SUBST(RMATIO_HAVE_ZLIB)
+
+# Check for hdf5
+AC_CHECK_LIB(hdf5, H5open,
+[
+        RMATIO_HAVE_HDF5LIB=TRUE
+        AC_DEFINE_UNQUOTED([HAVE_HDF5],[1],[Have hdf5])
+        AC_DEFINE_UNQUOTED([HDF5_LIBS],[-lhdf5],[])
+        AC_DEFINE_UNQUOTED([MAT73],[1],[Enable MAT73])
+        LIBS="${LIBS} -lhdf5"
+],
+[
+        RMATIO_HAVE_HDF5LIB=FALSE
+])
+AC_SUBST(RMATIO_HAVE_HDF5LIB)
 
 # Checks for header files.
 AC_CHECK_HEADERS([inttypes.h stdint.h stdlib.h string.h])
