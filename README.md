@@ -35,7 +35,6 @@ library(rmatio)
 Read a compressed version 5 MAT file from an URL
 
 ```
-library(rmatio)
 url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
              "master/tree/matio_test_cases_compressed_le.mat?format=raw",
              sep="")
