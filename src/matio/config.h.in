@@ -160,6 +160,9 @@
 /* Have zlib */
 #undef HAVE_ZLIB
 
+/* Have HDF5 */
+#undef HAVE_HDF5
+
 /* MAT v7.3 file support */
 #undef MAT73
 
