@@ -88,6 +88,14 @@ test_that("dgCMatrix: case-1", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("dgCMatrix: case-2", {
@@ -108,6 +116,14 @@ test_that("dgCMatrix: case-2", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -136,6 +152,15 @@ test_that("vector: case-1", {
         storage.mode(a) <- 'integer'
         expect_identical(a, 1:5)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=1:5),
+                  filename=filename,
+                  version='MAT73')
+        a <- read.mat(filename)[['a']]
+        storage.mode(a) <- 'integer'
+        expect_identical(a, 1:5)
+    }
 })
 
 test_that("vector: case-2", {
@@ -157,6 +182,14 @@ test_that("vector: case-2", {
         a <- read.mat(filename)[['a']]
         expect_identical(a, c(1,2,3,4,5))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=c(1,2,3,4,5)),
+                  filename=filename,
+                  version='MAT73')
+        a <- read.mat(filename)[['a']]
+        expect_identical(a, c(1,2,3,4,5))
+    }
 })
 
 test_that("vector: case-3", {
@@ -175,6 +208,14 @@ test_that("vector: case-3", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a <- read.mat(filename)[['a']]
+        expect_identical(a, 1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=1),
+                  filename=filename,
+                  version='MAT73')
         a <- read.mat(filename)[['a']]
         expect_identical(a, 1)
     }
@@ -203,6 +244,15 @@ test_that("matrix: case-1", {
         storage.mode(a) <- 'integer'
         expect_identical(a, matrix(1:9, nrow=3))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=matrix(1:9, nrow=3)),
+                  filename=filename,
+                  version='MAT73')
+        a <- read.mat(filename)[['a']]
+        storage.mode(a) <- 'integer'
+        expect_identical(a, matrix(1:9, nrow=3))
+    }
 })
 
 test_that("matrix: case-2", {
@@ -221,6 +271,14 @@ test_that("matrix: case-2", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a <- read.mat(filename)[['a']]
+        expect_identical(a, matrix(c(1,2,3,4,5,6,7,8,9), nrow=3))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=matrix(c(1,2,3,4,5,6,7,8,9), nrow=3)),
+                  filename=filename,
+                  version='MAT73')
         a <- read.mat(filename)[['a']]
         expect_identical(a, matrix(c(1,2,3,4,5,6,7,8,9), nrow=3))
     }
@@ -250,6 +308,14 @@ test_that("array: case-1", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("array: case-2", {
@@ -271,6 +337,14 @@ test_that("array: case-2", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -300,6 +374,14 @@ test_that("array: case-3", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("array: case-4", {
@@ -321,6 +403,14 @@ test_that("array: case-4", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -349,6 +439,14 @@ test_that("array: case-5", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 
@@ -371,6 +469,14 @@ test_that("array: case-6", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -397,6 +503,14 @@ test_that("array: case-7", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 context("complex")
@@ -419,6 +533,14 @@ test_that("complex: case-1", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -450,6 +572,14 @@ test_that("string: case-1", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("string: case-2", {
@@ -470,6 +600,14 @@ test_that("string: case-2", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list("a", "bb"))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list("a", "bb"))
     }
@@ -496,6 +634,14 @@ test_that("string: case-3", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(y=list('a', 'bb')))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(y=list('a', 'bb')))
+    }
 })
 
 test_that("string: case-4", {
@@ -516,6 +662,14 @@ test_that("string: case-4", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(list("a", "bb")))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(list("a", "bb")))
     }
@@ -549,6 +703,14 @@ test_that("logical: case-1", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("logical: case-2", {
@@ -579,6 +741,14 @@ test_that("logical: case-2", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 context("struct")
@@ -604,6 +774,14 @@ test_that("struct: case-1 (Empty structure array)", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-2 (Empty structure array with fields)", {
@@ -624,6 +802,14 @@ test_that("struct: case-2 (Empty structure array with fields)", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -654,6 +840,14 @@ test_that("struct: case-3 (Structure array with empty fields)", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-4", {
@@ -679,6 +873,14 @@ test_that("struct: case-4", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-5", {
@@ -701,6 +903,14 @@ test_that("struct: case-5", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -733,6 +943,14 @@ test_that("struct: case-6", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-7", {
@@ -754,6 +972,14 @@ test_that("struct: case-7", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -787,6 +1013,14 @@ test_that("struct: case-8", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-9", {
@@ -813,6 +1047,14 @@ test_that("struct: case-9", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-10 (Structure array with empty fields)", {
@@ -836,6 +1078,14 @@ test_that("struct: case-10 (Structure array with empty fields)", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-11", {
@@ -856,6 +1106,14 @@ test_that("struct: case-11", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -904,6 +1162,14 @@ test_that("struct: case-12", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-13", {
@@ -944,6 +1210,14 @@ test_that("struct: case-13", {
         a.2 <- read.mat(filename)
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("struct: case-14", {
@@ -964,6 +1238,14 @@ test_that("struct: case-14", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(y = list("a", "bb"), z = list(c(1, 2))))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(y = list("a", "bb"), z = list(c(1, 2))))
     }
@@ -988,6 +1270,15 @@ test_that("struct: case-15", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(y = list("a", "bb"),
+                                   z = list("c", "dd")))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(y = list("a", "bb"),
                                    z = list("c", "dd")))
@@ -1017,6 +1308,15 @@ test_that("struct: case-16", {
         expect_identical(a.2, list(a = list(y = list("a", "b"),
                                        z = list(c(1, 2)))))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(a = list(y = list("a", "b"),
+                                       z = list(c(1, 2)))))
+    }
 })
 
 test_that("struct: case-17", {
@@ -1038,6 +1338,15 @@ test_that("struct: case-17", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(a = list(y = list("a", "b"),
+                                       z = list(c(1, 2, 3)))))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(a = list(y = list("a", "b"),
                                        z = list(c(1, 2, 3)))))
@@ -1067,6 +1376,15 @@ test_that("struct: case-18", {
         expect_identical(a.2, list(a = list(y = list("a", "bb"),
                                        z = list(c(1, 2, 3)))))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(a = list(y = list("a", "bb"),
+                                       z = list(c(1, 2, 3)))))
+    }
 })
 
 test_that("struct: case-19", {
@@ -1088,6 +1406,15 @@ test_that("struct: case-19", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = list('a', 'bb'),
+                                   z = c(1, 2)))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y = list('a', 'bb'),
                                    z = c(1, 2)))
@@ -1117,6 +1444,15 @@ test_that("struct: case-20", {
         expect_identical(a.2, list(y = list("a", "bb"),
                                    z = list("c", "dd")))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = list("a", "bb"),
+                                   z = list("c", "dd")))
+    }
 })
 
 test_that("struct: case-21", {
@@ -1138,6 +1474,15 @@ test_that("struct: case-21", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = c("a", "b"),
+                                   z = c(1, 2)))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y = c("a", "b"),
                                    z = c(1, 2)))
@@ -1167,6 +1512,15 @@ test_that("struct: case-22", {
         expect_identical(a.2, list(y = c("a", "b"),
                                    z = c(1, 2, 3)))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = c("a", "b"),
+                                   z = c(1, 2, 3)))
+    }
 })
 
 test_that("struct: case-23", {
@@ -1188,6 +1542,15 @@ test_that("struct: case-23", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = list("a", "bb"),
+                                   z = c(1, 2, 3)))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y = list("a", "bb"),
                                    z = c(1, 2, 3)))
@@ -1217,6 +1580,15 @@ test_that("struct: case-24", {
         expect_identical(a.2, list(a = list(y = list("a", "bb"),
                                        z = list(list(list("d", "eee"))))))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(a = list(y = list("a", "bb"),
+                                       z = list(list(list("d", "eee"))))))
+    }
 })
 
 test_that("struct: case-25", {
@@ -1238,6 +1610,15 @@ test_that("struct: case-25", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = list("a", "bb"),
+                                   z = list(list("d", "eee"))))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y = list("a", "bb"),
                                    z = list(list("d", "eee"))))
@@ -1275,6 +1656,21 @@ test_that("struct: case-26", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y=list("a", "bb"),
+                                   z=Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                       nrow=3,
+                                       ncol=9,
+                                       byrow=TRUE,
+                                       sparse=TRUE)))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y=list("a", "bb"),
                                    z=Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -1328,6 +1724,21 @@ test_that("struct: case-27", {
                                        byrow=TRUE,
                                        sparse=TRUE))))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(y=list("a", "bb"),
+                                   z=list(Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                       0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                       nrow=3,
+                                       ncol=9,
+                                       byrow=TRUE,
+                                       sparse=TRUE))))
+    }
 })
 
 test_that("struct: case-28", {
@@ -1351,6 +1762,14 @@ test_that("struct: case-28", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(y=list(list(list("a", "bb"))), z=list()))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(y=list(list(list("a", "bb"))), z=list()))
+    }
 })
 
 test_that("struct: case-29", {
@@ -1371,6 +1790,14 @@ test_that("struct: case-29", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)
+        expect_identical(a.2, list(y = list(list("a", "bb")), z = list()))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(a.1,
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)
         expect_identical(a.2, list(y = list(list("a", "bb")), z = list()))
     }
@@ -1399,6 +1826,14 @@ test_that("cell: case-1", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-2", {
@@ -1423,6 +1858,14 @@ test_that("cell: case-2", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -1454,6 +1897,14 @@ test_that("cell: case-3", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-4", {
@@ -1482,6 +1933,14 @@ test_that("cell: case-4", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-5", {
@@ -1503,6 +1962,14 @@ test_that("cell: case-5", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -1536,6 +2003,14 @@ test_that("cell: case-6", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-7", {
@@ -1559,6 +2034,14 @@ test_that("cell: case-7", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -1587,6 +2070,14 @@ test_that("cell: case-8", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -1722,6 +2213,14 @@ test_that("cell: case-9", {
       a.2 <- read.mat(filename)[['a']]
       expect_identical(a.2, a.1)
   }
+
+  if(have.hdf5lib()) {
+      write.mat(list(a=a.1),
+                filename=filename,
+                version='MAT73')
+      a.2 <- read.mat(filename)[['a']]
+      expect_identical(a.2, a.1)
+  }
 })
 
 test_that("cell: case-10", {
@@ -1758,6 +2257,14 @@ test_that("cell: case-10", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-11", {
@@ -1781,6 +2288,14 @@ test_that("cell: case-11", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
@@ -1831,6 +2346,14 @@ test_that("cell: case-12", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-13", {
@@ -1859,6 +2382,14 @@ test_that("cell: case-13", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, a.1)
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, a.1)
+    }
 })
 
 test_that("cell: case-14", {
@@ -1879,6 +2410,14 @@ test_that("cell: case-14", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(list("a", "bb"), list("c", "dd")))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(list("a", "bb"), list("c", "dd")))
     }
@@ -1903,6 +2442,15 @@ test_that("cell: case-15", {
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(list("a", "bb"),
+                                   list(list(list("d", "eee")))))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(list("a", "bb"),
                                    list(list(list("d", "eee")))))
@@ -1934,11 +2482,27 @@ test_that("cell: case-16", {
                                            ncol=9,
                                            byrow=TRUE,
                                            sparse=TRUE))))
+
     if(have.zlib()) {
         write.mat(list(a=a.1),
                   filename=filename,
                   compression=TRUE,
                   version='MAT5')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(list("a", "bb"),
+                                   list(Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0, 1),
+                                               nrow=3,
+                                               ncol=9,
+                                               byrow=TRUE,
+                                               sparse=TRUE))))
+    }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(list("a", "bb"),
                                    list(Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
@@ -1972,6 +2536,14 @@ test_that("cell: case-17", {
         a.2 <- read.mat(filename)[['a']]
         expect_identical(a.2, list(list(list(list("a", "bb"))), list()))
     }
+
+    if(have.hdf5lib()) {
+        write.mat(list(a=a.1),
+                  filename=filename,
+                  version='MAT73')
+        a.2 <- read.mat(filename)[['a']]
+        expect_identical(a.2, list(list(list(list("a", "bb"))), list()))
+    }
 })
 
 context("Read: small_v4_le.mat")
@@ -1995,7 +2567,7 @@ test_that("matio_test_cases_compressed_le.mat", {
 
 context("Write MAT5 compressed: small_v4_le.mat")
 
-test_that("matio_test_cases_compressed_le.mat", {
+test_that("small_v4_le.mat", {
     if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
@@ -2079,13 +2651,13 @@ test_mat_v4_file <- function(filename) {
 
 context("Read: matio_test_cases_v4_le.mat")
 
-test_that("matio_test_cases_uncompressed_le.mat", {
+test_that("matio_test_cases_v4_le.mat", {
     test_mat_v4_file('../extdata/matio_test_cases_v4_le.mat')
 })
 
 context("Write MAT5 uncompressed: matio_test_cases_v4_le.mat")
 
-test_that("matio_test_cases_uncompressed_le.mat", {
+test_that("matio_test_cases_v4_le.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
@@ -2098,7 +2670,7 @@ test_that("matio_test_cases_uncompressed_le.mat", {
 
 context("Write MAT5 compressed: matio_test_cases_v4_le.mat")
 
-test_that("matio_test_cases_uncompressed_le.mat", {
+test_that("matio_test_cases_v4_le.mat", {
     if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
@@ -2113,13 +2685,13 @@ test_that("matio_test_cases_uncompressed_le.mat", {
 
 context("Read: matio_test_cases_v4_be.mat")
 
-test_that("matio_test_cases_uncompressed_be.mat", {
+test_that("matio_test_cases_v4_be.mat", {
     test_mat_v4_file('../extdata/matio_test_cases_v4_be.mat')
 })
 
 context("Write MAT5 uncompressed: matio_test_cases_v4_be.mat")
 
-test_that("matio_test_cases_uncompressed_be.mat", {
+test_that("matio_test_cases_v4_be.mat", {
   filename <- tempfile(fileext = ".mat")
   on.exit(unlink(filename))
 
@@ -2132,7 +2704,7 @@ test_that("matio_test_cases_uncompressed_be.mat", {
 
 context("Write MAT5 compressed: matio_test_cases_v4_be.mat")
 
-test_that("matio_test_cases_uncompressed_be.mat", {
+test_that("matio_test_cases_v4_be.mat", {
     if(have.zlib()) {
         filename <- tempfile(fileext = ".mat")
         on.exit(unlink(filename))
