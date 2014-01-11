@@ -12,9 +12,8 @@
   \item{compression}{Use compression when writing
   variables. Defaults to TRUE.}
 
-  \item{version}{MAT file version to create. Currently only
-  support for Matlab level-5 file (MAT5) from rmatio
-  package.}
+  \item{version}{MAT file version to create, 'MAT5' or
+  'MAT73'. Defaults to 'MAT5'}
 }
 \value{
   invisible NULL
@@ -25,6 +24,11 @@
 \details{
   Writes the values in the list to a mat-file. All values
   in the list must have unique names.
+
+  The rmatio package can write version 5 MAT files, version
+  5 files with variable compression (if built with zlib),
+  and an HDF5 format MAT file introduced in MATLAB version
+  7.3 (if built with hdf5).
 }
 \note{
   \itemize{ \item A vector is saved as a \code{1 x length}
