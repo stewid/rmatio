@@ -11,40 +11,91 @@ at https://github.com/stewid/rmatio.
 Installation
 ------------
 
+To install the latest release on CRAN
+
+```
+install.packages('rmatio')
+```
+
 To install the development version of rmatio, it's easiest to use the `devtools` package:
 
-    # install.packages("devtools")
-    library(devtools)
-    install_github("rmatio", "stewid")
+```
+# install.packages("devtools")
+library(devtools)
+install_github("rmatio", "stewid")
+```
 
 Usage
 -----
 
+```
+library(rmatio)
+```
+
 Read a compressed version 5 MAT file from an URL
 
-    library(rmatio)
-    m <- read.mat("http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/matio_test_cases_compressed_le.mat?format=raw")
+```
+library(rmatio)
+url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
+             "master/tree/matio_test_cases_compressed_le.mat?format=raw",
+             sep="")
+m <- read.mat(url)
+```
 
 View content
 
-    str(m)
+```
+str(m)
+```
 
 Write an uncompressed version 5 MAT file
 
-    write.mat(m, filename="test-uncompressed.mat", compression=FALSE, version="MAT5")
+```
+write.mat(m, filename="test-uncompressed.mat", compression=FALSE, version="MAT5")
+```
 
 Write a compressed version 5 MAT file
 
-    write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
+```
+write.mat(m, filename="test-compressed.mat", compression=TRUE, version="MAT5")
+```
 
 Check that the content of the files are identical
 
-    identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
+```
+identical(read.mat("test-uncompressed.mat"), read.mat("test-compressed.mat"))
+```
+
+Read a version 4 MAT file with little-endian byte ordering
+
+```
+filename <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
+m <- read.mat(filename)
+```
+
+View content
+
+```
+str(m)
+```
+
+Read a version 4 MAT file with big-endian byte ordering
+
+```
+filename <- system.file('extdata/matio_test_cases_v4_be.mat', package='rmatio')
+m <- read.mat(filename)
+```
+
+View content
+
+```
+str(m)
+```
 
 Included software
 -----------------
 
-- The C library [matio](http://sourceforge.net/projects/matio/) written by Christopher Hulbert
+- The C library [matio](http://sourceforge.net/projects/matio/) (http://sourceforge.net/projects/matio/)
 
 License
 -------
