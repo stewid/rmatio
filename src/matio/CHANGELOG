@@ -1,6 +1,11 @@
 The following changes have been made in matio to build and work in the
 rmatio package
 
+* Stefan Widgren 2014-01-11: mat73.c
+  The io routines have been adopted to use R printing and error routines.
+  #define Mat_Critical error
+  mat_snprintf replaced with snprintf
+
 * Stefan Widgren 2014-01-06:
   MATIO_PLATFORM is defined to "rmatio" when building. The define is not
   really used, since rmatio always use the argument hdr_str initialized

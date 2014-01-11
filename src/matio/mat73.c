@@ -30,6 +30,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Changes in the R package rmatio:
+ *
+ * - The io routines have been adopted to use R printing and error routines.
+ *   See the R manual Writing R Extensions
+ *
+ */
+
+#include <Rdefines.h>
+#define Mat_Critical error
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -2166,15 +2177,19 @@ Mat_Create73(const char *matname,const char *hdr_str)
     mat->subsys_offset = calloc(1,16);
     memset(mat->header,' ',128);
     if ( hdr_str == NULL ) {
-        err = mat_snprintf(mat->header,116,"MATLAB 7.0 MAT-file, Platform: %s,"
+        /* Stefan Widgren 2014-01-11: Replaced mat_snprintf with snprintf */
+        err = snprintf(mat->header,116,"MATLAB 7.0 MAT-file, Platform: %s,"
                 "Created by libmatio v%d.%d.%d on %s HDF5 schema 0.5",
                 MATIO_PLATFORM,MATIO_MAJOR_VERSION,MATIO_MINOR_VERSION,
                 MATIO_RELEASE_LEVEL,ctime(&t));
-        mat->header[115] = '\0';    /* Just to make sure it's NULL terminated */    } else {
-        err = mat_snprintf(mat->header,116,"%s",hdr_str);
+        mat->header[115] = '\0';    /* Just to make sure it's NULL terminated */
+    } else {
+        /* Stefan Widgren 2014-01-11: Replaced mat_snprintf with snprintf */
+        err = snprintf(mat->header,116,"%s",hdr_str);
     }
     mat->header[err] = ' ';
-    mat_snprintf(mat->subsys_offset,15,"            ");
+    /* Stefan Widgren 2014-01-11: Replaced mat_snprintf with snprintf */
+    snprintf(mat->subsys_offset,15,"            ");
     mat->version = (int)0x0200;
     endian = 0x4d49;
 
