@@ -19,3 +19,9 @@
 have.zlib <- function() {
     TRUE
 }
+
+##' Is hdf5lib available
+##' @keywords internal
+have.hdf5lib <- function() {
+    FALSE
+}
