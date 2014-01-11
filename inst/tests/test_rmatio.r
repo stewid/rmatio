@@ -1,28 +1,3 @@
-context("complex")
-
-test_that("complex: case-1", {
-    filename <- tempfile(fileext = ".mat")
-    on.exit(unlink(filename))
-
-    a.1 <- array(complex(real=1:20,imaginary=21:40), c(4,5))
-
-    write.mat(list(a=a.1),
-              filename=filename,
-              compression=FALSE,
-              version='MAT5')
-    a.2 <- read.mat(filename)[['a']]
-    expect_identical(a.2, a.1)
-
-    if(rmatio:::have.zlib()) {
-        write.mat(list(a=a.1),
-                  filename=filename,
-                  compression=TRUE,
-                  version='MAT5')
-        a.2 <- read.mat(filename)[['a']]
-        expect_identical(a.2, a.1)
-    }
-})
-
 context("string")
 
 test_that("string: case-1", {
