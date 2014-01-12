@@ -1,3 +1,12 @@
+rmatio 0.8.0
+-------------
+
+CHANGES
+
+* Added missing field in DESCRIPTION, Biarch: true
+
+* Removed usage of testthat when testing the package.
+
 rmatio 0.7.0
 -------------
 
