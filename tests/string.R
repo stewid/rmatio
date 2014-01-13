@@ -22,8 +22,6 @@ library(rmatio)
 ## 2) with compression
 ##
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## string: case-1
 ##
@@ -31,7 +29,7 @@ a.in <- c("abcdefghijklmnopqrstuvwxyz",
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
           "1234567890!@#$%^&*()-_=+`~", #
           "[{]}\\|;:'\",<.>/?          ")
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -42,6 +40,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -55,7 +54,7 @@ if(rmatio:::have.zlib()) {
 ## string: case-2
 ##
 a.in <- c("a", "bb")
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -66,6 +65,7 @@ stopifnot(identical(a.out, list("a", "bb")))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -79,7 +79,7 @@ if(rmatio:::have.zlib()) {
 ## string: case-3
 ##
 a.in <- list(y=c("a", "bb"))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -90,6 +90,7 @@ stopifnot(identical(a.out, list(y=list('a', 'bb'))))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -103,7 +104,7 @@ if(rmatio:::have.zlib()) {
 ## string: case-4
 ##
 a.in <- list(c("a", "bb"))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -114,6 +115,7 @@ stopifnot(identical(a.out, list(list("a", "bb"))))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,

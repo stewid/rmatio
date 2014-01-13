@@ -22,13 +22,11 @@ library(rmatio)
 ## 2) with compression
 ##
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## complex: case-1
 ##
 a.in <- array(complex(real=1:20,imaginary=21:40), c(4,5))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -39,6 +37,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,

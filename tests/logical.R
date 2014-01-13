@@ -22,17 +22,16 @@ library(rmatio)
 ## 2) with compression
 ##
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## logical: case-1
+##
 a.in <- array(c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
                 FALSE, TRUE,  TRUE,  TRUE,  TRUE,
                 FALSE, FALSE, TRUE,  TRUE,  TRUE,
                 FALSE, FALSE, FALSE, TRUE,  TRUE,
                 FALSE, FALSE, FALSE, FALSE, TRUE),
               c(5L, 5L))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -43,6 +42,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -63,7 +63,7 @@ a.in <- new("lgCMatrix",
             x = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
                 TRUE, TRUE, TRUE),
             factors = list())
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -74,6 +74,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,

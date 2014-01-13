@@ -23,13 +23,11 @@ library(rmatio)
 ##
 ## In rmatio, cell arrays are mapped to an unnamed list
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## cell: case-1
 ##
 a.in <- list()
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -40,6 +38,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -57,7 +56,7 @@ a.in <- list(complex(0),
              character(0),
              numeric(0),
              integer(0))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -68,6 +67,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -86,7 +86,7 @@ a.in <- list(list(array(c(1, 3, 2, 4), c(2, 2)),
              list(array(c(19, 21, 20, 22), c(2, 2)),
                   array(c(23, 25, 27, 24, 26, 28), c(3L, 2L)),
                   array(c(29, 31, 33, 35, 30, 32, 34, 36), c(4, 2))))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -97,6 +97,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -115,7 +116,7 @@ a.in <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
              list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
                   array(c(23L, 25L, 27L, 24L, 26L, 28L), c(3L, 2L)),
                   array(c(29L, 31L, 33L, 35L, 30L, 32L, 34L, 36L), c(4, 2))))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -126,6 +127,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -140,7 +142,7 @@ if(rmatio:::have.zlib()) {
 ##
 a.in <- list(list(triu(Matrix(1:20, nrow=4, ncol=5, sparse=TRUE)),
                   tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -151,6 +153,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -171,7 +174,7 @@ a.in <- list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i,
                      0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
                      11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
                      16-36i, 20-40i), c(5,4)))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -182,6 +185,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -198,7 +202,7 @@ a.in <- list(list("abcdefghijklmnopqrstuvwxyz",
                   "1234567890!@#$%^&*()-_=+`~"), #
              list("ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                   "[{]}\\|;:'\",<.>/?          "))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -209,6 +213,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -227,7 +232,7 @@ a.in <- list(structure(list(),
              structure(list(field1 = numeric(0),
                             field2 = character(0)),
                        .Names = c("field1", "field2")))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -238,6 +243,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -250,9 +256,6 @@ if(rmatio:::have.zlib()) {
 ##
 ## cell: case-9
 ##
-filename <- tempfile(fileext = ".mat")
-on.exit(unlink(filename))
-
 a.in <- list(list(structure(list(
     field1 = list(1, 14),
     field2 = list(
@@ -403,7 +406,7 @@ a.in <- list(list(structure(list(
                                        17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                                        23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                             .Names = c("field1", "field2"))))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -414,6 +417,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -440,7 +444,7 @@ a.in <- list(list(field1=list(triu(Matrix(1:20, nrow=4,
                       14-34i, 18-38i, 0+0i, 0+0i, 11-31i, 15-35i,
                       19-39i, 0+0i, 0+0i, 0+0i, 16-36i, 20-40i),
                       c(5,4)))))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -451,6 +455,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -467,7 +472,7 @@ a.in <- list(list(field1 = "abcdefghijklmnopqrstuvwxyz",
                   field2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
              list(field1 = "1234567890!@#$%^&*()-_=+`~", #
                   field2 = "[{]}\\|;:'\",<.>/?          "))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -478,6 +483,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -515,7 +521,7 @@ a.in <- list(structure(c(FALSE, TRUE, FALSE, TRUE, FALSE,
                          TRUE, TRUE, FALSE, TRUE, TRUE,
                          TRUE, TRUE, TRUE),
                        .Dim = c(5L, 5L)))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -526,6 +532,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -544,7 +551,7 @@ a.in <- list(structure(list(),
              structure(list(field1 = numeric(0),
                             field2 = character(0)),
                        .Names = c("field1", "field2")))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -555,6 +562,7 @@ stopifnot(identical(a.out, a.in))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -568,7 +576,7 @@ if(rmatio:::have.zlib()) {
 ## cell: case-14
 ##
 a.in <- list(c("a", "bb"), c("c", "dd"))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -579,6 +587,7 @@ stopifnot(identical(a.out, list(list("a", "bb"), list("c", "dd"))))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -592,7 +601,7 @@ if(rmatio:::have.zlib()) {
 ## cell: case-15
 ##
 a.in <- list(c("a", "bb"), list(c('d', 'eee')))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -604,6 +613,7 @@ stopifnot(identical(a.out, list(list("a", "bb"),
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -624,7 +634,7 @@ a.in <- list(c("a", "bb"), Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
                                   ncol=9,
                                   byrow=TRUE,
                                   sparse=TRUE))
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -642,6 +652,7 @@ stopifnot(identical(a.out, list(list("a", "bb"),
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -662,7 +673,7 @@ if(rmatio:::have.zlib()) {
 ## cell: case-17
 ##
 a.in <- list(list(c("a", "bb")), list())
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -673,6 +684,7 @@ stopifnot(identical(a.out, list(list(list(list("a", "bb"))), list())))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,

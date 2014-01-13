@@ -22,8 +22,6 @@ library(rmatio)
 ## 2) with compression
 ##
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## dgCMatrix: case-1
 ##
@@ -34,7 +32,7 @@ a.in <- Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
                ncol=9,
                byrow=TRUE,
                sparse=TRUE)
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -45,6 +43,7 @@ stopifnot(identical(a.out, a.in))
 
 # Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -58,7 +57,7 @@ if(rmatio:::have.zlib()) {
 ## dgCMatrix: case-2
 ##
 a.in <- as(diag(1:5), 'dgCMatrix')
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -69,6 +68,7 @@ stopifnot(identical(a.out, a.in))
 
 # Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,

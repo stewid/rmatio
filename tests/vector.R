@@ -22,13 +22,11 @@ library(rmatio)
 ## 2) with compression
 ##
 
-filename <- tempfile(fileext = ".mat")
-
 ##
 ## vector: case-1
 ##
 a.in <- 1:5
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -40,6 +38,7 @@ stopifnot(identical(a.out, a.in))
 
 # Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -54,7 +53,7 @@ if(rmatio:::have.zlib()) {
 ## vector: case-2
 ##
 a.in <- c(1,2,3,4,5)
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -65,6 +64,7 @@ stopifnot(identical(a.out, a.in))
 
 # Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
@@ -78,7 +78,7 @@ if(rmatio:::have.zlib()) {
 ## vector: case-3
 ##
 a.in <- 1
-
+filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a.in),
           filename=filename,
           compression=FALSE,
@@ -89,6 +89,7 @@ stopifnot(identical(a.in, a.out))
 
 # Run the same test with compression
 if(rmatio:::have.zlib()) {
+    filename <- tempfile(fileext = ".mat")
     write.mat(list(a=a.in),
               filename=filename,
               compression=TRUE,
