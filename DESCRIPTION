@@ -22,7 +22,7 @@ LazyLoad: yes
 Biarch: true
 Date: 2014-01-12
 Depends:
-    R(>= 2.15.2),
+    R(>= 3.0.2),
     Matrix,
     methods,
     lattice
