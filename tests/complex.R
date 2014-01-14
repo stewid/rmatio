@@ -25,24 +25,20 @@ library(rmatio)
 ##
 ## complex: case-1
 ##
-a.in <- array(complex(real=1:20,imaginary=21:40), c(4,5))
+a1.exp <- array(complex(real=1:20,imaginary=21:40), c(4,5))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a.in),
-          filename=filename,
-          compression=FALSE,
-          version='MAT5')
-a.out <- read.mat(filename)[['a']]
+write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
+a1.obs <- read.mat(filename)[['a']]
 unlink(filename)
-stopifnot(identical(a.out, a.in))
+str(a1.obs)
+stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a.in),
-              filename=filename,
-              compression=TRUE,
-              version='MAT5')
-    a.out <- read.mat(filename)[['a']]
+    write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
+    a1.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
-    stopifnot(identical(a.out, a.in))
+    str(a1.zlib.obs)
+    stopifnot(identical(a1.zlib.obs, a1.exp))
 }

@@ -25,51 +25,43 @@ library(rmatio)
 ##
 ## matrix: case-1
 ##
-a.in <- matrix(1:9, nrow=3)
+a1.exp <- matrix(1:9, nrow=3)
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a.in),
-          filename=filename,
-          compression=FALSE,
-          version='MAT5')
-a.out <- read.mat(filename)[['a']]
+write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
+a1.obs <- read.mat(filename)[['a']]
 unlink(filename)
-storage.mode(a.out) <- 'integer'
-stopifnot(identical(a.out, a.in))
+storage.mode(a1.obs) <- 'integer'
+str(a1.obs)
+stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a.in),
-              filename=filename,
-              compression=TRUE,
-              version='MAT5')
-    a.out <- read.mat(filename)[['a']]
+    write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
+    a1.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
-    storage.mode(a.out) <- 'integer'
-    stopifnot(identical(a.out, a.in))
+    storage.mode(a1.zlib.obs) <- 'integer'
+    str(a1.zlib.obs)
+    stopifnot(identical(a1.zlib.obs, a1.exp))
 }
 
 ##
 ## matrix: case-2
 ##
-a.in <- matrix(c(1,2,3,4,5,6,7,8,9), nrow=3)
+a2.exp <- matrix(c(1,2,3,4,5,6,7,8,9), nrow=3)
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a.in),
-          filename=filename,
-          compression=FALSE,
-          version='MAT5')
-a.out <- read.mat(filename)[['a']]
+write.mat(list(a=a2.exp), filename=filename, compression=FALSE, version='MAT5')
+a2.obs <- read.mat(filename)[['a']]
 unlink(filename)
-stopifnot(identical(a.in, a.out))
+str(a2.obs)
+stopifnot(identical(a2.obs, a2.exp))
 
 ## Run the same test with compression
 if(rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a.in),
-              filename=filename,
-              compression=TRUE,
-              version='MAT5')
-    a.out <- read.mat(filename)[['a']]
+    write.mat(list(a=a2.exp), filename=filename, compression=TRUE, version='MAT5')
+    a2.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
-    stopifnot(identical(a.out, a.in))
+    str(a2.zlib.obs)
+    stopifnot(identical(a2.zlib.obs, a2.exp))
 }
