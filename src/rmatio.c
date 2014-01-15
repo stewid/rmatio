@@ -301,23 +301,32 @@ map_R_vecsxp_dims(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to check
- * @return 1 if all lengths are equal else 0.
+ * @param equal_length The out value is 1 if all lengths are equal else 0.
+ * @return 0 on succes or 1 on failure.
  */
 static int
-all_strings_have_equal_length(const SEXP elmt)
+check_string_lengths(const SEXP elmt, int *equal_length)
 {
-    size_t len;
-    size_t n = LENGTH(elmt);
+    size_t n;
 
+    if (R_NilValue == elmt
+        || STRSXP != TYPEOF(elmt)
+        || NULL == equal_length)
+        return 1;
+
+    n = LENGTH(elmt);
+    *equal_length = 1;
     if (n) {
-        len = LENGTH(STRING_ELT(elmt, 0));
+        size_t len = LENGTH(STRING_ELT(elmt, 0));
         for (size_t i=1;i<n;i++) {
-            if (len != LENGTH(STRING_ELT(elmt, i)))
-                return 0;
+            if (len != LENGTH(STRING_ELT(elmt, i))) {
+                *equal_length = 0;
+                break;
+            }
         }
     }
 
-    return 1;
+    return 0;
 }
 
 /** @brief Check if the R object VECSXP contains element of equal
@@ -332,8 +341,6 @@ all_strings_have_equal_length(const SEXP elmt)
 static int
 check_ragged(const SEXP elmt, int *ragged)
 {
-    size_t len=0;
-
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt)
         || NULL == ragged)
@@ -342,6 +349,8 @@ check_ragged(const SEXP elmt, int *ragged)
     *ragged = 0;
 
     if (LENGTH(elmt)) {
+        size_t len=0;
+
         for (int i=0;i<LENGTH(elmt);i++) {
             SEXP item = VECTOR_ELT(elmt, i);
             switch (TYPEOF(item)) {
@@ -365,8 +374,13 @@ check_ragged(const SEXP elmt, int *ragged)
                 if (i && len != LENGTH(item)) {
                     return 1;
                 } else {
+                    int equal_length;
+
                     len = LENGTH(item);
-                    *ragged = (0 == all_strings_have_equal_length(item));
+                    if (check_string_lengths(item, &equal_length))
+                        return 1;
+                    if (0 == equal_length)
+                        *ragged = 1;
                 }
                 break;
 
@@ -870,6 +884,7 @@ write_strsxp(const SEXP elmt,
     size_t dims[2] = {0, 0};
     matvar_t *matvar;
     const int rank = 2;
+    int equal_length;
 
     if (R_NilValue == elmt
         || STRSXP != TYPEOF(elmt)
@@ -898,7 +913,10 @@ write_strsxp(const SEXP elmt,
     if (dims[0])
         dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
-    if (all_strings_have_equal_length(elmt)) {
+    if (check_string_lengths(elmt, &equal_length))
+        return 1;
+
+    if (equal_length) {
         mat_uint16_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint16_t));
         if (NULL == buf)
             return 1;
