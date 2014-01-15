@@ -57,10 +57,11 @@ write_elmt(const SEXP elmt,
 /** @brief Map the dimensions and rank from an R object
  *
  *
+ * Note: The function allocates memory for dims
  * @ingroup rmatio
- * @param elmt
- * @param rank
- * @param dims
+ * @param elmt R object to determine dimension and rank from
+ * @param rank The rank of the R object
+ * @param dims Dimensions of the R object.
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -70,6 +71,17 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
         || NULL == rank
         || NULL == dims)
         return 1;
+
+    /* Check that the type of elmt is the expected */
+    switch (TYPEOF(elmt)) {
+    case REALSXP:
+    case INTSXP:
+    case CPLXSXP:
+    case LGLSXP:
+        break;
+    default:
+        return 1;
+    }
 
     if (isNull(getAttrib(elmt, R_DimSymbol))) {
         *rank = 2;
