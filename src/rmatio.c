@@ -111,8 +111,7 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
  * @return 0 on succes or 1 on failure.
  */
 static int
-map_vec_len(const SEXP elmt,
-        int *len)
+map_vec_len(const SEXP elmt, int *len)
 {
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt))
@@ -178,14 +177,12 @@ map_vec_len(const SEXP elmt,
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param dims
- * @param empty
- * @param ragged
+ * @param elmt R object to determine dimension from
+ * @param dims Dimensions of the R object.
  * @return 0 on succes or 1 on failure.
  */
 static int
-map_R_object_dims(const SEXP elmt, const SEXP names, size_t *dims)
+map_R_object_dims(const SEXP elmt, size_t *dims)
 {
     if (R_NilValue == elmt
         || NULL == dims)
@@ -267,7 +264,7 @@ map_R_vecsxp_dims(const SEXP elmt,
         for (int i=0;i<LENGTH(elmt);i++) {
             SEXP item = VECTOR_ELT(elmt, i);
 
-            if (map_R_object_dims(item, names, dims))
+            if (map_R_object_dims(item, dims))
                 return 1;
 
             if (!i)
@@ -1204,7 +1201,7 @@ write_ragged(const SEXP elmt,
         matvar_t *cell;
         const char *fieldname = NULL;
 
-        if (map_R_object_dims(VECTOR_ELT(elmt, i), names, dims))
+        if (map_R_object_dims(VECTOR_ELT(elmt, i), dims))
             return 1;
 
         if (R_NilValue != names)
