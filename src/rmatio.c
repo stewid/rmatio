@@ -365,8 +365,8 @@ check_string_lengths(const SEXP elmt, int *equal_length)
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param ragged
+ * @param elmt R object to check if it's ragged
+ * @param ragged The out value is 0 if the VECSXP contains element of equal length
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -419,13 +419,27 @@ check_ragged(const SEXP elmt, int *ragged)
             case INTSXP:
             case CPLXSXP:
             case LGLSXP:
-            case S4SXP:
                 if(!i)
                     len = LENGTH(item) > 1;
                 else if(len != (LENGTH(item) > 1))
                     *ragged = 1;
                 break;
 
+            case S4SXP:
+            {
+                /* Check that the S4 class is the expected */
+                SEXP class_name = getAttrib(item, R_ClassSymbol);
+                if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+                    || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+                    if(!i)
+                        len = 1;
+                    else if(1 != len)
+                        *ragged = 1;
+                } else {
+                    return 1;
+                }
+                break;
+            }
             default:
                 return 1;
             }
