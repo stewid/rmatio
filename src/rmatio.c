@@ -212,10 +212,22 @@ map_R_object_dims(const SEXP elmt, const SEXP names, size_t *dims)
     case INTSXP:
     case CPLXSXP:
     case LGLSXP:
-    case S4SXP:
         dims[0] = LENGTH(elmt) > 1;
         dims[1] = 1;
         break;
+    case S4SXP:
+    {
+        /* Check that the S4 class is the expected */
+        SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+        if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+            || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+            dims[0] = 1;
+            dims[1] = 1;
+        } else {
+            return 1;
+        }
+        break;
+    }
     default:
         return 1;
     }
