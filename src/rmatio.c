@@ -102,12 +102,12 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
     return 0;
 }
 
-/** @brief
+/** @brief Map the length from an R object
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param empty
+ * @param elmt R object to determine dimension from
+ * @param len The out value of the length
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -144,7 +144,6 @@ map_vec_len(const SEXP elmt, int *len)
             case INTSXP:
             case CPLXSXP:
             case LGLSXP:
-            case S4SXP:
                 if (first_lookup) {
                     if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
                         *len = LENGTH(item);
@@ -158,6 +157,29 @@ map_vec_len(const SEXP elmt, int *len)
                     return 1;
                 }
                 break;
+
+            case S4SXP:
+            {
+                /* Check that the S4 class is the expected */
+                SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+                if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+                    || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+                    if (first_lookup) {
+                        if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                            *len = 1;
+                        else
+                            *len = LENGTH(elmt);
+                        first_lookup = 0;
+                    } else if (getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                        return 1;
+                    } else if (*len != LENGTH(elmt)) {
+                        return 1;
+                    }
+                } else {
+                    return 1;
+                }
+                break;
+            }
 
             default:
                 return 1;
