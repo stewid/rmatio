@@ -574,10 +574,7 @@ if(rmatio:::have.zlib()) {
 a16.in <- list(c("a", "bb"), Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
                                       0, 0, 0, 0, 0, 0, 0, 1, 0,
                                       0, 0, 0, 0, 0, 0, 0, 0, 1),
-                                    nrow=3,
-                                    ncol=9,
-                                    byrow=TRUE,
-                                    sparse=TRUE))
+                                    nrow=3, ncol=9, byrow=TRUE, sparse=TRUE))
 a16.exp <- list(list("a", "bb"), list(a16.in[[2]]))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a=a16.in), filename=filename, compression=FALSE, version='MAT5')
