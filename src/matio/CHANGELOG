@@ -2,6 +2,10 @@ The following changes have been made in matio to build and work in the
 rmatio package
 
 * Stefan Widgren 2014-01-17:
+  src/matio/mat4.c (Mat_VarReadNextInfo4): Replaced free(matvar) with
+  Mat_VarFree(matvar)
+
+* Stefan Widgren 2014-01-17:
   src/matio/mat.c (Mat_VarFree): Missing free when number of fields
   were equal to zero.
 
