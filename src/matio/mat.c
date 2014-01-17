@@ -1058,8 +1058,7 @@ Mat_VarFree(matvar_t *matvar)
             matvar->internal->hdf5_name = NULL;
         }
 #endif
-        if ( NULL != matvar->internal->fieldnames &&
-             matvar->internal->num_fields > 0 ) {
+        if ( NULL != matvar->internal->fieldnames ) {
             size_t i;
             for ( i = 0; i < matvar->internal->num_fields; i++ ) {
                 if ( NULL != matvar->internal->fieldnames[i] )
