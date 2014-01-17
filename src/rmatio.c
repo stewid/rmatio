@@ -1502,6 +1502,13 @@ write_vecsxp_as_cell(const SEXP elmt,
     if (ragged) {
         dims[0] = LENGTH(elmt);
     } else if (!LENGTH(elmt)) {
+        /* Check if the target is an empty cell array, in that case no
+         * more work to do. */
+        if (NULL != mat_cell
+            && 0 == mat_cell->dims[0]
+            && 1 == mat_cell->dims[1])
+            return 0;
+
         dims[0] = 0;
         dims[1] = 0;
     } else if (map_R_vecsxp_dims(elmt, dims, &empty)) {
