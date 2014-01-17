@@ -1,6 +1,10 @@
 The following changes have been made in matio to build and work in the
 rmatio package
 
+* Stefan Widgren 2014-01-17:
+  src/matio/mat.c (Mat_VarFree): Missing free when number of fields
+  were equal to zero.
+
 * Stefan Widgren 2014-01-06:
   MATIO_PLATFORM is defined to "rmatio" when building. The define is not
   really used, since rmatio always use the argument hdr_str initialized
