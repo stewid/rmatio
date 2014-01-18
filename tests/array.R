@@ -79,7 +79,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a2.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a2.exp), filename=filename, version='MAT73')
     a2.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a2.hdf5lib.obs)
@@ -113,7 +113,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a3.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a3.exp), filename=filename, version='MAT73')
     a3.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a3.hdf5lib.obs)
@@ -145,7 +145,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a4.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a4.exp), filename=filename, version='MAT73')
     a4.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a4.hdf5lib.obs)
@@ -177,7 +177,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a5.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a5.exp), filename=filename, version='MAT73')
     a5.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a5.hdf5lib.obs)
@@ -209,7 +209,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a6.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a6.exp), filename=filename, version='MAT73')
     a6.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a6.hdf5lib.obs)
@@ -240,7 +240,7 @@ if(rmatio:::have.zlib()) {
 ## Run the same test with hdf5
 if(rmatio:::have.hdf5lib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a7.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a=a7.exp), filename=filename, version='MAT73')
     a7.hdf5lib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a7.hdf5lib.obs)
