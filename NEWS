@@ -1,3 +1,30 @@
+rmatio 0.9.0
+-------------
+
+CHANGES
+
+* Improved test code layout to give better information in case of
+  error
+
+* Each write/read test case run with a unique tempfile
+
+* Depends on R(>=3.0.2)
+
+BUG FIXES
+
+* Fix memory leaks
+
+* Removed usage of LENGTH on a S4SXP object
+
+rmatio 0.8.0
+-------------
+
+CHANGES
+
+* Added missing field in DESCRIPTION, Biarch: true
+
+* Removed usage of testthat when testing the package.
+
 rmatio 0.7.0
 -------------
 

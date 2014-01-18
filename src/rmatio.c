@@ -57,10 +57,11 @@ write_elmt(const SEXP elmt,
 /** @brief Map the dimensions and rank from an R object
  *
  *
+ * Note: The function allocates memory for dims
  * @ingroup rmatio
- * @param elmt
- * @param rank
- * @param dims
+ * @param elmt R object to determine dimension and rank from
+ * @param rank The rank of the R object
+ * @param dims Dimensions of the R object.
  * @return 0 on succes or 1 on failure.
  */
 static int
@@ -70,6 +71,17 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
         || NULL == rank
         || NULL == dims)
         return 1;
+
+    /* Check that the type of elmt is the expected */
+    switch (TYPEOF(elmt)) {
+    case REALSXP:
+    case INTSXP:
+    case CPLXSXP:
+    case LGLSXP:
+        break;
+    default:
+        return 1;
+    }
 
     if (isNull(getAttrib(elmt, R_DimSymbol))) {
         *rank = 2;
@@ -90,17 +102,16 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
     return 0;
 }
 
-/** @brief
+/** @brief Map the length from an R object
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param empty
+ * @param elmt R object to determine dimension from
+ * @param len The out value of the length
  * @return 0 on succes or 1 on failure.
  */
 static int
-map_vec_len(const SEXP elmt,
-        int *len)
+map_vec_len(const SEXP elmt, int *len)
 {
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt))
@@ -133,7 +144,6 @@ map_vec_len(const SEXP elmt,
             case INTSXP:
             case CPLXSXP:
             case LGLSXP:
-            case S4SXP:
                 if (first_lookup) {
                     if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
                         *len = LENGTH(item);
@@ -147,6 +157,29 @@ map_vec_len(const SEXP elmt,
                     return 1;
                 }
                 break;
+
+            case S4SXP:
+            {
+                /* Check that the S4 class is the expected */
+                SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+                if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+                    || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+                    if (first_lookup) {
+                        if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                            *len = 1;
+                        else
+                            *len = LENGTH(elmt);
+                        first_lookup = 0;
+                    } else if (getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                        return 1;
+                    } else if (*len != LENGTH(elmt)) {
+                        return 1;
+                    }
+                } else {
+                    return 1;
+                }
+                break;
+            }
 
             default:
                 return 1;
@@ -166,14 +199,12 @@ map_vec_len(const SEXP elmt,
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param dims
- * @param empty
- * @param ragged
+ * @param elmt R object to determine dimension from
+ * @param dims Dimensions of the R object.
  * @return 0 on succes or 1 on failure.
  */
 static int
-map_R_object_dims(const SEXP elmt, const SEXP names, size_t *dims)
+map_R_object_dims(const SEXP elmt, size_t *dims)
 {
     if (R_NilValue == elmt
         || NULL == dims)
@@ -200,10 +231,22 @@ map_R_object_dims(const SEXP elmt, const SEXP names, size_t *dims)
     case INTSXP:
     case CPLXSXP:
     case LGLSXP:
-    case S4SXP:
         dims[0] = LENGTH(elmt) > 1;
         dims[1] = 1;
         break;
+    case S4SXP:
+    {
+        /* Check that the S4 class is the expected */
+        SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+        if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+            || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+            dims[0] = 1;
+            dims[1] = 1;
+        } else {
+            return 1;
+        }
+        break;
+    }
     default:
         return 1;
     }
@@ -243,7 +286,7 @@ map_R_vecsxp_dims(const SEXP elmt,
         for (int i=0;i<LENGTH(elmt);i++) {
             SEXP item = VECTOR_ELT(elmt, i);
 
-            if (map_R_object_dims(item, names, dims))
+            if (map_R_object_dims(item, dims))
                 return 1;
 
             if (!i)
@@ -289,23 +332,32 @@ map_R_vecsxp_dims(const SEXP elmt,
  *
  * @ingroup rmatio
  * @param elmt R object to check
- * @return 1 if all lengths are equal else 0.
+ * @param equal_length The out value is 1 if all lengths are equal else 0.
+ * @return 0 on succes or 1 on failure.
  */
 static int
-all_strings_have_equal_length(const SEXP elmt)
+check_string_lengths(const SEXP elmt, int *equal_length)
 {
-    size_t len;
-    size_t n = LENGTH(elmt);
+    size_t n;
 
+    if (R_NilValue == elmt
+        || STRSXP != TYPEOF(elmt)
+        || NULL == equal_length)
+        return 1;
+
+    n = LENGTH(elmt);
+    *equal_length = 1;
     if (n) {
-        len = LENGTH(STRING_ELT(elmt, 0));
+        size_t len = LENGTH(STRING_ELT(elmt, 0));
         for (size_t i=1;i<n;i++) {
-            if (len != LENGTH(STRING_ELT(elmt, i)))
-                return 0;
+            if (len != LENGTH(STRING_ELT(elmt, i))) {
+                *equal_length = 0;
+                break;
+            }
         }
     }
 
-    return 1;
+    return 0;
 }
 
 /** @brief Check if the R object VECSXP contains element of equal
@@ -313,15 +365,13 @@ all_strings_have_equal_length(const SEXP elmt)
  *
  *
  * @ingroup rmatio
- * @param elmt
- * @param ragged
+ * @param elmt R object to check if it's ragged
+ * @param ragged The out value is 0 if the VECSXP contains element of equal length
  * @return 0 on succes or 1 on failure.
  */
 static int
 check_ragged(const SEXP elmt, int *ragged)
 {
-    size_t len=0;
-
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt)
         || NULL == ragged)
@@ -330,6 +380,8 @@ check_ragged(const SEXP elmt, int *ragged)
     *ragged = 0;
 
     if (LENGTH(elmt)) {
+        size_t len=0;
+
         for (int i=0;i<LENGTH(elmt);i++) {
             SEXP item = VECTOR_ELT(elmt, i);
             switch (TYPEOF(item)) {
@@ -353,8 +405,13 @@ check_ragged(const SEXP elmt, int *ragged)
                 if (i && len != LENGTH(item)) {
                     return 1;
                 } else {
+                    int equal_length;
+
                     len = LENGTH(item);
-                    *ragged = (0 == all_strings_have_equal_length(item));
+                    if (check_string_lengths(item, &equal_length))
+                        return 1;
+                    if (0 == equal_length)
+                        *ragged = 1;
                 }
                 break;
 
@@ -362,13 +419,27 @@ check_ragged(const SEXP elmt, int *ragged)
             case INTSXP:
             case CPLXSXP:
             case LGLSXP:
-            case S4SXP:
                 if(!i)
                     len = LENGTH(item) > 1;
                 else if(len != (LENGTH(item) > 1))
                     *ragged = 1;
                 break;
 
+            case S4SXP:
+            {
+                /* Check that the S4 class is the expected */
+                SEXP class_name = getAttrib(item, R_ClassSymbol);
+                if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
+                    || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
+                    if(!i)
+                        len = 1;
+                    else if(1 != len)
+                        *ragged = 1;
+                } else {
+                    return 1;
+                }
+                break;
+            }
             default:
                 return 1;
             }
@@ -858,6 +929,7 @@ write_strsxp(const SEXP elmt,
     size_t dims[2] = {0, 0};
     matvar_t *matvar;
     const int rank = 2;
+    int equal_length;
 
     if (R_NilValue == elmt
         || STRSXP != TYPEOF(elmt)
@@ -886,7 +958,10 @@ write_strsxp(const SEXP elmt,
     if (dims[0])
         dims[1] = LENGTH(STRING_ELT(elmt, 0));
 
-    if (all_strings_have_equal_length(elmt)) {
+    if (check_string_lengths(elmt, &equal_length))
+        return 1;
+
+    if (equal_length) {
         mat_uint16_t *buf = malloc(dims[0]*dims[1]*sizeof(mat_uint16_t));
         if (NULL == buf)
             return 1;
@@ -1162,7 +1237,7 @@ write_ragged(const SEXP elmt,
         matvar_t *cell;
         const char *fieldname = NULL;
 
-        if (map_R_object_dims(VECTOR_ELT(elmt, i), names, dims))
+        if (map_R_object_dims(VECTOR_ELT(elmt, i), dims))
             return 1;
 
         if (R_NilValue != names)
@@ -1427,6 +1502,13 @@ write_vecsxp_as_cell(const SEXP elmt,
     if (ragged) {
         dims[0] = LENGTH(elmt);
     } else if (!LENGTH(elmt)) {
+        /* Check if the target is an empty cell array, in that case no
+         * more work to do. */
+        if (NULL != mat_cell
+            && 0 == mat_cell->dims[0]
+            && 1 == mat_cell->dims[1])
+            return 0;
+
         dims[0] = 0;
         dims[1] = 0;
     } else if (map_R_vecsxp_dims(elmt, dims, &empty)) {

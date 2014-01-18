@@ -380,7 +380,9 @@ Mat_VarReadNextInfo4(mat_t *mat)
 
     err = fread(&tmp,sizeof(int),1,mat->fp);
     if ( !err ) {
-        free(matvar);
+        /* Stefan Widgren 2014-01-17: Replaced free(matvar) with
+         * Mat_VarFree(matvar) */
+        Mat_VarFree(matvar);
         return NULL;
     }
 
