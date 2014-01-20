@@ -53,6 +53,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a1.zlib.obs, a1.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a1.exp), filename=filename, version='MAT73')
+    a1.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a1.hdf5lib.obs)
+    stopifnot(identical(a1.hdf5lib.obs, a1.exp))
+}
+
 ##
 ## cell: case-2
 ##
@@ -72,6 +82,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a2.zlib.obs)
     stopifnot(identical(a2.zlib.obs, a2.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a2.exp), filename=filename, version='MAT73')
+    a2.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a2.hdf5lib.obs)
+    stopifnot(identical(a2.hdf5lib.obs, a2.exp))
 }
 
 ##
@@ -100,6 +120,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a3.zlib.obs, a3.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a3.exp), filename=filename, version='MAT73')
+    a3.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a3.hdf5lib.obs)
+    stopifnot(identical(a3.hdf5lib.obs, a3.exp))
+}
+
 ##
 ## cell: case-4
 ##
@@ -126,6 +156,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a4.zlib.obs, a4.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a4.exp), filename=filename, version='MAT73')
+    a4.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a4.hdf5lib.obs)
+    stopifnot(identical(a4.hdf5lib.obs, a4.exp))
+}
+
 ##
 ## cell: case-5
 ##
@@ -146,6 +186,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a5.zlib.obs)
     stopifnot(identical(a5.zlib.obs, a5.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a5.exp), filename=filename, version='MAT73')
+    a5.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a5.hdf5lib.obs)
+    stopifnot(identical(a5.hdf5lib.obs, a5.exp))
 }
 
 ##
@@ -176,6 +226,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a6.zlib.obs, a6.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a6.exp), filename=filename, version='MAT73')
+    a6.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a6.hdf5lib.obs)
+    stopifnot(identical(a6.hdf5lib.obs, a6.exp))
+}
+
 ##
 ## cell: case-7
 ##
@@ -198,6 +258,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a7.zlib.obs)
     stopifnot(identical(a7.zlib.obs, a7.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a7.exp), filename=filename, version='MAT73')
+    a7.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a7.hdf5lib.obs)
+    stopifnot(identical(a7.hdf5lib.obs, a7.exp))
 }
 
 ##
@@ -223,6 +293,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a8.zlib.obs)
     stopifnot(identical(a8.zlib.obs, a8.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a8.exp), filename=filename, version='MAT73')
+    a8.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a8.hdf5lib.obs)
+    stopifnot(identical(a8.hdf5lib.obs, a8.exp))
 }
 
 ##
@@ -395,6 +475,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a9.zlib.obs, a9.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a9.exp), filename=filename, version='MAT73')
+    a9.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a9.hdf5lib.obs)
+    stopifnot(identical(a9.hdf5lib.obs, a9.exp))
+}
+
 ##
 ## cell: case-10
 ##
@@ -429,6 +519,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a10.zlib.obs, a10.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a10.exp), filename=filename, version='MAT73')
+    a10.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a10.hdf5lib.obs)
+    stopifnot(identical(a10.hdf5lib.obs, a10.exp))
+}
+
 ##
 ## cell: case-11
 ##
@@ -451,6 +551,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a11.zlib.obs)
     stopifnot(identical(a11.zlib.obs, a11.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a11.exp), filename=filename, version='MAT73')
+    a11.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a11.hdf5lib.obs)
+    stopifnot(identical(a11.hdf5lib.obs, a11.exp))
 }
 
 ##
@@ -498,6 +608,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a12.zlib.obs, a12.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a12.exp), filename=filename, version='MAT73')
+    a12.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a12.hdf5lib.obs)
+    stopifnot(identical(a12.hdf5lib.obs, a12.exp))
+}
+
 ##
 ## cell: case-13
 ##
@@ -524,6 +644,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a13.zlib.obs, a13.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a13.exp), filename=filename, version='MAT73')
+    a13.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a13.hdf5lib.obs)
+    stopifnot(identical(a13.hdf5lib.obs, a13.exp))
+}
+
 ##
 ## cell: case-14
 ##
@@ -546,6 +676,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a14.zlib.obs, a14.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a14.in), filename=filename, version='MAT73')
+    a14.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a14.hdf5lib.obs)
+    stopifnot(identical(a14.hdf5lib.obs, a14.exp))
+}
+
 ##
 ## cell: case-15
 ##
@@ -566,6 +706,16 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a15.zlib.obs)
     stopifnot(identical(a15.zlib.obs, a15.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a15.in), filename=filename, version='MAT73')
+    a15.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a15.hdf5lib.obs)
+    stopifnot(identical(a15.hdf5lib.obs, a15.exp))
 }
 
 ##
@@ -593,6 +743,16 @@ if(rmatio:::have.zlib()) {
     stopifnot(identical(a16.zlib.obs, a16.exp))
 }
 
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a16.in), filename=filename, version='MAT73')
+    a16.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a16.hdf5lib.obs)
+    stopifnot(identical(a16.hdf5lib.obs, a16.exp))
+}
+
 ##
 ## cell: case-17
 ##
@@ -613,4 +773,14 @@ if(rmatio:::have.zlib()) {
     unlink(filename)
     str(a17.zlib.obs)
     stopifnot(identical(a17.zlib.obs, a17.exp))
+}
+
+## Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a17.in), filename=filename, version='MAT73')
+    a17.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a17.hdf5lib.obs)
+    stopifnot(identical(a17.hdf5lib.obs, a17.exp))
 }
