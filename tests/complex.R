@@ -42,3 +42,13 @@ if(rmatio:::have.zlib()) {
     str(a1.zlib.obs)
     stopifnot(identical(a1.zlib.obs, a1.exp))
 }
+
+### Run the same test with hdf5
+if(rmatio:::have.hdf5lib()) {
+    filename <- tempfile(fileext = ".mat")
+    write.mat(list(a=a1.exp), filename=filename, version='MAT73')
+    a1.hdf5lib.obs <- read.mat(filename)[['a']]
+    unlink(filename)
+    str(a1.hdf5lib.obs)
+    stopifnot(identical(a1.hdf5lib.obs, a1.exp))
+}
