@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/stewid/rmatio.png)](https://travis-ci.org/stewid/rmatio)
+
 rmatio
 ======
 
