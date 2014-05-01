@@ -36,6 +36,11 @@ read_mat_cell(SEXP list,
               matvar_t *matvar);
 
 static int
+read_mat_struct(SEXP list,
+                int index,
+                matvar_t *matvar);
+
+static int
 write_elmt(const SEXP elmt,
            mat_t *mat,
            const char *name,
@@ -2642,6 +2647,10 @@ read_structure_array_with_fields(SEXP list,
 
             case MAT_C_CELL:
                 err = read_mat_cell(struc, i, field);
+                break;
+
+            case MAT_C_STRUCT:
+                err = read_mat_struct(struc, i, field);
                 break;
 
             default:
