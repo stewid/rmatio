@@ -2581,7 +2581,8 @@ read_structure_array_with_fields(SEXP list,
             protected++;
             break;
 
-        case MAT_C_CELL:
+        case MAT_C_CELL: 
+        case MAT_C_STRUCT:
             s = R_NilValue;
             break;
 
@@ -2651,6 +2652,11 @@ read_structure_array_with_fields(SEXP list,
 
             case MAT_C_STRUCT:
                 err = read_mat_struct(struc, i, field);
+                break;
+
+            case MAT_C_EMPTY:
+            case MAT_C_OPAQUE:
+                err = 0;
                 break;
 
             default:
