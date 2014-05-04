@@ -3169,7 +3169,6 @@ SEXP read_mat(const SEXP filename)
     const char err_reading_mat_file[] = "Error reading MAT file";
     const char err_mat_c_empty[] = "Not implemented support to read matio class type MAT_C_EMPTY";
     const char err_mat_c_object[] = "Not implemented support to read matio class type MAT_C_OBJECT";
-    const char err_mat_c_function[] = "Not implemented support to read matio class type MAT_C_FUNCTION";
     const char *err_msg = NULL;
 
     if (filename == R_NilValue)
@@ -3240,9 +3239,8 @@ SEXP read_mat(const SEXP filename)
             break;
 
         case MAT_C_FUNCTION:
-            err = 1;
-            err_msg = err_mat_c_function;
-            goto cleanup;
+            err = 0;
+            break;
 
         default:
             err = 1;
