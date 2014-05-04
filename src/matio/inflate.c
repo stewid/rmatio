@@ -385,10 +385,13 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
         Mat_int32Swap(tag);
         Mat_int32Swap(tag+1);
     }
-    if ( (tag[0] & 0x0000ffff) != MAT_T_INT32 ) {
-        Mat_Critical("InflateDimensions: Reading dimensions expected type MAT_T_INT32");
+
+    /**
+     *  Stefan Widgren: 2014-04-28
+     *  Removed throwing an error if the data type not equals MAT_T_INT32
+     */
+    if ( (tag[0] & 0x0000ffff) != MAT_T_INT32 )
         return bytesread;
-    }
     rank = tag[1];
     if ( rank % 8 != 0 )
         i = 8-(rank %8);
