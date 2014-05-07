@@ -38,6 +38,7 @@
 ##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
 ##' @keywords methods
+##' @include have_lib.r
 ##' @export
 ##' @useDynLib rmatio
 ##' @author Stefan Widgren

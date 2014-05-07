@@ -27,7 +27,7 @@ Depends:
     methods,
     lattice
 Collate:
-    'rmatio.r'
-    'read_mat.r'
-    'write_mat.r'
     'have_lib.r'
+    'read_mat.r'
+    'rmatio.r'
+    'write_mat.r'
