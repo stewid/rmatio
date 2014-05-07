@@ -2,6 +2,7 @@
 
 export()
 export(read.mat)
+exportMethods(write.mat)
 import(Matrix)
 import(lattice)
 import(methods)
