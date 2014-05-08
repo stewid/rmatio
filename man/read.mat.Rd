@@ -30,6 +30,8 @@ Reads the values in a mat-file and stores them in a list.
   \item A structure is read as a named list with fields.
 
   \item A cell array is read as an unnamed list with cell data
+
+  \item A function class type is read as NULL and gives a warning.
 }
 }
 \examples{

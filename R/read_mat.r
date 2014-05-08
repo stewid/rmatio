@@ -30,6 +30,8 @@
 ##'   \item A structure is read as a named list with fields.
 ##'
 ##'   \item A cell array is read as an unnamed list with cell data
+##'
+##'   \item A function class type is read as NULL and gives a warning.
 ##' }
 ##' @title Read Matlab file
 ##' @param filename Character string, with the MAT file or URL to read.
