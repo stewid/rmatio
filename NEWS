@@ -1,3 +1,17 @@
+rmatio 0.11.0
+-------------
+
+CHANGES
+
+* Added SystemRequirements (zlib headers and library) field to
+  DESCRIPTION
+
+* Replaced ZLIB_LIBS with -lz in src/Makevars.win
+
+* Updated maintainer email
+
+* Changed 'Title' field in DESCRIPTION to title case
+
 rmatio 0.10.0
 -------------
 
