@@ -17,6 +17,7 @@ Copyright: The package includes the source code of matio written by
     to use R printing and error routines.
 License: GPL-3
 URL: https://github.com/stewid/rmatio
+SystemRequirements: zlib headers and library.
 Type: Package
 LazyLoad: yes
 Biarch: true
