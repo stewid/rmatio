@@ -2,7 +2,7 @@ Package: rmatio
 Title: Read and Write Matlab Files
 Version: 0.10.0
 Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"),
-    email = "stefan.widgren@sva.se", comment = "Author of the R
+    email = "stefan.widgren@gmail.com", comment = "Author of the R
     interface to the C-library matio"), person("Christopher",
     "Hulbert", role = c("aut"), comment = "Author of the C-library
     matio, http://sourceforge.net/projects/matio/"))
