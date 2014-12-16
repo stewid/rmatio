@@ -4,7 +4,7 @@ else
 PKG_CFLAGS = -I. -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4
 endif
 
-PKG_LIBS = $(ZLIB_LIBS)
+PKG_LIBS = -lz
 
 OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
                 matio/mat5.o matio/mat.o \
