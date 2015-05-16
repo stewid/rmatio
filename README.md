@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/stewid/rmatio.png)](https://travis-ci.org/stewid/rmatio)
+[![Build status](https://ci.appveyor.com/api/projects/status/2o68xusy0vacygrq?svg=true)](https://ci.appveyor.com/project/stewid/rmatio)
 
 rmatio
 ======
