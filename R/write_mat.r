@@ -26,9 +26,6 @@
 ##'     to file
 ##' }
 ##' @rdname write.mat-methods
-##' @aliases write.mat
-##' @aliases write.mat-methods
-##' @aliases write.mat,list-method
 ##' @docType methods
 ##' @title Write Matlab file
 ##' @param object The \code{object} to write.
@@ -39,7 +36,6 @@
 ##' @return invisible NULL
 ##' @keywords methods
 ##' @include have_lib.r
-##' @export
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
@@ -151,7 +147,6 @@ setGeneric("write.mat",
                     version = c('MAT5')) standardGeneric("write.mat"))
 
 ##' @rdname write.mat-methods
-##' @include have_lib.r
 ##' @export
 setMethod("write.mat",
           signature(object = "list"),
