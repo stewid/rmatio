@@ -87,5 +87,5 @@ read.mat <- function(filename) {
         stop(sprintf("File don't exists: %s", filename))
     }
 
-    return(.Call('read_mat', filename))
+    return(.Call(read_mat, filename))
 }

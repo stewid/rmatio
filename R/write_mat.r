@@ -202,7 +202,7 @@ setMethod("write.mat",
               stop("All values in the list must have a unique name")
             }
 
-            .Call("write_mat", object, filename, compression, version, header)
+            .Call(write_mat, object, filename, compression, version, header)
 
             invisible(NULL)
           }
