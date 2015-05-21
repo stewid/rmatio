@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2014  Stefan Widgren
+## Copyright (C) 2013-2015  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 ##' with variable compression.
 ##' @import Matrix
 ##' @import methods
-##' @import lattice
 ##' @name rmatio
 ##' @references \itemize{
 ##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.2.\cr
