@@ -27,7 +27,7 @@ To install the development version of rmatio, it's easiest to use the `devtools`
 ```
 # install.packages("devtools")
 library(devtools)
-install_github("rmatio", "stewid")
+install_github("stewid/rmatio")
 ```
 
 Usage
