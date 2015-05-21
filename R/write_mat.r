@@ -40,7 +40,6 @@
 ##' @keywords methods
 ##' @include have_lib.r
 ##' @export
-##' @useDynLib rmatio
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{

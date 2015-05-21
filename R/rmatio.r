@@ -26,6 +26,7 @@
 ##' @import Matrix
 ##' @import methods
 ##' @name rmatio
+##' @useDynLib rmatio, .registration=TRUE
 ##' @references \itemize{
 ##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.2.\cr
 ##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.2/matio_user_guide.pdf}

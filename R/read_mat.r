@@ -38,7 +38,6 @@
 ##' @return A list with the variables read.
 ##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 ##' @export
-##' @useDynLib rmatio
 ##' @examples
 ##' \dontrun{
 ##' library(rmatio)
