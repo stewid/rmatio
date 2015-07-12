@@ -22,10 +22,12 @@ Type: Package
 LazyLoad: yes
 Biarch: true
 Date: 2014-12-16
-Depends:
-    R(>= 3.0.2),
+Imports:
     Matrix,
-    methods
+    methods,
+    utils
+Depends:
+    R(>= 3.0.2)
 Collate:
     'have_lib.r'
     'read_mat.r'
