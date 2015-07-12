@@ -15,6 +15,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 library(rmatio)
+library(Matrix)
 
 ##
 ## Check write and read of structure arrays in MAT5 format:

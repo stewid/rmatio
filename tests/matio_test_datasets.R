@@ -270,6 +270,7 @@
 ## Load rmatio
 ##
 library(rmatio)
+library(Matrix)
 
 test_mat_v4_file <- function(x) {
     ## var1 read as double
