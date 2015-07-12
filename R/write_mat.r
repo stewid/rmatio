@@ -37,6 +37,7 @@
 ##' @keywords methods
 ##' @include have_lib.r
 ##' @author Stefan Widgren
+##' @importFrom utils packageVersion
 ##' @examples
 ##' \dontrun{
 ##' filename <- tempfile(fileext = ".mat")
