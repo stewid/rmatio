@@ -9,3 +9,5 @@ config.status
 /inst/tests/test_rmatio.r
 /src/matio/config.h
 /src/Makevars
+/src/zlib/
+local320.zip
