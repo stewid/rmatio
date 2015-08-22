@@ -21,7 +21,6 @@ SystemRequirements: zlib headers and library.
 Type: Package
 LazyLoad: yes
 Biarch: true
-Date: 2014-12-16
 Imports:
     Matrix,
     methods,
