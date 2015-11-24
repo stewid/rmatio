@@ -49,5 +49,9 @@ clean:
 	-rm -f src/*.o
 	-rm -f src/*.so
 	-rm -f src/matio/*.o
+	-rm -f local320.zip
+	-rm -rf src/zlib
+	-rm -rf src-x64
+	-rm -rf src-i386
 
 .PHONY: install roxygen pdf check check_valgrind valgrind clean
