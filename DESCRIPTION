@@ -31,3 +31,4 @@ Collate:
     'read_mat.r'
     'rmatio.r'
     'write_mat.r'
+RoxygenNote: 5.0.1
