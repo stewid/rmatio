@@ -43,15 +43,6 @@ valgrind:
 	$(foreach var,$(test_objects),R -d "valgrind --tool=memcheck --leak-check=full" --vanilla < $(var);)
 
 clean:
-	-rm -f config.log
-	-rm -f config.status
-	-rm -f src/Makevars
-	-rm -f src/*.o
-	-rm -f src/*.so
-	-rm -f src/matio/*.o
-	-rm -f local320.zip
-	-rm -rf src/zlib
-	-rm -rf src-x64
-	-rm -rf src-i386
+	./cleanup
 
 .PHONY: install roxygen pdf check check_valgrind valgrind clean
