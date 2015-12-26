@@ -6,6 +6,14 @@ os:
   - linux
   - osx
 
+after_failure:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cat /home/travis/build/stewid/rmatio/rmatio.Rcheck/00install.out; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then cat /Users/travis/build/stewid/rmatio/rmatio.Rcheck/00install.out; fi
+
+after_success:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cat /home/travis/build/stewid/rmatio/rmatio.Rcheck/00install.out; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then cat /Users/travis/build/stewid/rmatio/rmatio.Rcheck/00install.out; fi
+
 notifications:
   email:
     on_success: change
