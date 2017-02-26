@@ -3361,4 +3361,6 @@ void
 R_init_rmatio(DllInfo *info)
 {
     R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+    R_useDynamicSymbols(info, FALSE);
+    R_forceSymbols(info, TRUE);
 }
