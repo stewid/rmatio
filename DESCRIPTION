@@ -6,9 +6,9 @@ Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"),
     interface to the C-library matio"), person("Christopher",
     "Hulbert", role = c("aut"), comment = "Author of the C-library
     matio, http://sourceforge.net/projects/matio/"))
-Description: Read and write Matlab MAT files from R. The rmatio
+Description: Read and write 'Matlab' MAT files from R. The rmatio
     package supports reading MAT version 4, MAT version 5 and MAT
-    compressed version 5. The rmatio package can write version 5 MAT
+    compressed version 5. The 'rmatio' package can write version 5 MAT
     files and version 5 files with variable compression.
 Copyright: The package includes the source code of matio written by
     Christopher Hulbert (http://sourceforge.net/projects/matio/)
