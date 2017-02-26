@@ -1,3 +1,11 @@
+rmatio 0.11.0.9000
+------------------
+
+* Fixed registration of native routines called from R.
+
+* Added importFrom 'download.file' and 'packageVersion' from utils to
+  NAMESPACE.
+
 rmatio 0.11.0
 -------------
 
