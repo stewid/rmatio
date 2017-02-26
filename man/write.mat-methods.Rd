@@ -147,4 +147,3 @@ unlink(filename)
 Stefan Widgren
 }
 \keyword{methods}
-

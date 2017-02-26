@@ -10,4 +10,3 @@ have.zlib()
 Is zlib available
 }
 \keyword{internal}
-

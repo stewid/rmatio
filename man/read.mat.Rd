@@ -73,4 +73,3 @@ str(m)
 \seealso{
 See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 }
-
