@@ -2537,7 +2537,7 @@ read_structure_array_with_fields(SEXP list,
     size_t nfields = 0;
     size_t fieldlen = 0;
     int err = 0;
-    size_t protected = 0;
+    int protected = 0;
 
     if (NULL == matvar
         || MAT_C_STRUCT != matvar->class_type
@@ -2789,7 +2789,7 @@ read_cell_array_with_empty_arrays(SEXP list,
     SEXP cell_array;
     char * const * fieldnames;
     int err = 0;
-    size_t protected = 0;
+    int protected = 0;
 
     if (NULL == matvar
         || MAT_C_CELL != matvar->class_type
@@ -2970,10 +2970,9 @@ read_cell_array_with_arrays(SEXP list,
 {
     SEXP cell;
     int err = 0;
-    size_t protected = 0;
+    int protected = 0;
 
-    if (NULL == matvar
-        || NULL == matvar->dims)
+    if (NULL == matvar || NULL == matvar->dims)
         return 1;
 
     PROTECT(cell = allocVector(VECSXP, matvar->dims[0]));
