@@ -270,22 +270,17 @@ map_R_object_dims(const SEXP elmt, size_t *dims)
  * @return 0 on succes or 1 on failure.
  */
 static int
-map_R_vecsxp_dims(const SEXP elmt,
-                  size_t *dims,
-                  int *empty)
+map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
 {
     SEXP names;
     size_t len=0;
     int vecsxp = 0;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || NULL == dims
-        || NULL == empty)
+    if (R_NilValue == elmt || VECSXP != TYPEOF(elmt) ||
+        NULL == dims || NULL == empty)
         return 1;
 
     *empty = 0;
-    names = getAttrib(elmt, R_NamesSymbol);
 
     if (LENGTH(elmt)) {
         for (int i=0;i<LENGTH(elmt);i++) {
@@ -303,6 +298,8 @@ map_R_vecsxp_dims(const SEXP elmt,
                 vecsxp = 1;
         }
     }
+
+    PROTECT(names = getAttrib(elmt, R_NamesSymbol));
 
     if (!LENGTH(elmt)) {
         if (R_NilValue == names) {
@@ -328,6 +325,8 @@ map_R_vecsxp_dims(const SEXP elmt,
         dims[0] = len;
         dims[1] = 1;
     }
+
+    UNPROTECT(1);
 
     return 0;
 }
