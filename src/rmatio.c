@@ -1971,8 +1971,6 @@ read_sparse(SEXP list,
 {
     SEXP m, data;
     int *dims;
-    int *ir;              /* Array of size nnzero where ir[k] is the row of data[k] */
-    int *jc;              /* Array of size ncol+1, jc[k] index to data of first non-zero element in row k */
     mat_sparse_t *sparse;
 
     if (NULL == matvar
@@ -2016,6 +2014,12 @@ read_sparse(SEXP list,
             return 1;
         }
     } else {
+        SEXP ir, jc;
+        int *ir_ptr;  /* Array of size nnzero where ir_ptr[k] is the
+                       * row of data[k] */
+        int *jc_ptr;  /* Array of size ncol+1, jc_ptr[k] index to data
+                       * of first non-zero element in row k */
+
         if (matvar->isLogical)
             PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
         else
@@ -2025,15 +2029,19 @@ read_sparse(SEXP list,
         dims[0] = matvar->dims[0];
         dims[1] = matvar->dims[1];
 
-        SET_SLOT(m, Rf_install("i"), allocVector(INTSXP, sparse->nir));
-        ir = INTEGER(GET_SLOT(m, Rf_install("i")));
-        for (int j=0;j<sparse->nir;++j)
-            ir[j] = sparse->ir[j];
+        PROTECT(ir = allocVector(INTSXP, sparse->nir));
+        SET_SLOT(m, Rf_install("i"), ir);
+        ir_ptr = INTEGER(ir);
+        for (int j=0; j<sparse->nir; ++j)
+            ir_ptr[j] = sparse->ir[j];
+        UNPROTECT(1);
 
-        SET_SLOT(m, Rf_install("p"), allocVector(INTSXP, sparse->njc));
-        jc = INTEGER(GET_SLOT(m, Rf_install("p")));
-        for (int j=0;j<sparse->njc;++j)
-            jc[j] = sparse->jc[j];
+        PROTECT(jc = allocVector(INTSXP, sparse->njc));
+        SET_SLOT(m, Rf_install("p"), jc);
+        jc_ptr = INTEGER(jc);
+        for (int j=0; j<sparse->njc; ++j)
+            jc_ptr[j] = sparse->jc[j];
+        UNPROTECT(1);
 
         if (matvar->isLogical) {
             int *data_ptr;
