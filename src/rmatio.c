@@ -2036,15 +2036,21 @@ read_sparse(SEXP list,
             jc[j] = sparse->jc[j];
 
         if (matvar->isLogical) {
-            SET_SLOT(m, Rf_install("x"), allocVector(LGLSXP, sparse->nir));
-            data = GET_SLOT(m, Rf_install("x"));
-            for (int j=0;j<sparse->nir;++j)
-                LOGICAL(data)[j] = 1;
+            int *data_ptr;
+            PROTECT(data = allocVector(LGLSXP, sparse->nir));
+            SET_SLOT(m, Rf_install("x"), data);
+            data_ptr = LOGICAL(data);
+            for (int j=0; j<sparse->nir; ++j)
+                data_ptr[j] = 1;
+            UNPROTECT(1);
         } else {
-            SET_SLOT(m, Rf_install("x"), allocVector(REALSXP, sparse->ndata));
-            data = GET_SLOT(m, Rf_install("x"));
-            for (int j=0;j<sparse->ndata;++j)
-                REAL(data)[j] = ((double*)sparse->data)[j];
+            double *data_ptr;
+            PROTECT(data = allocVector(REALSXP, sparse->ndata));
+            SET_SLOT(m, Rf_install("x"), data);
+            data_ptr = REAL(data);
+            for (int j=0; j<sparse->ndata; ++j)
+                data_ptr[j] = ((double*)sparse->data)[j];
+            UNPROTECT(1);
         }
     }
 
