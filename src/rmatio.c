@@ -3321,7 +3321,8 @@ write_mat(const SEXP list,
     if (INTEGER(compression)[0])
         use_compression = MAT_COMPRESSION_ZLIB;
 
-    names = getAttrib(list, R_NamesSymbol);
+    PROTECT(names = getAttrib(list, R_NamesSymbol));
+
     for (int i = 0; i < length(list); i++) {
         if (write_elmt(VECTOR_ELT(list, i),
                        mat,
@@ -3338,6 +3339,8 @@ write_mat(const SEXP list,
     }
 
     Mat_Close(mat);
+
+    UNPROTECT(1);
 
     return R_NilValue;
 }
