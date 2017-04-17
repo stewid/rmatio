@@ -272,7 +272,6 @@ map_R_object_dims(const SEXP elmt, size_t *dims)
 static int
 map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
 {
-    SEXP names;
     size_t len=0;
     int vecsxp = 0;
 
@@ -299,10 +298,8 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
         }
     }
 
-    PROTECT(names = getAttrib(elmt, R_NamesSymbol));
-
     if (!LENGTH(elmt)) {
-        if (R_NilValue == names) {
+        if (isNull(getAttrib(elmt, R_NamesSymbol))) {
             dims[0] = 0;
             dims[1] = 0;
         } else {
@@ -310,7 +307,7 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
             dims[1] = 1;
         }
     } else if (!len) {
-        if (R_NilValue == names || !vecsxp) {
+        if (isNull(getAttrib(elmt, R_NamesSymbol)) || !vecsxp) {
             dims[0] = 1;
             dims[1] = LENGTH(elmt);
             *empty = 1;
@@ -318,15 +315,13 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
             dims[0] = 0;
             dims[1] = 1;
         }
-    } else if (R_NilValue == names) {
+    } else if (isNull(getAttrib(elmt, R_NamesSymbol))) {
         dims[0] = LENGTH(elmt);
         dims[1] = len;
     } else {
         dims[0] = len;
         dims[1] = 1;
     }
-
-    UNPROTECT(1);
 
     return 0;
 }
