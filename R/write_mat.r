@@ -37,7 +37,6 @@
 ##' @keywords methods
 ##' @include have_lib.r
 ##' @author Stefan Widgren
-##' @importFrom utils packageVersion
 ##' @examples
 ##' \dontrun{
 ##' filename <- tempfile(fileext = ".mat")
@@ -185,7 +184,7 @@ setMethod("write.mat",
               version <- 0x0100L
               header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
                                 R.version$platform[[1]],
-                                packageVersion('rmatio'),
+                                utils::packageVersion('rmatio'),
                                 date())
             } else {
               stop('Unsupported version')

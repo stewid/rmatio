@@ -38,7 +38,6 @@
 ##' @return A list with the variables read.
 ##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
 ##' @export
-##' @importFrom utils download.file
 ##' @examples
 ##' \dontrun{
 ##' library(rmatio)
@@ -81,7 +80,7 @@ read.mat <- function(filename) {
 
     if (length(grep("^(http|ftp|https)://", filename))) {
         tmp <- tempfile(fileext = ".mat")
-        download.file(filename, tmp, quiet = TRUE, mode = "wb")
+        utils::download.file(filename, tmp, quiet = TRUE, mode = "wb")
         filename <- tmp
         on.exit(unlink(filename))
     } else if(!file.exists(filename)) {
