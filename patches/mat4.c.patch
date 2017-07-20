@@ -1,5 +1,5 @@
-*** mat4.c.orig	2017-07-20 12:51:36.158270751 +0200
---- mat4.c	2017-07-20 12:58:12.197107987 +0200
+*** mat4.c.orig	2017-07-20 13:30:07.027793342 +0200
+--- mat4.c	2017-07-20 13:30:07.047792614 +0200
 ***************
 *** 29,34 ****
 --- 29,46 ----
@@ -128,27 +128,8 @@
               Mat_Critical("MAT V4 data type error");
               return;
 ***************
-*** 280,286 ****
-  
-      err = fread(&tmp,sizeof(int),1,mat->fp);
-      if ( !err ) {
-!         free(matvar);
-          return NULL;
-      }
-  
---- 380,388 ----
-  
-      err = fread(&tmp,sizeof(int),1,mat->fp);
-      if ( !err ) {
-!         /* Stefan Widgren 2014-01-17: Replaced free(matvar) with
-!          * Mat_VarFree(matvar) */
-!         Mat_VarFree(matvar);
-          return NULL;
-      }
-  
-***************
-*** 387,392 ****
---- 489,495 ----
+*** 364,369 ****
+--- 464,470 ----
           Mat_VarFree(matvar);
           return NULL;
       }
@@ -157,8 +138,8 @@
       if ( !err ) {
           Mat_VarFree(matvar);
 ***************
-*** 416,420 ****
---- 519,530 ----
+*** 393,397 ****
+--- 494,505 ----
           nBytes *= 2;
       fseek(mat->fp,nBytes,SEEK_CUR);
   
