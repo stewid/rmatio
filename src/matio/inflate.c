@@ -57,7 +57,7 @@
  * @return Number of bytes read from the file
  */
 int
-InflateSkip(mat_t *mat, z_stream *z, int nbytes)
+InflateSkip(mat_t *mat, z_streamp z, int nbytes)
 {
     mat_uint8_t comp_buf[512],uncomp_buf[512];
     int     bytesread = 0, n,err, cnt = 0;
@@ -68,7 +68,7 @@ InflateSkip(mat_t *mat, z_stream *z, int nbytes)
     n = (nbytes<512) ? nbytes : 512;
     if ( !z->avail_in ) {
         z->next_in = comp_buf;
-        z->avail_in += fread(comp_buf,1,n,mat->fp);
+        z->avail_in += fread(comp_buf,1,n,(FILE*)mat->fp);
         bytesread   += z->avail_in;
     }
     z->avail_out = n;
@@ -89,7 +89,7 @@ InflateSkip(mat_t *mat, z_stream *z, int nbytes)
     while ( cnt < nbytes ) {
         if ( !z->avail_in ) {
             z->next_in   = comp_buf;
-            z->avail_in += fread(comp_buf,1,n,mat->fp);
+            z->avail_in += fread(comp_buf,1,n,(FILE*)mat->fp);
             bytesread   += z->avail_in;
         }
         err = inflate(z,Z_FULL_FLUSH);
@@ -109,7 +109,7 @@ InflateSkip(mat_t *mat, z_stream *z, int nbytes)
 
     if ( z->avail_in ) {
         long offset = -(long)z->avail_in;
-        err = fseek(mat->fp,offset,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,offset,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateSkip: fseek returned %d",err);
         }
@@ -138,7 +138,7 @@ InflateSkip2(mat_t *mat, matvar_t *matvar, int nbytes)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 1;
     matvar->internal->z->next_out = uncomp_buf;
@@ -155,7 +155,7 @@ InflateSkip2(mat_t *mat, matvar_t *matvar, int nbytes)
         if ( !matvar->internal->z->avail_in ) {
             matvar->internal->z->avail_in = 1;
             matvar->internal->z->next_in = comp_buf;
-            bytesread += fread(comp_buf,1,1,mat->fp);
+            bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
             cnt++;
         }
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
@@ -170,7 +170,7 @@ InflateSkip2(mat_t *mat, matvar_t *matvar, int nbytes)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateSkip2: %s - fseek returned %d",matvar->name,err);
         }
@@ -192,7 +192,7 @@ InflateSkip2(mat_t *mat, matvar_t *matvar, int nbytes)
  * @return Number of bytes read from the file
  */
 int
-InflateSkipData(mat_t *mat,z_stream *z,enum matio_types data_type,int len)
+InflateSkipData(mat_t *mat,z_streamp z,enum matio_types data_type,int len)
 {
     int data_size = 0;
 
@@ -264,10 +264,10 @@ InflateVarTag(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateVarTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -276,7 +276,7 @@ InflateVarTag(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateVarTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -285,7 +285,7 @@ InflateVarTag(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateVarTag: fseek returned %d",err);
         }
@@ -316,10 +316,10 @@ InflateArrayFlags(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 16;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateArrayFlags: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -328,7 +328,7 @@ InflateArrayFlags(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateArrayFlags: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -337,7 +337,7 @@ InflateArrayFlags(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateArrayFlags: fseek returned %d",err);
         }
@@ -372,10 +372,10 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateDimensions: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -384,7 +384,7 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateDimensions: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -414,10 +414,10 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = rank;
-    matvar->internal->z->next_out = (void *)((mat_int32_t *)buf+2);
+    matvar->internal->z->next_out = (Bytef*)((mat_int32_t *)buf+2);
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateDimensions: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -426,7 +426,7 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateDimensions: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -435,7 +435,7 @@ InflateDimensions(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateDimensions: fseek returned %d",err);
         }
@@ -466,10 +466,10 @@ InflateVarNameTag(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateVarNameTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -478,7 +478,7 @@ InflateVarNameTag(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateVarNameTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -487,7 +487,7 @@ InflateVarNameTag(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateVarNameTag: fseek returned %d",err);
         }
@@ -519,10 +519,10 @@ InflateVarName(mat_t *mat, matvar_t *matvar, void *buf, int N)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = N;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateVarName: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -531,7 +531,7 @@ InflateVarName(mat_t *mat, matvar_t *matvar, void *buf, int N)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateVarName: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -540,7 +540,7 @@ InflateVarName(mat_t *mat, matvar_t *matvar, void *buf, int N)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateVarName: fseek returned %d",err);
         }
@@ -572,10 +572,10 @@ InflateDataTag(mat_t *mat, matvar_t *matvar, void *buf)
    if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err == Z_STREAM_END ) {
         return bytesread;
@@ -586,7 +586,7 @@ InflateDataTag(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err == Z_STREAM_END ) {
             break;
@@ -597,7 +597,7 @@ InflateDataTag(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateDataTag: %s - fseek returned %d",matvar->name,err);
         }
@@ -618,7 +618,7 @@ InflateDataTag(mat_t *mat, matvar_t *matvar, void *buf)
  * @return Number of bytes read from the file
  */
 int
-InflateDataType(mat_t *mat, z_stream *z, void *buf)
+InflateDataType(mat_t *mat, z_streamp z, void *buf)
 {
     mat_uint8_t comp_buf[32];
     int     bytesread = 0, err;
@@ -629,10 +629,10 @@ InflateDataType(mat_t *mat, z_stream *z, void *buf)
     if ( !z->avail_in ) {
         z->avail_in = 1;
         z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     z->avail_out = 4;
-    z->next_out = buf;
+    z->next_out = (Bytef*)buf;
     err = inflate(z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateDataType: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -641,7 +641,7 @@ InflateDataType(mat_t *mat, z_stream *z, void *buf)
     while ( z->avail_out && !z->avail_in ) {
         z->avail_in = 1;
         z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateDataType: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -650,7 +650,7 @@ InflateDataType(mat_t *mat, z_stream *z, void *buf)
     }
 
     if ( z->avail_in ) {
-        err = fseek(mat->fp,-(int)z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateDataType: fseek returned %d",err);
         }
@@ -672,7 +672,7 @@ InflateDataType(mat_t *mat, z_stream *z, void *buf)
  * @return Number of bytes read from the file
  */
 int
-InflateData(mat_t *mat, z_stream *z, void *buf, int nBytes)
+InflateData(mat_t *mat, z_streamp z, void *buf, int nBytes)
 {
     mat_uint8_t comp_buf[1024];
     int     bytesread = 0, err;
@@ -685,17 +685,17 @@ InflateData(mat_t *mat, z_stream *z, void *buf, int nBytes)
 
     if ( !z->avail_in ) {
         if ( nBytes > 1024 ) {
-            z->avail_in = fread(comp_buf,1,1024,mat->fp);
+            z->avail_in = fread(comp_buf,1,1024,(FILE*)mat->fp);
             bytesread += z->avail_in;
             z->next_in = comp_buf;
         } else {
-            z->avail_in = fread(comp_buf,1,nBytes,mat->fp);
+            z->avail_in = fread(comp_buf,1,nBytes,(FILE*)mat->fp);
             bytesread  += z->avail_in;
             z->next_in  = comp_buf;
         }
     }
     z->avail_out = nBytes;
-    z->next_out = buf;
+    z->next_out = (Bytef*)buf;
     err = inflate(z,Z_FULL_FLUSH);
     if ( err == Z_STREAM_END ) {
         return bytesread;
@@ -705,15 +705,15 @@ InflateData(mat_t *mat, z_stream *z, void *buf, int nBytes)
     }
     while ( z->avail_out && !z->avail_in ) {
         if ( (nBytes-bytesread) > 1024 ) {
-            z->avail_in = fread(comp_buf,1,1024,mat->fp);
+            z->avail_in = fread(comp_buf,1,1024,(FILE*)mat->fp);
             bytesread += z->avail_in;
             z->next_in = comp_buf;
         } else if ( (nBytes-bytesread) < 1 ) { /* Read a byte at a time */
-            z->avail_in = fread(comp_buf,1,1,mat->fp);
+            z->avail_in = fread(comp_buf,1,1,(FILE*)mat->fp);
             bytesread  += z->avail_in;
             z->next_in  = comp_buf;
         } else {
-            z->avail_in = fread(comp_buf,1,nBytes-bytesread,mat->fp);
+            z->avail_in = fread(comp_buf,1,nBytes-bytesread,(FILE*)mat->fp);
             bytesread  += z->avail_in;
             z->next_in  = comp_buf;
         }
@@ -728,7 +728,7 @@ InflateData(mat_t *mat, z_stream *z, void *buf, int nBytes)
 
     if ( z->avail_in ) {
         long offset = -(long)z->avail_in;
-        err = fseek(mat->fp,offset,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,offset,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateData: fseek returned %d",err);
         }
@@ -760,10 +760,10 @@ InflateFieldNameLength(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateFieldNameLength: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -772,7 +772,7 @@ InflateFieldNameLength(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateFieldNameLength: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -781,7 +781,7 @@ InflateFieldNameLength(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateFieldNameLength: fseek returned %d",err);
         }
@@ -813,10 +813,10 @@ InflateFieldNamesTag(mat_t *mat, matvar_t *matvar, void *buf)
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = 8;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateFieldNamesTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -825,7 +825,7 @@ InflateFieldNamesTag(mat_t *mat, matvar_t *matvar, void *buf)
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateFieldNamesTag: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -834,7 +834,7 @@ InflateFieldNamesTag(mat_t *mat, matvar_t *matvar, void *buf)
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateFieldNamesTag: fseek returned %d",err);
         }
@@ -874,10 +874,10 @@ InflateFieldNames(mat_t *mat,matvar_t *matvar,void *buf,int nfields,
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
     }
     matvar->internal->z->avail_out = nfields*fieldname_length+padding;
-    matvar->internal->z->next_out = buf;
+    matvar->internal->z->next_out = (Bytef*)buf;
     err = inflate(matvar->internal->z,Z_NO_FLUSH);
     if ( err != Z_OK ) {
         Mat_Critical("InflateFieldNames: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -886,7 +886,7 @@ InflateFieldNames(mat_t *mat,matvar_t *matvar,void *buf,int nfields,
     while ( matvar->internal->z->avail_out && !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
         matvar->internal->z->next_in = comp_buf;
-        bytesread += fread(comp_buf,1,1,mat->fp);
+        bytesread += fread(comp_buf,1,1,(FILE*)mat->fp);
         err = inflate(matvar->internal->z,Z_NO_FLUSH);
         if ( err != Z_OK ) {
             Mat_Critical("InflateFieldNames: inflate returned %s",zError(err == Z_NEED_DICT ? Z_DATA_ERROR : err));
@@ -895,7 +895,7 @@ InflateFieldNames(mat_t *mat,matvar_t *matvar,void *buf,int nfields,
     }
 
     if ( matvar->internal->z->avail_in ) {
-        err = fseek(mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+        err = fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
         if ( err != 0 ) {
             Mat_Critical("InflateFieldNames: fseek returned %d",err);
         }
