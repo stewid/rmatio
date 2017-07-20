@@ -3,7 +3,7 @@
  * @ingroup MAT
  */
 /*
- * Copyright (C) 2005-2011   Christopher C. Hulbert
+ * Copyright (C) 2005-2016   Christopher C. Hulbert
  *
  * All rights reserved.
  *
@@ -461,7 +461,7 @@ Mat_VarReadDataLinear4(mat_t *mat,matvar_t *matvar,void *data,int start,
  *
  * @ingroup mat_internal
  * @param mat MAT file pointer
- * @retuen pointer to the MAT variable or NULL
+ * @return pointer to the MAT variable or NULL
  * @endif
  */
 matvar_t *
