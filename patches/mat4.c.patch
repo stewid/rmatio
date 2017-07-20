@@ -1,5 +1,5 @@
-*** mat4.c.orig	2017-07-20 13:30:07.027793342 +0200
---- mat4.c	2017-07-20 13:30:07.047792614 +0200
+*** mat4.c.orig	2017-07-20 16:02:24.300749853 +0200
+--- mat4.c	2017-07-20 16:00:42.244344553 +0200
 ***************
 *** 29,34 ****
 --- 29,46 ----
@@ -19,11 +19,30 @@
 + #define Mat_Critical error
 + 
   #include <stdlib.h>
+  #include <string.h>
   #include <stdio.h>
-  #include <math.h>
 ***************
-*** 47,52 ****
---- 59,65 ----
+*** 71,77 ****
+      mat->bof           = 0;
+      mat->next_index    = 0;
+      mat->refs_id       = -1;
+!     mat->filename      = strdup_printf("%s",matname);
+      mat->mode          = 0;
+  
+      Mat_Rewind(mat);
+--- 83,91 ----
+      mat->bof           = 0;
+      mat->next_index    = 0;
+      mat->refs_id       = -1;
+!     /* Stefan Widgren 2017-07-20 Replaced strdup_printf with strdup */
+!     /* mat->filename = strdup_printf("%s",matname); */
+!     mat->filename      = strdup(matname);
+      mat->mode          = 0;
+  
+      Mat_Rewind(mat);
+***************
+*** 174,179 ****
+--- 188,194 ----
   Read4(mat_t *mat,matvar_t *matvar)
   {
       unsigned int N;
@@ -32,8 +51,8 @@
           return;
   
 ***************
-*** 86,91 ****
---- 99,191 ----
+*** 213,218 ****
+--- 228,320 ----
                   ReadUInt8Data(mat,matvar->data,matvar->data_type,N);
               matvar->data_type = MAT_T_UINT8;
               break;
@@ -128,8 +147,8 @@
               Mat_Critical("MAT V4 data type error");
               return;
 ***************
-*** 364,369 ****
---- 464,470 ----
+*** 491,496 ****
+--- 593,599 ----
           Mat_VarFree(matvar);
           return NULL;
       }
@@ -138,8 +157,8 @@
       if ( !err ) {
           Mat_VarFree(matvar);
 ***************
-*** 393,397 ****
---- 494,505 ----
+*** 520,524 ****
+--- 623,634 ----
           nBytes *= 2;
       fseek(mat->fp,nBytes,SEEK_CUR);
   
