@@ -299,32 +299,9 @@ Mat_VarReadDataLinear4(mat_t *mat,matvar_t *matvar,void *data,int start,
 {
     size_t i, nmemb = 1;
     int err = 0;
-    enum matio_classes class_type = MAT_C_EMPTY;
 
     fseek(mat->fp,matvar->internal->datapos,SEEK_SET);
 
-    switch( matvar->data_type ) {
-        case MAT_T_DOUBLE:
-            class_type = MAT_C_DOUBLE;
-            break;
-        case MAT_T_SINGLE:
-            class_type = MAT_C_SINGLE;
-            break;
-        case MAT_T_INT32:
-            class_type = MAT_C_INT32;
-            break;
-        case MAT_T_INT16:
-            class_type = MAT_C_INT16;
-            break;
-        case MAT_T_UINT16:
-            class_type = MAT_C_UINT16;
-            break;
-        case MAT_T_UINT8:
-            class_type = MAT_C_UINT8;
-            break;
-        default:
-            return 1;
-    }
     matvar->data_size = Mat_SizeOf(matvar->data_type);
 
     for ( i = 0; i < matvar->rank; i++ )
@@ -380,8 +357,6 @@ Mat_VarReadNextInfo4(mat_t *mat)
 
     err = fread(&tmp,sizeof(int),1,mat->fp);
     if ( !err ) {
-        /* Stefan Widgren 2014-01-17: Replaced free(matvar) with
-         * Mat_VarFree(matvar) */
         Mat_VarFree(matvar);
         return NULL;
     }
