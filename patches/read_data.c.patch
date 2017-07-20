@@ -1,5 +1,5 @@
-*** read_data.c.orig	2017-07-20 16:20:39.542415314 +0200
---- read_data.c	2017-07-20 16:20:39.558415322 +0200
+*** read_data.c.orig	2017-07-20 16:45:19.832393611 +0200
+--- read_data.c	2017-07-20 16:43:29.276492398 +0200
 ***************
 *** 30,45 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -18,7 +18,7 @@
   
   /*
    * --------------------------------------------------------------------------
---- 30,58 ----
+--- 30,59 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
@@ -33,6 +33,7 @@
 ! /* Stefan Widgren 2014-01-04: Include files for rmatio package */
 ! #include <R.h>
   #include "matio_private.h"
+! #define Mat_Critical error
 ! 
 ! /* FIXME: Implement Unicode support */
 ! /* #include <stdlib.h> */
@@ -49,7 +50,7 @@
   /*
    * --------------------------------------------------------------------------
 ***************
-*** 3711,3717 ****
+*** 3571,3577 ****
               break;
           }
           default:
@@ -57,7 +58,7 @@
               break;
       }
       nBytes = len*data_size;
---- 3724,3730 ----
+--- 3585,3591 ----
               break;
           }
           default:
@@ -66,7 +67,7 @@
       }
       nBytes = len*data_size;
 ***************
-*** 3756,3762 ****
+*** 3616,3622 ****
               break;
           }
           default:
@@ -74,7 +75,7 @@
               break;
       }
       bytesread *= data_size;
---- 3769,3775 ----
+--- 3630,3636 ----
               break;
           }
           default:

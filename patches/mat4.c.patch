@@ -1,5 +1,5 @@
-*** mat4.c.orig	2017-07-20 16:20:39.526415306 +0200
---- mat4.c	2017-07-20 16:20:39.562415324 +0200
+*** mat4.c.orig	2017-07-20 16:29:32.561310182 +0200
+--- mat4.c	2017-07-20 16:29:32.601310647 +0200
 ***************
 *** 29,34 ****
 --- 29,46 ----
@@ -41,18 +41,8 @@
   
       Mat_Rewind(mat);
 ***************
-*** 177,182 ****
---- 191,197 ----
-  Read4(mat_t *mat,matvar_t *matvar)
-  {
-      unsigned int N;
-+ 
-      if ( fseek(mat->fp,matvar->internal->datapos,SEEK_SET) )
-          return;
-  
-***************
-*** 216,221 ****
---- 231,323 ----
+*** 224,229 ****
+--- 238,330 ----
                   ReadUInt8Data(mat,matvar->data,matvar->data_type,N);
               matvar->data_type = MAT_T_UINT8;
               break;
@@ -147,8 +137,8 @@
               Mat_Critical("MAT V4 data type error");
               return;
 ***************
-*** 494,499 ****
---- 596,602 ----
+*** 513,518 ****
+--- 614,620 ----
           Mat_VarFree(matvar);
           return NULL;
       }
@@ -157,10 +147,10 @@
       if ( !err ) {
           Mat_VarFree(matvar);
 ***************
-*** 523,527 ****
---- 626,637 ----
-          nBytes *= 2;
-      fseek(mat->fp,nBytes,SEEK_CUR);
+*** 551,555 ****
+--- 653,664 ----
+          return NULL;
+      }
   
 +     /* Check if sparse complex matrix */
 +     if ( !matvar->isComplex
