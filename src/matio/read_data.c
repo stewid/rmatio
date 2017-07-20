@@ -41,6 +41,7 @@
 /* Stefan Widgren 2014-01-04: Include files for rmatio package */
 #include <R.h>
 #include "matio_private.h"
+#define Mat_Critical error
 
 /* FIXME: Implement Unicode support */
 /* #include <stdlib.h> */
@@ -191,16 +192,9 @@ ReadDoubleData(mat_t *mat,double *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -209,16 +203,9 @@ ReadDoubleData(mat_t *mat,double *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -630,16 +617,9 @@ ReadSingleData(mat_t *mat,float *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -648,16 +628,9 @@ ReadSingleData(mat_t *mat,float *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -1003,16 +976,9 @@ ReadInt64Data(mat_t *mat,mat_int64_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -1021,16 +987,9 @@ ReadInt64Data(mat_t *mat,mat_int64_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -1415,16 +1374,9 @@ ReadUInt64Data(mat_t *mat,mat_uint64_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -1433,16 +1385,9 @@ ReadUInt64Data(mat_t *mat,mat_uint64_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -1788,16 +1733,9 @@ ReadInt32Data(mat_t *mat,mat_int32_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -1806,16 +1744,9 @@ ReadInt32Data(mat_t *mat,mat_int32_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -2124,16 +2055,9 @@ ReadUInt32Data(mat_t *mat,mat_uint32_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -2142,16 +2066,9 @@ ReadUInt32Data(mat_t *mat,mat_uint32_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -2460,16 +2377,9 @@ ReadInt16Data(mat_t *mat,mat_int16_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -2478,16 +2388,9 @@ ReadInt16Data(mat_t *mat,mat_int16_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -2796,16 +2699,9 @@ ReadUInt16Data(mat_t *mat,mat_uint16_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -2814,16 +2710,9 @@ ReadUInt16Data(mat_t *mat,mat_uint16_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -3132,16 +3021,9 @@ ReadInt8Data(mat_t *mat,mat_int8_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -3150,16 +3032,9 @@ ReadInt8Data(mat_t *mat,mat_int8_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -3468,16 +3343,9 @@ ReadUInt8Data(mat_t *mat,mat_uint8_t *data,enum matio_types data_type,int len)
             mat_int8_t i8;
 
             data_size = sizeof(mat_int8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&i8,data_size,1,mat->fp);
-                    data[i] = i8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&i8,data_size,1,mat->fp);
+                data[i] = i8;
             }
             break;
         }
@@ -3486,16 +3354,9 @@ ReadUInt8Data(mat_t *mat,mat_uint8_t *data,enum matio_types data_type,int len)
             mat_uint8_t ui8;
 
             data_size = sizeof(mat_uint8_t);
-            if ( mat->byteswap ) {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
-            } else {
-                for ( i = 0; i < len; i++ ) {
-                    bytesread += fread(&ui8,data_size,1,mat->fp);
-                    data[i] = ui8;
-                }
+            for ( i = 0; i < len; i++ ) {
+                bytesread += fread(&ui8,data_size,1,mat->fp);
+                data[i] = ui8;
             }
             break;
         }
@@ -5811,7 +5672,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
     enum matio_types data_type,size_t *dims,int *start,int *stride,int *edge)
 {
     int nBytes = 0, data_size, i, j;
-    long pos, row_stride, col_stride;
+    long pos, row_stride, col_stride, pos2;
 
     if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) ||
          (start == NULL) || (stride == NULL) || (edge    == NULL) ) {
@@ -5836,15 +5697,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 row_stride = (stride[0]-1)*data_size;
                 col_stride = stride[1]*dims[0]*data_size;
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
                 for ( i = 0; i < edge[1]; i++ ) {
                     pos = ftell(mat->fp);
+                    if ( pos == -1L ) {
+                        Mat_Critical("Couldn't determine file position");
+                        return -1;
+                    }
                     fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadDoubleData(mat,ptr++,data_type,1);
                         fseek(mat->fp,row_stride,SEEK_CUR);
                     }
-                    pos = pos+col_stride-ftell(mat->fp);
+                    pos2 = ftell(mat->fp);
+                    if ( pos2 == -1L ) {
+                        Mat_Critical("Couldn't determine file position");
+                        return -1;
+                    }
+                    pos +=col_stride-pos2;
                     fseek(mat->fp,pos,SEEK_CUR);
                 }
             }
@@ -5858,15 +5732,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadSingleData(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5880,15 +5767,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt64Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5903,15 +5803,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt64Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5925,15 +5838,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt32Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5946,15 +5872,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt32Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5967,15 +5906,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt16Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -5988,15 +5940,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt16Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -6009,15 +5974,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt8Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
@@ -6030,15 +6008,28 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             row_stride = (stride[0]-1)*data_size;
             col_stride = stride[1]*dims[0]*data_size;
             pos = ftell(mat->fp);
+            if ( pos == -1L ) {
+                Mat_Critical("Couldn't determine file position");
+                return -1;
+            }
             fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell(mat->fp);
+                if ( pos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
                 fseek(mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt8Data(mat,ptr++,data_type,1);
                     fseek(mat->fp,row_stride,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
+                pos2 = ftell(mat->fp);
+                if ( pos2 == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                    return -1;
+                }
+                pos +=col_stride-pos2;
                 fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
