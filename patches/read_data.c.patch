@@ -1,0 +1,84 @@
+*** read_data.c.orig	2017-07-20 12:51:36.166270509 +0200
+--- read_data.c	2017-07-20 13:04:56.962651327 +0200
+***************
+*** 30,45 ****
+   * POSSIBILITY OF SUCH DAMAGE.
+   */
+  
+! /* FIXME: Implement Unicode support */
+! #include <stdlib.h>
+! #include <string.h>
+! #include <stdio.h>
+! #include <math.h>
+! #include <time.h>
+  #include "matio_private.h"
+! #if defined(HAVE_ZLIB)
+! #   include <zlib.h>
+! #endif
+  
+  /*
+   * --------------------------------------------------------------------------
+--- 30,58 ----
+   * POSSIBILITY OF SUCH DAMAGE.
+   */
+  
+! /*
+!  * Changes in the R package rmatio:
+!  *
+!  * - The io routines have been adopted to use R printing and error routines.
+!  *   See the R manual Writing R Extensions
+!  *
+!  */
+! 
+! /* Stefan Widgren 2014-01-04: Include files for rmatio package */
+! #include <R.h>
+  #include "matio_private.h"
+! 
+! /* FIXME: Implement Unicode support */
+! /* #include <stdlib.h> */
+! /* #include <string.h> */
+! /* #include <stdio.h> */
+! /* #include <math.h> */
+! /* #include <time.h> */
+! /* #include "matio_private.h" */
+! 
+! /* #if defined(HAVE_ZLIB) */
+! /* #   include <zlib.h> */
+! /* #endif */
+  
+  /*
+   * --------------------------------------------------------------------------
+***************
+*** 3708,3714 ****
+              break;
+          }
+          default:
+!             printf("Character data not supported type: %d",data_type);
+              break;
+      }
+      nBytes = len*data_size;
+--- 3721,3727 ----
+              break;
+          }
+          default:
+!             Rprintf("Character data not supported type: %d",data_type);
+              break;
+      }
+      nBytes = len*data_size;
+***************
+*** 3753,3759 ****
+              break;
+          }
+          default:
+!             printf("Character data not supported type: %d",data_type);
+              break;
+      }
+      bytesread *= data_size;
+--- 3766,3772 ----
+              break;
+          }
+          default:
+!             Rprintf("Character data not supported type: %d",data_type);
+              break;
+      }
+      bytesread *= data_size;
