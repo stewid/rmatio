@@ -1,5 +1,5 @@
-*** mat4.c.orig	2017-07-20 16:29:32.561310182 +0200
---- mat4.c	2017-07-20 16:29:32.601310647 +0200
+*** mat4.c.orig	2017-07-20 17:36:23.831056824 +0200
+--- mat4.c	2017-07-20 17:36:23.847056754 +0200
 ***************
 *** 29,34 ****
 --- 29,46 ----
@@ -43,7 +43,7 @@
 ***************
 *** 224,229 ****
 --- 238,330 ----
-                  ReadUInt8Data(mat,matvar->data,matvar->data_type,N);
+                  ReadUInt8Data(mat,(mat_uint8_t*)matvar->data,matvar->data_type,N);
               matvar->data_type = MAT_T_UINT8;
               break;
 +         case MAT_C_SPARSE:
@@ -137,18 +137,8 @@
               Mat_Critical("MAT V4 data type error");
               return;
 ***************
-*** 513,518 ****
---- 614,620 ----
-          Mat_VarFree(matvar);
-          return NULL;
-      }
-+ 
-      err = fread(&tmp,sizeof(int),1,mat->fp);
-      if ( !err ) {
-          Mat_VarFree(matvar);
-***************
 *** 551,555 ****
---- 653,664 ----
+--- 652,663 ----
           return NULL;
       }
   
