@@ -121,7 +121,7 @@ Mat_VarWrite4(mat_t *mat,matvar_t *matvar)
         return -1;
 
     if (matvar->isComplex) {
-        mat_complex_split_t *complex_data = matvar->data;
+        complex_data = matvar->data;
         if ( NULL == complex_data )
             return 1;
     }
@@ -148,6 +148,9 @@ Mat_VarWrite4(mat_t *mat,matvar_t *matvar)
         default:
             return 2;
     }
+
+    if ( matvar->class_type == MAT_C_CHAR )
+        x.type++;
 
     for ( i = 0; i < matvar->rank; i++ ) {
         mat_int32_t dim;

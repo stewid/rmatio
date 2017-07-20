@@ -263,7 +263,6 @@ ReadCompressedDoubleData(mat_t *mat,z_stream *z,double *data,
         mat_uint8_t   ui8[1024];
     } buf;
 
-
     switch ( data_type ) {
         case MAT_T_DOUBLE:
         {
@@ -3825,7 +3824,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -3912,7 +3911,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4000,7 +3999,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4089,7 +4088,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4177,7 +4176,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4264,7 +4263,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4351,7 +4350,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4438,7 +4437,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4525,7 +4524,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4612,7 +4611,7 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4741,7 +4740,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4837,7 +4836,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -4929,7 +4928,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5022,7 +5021,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5114,7 +5113,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5205,7 +5204,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5296,7 +5295,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5387,7 +5386,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5478,7 +5477,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5569,7 +5568,7 @@ ReadCompressedDataSlabN(mat_t *mat,z_stream *z,void *data,
             for ( i = 1; i < rank; i++ ) {
                 inc[i]  = stride[i]-1;
                 dimp[i] = dims[i-1];
-                for ( j = i ; j--; ) {
+                for ( j = i; j--; ) {
                     inc[i]  *= dims[j];
                     dimp[i] *= dims[j+1];
                 }
@@ -5827,19 +5826,27 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
             double *ptr;
 
             ptr = (double *)data;
-            row_stride = (stride[0]-1)*data_size;
-            col_stride = stride[1]*dims[0]*data_size;
-            pos = ftell(mat->fp);
-            fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
-            for ( i = 0; i < edge[1]; i++ ) {
+            /* If stride[0] is 1 and stride[1] is 1, we are reading all of the
+             * data so get rid of the loops.
+             */
+            if ( (stride[0] == 1 && edge[0] == dims[0]) &&
+                 (stride[1] == 1) ) {
+                ReadDoubleData(mat,ptr,data_type,edge[0]*edge[1]);
+            } else {
+                row_stride = (stride[0]-1)*data_size;
+                col_stride = stride[1]*dims[0]*data_size;
                 pos = ftell(mat->fp);
-                fseek(mat->fp,start[0]*data_size,SEEK_CUR);
-                for ( j = 0; j < edge[0]; j++ ) {
-                    ReadDoubleData(mat,ptr++,data_type,1);
-                    fseek(mat->fp,row_stride,SEEK_CUR);
+                fseek(mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
+                for ( i = 0; i < edge[1]; i++ ) {
+                    pos = ftell(mat->fp);
+                    fseek(mat->fp,start[0]*data_size,SEEK_CUR);
+                    for ( j = 0; j < edge[0]; j++ ) {
+                        ReadDoubleData(mat,ptr++,data_type,1);
+                        fseek(mat->fp,row_stride,SEEK_CUR);
+                    }
+                    pos = pos+col_stride-ftell(mat->fp);
+                    fseek(mat->fp,pos,SEEK_CUR);
                 }
-                pos = pos+col_stride-ftell(mat->fp);
-                fseek(mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6259,7 +6266,6 @@ ReadCompressedDataSlab2(mat_t *mat,z_stream *z,void *data,
              * is not 0, we are reading whole columns, so get rid of inner loop
              * to speed up the code
              */
-#if 0
             if ( (stride[0] == 1 && edge[0] == dims[0]) &&
                  (stride[1] == 1) ) {
                 ReadCompressedDoubleData(mat,&z_copy,ptr,data_type,
@@ -6273,20 +6279,17 @@ ReadCompressedDataSlab2(mat_t *mat,z_stream *z,void *data,
                     InflateSkipData(mat,&z_copy,data_type,pos);
                 }
             } else {
-#endif
-            for ( i = 0; i < edge[1]; i++ ) {
-                InflateSkipData(mat,&z_copy,data_type,start[0]);
-                for ( j = 0; j < edge[0]-1; j++ ) {
+                for ( i = 0; i < edge[1]; i++ ) {
+                    InflateSkipData(mat,&z_copy,data_type,start[0]);
+                    for ( j = 0; j < edge[0]-1; j++ ) {
+                        ReadCompressedDoubleData(mat,&z_copy,ptr++,data_type,1);
+                        InflateSkipData(mat,&z_copy,data_type,stride[0]-1);
+                    }
                     ReadCompressedDoubleData(mat,&z_copy,ptr++,data_type,1);
-                    InflateSkipData(mat,&z_copy,data_type,stride[0]-1);
+                    pos = dims[0]-(edge[0]-1)*stride[0]-1-start[0] + col_stride;
+                    InflateSkipData(mat,&z_copy,data_type,pos);
                 }
-                ReadCompressedDoubleData(mat,&z_copy,ptr++,data_type,1);
-                pos = dims[0]-(edge[0]-1)*stride[0]-1-start[0] + col_stride;
-                InflateSkipData(mat,&z_copy,data_type,pos);
             }
-#if 0
-            }
-#endif
             break;
         }
         case MAT_C_SINGLE:
