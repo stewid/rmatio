@@ -1,5 +1,5 @@
-*** matio.h.orig	2017-07-21 10:01:54.498528925 +0200
---- matio.h	2017-07-21 10:01:30.349576523 +0200
+*** matio.h.orig	2017-07-21 22:36:14.456318508 +0200
+--- matio.h	2017-07-21 22:35:47.948524834 +0200
 ***************
 *** 30,43 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -127,13 +127,3 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
-***************
-*** 282,288 ****
-                        int *edge,int copy_fields);
-  EXTERN matvar_t  *Mat_VarGetStructsLinear(matvar_t *matvar,int start,int stride,
-                        int edge,int copy_fields);
-- EXTERN void       Mat_VarPrint( matvar_t *matvar, int printdata );
-  EXTERN matvar_t  *Mat_VarRead(mat_t *mat, const char *name );
-  EXTERN int        Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
-                        int *start,int *stride,int *edge);
---- 297,302 ----

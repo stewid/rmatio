@@ -35,6 +35,7 @@ sync:
 	-cd src/matio && patch -i ../../patches/mat.c.patch
 	-cd src/matio && patch -i ../../patches/mat4.c.patch
 	-cd src/matio && patch -i ../../patches/mat5.h.patch
+	-cd src/matio && patch -i ../../patches/matio.h.patch
 	-cd src/matio && patch -i ../../patches/matio_private.h.patch
 
 # Generate PDF output from the Rd sources

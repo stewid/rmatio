@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-21 11:05:30.802595055 +0200
---- mat.c	2017-07-21 11:04:43.930151248 +0200
+*** mat.c.orig	2017-07-21 11:11:55.862427558 +0200
+--- mat.c	2017-07-21 11:29:57.366285301 +0200
 ***************
 *** 30,50 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -15,7 +15,7 @@
 ! #   include <io.h>
 ! #   define mktemp _mktemp
 ! #endif
-! #ifdef _MSC_VER
+! #if defined(_MSC_VER) || defined(__MINGW32__)
 ! #   define SIZE_T_FMTSTR "Iu"
 ! #else
 ! #   define SIZE_T_FMTSTR "zu"
@@ -189,7 +189,7 @@
   
       if ( mat->version == 0x0200 ) {
 ***************
-*** 618,625 ****
+*** 611,618 ****
       matvar->isComplex   = opt & MAT_F_COMPLEX;
       matvar->isGlobal    = opt & MAT_F_GLOBAL;
       matvar->isLogical   = opt & MAT_F_LOGICAL;
@@ -198,7 +198,7 @@
       matvar->rank = rank;
       matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
       for ( i = 0; i < matvar->rank; i++ ) {
---- 608,618 ----
+--- 601,611 ----
       matvar->isComplex   = opt & MAT_F_COMPLEX;
       matvar->isGlobal    = opt & MAT_F_GLOBAL;
       matvar->isLogical   = opt & MAT_F_LOGICAL;
@@ -211,7 +211,7 @@
       matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
       for ( i = 0; i < matvar->rank; i++ ) {
 ***************
-*** 820,917 ****
+*** 813,910 ****
       return 0;
   }
   
@@ -310,9 +310,9 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 813,818 ----
+--- 806,811 ----
 ***************
-*** 1382,1592 ****
+*** 1375,1585 ****
       return bytes;
   }
   
@@ -489,8 +489,8 @@
 -                     char *re = (char*)complex_data->Re;
 -                     char *im = (char*)complex_data->Im;
 -                     for ( i = 0; i < sparse->njc-1; i++ ) {
--                         for (j = sparse->jc[i];
--                              j<sparse->jc[i+1] && j<sparse->ndata;j++ ) {
+-                         for ( j = sparse->jc[i];
+-                               j < sparse->jc[i+1] && j < sparse->ndata; j++ ) {
 -                             printf("    (%d,%d)  ",sparse->ir[j]+1,i+1);
 -                             Mat_PrintNumber(matvar->data_type,re+j*stride);
 -                             printf(" + ");
@@ -501,8 +501,8 @@
 -                 } else {
 -                     char *data = (char*)sparse->data;
 -                     for ( i = 0; i < sparse->njc-1; i++ ) {
--                         for (j = sparse->jc[i];
--                              j<sparse->jc[i+1] && j<sparse->ndata;j++ ){
+-                         for ( j = sparse->jc[i];
+-                               j < sparse->jc[i+1] && j < sparse->ndata; j++ ) {
 -                             printf("    (%d,%d)  ",sparse->ir[j]+1,i+1);
 -                             Mat_PrintNumber(matvar->data_type,data+j*stride);
 -                             printf("\n");
@@ -524,4 +524,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1283,1288 ----
+--- 1276,1281 ----
