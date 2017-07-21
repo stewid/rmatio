@@ -3692,52 +3692,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadDoubleData(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -3745,52 +3727,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadDoubleData(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -3815,52 +3779,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadSingleData(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -3868,52 +3814,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadSingleData(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -3939,52 +3867,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadInt64Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -3992,52 +3902,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadInt64Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4064,52 +3956,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadUInt64Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4117,52 +3991,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadUInt64Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4188,52 +4044,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadInt32Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4241,52 +4079,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadInt32Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4311,52 +4131,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadUInt32Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4364,52 +4166,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadUInt32Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4434,52 +4218,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadInt16Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4487,52 +4253,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadInt16Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4557,52 +4305,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadUInt16Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4610,52 +4340,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadUInt16Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4680,52 +4392,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadInt8Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4733,52 +4427,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadInt8Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4803,52 +4479,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
                 N *= edge[i];
                 I += dimp[i-1]*start[i];
             }
-            if ( fseek((FILE*)mat->fp,I*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't set file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,I*data_size,SEEK_CUR);
             if ( stride[0] == 1 ) {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     ReadUInt8Data(mat,ptr+i,data_type,edge[0]);
                     I += dims[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
-                        SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*(dims[0]-edge[0]-start[0]),
+                        SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j])+
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -4856,52 +4514,34 @@ ReadDataSlabN(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < N; i+=edge[0] ) {
                     if ( start[0] ) {
-                        if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                         I += start[0];
                     }
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadUInt8Data(mat,ptr+i+j,data_type,1);
-                        if ( fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR) != 0 ) {
-                            Mat_Critical("Couldn't set file position");
-                            return -1;
-                        }
+                        (void)fseek((FILE*)mat->fp,data_size*(stride[0]-1),SEEK_CUR);
                         I += stride[0];
                     }
                     I += dims[0]-edge[0]*stride[0]-start[0];
-                    if ( fseek((FILE*)mat->fp,data_size*
-                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,data_size*
+                        (dims[0]-edge[0]*stride[0]-start[0]),SEEK_CUR);
                     for ( j = 1; j < rank; j++ ) {
                         cnt[j]++;
                         if ( (cnt[j] % edge[j]) == 0 ) {
                             cnt[j] = 0;
                             if ( (I % dimp[j]) != 0 ) {
-                                if ( fseek((FILE*)mat->fp,data_size*
+                                (void)fseek((FILE*)mat->fp,data_size*
                                     (dimp[j]-(I % dimp[j]) +
-                                    dimp[j-1]*start[j]),SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                    dimp[j-1]*start[j]),SEEK_CUR);
                                 I += dimp[j]-(I % dimp[j]) + dimp[j-1]*start[j];
                             } else if ( start[j] ) {
-                                if ( fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
-                                    SEEK_CUR) != 0 ) {
-                                    Mat_Critical("Couldn't set file position");
-                                    return -1;
-                                }
+                                (void)fseek((FILE*)mat->fp,data_size*(dimp[j-1]*start[j]),
+                                    SEEK_CUR);
                                 I += dimp[j-1]*start[j];
                             }
                         } else {
                             I += inc[j];
-                            if ( fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR) != 0 ) {
-                                Mat_Critical("Couldn't set file position");
-                                return -1;
-                            }
+                            (void)fseek((FILE*)mat->fp,data_size*inc[j],SEEK_CUR);
                             break;
                         }
                     }
@@ -5898,10 +5538,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
     int    bytesread = 0;
 
     data_size = Mat_SizeOf(data_type);
-    if ( fseek((FILE*)mat->fp,start*data_size,SEEK_CUR) != 0 ) {
-        Mat_Critical("Couldn't set file position");
-        return -1;
-    }
+    (void)fseek((FILE*)mat->fp,start*data_size,SEEK_CUR);
 
     stride = data_size*(stride-1);
     switch(class_type) {
@@ -5911,10 +5548,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadDoubleData(mat,(double*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5924,10 +5558,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadSingleData(mat,(float*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5938,10 +5569,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadInt64Data(mat,(mat_int64_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5953,10 +5581,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadUInt64Data(mat,(mat_uint64_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5967,10 +5592,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadInt32Data(mat,(mat_int32_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5980,10 +5602,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadUInt32Data(mat,(mat_uint32_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -5993,10 +5612,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadInt16Data(mat,(mat_int16_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -6006,10 +5622,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadUInt16Data(mat,(mat_uint16_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -6019,10 +5632,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadInt8Data(mat,(mat_int8_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -6032,10 +5642,7 @@ ReadDataSlab1(mat_t *mat,void *data,enum matio_classes class_type,
             } else {
                 for ( i = 0; i < edge; i++ ) {
                     bytesread+=ReadUInt8Data(mat,(mat_uint8_t*)data+i,data_type,1);
-                    if ( fseek((FILE*)mat->fp,stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,stride,SEEK_CUR);
                 }
             }
             break;
@@ -6094,26 +5701,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't determine file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
                 for ( i = 0; i < edge[1]; i++ ) {
                     pos = ftell((FILE*)mat->fp);
                     if ( pos == -1L ) {
                         Mat_Critical("Couldn't determine file position");
                         return -1;
                     }
-                    if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                     for ( j = 0; j < edge[0]; j++ ) {
                         ReadDoubleData(mat,ptr++,data_type,1);
-                        if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-	                        Mat_Critical("Couldn't set file position");
-	                        return -1;
-	                    }
+                        (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                     }
                     pos2 = ftell((FILE*)mat->fp);
                     if ( pos2 == -1L ) {
@@ -6121,10 +5719,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                         return -1;
                     }
                     pos +=col_stride-pos2;
-                    if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
                 }
             }
             break;
@@ -6141,26 +5736,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadSingleData(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6168,10 +5754,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6188,26 +5771,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt64Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6215,10 +5789,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6236,26 +5807,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt64Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6263,10 +5825,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6283,26 +5842,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt32Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6310,10 +5860,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6329,26 +5876,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt32Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6356,10 +5894,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6375,26 +5910,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt16Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6402,10 +5928,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6421,26 +5944,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt16Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6448,10 +5962,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6467,26 +5978,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadInt8Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6494,10 +5996,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }
@@ -6513,26 +6012,17 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                 Mat_Critical("Couldn't determine file position");
                 return -1;
             }
-            if ( fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR) != 0 ) {
-                Mat_Critical("Couldn't determine file position");
-                return -1;
-            }
+            (void)fseek((FILE*)mat->fp,start[1]*dims[0]*data_size,SEEK_CUR);
             for ( i = 0; i < edge[1]; i++ ) {
                 pos = ftell((FILE*)mat->fp);
                 if ( pos == -1L ) {
                     Mat_Critical("Couldn't determine file position");
                     return -1;
                 }
-                if ( fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,start[0]*data_size,SEEK_CUR);
                 for ( j = 0; j < edge[0]; j++ ) {
                     ReadUInt8Data(mat,ptr++,data_type,1);
-                    if ( fseek((FILE*)mat->fp,row_stride,SEEK_CUR) != 0 ) {
-                        Mat_Critical("Couldn't set file position");
-                        return -1;
-                    }
+                    (void)fseek((FILE*)mat->fp,row_stride,SEEK_CUR);
                 }
                 pos2 = ftell((FILE*)mat->fp);
                 if ( pos2 == -1L ) {
@@ -6540,10 +6030,7 @@ ReadDataSlab2(mat_t *mat,void *data,enum matio_classes class_type,
                     return -1;
                 }
                 pos +=col_stride-pos2;
-                if ( fseek((FILE*)mat->fp,pos,SEEK_CUR) != 0 ) {
-                    Mat_Critical("Couldn't set file position");
-                    return -1;
-                }
+                (void)fseek((FILE*)mat->fp,pos,SEEK_CUR);
             }
             break;
         }

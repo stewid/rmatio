@@ -190,15 +190,15 @@ struct matvar_internal;
  * @ingroup MAT
  */
 typedef struct matvar_t {
-    size_t nbytes;                     /**< Number of bytes for the MAT variable */
-    int    rank;                       /**< Rank (Number of dimensions) of the data */
+    size_t nbytes;                    /**< Number of bytes for the MAT variable */
+    int    rank;                      /**< Rank (Number of dimensions) of the data */
     enum matio_types   data_type;     /**< Data type(MAT_T_*) */
     int   data_size;                  /**< Bytes / element for the data */
     enum matio_classes class_type;    /**< Class type in Matlab(MAT_C_DOUBLE, etc) */
     int   isComplex;                  /**< non-zero if the data is complex, 0 if real */
     int   isGlobal;                   /**< non-zero if the variable is global */
     int   isLogical;                  /**< non-zero if the variable is logical */
-    size_t *dims;                    /**< Array of lengths for each dimension */
+    size_t *dims;                     /**< Array of lengths for each dimension */
     char *name;                       /**< Name of the variable */
     void *data;                       /**< Pointer to the data */
     int   mem_conserve;               /**< 1 if Memory was conserved with data */
@@ -297,6 +297,7 @@ EXTERN matvar_t  *Mat_VarGetStructs(matvar_t *matvar,int *start,int *stride,
                       int *edge,int copy_fields);
 EXTERN matvar_t  *Mat_VarGetStructsLinear(matvar_t *matvar,int start,int stride,
                       int edge,int copy_fields);
+EXTERN void       Mat_VarPrint( matvar_t *matvar, int printdata );
 EXTERN matvar_t  *Mat_VarRead(mat_t *mat, const char *name );
 EXTERN int        Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
                       int *start,int *stride,int *edge);
