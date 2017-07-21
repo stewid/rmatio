@@ -1,0 +1,63 @@
+*** matio_private.h.orig	2017-07-21 09:46:19.647236202 +0200
+--- matio_private.h	2017-07-21 09:45:25.636987270 +0200
+***************
+*** 28,34 ****
+  #ifndef MATIO_PRIVATE_H
+  #define MATIO_PRIVATE_H
+  
+! #include "matioConfig.h"
+  #include "matio.h"
+  #if defined(HAVE_ZLIB)
+  #   include <zlib.h>
+--- 28,35 ----
+  #ifndef MATIO_PRIVATE_H
+  #define MATIO_PRIVATE_H
+  
+! /* Stefan Widgren 2014-01-04 */
+! #include "config.h"
+  #include "matio.h"
+  #if defined(HAVE_ZLIB)
+  #   include <zlib.h>
+***************
+*** 93,122 ****
+  };
+  
+  /*    snprintf.c    */
+! #if !HAVE_VSNPRINTF
+! int rpl_vsnprintf(char *, size_t, const char *, va_list);
+! #define mat_vsnprintf rpl_vsnprintf
+! #else
+! #define mat_vsnprintf vsnprintf
+! #endif	/* !HAVE_VSNPRINTF */
+! #if !HAVE_SNPRINTF
+! int rpl_snprintf(char *, size_t, const char *, ...);
+! #define mat_snprintf rpl_snprintf
+! #else
+! #define mat_snprintf snprintf
+! #endif	/* !HAVE_SNPRINTF */
+! #if !HAVE_VASPRINTF
+! int rpl_vasprintf(char **, const char *, va_list);
+! #define mat_vasprintf rpl_vasprintf
+! #else
+! #define mat_vasprintf vasprintf
+! #endif	/* !HAVE_VASPRINTF */
+! #if !HAVE_ASPRINTF
+! int rpl_asprintf(char **, const char *, ...);
+! #define mat_asprintf rpl_asprintf
+! #else
+! #define mat_asprintf asprintf
+! #endif	/* !HAVE_ASPRINTF */
+  
+  /*   endian.c     */
+  EXTERN double        Mat_doubleSwap(double  *a);
+--- 94,103 ----
+  };
+  
+  /*    snprintf.c    */
+! EXTERN int mat_snprintf(char *str,size_t count,const char *fmt,...);
+! EXTERN int mat_asprintf(char **ptr,const char *format, ...);
+! EXTERN int mat_vsnprintf(char *str,size_t count,const char *fmt,va_list args);
+! EXTERN int mat_vasprintf(char **ptr,const char *format,va_list ap);
+  
+  /*   endian.c     */
+  EXTERN double        Mat_doubleSwap(double  *a);

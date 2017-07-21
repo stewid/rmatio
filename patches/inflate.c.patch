@@ -1,19 +1,18 @@
-*** inflate.c.orig	2017-07-20 16:29:32.557310136 +0200
---- inflate.c	2017-07-20 16:29:32.585310461 +0200
+*** inflate.c.orig	2017-07-21 09:25:23.943381493 +0200
+--- inflate.c	2017-07-21 09:26:59.924837454 +0200
 ***************
-*** 29,35 ****
-   * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*** 30,36 ****
    * POSSIBILITY OF SUCH DAMAGE.
    */
+  
 ! #include <stdlib.h>
   #include "matio_private.h"
   
   #if HAVE_ZLIB
---- 29,46 ----
-   * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+--- 30,46 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
-! 
+  
 ! /*
 !  * Changes in the R package rmatio:
 !  *
@@ -29,7 +28,7 @@
   
   #if HAVE_ZLIB
 ***************
-*** 386,395 ****
+*** 392,401 ****
           Mat_int32Swap(tag);
           Mat_int32Swap(tag+1);
       }
@@ -40,7 +39,7 @@
       rank = tag[1];
       if ( rank % 8 != 0 )
           i = 8-(rank %8);
---- 397,409 ----
+--- 402,414 ----
           Mat_int32Swap(tag);
           Mat_int32Swap(tag+1);
       }

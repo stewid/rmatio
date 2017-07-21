@@ -1,12 +1,11 @@
-*** matvar_struct.c.orig	2017-07-20 12:51:36.162270629 +0200
---- matvar_struct.c	2017-07-20 13:00:28.744279874 +0200
+*** matvar_struct.c.orig	2017-07-21 09:25:23.967391864 +0200
+--- matvar_struct.c	2017-07-21 09:35:44.518314397 +0200
 ***************
-*** 25,30 ****
---- 25,42 ----
-   * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*** 26,31 ****
+--- 26,42 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
-+ 
+  
 + /*
 +  * Changes in the R package rmatio:
 +  *

@@ -20,17 +20,22 @@ roxygen:
 sync:
 	-cp -f ../matio/src/endian.c src/matio/
 	-cp -f ../matio/src/inflate.c src/matio/
+	-cp -f ../matio/src/mat.c src/matio/
 	-cp -f ../matio/src/mat4.h src/matio/
 	-cp -f ../matio/src/mat4.c src/matio/
 	-cp -f ../matio/src/mat5.h src/matio/
-	-cp -f ../matio/src/matvar_struct.c src/matio/
+	-cp -f ../matio/src/matio.h src/matio/
+	-cp -f ../matio/src/matio_private.h src/matio/
 	-cp -f ../matio/src/matvar_cell.c src/matio/
+	-cp -f ../matio/src/matvar_struct.c src/matio/
 	-cp -f ../matio/src/read_data.c src/matio/
 	-cd src/matio && patch -i ../../patches/inflate.c.patch
 	-cd src/matio && patch -i ../../patches/matvar_struct.c.patch
 	-cd src/matio && patch -i ../../patches/read_data.c.patch
+	-cd src/matio && patch -i ../../patches/mat.c.patch
 	-cd src/matio && patch -i ../../patches/mat4.c.patch
 	-cd src/matio && patch -i ../../patches/mat5.h.patch
+	-cd src/matio && patch -i ../../patches/matio_private.h.patch
 
 # Generate PDF output from the Rd sources
 # 1) Rebuild documentation with roxygen
