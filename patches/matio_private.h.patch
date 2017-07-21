@@ -1,5 +1,5 @@
-*** matio_private.h.orig	2017-07-21 09:46:19.647236202 +0200
---- matio_private.h	2017-07-21 09:45:25.636987270 +0200
+*** matio_private.h.orig	2017-07-21 22:51:00.669108618 +0200
+--- matio_private.h	2017-07-21 22:51:00.697107295 +0200
 ***************
 *** 28,34 ****
   #ifndef MATIO_PRIVATE_H
@@ -19,7 +19,7 @@
   #if defined(HAVE_ZLIB)
   #   include <zlib.h>
 ***************
-*** 93,122 ****
+*** 94,123 ****
   };
   
   /*    snprintf.c    */
@@ -50,7 +50,7 @@
   
   /*   endian.c     */
   EXTERN double        Mat_doubleSwap(double  *a);
---- 94,103 ----
+--- 95,104 ----
   };
   
   /*    snprintf.c    */

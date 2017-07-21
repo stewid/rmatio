@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-21 11:11:55.862427558 +0200
---- mat.c	2017-07-21 11:29:57.366285301 +0200
+*** mat.c.orig	2017-07-21 22:51:00.661108996 +0200
+--- mat.c	2017-07-21 22:51:00.689107673 +0200
 ***************
 *** 30,50 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -189,7 +189,7 @@
   
       if ( mat->version == 0x0200 ) {
 ***************
-*** 611,618 ****
+*** 612,619 ****
       matvar->isComplex   = opt & MAT_F_COMPLEX;
       matvar->isGlobal    = opt & MAT_F_GLOBAL;
       matvar->isLogical   = opt & MAT_F_LOGICAL;
@@ -198,7 +198,7 @@
       matvar->rank = rank;
       matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
       for ( i = 0; i < matvar->rank; i++ ) {
---- 601,611 ----
+--- 602,612 ----
       matvar->isComplex   = opt & MAT_F_COMPLEX;
       matvar->isGlobal    = opt & MAT_F_GLOBAL;
       matvar->isLogical   = opt & MAT_F_LOGICAL;
@@ -211,7 +211,7 @@
       matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
       for ( i = 0; i < matvar->rank; i++ ) {
 ***************
-*** 813,910 ****
+*** 814,911 ****
       return 0;
   }
   
@@ -310,9 +310,9 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 806,811 ----
+--- 807,812 ----
 ***************
-*** 1375,1585 ****
+*** 1497,1707 ****
       return bytes;
   }
   
@@ -524,4 +524,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1276,1281 ----
+--- 1398,1403 ----
