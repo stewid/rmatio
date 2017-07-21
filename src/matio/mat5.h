@@ -40,11 +40,12 @@
 /* static size_t GetCellArrayFieldBufSize(matvar_t *matvar); */
 /* static size_t GetMatrixMaxBufSize(matvar_t *matvar); */
 /* static size_t GetEmptyMatrixMaxBufSize(const char *name,int rank); */
-/* static int WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type); */
-/* static int WriteEmptyData(mat_t *mat,int N,enum matio_types data_type); */
-/* static int ReadNextCell( mat_t *mat, matvar_t *matvar ); */
-/* static int ReadNextStructField( mat_t *mat, matvar_t *matvar ); */
-/* static int ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar); */
+/* static size_t WriteCharData(mat_t *mat, void *data, int N,enum matio_types data_type); */
+/* static size_t WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type); */
+/* static size_t WriteEmptyData(mat_t *mat,int N,enum matio_types data_type); */
+/* static size_t ReadNextCell( mat_t *mat, matvar_t *matvar ); */
+/* static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar ); */
+/* static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar); */
 /* static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar); */
 /* static int WriteCellArrayField(mat_t *mat,matvar_t *matvar ); */
 /* static int WriteStructField(mat_t *mat,matvar_t *matvar); */
@@ -53,7 +54,7 @@
 /* #if defined(HAVE_ZLIB) */
 /* static size_t WriteCompressedCharData(mat_t *mat,z_streamp z,void *data,int N, */
 /*                   enum matio_types data_type); */
-/* static int    WriteCompressedEmptyData(mat_t *mat,z_streamp z,int N, */
+/* static size_t WriteCompressedEmptyData(mat_t *mat,z_streamp z,int N, */
 /*                   enum matio_types data_type); */
 /* static size_t WriteCompressedData(mat_t *mat,z_streamp z,void *data,int N, */
 /*                   enum matio_types data_type); */
@@ -70,7 +71,7 @@ EXTERN mat_t *Mat_Create5(const char *matname,const char *hdr_str);
 
 matvar_t *Mat_VarReadNextInfo5( mat_t *mat );
 void      Read5(mat_t *mat, matvar_t *matvar);
-int       ReadData5(mat_t *mat,matvar_t *matvar,void *data, 
+int       ReadData5(mat_t *mat,matvar_t *matvar,void *data,
               int *start,int *stride,int *edge);
 int       Mat_VarReadDataLinear5(mat_t *mat,matvar_t *matvar,void *data,
               int start,int stride,int edge);

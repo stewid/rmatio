@@ -3,7 +3,7 @@
  * @ingroup MAT
  */
 /*
- * Copyright (C) 2005-2011   Christopher C. Hulbert
+ * Copyright (C) 2005-2016   Christopher C. Hulbert
  *
  * All rights reserved.
  *
@@ -51,7 +51,7 @@
 #endif
 
 /** @defgroup MAT Matlab MAT File I/O Library */
-/** @defgroup mat_util MAT File I/O Utitlity Functions */
+/** @defgroup mat_util MAT File I/O Utility Functions */
 /** @if mat_devman @defgroup mat_internal Internal Functions @endif */
 
 /** @brief MAT file access types
@@ -71,10 +71,10 @@ enum mat_acc {
  */
 enum mat_ft {
     MAT_FT_MAT73  = 0x0200,   /**< @brief Matlab version 7.3 file             */
-    MAT_FT_MAT5   = 0x0100,   /**< @brief Matlab level-5 file                 */
-    MAT_FT_MAT4   = 0x0010    /**< @brief Version 4 file                      */
+    MAT_FT_MAT5   = 0x0100,   /**< @brief Matlab version 5 file               */
+    MAT_FT_MAT4   = 0x0010,   /**< @brief Matlab version 4 file               */
+    MAT_FT_UNDEFINED =   0    /**< @brief Undefined version                   */
 };
-
 
 /** @brief Matlab data types
  *
@@ -126,9 +126,9 @@ enum matio_classes {
     MAT_C_UINT16   = 11, /**< @brief Matlab unsigned 16-bit integer class  */
     MAT_C_INT32    = 12, /**< @brief Matlab signed 32-bit integer class    */
     MAT_C_UINT32   = 13, /**< @brief Matlab unsigned 32-bit integer class  */
-    MAT_C_INT64    = 14, /**< @brief Matlab unsigned 32-bit integer class  */
-    MAT_C_UINT64   = 15, /**< @brief Matlab unsigned 32-bit integer class  */
-    MAT_C_FUNCTION = 16, /**< @brief Matlab unsigned 32-bit integer class  */
+    MAT_C_INT64    = 14, /**< @brief Matlab signed 64-bit integer class    */
+    MAT_C_UINT64   = 15, /**< @brief Matlab unsigned 64-bit integer class  */
+    MAT_C_FUNCTION = 16, /**< @brief Matlab function class                 */
     MAT_C_OPAQUE   = 17  /**< @brief Matlab function workspace?            */
 };
 
@@ -217,7 +217,7 @@ typedef struct mat_sparse_t {
                                *  data[k].  0 <= k <= nzmax
                                */
     int nir;                 /**< number of elements in ir */
-    int *jc;                 /**< Array size N+1 (N is number of columsn) with
+    int *jc;                 /**< Array size N+1 (N is number of columns) with
                                *  jc[k] being the index into ir/data of the
                                *  first non-zero element for row k.
                                */
@@ -253,6 +253,7 @@ EXTERN size_t Mat_SizeOf(enum matio_types data_type);
 EXTERN size_t Mat_SizeOfClass(int class_type);
 
 /*   MAT File functions   */
+/** Create new Matlab MAT file */
 #define            Mat_Create(a,b) Mat_CreateVer(a,b,MAT_FT_DEFAULT)
 EXTERN mat_t      *Mat_CreateVer(const char *matname,const char *hdr_str,
                        enum mat_ft mat_file_ver);
@@ -318,6 +319,8 @@ EXTERN int        Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
 
 /* Other functions */
 EXTERN int       Mat_CalcSingleSubscript(int rank,int *dims,int *subs);
+EXTERN int       Mat_CalcSingleSubscript2(int rank,size_t *dims,size_t *subs,size_t *index);
 EXTERN int      *Mat_CalcSubscripts(int rank,int *dims,int index);
+EXTERN size_t   *Mat_CalcSubscripts2(int rank,size_t *dims,size_t index);
 
 #endif
