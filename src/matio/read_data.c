@@ -41,7 +41,6 @@
 /* Stefan Widgren 2014-01-04: Include files for rmatio package */
 #include <R.h>
 #include "matio_private.h"
-#define Mat_Critical error
 
 /* FIXME: Implement Unicode support */
 /* #include <stdlib.h> */
