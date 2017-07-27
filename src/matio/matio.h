@@ -40,6 +40,10 @@
 #ifndef MATIO_H
 #define MATIO_H
 
+#include <Rdefines.h>
+#define Mat_Critical Rf_error
+#define strdup_printf(format, str) strdup((str))
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "config.h"

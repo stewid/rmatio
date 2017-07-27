@@ -1,5 +1,5 @@
-*** matio.h.orig	2017-07-21 22:36:14.456318508 +0200
---- matio.h	2017-07-21 22:35:47.948524834 +0200
+*** matio.h.orig	2017-07-27 17:44:25.713959468 +0200
+--- matio.h	2017-07-27 17:40:43.577291022 +0200
 ***************
 *** 30,43 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -16,7 +16,7 @@
   
   #ifdef __cplusplus
   #   define EXTERN extern "C"
---- 30,48 ----
+--- 30,52 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
@@ -30,6 +30,10 @@
   #ifndef MATIO_H
   #define MATIO_H
   
++ #include <Rdefines.h>
++ #define Mat_Critical Rf_error
++ #define strdup_printf(format, str) strdup((str))
++ 
   #include <stdlib.h>
   #include <stdio.h>
 ! #include "config.h"
@@ -45,7 +49,7 @@
   };
   
   /** @brief Matlab array flags
---- 128,135 ----
+--- 132,139 ----
       MAT_C_UINT32   = 13, /**< @brief Matlab unsigned 32-bit integer class  */
       MAT_C_INT64    = 14, /**< @brief Matlab signed 64-bit integer class    */
       MAT_C_UINT64   = 15, /**< @brief Matlab unsigned 64-bit integer class  */
@@ -78,7 +82,7 @@
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
---- 229,254 ----
+--- 233,258 ----
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
@@ -114,7 +118,7 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
---- 270,281 ----
+--- 274,285 ----
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);

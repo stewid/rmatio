@@ -30,17 +30,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Changes in the R package rmatio:
- *
- * - The io routines have been adopted to use R printing and error routines.
- *   See the R manual Writing R Extensions
- *
- */
-
-#include <Rdefines.h>
-#define Mat_Critical error
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -84,9 +73,7 @@ Mat_Create4(const char* matname)
     mat->bof           = 0;
     mat->next_index    = 0;
     mat->refs_id       = -1;
-    /* Stefan Widgren 2017-07-20 Replaced strdup_printf with strdup */
-    /* mat->filename = strdup_printf("%s",matname); */
-    mat->filename      = strdup(matname);
+    mat->filename      = strdup_printf("%s",matname);
     mat->mode          = 0;
 
     Mat_Rewind(mat);
