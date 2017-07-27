@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-21 22:51:00.661108996 +0200
---- mat.c	2017-07-21 22:51:00.689107673 +0200
+*** mat.c.orig	2017-07-27 17:57:06.167073684 +0200
+--- mat.c	2017-07-27 17:55:30.468163676 +0200
 ***************
 *** 30,50 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -43,17 +43,6 @@
   #include "matio_private.h"
   #include "mat5.h"
   #include "mat4.h"
-***************
-*** 52,57 ****
---- 50,57 ----
-  #   include "mat73.h"
-  #endif
-  
-+ #define Mat_Critical error
-+ 
-  static void
-  ReadData(mat_t *mat, matvar_t *matvar)
-  {
 ***************
 *** 68,129 ****
       return;
@@ -118,7 +107,7 @@
       }
   }
   
---- 68,117 ----
+--- 66,115 ----
       return;
   }
   
@@ -169,47 +158,6 @@
       }
   }
   
-***************
-*** 316,322 ****
-      if ( NULL == mat )
-          return mat;
-  
-!     mat->filename = strdup_printf("%s",matname);
-      mat->mode = mode;
-  
-      if ( mat->version == 0x0200 ) {
---- 304,312 ----
-      if ( NULL == mat )
-          return mat;
-  
-!     /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-!     /* mat->filename = strdup_printf("%s",matname); */
-!     mat->filename = strdup(matname);
-      mat->mode = mode;
-  
-      if ( mat->version == 0x0200 ) {
-***************
-*** 612,619 ****
-      matvar->isComplex   = opt & MAT_F_COMPLEX;
-      matvar->isGlobal    = opt & MAT_F_GLOBAL;
-      matvar->isLogical   = opt & MAT_F_LOGICAL;
-      if ( name )
-!         matvar->name = strdup_printf("%s",name);
-      matvar->rank = rank;
-      matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
-      for ( i = 0; i < matvar->rank; i++ ) {
---- 602,612 ----
-      matvar->isComplex   = opt & MAT_F_COMPLEX;
-      matvar->isGlobal    = opt & MAT_F_GLOBAL;
-      matvar->isLogical   = opt & MAT_F_LOGICAL;
-+     /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-+     /* if ( name ) */
-+     /*     matvar->name = strdup_printf("%s",name); */
-      if ( name )
-!         matvar->name = strdup(name);
-      matvar->rank = rank;
-      matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
-      for ( i = 0; i < matvar->rank; i++ ) {
 ***************
 *** 814,911 ****
       return 0;
@@ -310,7 +258,7 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 807,812 ----
+--- 800,805 ----
 ***************
 *** 1497,1707 ****
       return bytes;
@@ -524,4 +472,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1398,1403 ----
+--- 1391,1396 ----

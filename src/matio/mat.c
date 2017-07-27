@@ -50,8 +50,6 @@
 #   include "mat73.h"
 #endif
 
-#define Mat_Critical error
-
 static void
 ReadData(mat_t *mat, matvar_t *matvar)
 {
@@ -304,9 +302,7 @@ Mat_Open(const char *matname,int mode)
     if ( NULL == mat )
         return mat;
 
-    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-    /* mat->filename = strdup_printf("%s",matname); */
-    mat->filename = strdup(matname);
+    mat->filename = strdup_printf("%s",matname);
     mat->mode = mode;
 
     if ( mat->version == 0x0200 ) {
@@ -602,11 +598,8 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
     matvar->isComplex   = opt & MAT_F_COMPLEX;
     matvar->isGlobal    = opt & MAT_F_GLOBAL;
     matvar->isLogical   = opt & MAT_F_LOGICAL;
-    /* Stefan Widgren 2014-01-01 Replaced strdup_printf with strdup */
-    /* if ( name ) */
-    /*     matvar->name = strdup_printf("%s",name); */
     if ( name )
-        matvar->name = strdup(name);
+        matvar->name = strdup_printf("%s",name);
     matvar->rank = rank;
     matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
     for ( i = 0; i < matvar->rank; i++ ) {
