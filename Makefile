@@ -30,7 +30,6 @@ sync:
 	-cp -f ../matio/src/matvar_struct.c src/matio/
 	-cp -f ../matio/src/read_data.c src/matio/
 	-cd src/matio && patch -i ../../patches/inflate.c.patch
-	-cd src/matio && patch -i ../../patches/matvar_struct.c.patch
 	-cd src/matio && patch -i ../../patches/read_data.c.patch
 	-cd src/matio && patch -i ../../patches/mat.c.patch
 	-cd src/matio && patch -i ../../patches/mat5.h.patch
