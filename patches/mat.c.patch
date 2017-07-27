@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-27 19:27:07.464355559 +0200
---- mat.c	2017-07-27 19:27:55.604380659 +0200
+*** mat.c.orig	2017-07-27 19:52:39.556154473 +0200
+--- mat.c	2017-07-27 19:53:21.767887190 +0200
 ***************
 *** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -212,7 +212,7 @@
 -             }
 -             Mat_Close(tmp);
 - 
--             if (err == 0) {
+-             if ( err == 0 ) {
 -                 char *new_name = strdup_printf("%s",mat->filename);
 - #if defined(MAT73) && MAT73
 -                 if ( mat_file_ver == MAT_FT_MAT73 ) {
