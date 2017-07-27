@@ -42,6 +42,7 @@
 
 #include <Rdefines.h>
 #define Mat_Critical Rf_error
+#define Mat_Warning Rf_warning
 #define strdup_printf(format, str) strdup((str))
 
 #include <stdlib.h>
@@ -196,9 +197,9 @@ struct matvar_internal;
 typedef struct matvar_t {
     size_t nbytes;                    /**< Number of bytes for the MAT variable */
     int    rank;                      /**< Rank (Number of dimensions) of the data */
-    enum matio_types   data_type;     /**< Data type(MAT_T_*) */
+    enum matio_types   data_type;     /**< Data type (MAT_T_*) */
     int   data_size;                  /**< Bytes / element for the data */
-    enum matio_classes class_type;    /**< Class type in Matlab(MAT_C_DOUBLE, etc) */
+    enum matio_classes class_type;    /**< Class type in Matlab (MAT_C_DOUBLE, etc) */
     int   isComplex;                  /**< non-zero if the data is complex, 0 if real */
     int   isGlobal;                   /**< non-zero if the variable is global */
     int   isLogical;                  /**< non-zero if the variable is logical */
@@ -240,19 +241,16 @@ EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
 /* EXTERN int    Mat_SetVerbose( int verb, int s ); */
 /* EXTERN int    Mat_SetDebug( int d ); */
 /* EXTERN void   Mat_Critical( const char *format, ... ); */
-/* EXTERN void   Mat_Error( const char *format, ... ); */
+/* EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR; */
 /* EXTERN void   Mat_Help( const char *helpstr[] ); */
 /* EXTERN int    Mat_LogInit( const char *progname ); */
 /* EXTERN int    Mat_LogClose(void); */
 /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
-/*                     void (*log_func)(int log_level, char *message) ); */
+/*                   void (*log_func)(int log_level, char *message) ); */
 /* EXTERN int    Mat_Message( const char *format, ... ); */
 /* EXTERN int    Mat_DebugMessage( int level, const char *format, ... ); */
 /* EXTERN int    Mat_VerbMessage( int level, const char *format, ... ); */
 /* EXTERN void   Mat_Warning( const char *format, ... ); */
-/* EXTERN void   Mat_PrintNumber(enum matio_types type, void *data); */
-/* EXTERN void   Mat_VarPrint( matvar_t *matvar, int printdata ); */
-
 EXTERN size_t Mat_SizeOf(enum matio_types data_type);
 EXTERN size_t Mat_SizeOfClass(int class_type);
 
@@ -323,9 +321,9 @@ EXTERN int        Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
                       int *start,int *stride,int *edge);
 
 /* Other functions */
-EXTERN int       Mat_CalcSingleSubscript(int rank,int *dims,int *subs);
-EXTERN int       Mat_CalcSingleSubscript2(int rank,size_t *dims,size_t *subs,size_t *index);
-EXTERN int      *Mat_CalcSubscripts(int rank,int *dims,int index);
-EXTERN size_t   *Mat_CalcSubscripts2(int rank,size_t *dims,size_t index);
+EXTERN int     Mat_CalcSingleSubscript(int rank,int *dims,int *subs);
+EXTERN int     Mat_CalcSingleSubscript2(int rank,size_t *dims,size_t *subs,size_t *index);
+EXTERN int    *Mat_CalcSubscripts(int rank,int *dims,int index);
+EXTERN size_t *Mat_CalcSubscripts2(int rank,size_t *dims,size_t index);
 
 #endif
