@@ -1,7 +1,7 @@
-*** mat.c.orig	2017-07-27 17:57:06.167073684 +0200
---- mat.c	2017-07-27 17:55:30.468163676 +0200
+*** mat.c.orig	2017-07-27 19:06:27.903891461 +0200
+--- mat.c	2017-07-27 19:11:44.179950919 +0200
 ***************
-*** 30,50 ****
+*** 30,53 ****
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
@@ -11,6 +11,9 @@
 ! #include <stdio.h>
 ! #include <math.h>
 ! #include <time.h>
+! #if HAVE_INTTYPES_H
+! #   include <inttypes.h>
+! #endif
 ! #if defined(_WIN64) || defined(_WIN32)
 ! #   include <io.h>
 ! #   define mktemp _mktemp
@@ -44,7 +47,7 @@
   #include "mat5.h"
   #include "mat4.h"
 ***************
-*** 68,129 ****
+*** 71,132 ****
       return;
   }
   
@@ -159,7 +162,7 @@
   }
   
 ***************
-*** 814,911 ****
+*** 819,916 ****
       return 0;
   }
   
@@ -258,9 +261,9 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 800,805 ----
+--- 802,807 ----
 ***************
-*** 1497,1707 ****
+*** 1502,1712 ****
       return bytes;
   }
   
@@ -472,4 +475,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1391,1396 ----
+--- 1393,1398 ----
