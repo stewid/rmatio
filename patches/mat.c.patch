@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-27 19:18:09.020094499 +0200
---- mat.c	2017-07-27 19:20:10.096148985 +0200
+*** mat.c.orig	2017-07-27 19:27:07.464355559 +0200
+--- mat.c	2017-07-27 19:27:55.604380659 +0200
 ***************
 *** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -264,7 +264,7 @@
    * Provides a clean function for duplicating a matvar_t structure.
 --- 802,807 ----
 ***************
-*** 1503,1713 ****
+*** 1503,1715 ****
       return bytes;
   }
   
@@ -344,6 +344,8 @@
 -         }
 -         return;
 -     } else if ( matvar->data == NULL || matvar->data_size < 1 ) {
+-         if ( printdata )
+-             printf("{\n}\n");
 -         return;
 -     } else if ( MAT_C_CELL == matvar->class_type ) {
 -         matvar_t **cells = (matvar_t **)matvar->data;
