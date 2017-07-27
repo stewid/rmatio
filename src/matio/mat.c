@@ -1579,7 +1579,7 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
     if ( mat->version == MAT_FT_MAT73 ) {
         fpos = mat->next_index;
         mat->next_index = 0;
-        do {
+        while ( NULL == matvar && mat->next_index < mat->num_datasets ) {
             matvar = Mat_VarReadNextInfo(mat);
             if ( matvar != NULL ) {
                 if ( matvar->name == NULL || strcmp(matvar->name,name) ) {
@@ -1590,7 +1590,7 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
                 Mat_Critical("An error occurred in reading the MAT file");
                 break;
             }
-        } while ( NULL == matvar && mat->next_index < mat->num_datasets );
+        }
         mat->next_index = fpos;
     } else {
         fpos = ftell((FILE*)mat->fp);
