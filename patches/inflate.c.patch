@@ -1,32 +1,15 @@
-*** inflate.c.orig	2017-07-21 11:11:55.858427517 +0200
---- inflate.c	2017-07-21 11:11:55.890427846 +0200
+*** inflate.c.orig	2017-07-27 18:13:16.006895407 +0200
+--- inflate.c	2017-07-27 18:12:29.806948269 +0200
 ***************
 *** 30,36 ****
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
-! #include <stdlib.h>
+- #include <stdlib.h>
   #include "matio_private.h"
   
   #if HAVE_ZLIB
---- 30,46 ----
-   * POSSIBILITY OF SUCH DAMAGE.
-   */
-  
-! /*
-!  * Changes in the R package rmatio:
-!  *
-!  * - The io routines have been adopted to use R printing and error routines.
-!  *   See the R manual Writing R Extensions
-!  *
-!  */
-! 
-! #include <Rdefines.h>
-! #define Mat_Critical error
-! 
-  #include "matio_private.h"
-  
-  #if HAVE_ZLIB
+--- 30,35 ----
 ***************
 *** 380,389 ****
           Mat_int32Swap(tag);
@@ -39,7 +22,7 @@
       rank = tag[1];
       if ( rank % 8 != 0 )
           i = 8-(rank %8);
---- 390,402 ----
+--- 379,391 ----
           Mat_int32Swap(tag);
           Mat_int32Swap(tag+1);
       }
