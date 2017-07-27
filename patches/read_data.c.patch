@@ -1,5 +1,5 @@
-*** read_data.c.orig	2017-07-27 18:07:10.855559325 +0200
---- read_data.c	2017-07-27 18:06:23.375698368 +0200
+*** read_data.c.orig	2017-07-27 20:05:15.747107818 +0200
+--- read_data.c	2017-07-27 20:05:15.755107824 +0200
 ***************
 *** 30,45 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -48,37 +48,3 @@
   
   /*
    * --------------------------------------------------------------------------
-***************
-*** 3571,3577 ****
-              break;
-          }
-          default:
-!             printf("Character data not supported type: %d",data_type);
-              break;
-      }
-      nBytes = len*data_size;
---- 3584,3590 ----
-              break;
-          }
-          default:
-!             Rprintf("Character data not supported type: %d",data_type);
-              break;
-      }
-      nBytes = len*data_size;
-***************
-*** 3616,3622 ****
-              break;
-          }
-          default:
-!             printf("Character data not supported type: %d",data_type);
-              break;
-      }
-      bytesread *= data_size;
---- 3629,3635 ----
-              break;
-          }
-          default:
-!             Rprintf("Character data not supported type: %d",data_type);
-              break;
-      }
-      bytesread *= data_size;

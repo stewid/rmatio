@@ -1,5 +1,5 @@
-*** matio.h.orig	2017-07-27 17:44:25.713959468 +0200
---- matio.h	2017-07-27 17:40:43.577291022 +0200
+*** matio.h.orig	2017-07-27 20:05:15.739107811 +0200
+--- matio.h	2017-07-27 20:16:59.775886918 +0200
 ***************
 *** 30,43 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -16,7 +16,7 @@
   
   #ifdef __cplusplus
   #   define EXTERN extern "C"
---- 30,52 ----
+--- 30,53 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
@@ -32,6 +32,7 @@
   
 + #include <Rdefines.h>
 + #define Mat_Critical Rf_error
++ #define Mat_Warning Rf_warning
 + #define strdup_printf(format, str) strdup((str))
 + 
   #include <stdlib.h>
@@ -49,7 +50,7 @@
   };
   
   /** @brief Matlab array flags
---- 132,139 ----
+--- 133,140 ----
       MAT_C_UINT32   = 13, /**< @brief Matlab unsigned 32-bit integer class  */
       MAT_C_INT64    = 14, /**< @brief Matlab signed 64-bit integer class    */
       MAT_C_UINT64   = 15, /**< @brief Matlab unsigned 64-bit integer class  */
@@ -74,7 +75,7 @@
 ! EXTERN int    Mat_LogInit( const char *progname );
 ! EXTERN int    Mat_LogClose(void);
 ! EXTERN int    Mat_LogInitFunc(const char *prog_name,
-!                     void (*log_func)(int log_level, char *message) );
+!                   void (*log_func)(int log_level, char *message) );
 ! EXTERN int    Mat_Message( const char *format, ... );
 ! EXTERN int    Mat_DebugMessage( int level, const char *format, ... );
 ! EXTERN int    Mat_VerbMessage( int level, const char *format, ... );
@@ -82,7 +83,7 @@
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
---- 233,258 ----
+--- 234,256 ----
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
@@ -93,19 +94,16 @@
 ! /* EXTERN int    Mat_SetVerbose( int verb, int s ); */
 ! /* EXTERN int    Mat_SetDebug( int d ); */
 ! /* EXTERN void   Mat_Critical( const char *format, ... ); */
-! /* EXTERN void   Mat_Error( const char *format, ... ); */
+! /* EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR; */
 ! /* EXTERN void   Mat_Help( const char *helpstr[] ); */
 ! /* EXTERN int    Mat_LogInit( const char *progname ); */
 ! /* EXTERN int    Mat_LogClose(void); */
 ! /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
-! /*                     void (*log_func)(int log_level, char *message) ); */
+! /*                   void (*log_func)(int log_level, char *message) ); */
 ! /* EXTERN int    Mat_Message( const char *format, ... ); */
 ! /* EXTERN int    Mat_DebugMessage( int level, const char *format, ... ); */
 ! /* EXTERN int    Mat_VerbMessage( int level, const char *format, ... ); */
 ! /* EXTERN void   Mat_Warning( const char *format, ... ); */
-! /* EXTERN void   Mat_PrintNumber(enum matio_types type, void *data); */
-! /* EXTERN void   Mat_VarPrint( matvar_t *matvar, int printdata ); */
-! 
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
@@ -118,7 +116,7 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
---- 274,285 ----
+--- 272,283 ----
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
