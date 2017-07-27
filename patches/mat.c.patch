@@ -1,7 +1,7 @@
-*** mat.c.orig	2017-07-27 19:06:27.903891461 +0200
---- mat.c	2017-07-27 19:11:44.179950919 +0200
+*** mat.c.orig	2017-07-27 19:18:09.020094499 +0200
+--- mat.c	2017-07-27 19:20:10.096148985 +0200
 ***************
-*** 30,53 ****
+*** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
    */
   
@@ -12,6 +12,7 @@
 ! #include <math.h>
 ! #include <time.h>
 ! #if HAVE_INTTYPES_H
+! #   define __STDC_FORMAT_MACROS
 ! #   include <inttypes.h>
 ! #endif
 ! #if defined(_WIN64) || defined(_WIN32)
@@ -47,7 +48,7 @@
   #include "mat5.h"
   #include "mat4.h"
 ***************
-*** 71,132 ****
+*** 72,133 ****
       return;
   }
   
@@ -83,7 +84,7 @@
 ! #elif defined(HAVE_UNSIGNED_LONG_LONG_INT)
 !             printf("%llu",(unsigned long long)(*(mat_uint64_t*)data));
 ! #else
-!             printf("%lu",(long)(*(mat_uint64_t*)data));
+!             printf("%lu",(unsigned long)(*(mat_uint64_t*)data));
 ! #endif
 !             break;
   #endif
@@ -162,7 +163,7 @@
   }
   
 ***************
-*** 819,916 ****
+*** 820,917 ****
       return 0;
   }
   
@@ -263,7 +264,7 @@
    * Provides a clean function for duplicating a matvar_t structure.
 --- 802,807 ----
 ***************
-*** 1502,1712 ****
+*** 1503,1713 ****
       return bytes;
   }
   
