@@ -1,5 +1,5 @@
-*** matio.h.orig	2017-07-28 15:38:55.278532652 +0200
---- matio.h	2017-07-28 15:42:38.142573647 +0200
+*** matio.h.orig	2017-07-28 16:00:19.306938170 +0200
+--- matio.h	2017-07-28 16:00:19.334938381 +0200
 ***************
 *** 30,43 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -91,7 +91,7 @@
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
 ***************
-*** 269,275 ****
+*** 270,276 ****
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
@@ -99,7 +99,7 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
---- 281,292 ----
+--- 282,293 ----
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
