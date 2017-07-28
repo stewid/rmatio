@@ -50,6 +50,12 @@
 #   include "mat73.h"
 #endif
 
+/*
+ *===================================================================
+ *                 Private Functions
+ *===================================================================
+ */
+
 static void
 ReadData(mat_t *mat, matvar_t *matvar)
 {
@@ -113,10 +119,32 @@ Mat_SizeOf(enum matio_types data_type)
     }
 }
 
+mat_complex_split_t *
+ComplexMalloc(size_t nbytes)
+{
+    mat_complex_split_t *complex_data = malloc(sizeof(*complex_data));
+    if ( NULL != complex_data ) {
+        complex_data->Re = malloc(nbytes);
+        if ( NULL != complex_data->Re ) {
+            complex_data->Im = malloc(nbytes);
+            if ( NULL == complex_data->Im ) {
+                free(complex_data->Re);
+                free(complex_data);
+                complex_data = NULL;
+            }
+        }
+        else {
+            free(complex_data);
+            complex_data = NULL;
+        }
+    }
+    return complex_data;
+}
+
 /*
- *====================================================================
+ *===================================================================
  *                 Public Functions
- *====================================================================
+ *===================================================================
  */
 
 /** @brief Get the version of the library
@@ -513,11 +541,11 @@ Mat_VarCalloc(void)
             matvar->internal->hdf5_name  = NULL;
             matvar->internal->hdf5_ref   =  0;
             matvar->internal->id         = -1;
-            matvar->internal->fp         = NULL;
             matvar->internal->fpos       = 0;
             matvar->internal->datapos    = 0;
-            matvar->internal->fieldnames = NULL;
+            matvar->internal->fp         = NULL;
             matvar->internal->num_fields = 0;
+            matvar->internal->fieldnames = NULL;
 #if defined(HAVE_ZLIB)
             matvar->internal->z          = NULL;
             matvar->internal->data       = NULL;
@@ -1353,6 +1381,15 @@ Mat_VarGetSize(matvar_t *matvar)
 {
     int i;
     size_t bytes = 0;
+    size_t overhead = 0;
+
+    if ( SIZEOF_VOID_P == 8 ) {
+        /* 112 bytes cell/struct overhead for 64-bit system */
+        overhead = 112;
+    } else if ( SIZEOF_VOID_P == 4 ) {
+        /* 60 bytes cell/struct overhead for 32-bit system */
+        overhead = 60;
+    }
 
     if ( matvar->class_type == MAT_C_STRUCT ) {
         int nfields = matvar->internal->num_fields;
@@ -1362,21 +1399,44 @@ Mat_VarGetSize(matvar_t *matvar)
         if ( nmemb*nfields > 0 ) {
             matvar_t **fields = (matvar_t**)matvar->data;
             if ( NULL != fields )
+                bytes = nmemb*nfields*overhead;
                 for ( i = 0; i < nmemb*nfields; i++ )
-                    bytes += Mat_VarGetSize(fields[i]);
+                    if ( NULL != fields[i] )
+                        bytes += Mat_VarGetSize(fields[i]);
         }
+        bytes += 64 /* max field name length */ *nfields;
     } else if ( matvar->class_type == MAT_C_CELL ) {
         matvar_t **cells = (matvar_t**)matvar->data;
         if ( NULL != cells ) {
             int ncells = matvar->nbytes / matvar->data_size;
+            bytes = ncells*overhead;
             for ( i = 0; i < ncells; i++ )
-                bytes += Mat_VarGetSize(cells[i]);
+                if ( NULL != cells[i] )
+                    bytes += Mat_VarGetSize(cells[i]);
+        }
+    } else if ( matvar->class_type == MAT_C_SPARSE ) {
+        mat_sparse_t *sparse = (mat_sparse_t*)matvar->data;
+        if ( NULL != sparse ) {
+            bytes = sparse->ndata*Mat_SizeOf(matvar->data_type);
+            if ( matvar->isComplex )
+                bytes *= 2;
+            if ( SIZEOF_VOID_P == 8 ) {
+                /* 8 byte integers for 64-bit system (as displayed in MATLAB (x64) whos) */
+                bytes += (sparse->nir + sparse->njc)*8;
+            } else if ( SIZEOF_VOID_P == 4 ) {
+                /* 4 byte integers for 32-bit system (as defined by mat_sparse_t) */
+                bytes += (sparse->nir + sparse->njc)*4;
+            }
+            if ( sparse->ndata == 0 || sparse->nir == 0 || sparse->njc == 0 )
+                bytes += matvar->isLogical ? 1 : 8;
         }
     } else {
         int nmemb = 1;
         for ( i = 0; i < matvar->rank; i++ )
             nmemb *= matvar->dims[i];
-        bytes += nmemb*Mat_SizeOfClass(matvar->class_type);
+        bytes = nmemb*Mat_SizeOfClass(matvar->class_type);
+        if ( matvar->isComplex )
+            bytes *= 2;
     }
     return bytes;
 }
@@ -1524,7 +1584,7 @@ matvar_t *
 Mat_VarReadNextInfo( mat_t *mat )
 {
     matvar_t *matvar = NULL;
-    if( mat == NULL )
+    if ( mat == NULL )
         return NULL;
 
     switch ( mat->version ) {

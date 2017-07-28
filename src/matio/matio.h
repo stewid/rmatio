@@ -88,7 +88,7 @@ enum mat_ft {
  * Matlab data types
  */
 enum matio_types {
-    MAT_T_UNKNOWN    =  0,    /**< @brief UNKNOWN data type                    */
+    MAT_T_UNKNOWN    =  0,    /**< @brief UNKNOWN data type                   */
     MAT_T_INT8       =  1,    /**< @brief 8-bit signed integer data type      */
     MAT_T_UINT8      =  2,    /**< @brief 8-bit unsigned integer data type    */
     MAT_T_INT16      =  3,    /**< @brief 16-bit signed integer data type     */
@@ -101,9 +101,9 @@ enum matio_types {
     MAT_T_UINT64     = 13,    /**< @brief 64-bit unsigned integer data type   */
     MAT_T_MATRIX     = 14,    /**< @brief matrix data type                    */
     MAT_T_COMPRESSED = 15,    /**< @brief compressed data type                */
-    MAT_T_UTF8       = 16,    /**< @brief 8-bit unicode text data type        */
-    MAT_T_UTF16      = 17,    /**< @brief 16-bit unicode text data type       */
-    MAT_T_UTF32      = 18,    /**< @brief 32-bit unicode text data type       */
+    MAT_T_UTF8       = 16,    /**< @brief 8-bit Unicode text data type        */
+    MAT_T_UTF16      = 17,    /**< @brief 16-bit Unicode text data type       */
+    MAT_T_UTF32      = 18,    /**< @brief 32-bit Unicode text data type       */
 
     MAT_T_STRING     = 20,    /**< @brief String data type                    */
     MAT_T_CELL       = 21,    /**< @brief Cell array data type                */
@@ -135,7 +135,7 @@ enum matio_classes {
     MAT_C_INT64    = 14, /**< @brief Matlab signed 64-bit integer class    */
     MAT_C_UINT64   = 15, /**< @brief Matlab unsigned 64-bit integer class  */
     MAT_C_FUNCTION = 16, /**< @brief Matlab function class                 */
-    MAT_C_OPAQUE   = 17  /**< @brief Matlab function workspace?            */
+    MAT_C_OPAQUE   = 17  /**< @brief Matlab opaque class                   */
 };
 
 /** @brief Matlab array flags
@@ -232,11 +232,19 @@ typedef struct mat_sparse_t {
     void *data;              /**< Array of data elements */
 } mat_sparse_t;
 
+/** @cond 0 */
+#define MATIO_LOG_LEVEL_ERROR    1
+#define MATIO_LOG_LEVEL_CRITICAL 1 << 1
+#define MATIO_LOG_LEVEL_WARNING  1 << 2
+#define MATIO_LOG_LEVEL_MESSAGE  1 << 3
+#define MATIO_LOG_LEVEL_DEBUG    1 << 4
+/** @endcond */
+
 /* Library function */
 EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
 
 /* Stefan Widgren 2014-01-01: Not used by rmatio */
-/*     io.c         */
+/* io.c */
 /* EXTERN char  *strdup_vprintf(const char *format, va_list ap); */
 /* EXTERN char  *strdup_printf(const char *format, ...); */
 /* EXTERN int    Mat_SetVerbose( int verb, int s ); */
@@ -255,7 +263,7 @@ EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
 EXTERN size_t Mat_SizeOf(enum matio_types data_type);
 EXTERN size_t Mat_SizeOfClass(int class_type);
 
-/*   MAT File functions   */
+/* MAT File functions */
 /** Create new Matlab MAT file */
 #define            Mat_Create(a,b) Mat_CreateVer(a,b,MAT_FT_DEFAULT)
 EXTERN mat_t      *Mat_CreateVer(const char *matname,const char *hdr_str,

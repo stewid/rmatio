@@ -1810,7 +1810,7 @@ ReadNextCell( mat_t *mat, matvar_t *matvar )
     matvar->data_size = sizeof(matvar_t *);
     matvar->nbytes    = ncells*matvar->data_size;
     matvar->data      = malloc(matvar->nbytes);
-    if ( !matvar->data ) {
+    if ( NULL == matvar->data ) {
         Mat_Critical("Couldn't allocate memory for %s->data",matvar->name);
         return bytesread;
     }
@@ -1819,7 +1819,7 @@ ReadNextCell( mat_t *mat, matvar_t *matvar )
     if ( matvar->compression ) {
 #if defined(HAVE_ZLIB)
         mat_uint32_t uncomp_buf[16] = {0,};
-        int      nbytes;
+        int nbytes;
         mat_uint32_t array_flags;
         int err;
 
@@ -1881,95 +1881,97 @@ ReadNextCell( mat_t *mat, matvar_t *matvar )
                                uncomp_buf[0]);
                 bytesread+=InflateSkip(mat,matvar->internal->z,nbytes);
             }
-            bytesread += InflateDimensions(mat,matvar,uncomp_buf);
-            nbytes -= 8;
-            if ( mat->byteswap ) {
-                (void)Mat_uint32Swap(uncomp_buf);
-                (void)Mat_uint32Swap(uncomp_buf+1);
-            }
-            /* Rank and Dimension */
-            if ( uncomp_buf[0] == MAT_T_INT32 ) {
-                int j = 0;
-
-                cells[i]->rank = uncomp_buf[1];
-                nbytes -= cells[i]->rank;
-                cells[i]->rank /= 4;
-                cells[i]->dims = (size_t*)malloc(cells[i]->rank*sizeof(*cells[i]->dims));
+            if ( cells[i]->class_type != MAT_C_OPAQUE ) {
+                bytesread += InflateDimensions(mat,matvar,uncomp_buf);
+                nbytes -= 8;
                 if ( mat->byteswap ) {
-                    for ( j = 0; j < cells[i]->rank; j++ )
-                        cells[i]->dims[j] = Mat_uint32Swap(uncomp_buf+2+j);
-                } else {
-                    for ( j = 0; j < cells[i]->rank; j++ )
-                        cells[i]->dims[j] = uncomp_buf[2+j];
+                    (void)Mat_uint32Swap(uncomp_buf);
+                    (void)Mat_uint32Swap(uncomp_buf+1);
                 }
-                if ( cells[i]->rank % 2 != 0 )
-                    nbytes -= 4;
-            }
-            bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
-            nbytes -= 8;
-            if ( mat->byteswap ) {
-                (void)Mat_uint32Swap(uncomp_buf);
-                (void)Mat_uint32Swap(uncomp_buf+1);
-            }
-            /* Handle cell elements written with a variable name */
-            if ( uncomp_buf[1] > 0 ) {
-                /* Name of variable */
-                int len = 0;
-                if ( uncomp_buf[0] == MAT_T_INT8 ) {    /* Name not in tag */
-                    len = uncomp_buf[1];
+                /* Rank and Dimension */
+                if ( uncomp_buf[0] == MAT_T_INT32 ) {
+                    int j = 0;
 
-                    if ( len % 8 > 0 )
-                        len = len+(8-(len % 8));
-                    cells[i]->name = (char*)malloc(len+1);
-                    /* Inflate variable name */
-                    bytesread += InflateVarName(mat,matvar,cells[i]->name,len);
-                    cells[i]->name[len] = '\0';
-                    nbytes -= len;
-                } else if ( ((uncomp_buf[0] & 0x0000ffff) == MAT_T_INT8) &&
-                           ((uncomp_buf[0] & 0xffff0000) != 0x00) ) {
-                    /* Name packed in tag */
-                    len = (uncomp_buf[0] & 0xffff0000) >> 16;
-                    cells[i]->name = (char*)malloc(len+1);
-                    memcpy(cells[i]->name,uncomp_buf+1,len);
-                    cells[i]->name[len] = '\0';
-                }
-            }
-            cells[i]->internal->z = (z_streamp)calloc(1,sizeof(z_stream));
-            if ( cells[i]->internal->z != NULL ) {
-                err = inflateCopy(cells[i]->internal->z,matvar->internal->z);
-                if ( err == Z_OK ) {
-                    cells[i]->internal->datapos = ftell((FILE*)mat->fp);
-                    if ( cells[i]->internal->datapos != -1L ) {
-                        cells[i]->internal->datapos -= matvar->internal->z->avail_in;
-                        if ( cells[i]->class_type == MAT_C_STRUCT )
-                            bytesread+=ReadNextStructField(mat,cells[i]);
-                        else if ( cells[i]->class_type == MAT_C_CELL )
-                            bytesread+=ReadNextCell(mat,cells[i]);
-                        else if ( nbytes <= (1 << MAX_WBITS) ) {
-                            /* Memory optimization: Read data if less in size
-                               than the zlib inflate state (approximately) */
-                            cells[i]->internal->fp = mat;
-                            Read5(mat,cells[i]);
-                            cells[i]->internal->data = cells[i]->data;
-                            cells[i]->data = NULL;
-                        }
-                        (void)fseek((FILE*)mat->fp,cells[i]->internal->datapos,SEEK_SET);
+                    cells[i]->rank = uncomp_buf[1];
+                    nbytes -= cells[i]->rank;
+                    cells[i]->rank /= 4;
+                    cells[i]->dims = (size_t*)malloc(cells[i]->rank*sizeof(*cells[i]->dims));
+                    if ( mat->byteswap ) {
+                        for ( j = 0; j < cells[i]->rank; j++ )
+                            cells[i]->dims[j] = Mat_uint32Swap(uncomp_buf+2+j);
                     } else {
-                        Mat_Critical("Couldn't determine file position");
+                        for ( j = 0; j < cells[i]->rank; j++ )
+                            cells[i]->dims[j] = uncomp_buf[2+j];
                     }
-                    if ( cells[i]->internal->data != NULL ||
-                         cells[i]->class_type == MAT_C_STRUCT ||
-                         cells[i]->class_type == MAT_C_CELL ) {
-                        /* Memory optimization: Free inflate state */
-                        inflateEnd(cells[i]->internal->z);
-                        free(cells[i]->internal->z);
-                        cells[i]->internal->z = NULL;
+                    if ( cells[i]->rank % 2 != 0 )
+                        nbytes -= 4;
+                }
+                bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
+                nbytes -= 8;
+                if ( mat->byteswap ) {
+                    (void)Mat_uint32Swap(uncomp_buf);
+                    (void)Mat_uint32Swap(uncomp_buf+1);
+                }
+                /* Handle cell elements written with a variable name */
+                if ( uncomp_buf[1] > 0 ) {
+                    /* Name of variable */
+                    int len = 0;
+                    if ( uncomp_buf[0] == MAT_T_INT8 ) {    /* Name not in tag */
+                        len = uncomp_buf[1];
+
+                        if ( len % 8 > 0 )
+                            len = len+(8-(len % 8));
+                        cells[i]->name = (char*)malloc(len+1);
+                        /* Inflate variable name */
+                        bytesread += InflateVarName(mat,matvar,cells[i]->name,len);
+                        cells[i]->name[len] = '\0';
+                        nbytes -= len;
+                    } else if ( ((uncomp_buf[0] & 0x0000ffff) == MAT_T_INT8) &&
+                               ((uncomp_buf[0] & 0xffff0000) != 0x00) ) {
+                        /* Name packed in tag */
+                        len = (uncomp_buf[0] & 0xffff0000) >> 16;
+                        cells[i]->name = (char*)malloc(len+1);
+                        memcpy(cells[i]->name,uncomp_buf+1,len);
+                        cells[i]->name[len] = '\0';
+                    }
+                }
+                cells[i]->internal->z = (z_streamp)calloc(1,sizeof(z_stream));
+                if ( cells[i]->internal->z != NULL ) {
+                    err = inflateCopy(cells[i]->internal->z,matvar->internal->z);
+                    if ( err == Z_OK ) {
+                        cells[i]->internal->datapos = ftell((FILE*)mat->fp);
+                        if ( cells[i]->internal->datapos != -1L ) {
+                            cells[i]->internal->datapos -= matvar->internal->z->avail_in;
+                            if ( cells[i]->class_type == MAT_C_STRUCT )
+                                bytesread+=ReadNextStructField(mat,cells[i]);
+                            else if ( cells[i]->class_type == MAT_C_CELL )
+                                bytesread+=ReadNextCell(mat,cells[i]);
+                            else if ( nbytes <= (1 << MAX_WBITS) ) {
+                                /* Memory optimization: Read data if less in size
+                                   than the zlib inflate state (approximately) */
+                                cells[i]->internal->fp = mat;
+                                Read5(mat,cells[i]);
+                                cells[i]->internal->data = cells[i]->data;
+                                cells[i]->data = NULL;
+                            }
+                            (void)fseek((FILE*)mat->fp,cells[i]->internal->datapos,SEEK_SET);
+                        } else {
+                            Mat_Critical("Couldn't determine file position");
+                        }
+                        if ( cells[i]->internal->data != NULL ||
+                             cells[i]->class_type == MAT_C_STRUCT ||
+                             cells[i]->class_type == MAT_C_CELL ) {
+                            /* Memory optimization: Free inflate state */
+                            inflateEnd(cells[i]->internal->z);
+                            free(cells[i]->internal->z);
+                            cells[i]->internal->z = NULL;
+                        }
+                    } else {
+                        Mat_Critical("inflateCopy returned error %s",zError(err));
                     }
                 } else {
-                    Mat_Critical("inflateCopy returned error %s",zError(err));
+                    Mat_Critical("Couldn't allocate memory");
                 }
-            } else {
-                Mat_Critical("Couldn't allocate memory");
             }
             bytesread+=InflateSkip(mat,matvar->internal->z,nbytes);
         }
@@ -2179,7 +2181,7 @@ ReadNextStructField( mat_t *mat, matvar_t *matvar )
             return bytesread;
 
         matvar->data = malloc(matvar->nbytes);
-        if ( !matvar->data )
+        if ( NULL == matvar->data )
             return bytesread;
 
         fields = (matvar_t**)matvar->data;
@@ -2239,69 +2241,71 @@ ReadNextStructField( mat_t *mat, matvar_t *matvar )
                     uncomp_buf[0]);
                 bytesread+=InflateSkip(mat,matvar->internal->z,nbytes);
             }
-            bytesread += InflateDimensions(mat,matvar,uncomp_buf);
-            nbytes -= 8;
-            if ( mat->byteswap ) {
-                (void)Mat_uint32Swap(uncomp_buf);
-                (void)Mat_uint32Swap(uncomp_buf+1);
-            }
-            /* Rank and dimension */
-            if ( uncomp_buf[0] == MAT_T_INT32 ) {
-                int j = 0;
-
-                fields[i]->rank = uncomp_buf[1];
-                nbytes -= fields[i]->rank;
-                fields[i]->rank /= 4;
-                fields[i]->dims = (size_t*)malloc(fields[i]->rank*
-                                         sizeof(*fields[i]->dims));
+            if ( fields[i]->class_type != MAT_C_OPAQUE ) {
+                bytesread += InflateDimensions(mat,matvar,uncomp_buf);
+                nbytes -= 8;
                 if ( mat->byteswap ) {
-                    for ( j = 0; j < fields[i]->rank; j++ )
-                        fields[i]->dims[j] = Mat_uint32Swap(uncomp_buf+2+j);
-                } else {
-                    for ( j = 0; j < fields[i]->rank; j++ )
-                        fields[i]->dims[j] = uncomp_buf[2+j];
+                    (void)Mat_uint32Swap(uncomp_buf);
+                    (void)Mat_uint32Swap(uncomp_buf+1);
                 }
-                if ( fields[i]->rank % 2 != 0 )
-                    nbytes -= 4;
-            }
-            bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
-            nbytes -= 8;
-            fields[i]->internal->z = (z_streamp)calloc(1,sizeof(z_stream));
-            if ( fields[i]->internal->z != NULL ) {
-                err = inflateCopy(fields[i]->internal->z,matvar->internal->z);
-                if ( err == Z_OK ) {
-                    fields[i]->internal->datapos = ftell((FILE*)mat->fp);
-                    if ( fields[i]->internal->datapos != -1L ) {
-                        fields[i]->internal->datapos -= matvar->internal->z->avail_in;
-                        if ( fields[i]->class_type == MAT_C_STRUCT )
-                            bytesread+=ReadNextStructField(mat,fields[i]);
-                        else if ( fields[i]->class_type == MAT_C_CELL )
-                            bytesread+=ReadNextCell(mat,fields[i]);
-                        else if ( nbytes <= (1 << MAX_WBITS) ) {
-                            /* Memory optimization: Read data if less in size
-                               than the zlib inflate state (approximately) */
-                            fields[i]->internal->fp = mat;
-                            Read5(mat,fields[i]);
-                            fields[i]->internal->data = fields[i]->data;
-                            fields[i]->data = NULL;
-                        }
-                        (void)fseek((FILE*)mat->fp,fields[i]->internal->datapos,SEEK_SET);
+                /* Rank and dimension */
+                if ( uncomp_buf[0] == MAT_T_INT32 ) {
+                    int j = 0;
+
+                    fields[i]->rank = uncomp_buf[1];
+                    nbytes -= fields[i]->rank;
+                    fields[i]->rank /= 4;
+                    fields[i]->dims = (size_t*)malloc(fields[i]->rank*
+                                             sizeof(*fields[i]->dims));
+                    if ( mat->byteswap ) {
+                        for ( j = 0; j < fields[i]->rank; j++ )
+                            fields[i]->dims[j] = Mat_uint32Swap(uncomp_buf+2+j);
                     } else {
-                        Mat_Critical("Couldn't determine file position");
+                        for ( j = 0; j < fields[i]->rank; j++ )
+                            fields[i]->dims[j] = uncomp_buf[2+j];
                     }
-                    if ( fields[i]->internal->data != NULL ||
-                         fields[i]->class_type == MAT_C_STRUCT ||
-                         fields[i]->class_type == MAT_C_CELL ) {
-                        /* Memory optimization: Free inflate state */
-                        inflateEnd(fields[i]->internal->z);
-                        free(fields[i]->internal->z);
-                        fields[i]->internal->z = NULL;
+                    if ( fields[i]->rank % 2 != 0 )
+                        nbytes -= 4;
+                }
+                bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
+                nbytes -= 8;
+                fields[i]->internal->z = (z_streamp)calloc(1,sizeof(z_stream));
+                if ( fields[i]->internal->z != NULL ) {
+                    err = inflateCopy(fields[i]->internal->z,matvar->internal->z);
+                    if ( err == Z_OK ) {
+                        fields[i]->internal->datapos = ftell((FILE*)mat->fp);
+                        if ( fields[i]->internal->datapos != -1L ) {
+                            fields[i]->internal->datapos -= matvar->internal->z->avail_in;
+                            if ( fields[i]->class_type == MAT_C_STRUCT )
+                                bytesread+=ReadNextStructField(mat,fields[i]);
+                            else if ( fields[i]->class_type == MAT_C_CELL )
+                                bytesread+=ReadNextCell(mat,fields[i]);
+                            else if ( nbytes <= (1 << MAX_WBITS) ) {
+                                /* Memory optimization: Read data if less in size
+                                   than the zlib inflate state (approximately) */
+                                fields[i]->internal->fp = mat;
+                                Read5(mat,fields[i]);
+                                fields[i]->internal->data = fields[i]->data;
+                                fields[i]->data = NULL;
+                            }
+                            (void)fseek((FILE*)mat->fp,fields[i]->internal->datapos,SEEK_SET);
+                        } else {
+                            Mat_Critical("Couldn't determine file position");
+                        }
+                        if ( fields[i]->internal->data != NULL ||
+                             fields[i]->class_type == MAT_C_STRUCT ||
+                             fields[i]->class_type == MAT_C_CELL ) {
+                            /* Memory optimization: Free inflate state */
+                            inflateEnd(fields[i]->internal->z);
+                            free(fields[i]->internal->z);
+                            fields[i]->internal->z = NULL;
+                        }
+                    } else {
+                        Mat_Critical("inflateCopy returned error %s",zError(err));
                     }
                 } else {
-                    Mat_Critical("inflateCopy returned error %s",zError(err));
+                    Mat_Critical("Couldn't allocate memory");
                 }
-            } else {
-                Mat_Critical("Couldn't allocate memory");
             }
             bytesread+=InflateSkip(mat,matvar->internal->z,nbytes);
         }
@@ -2357,7 +2361,7 @@ ReadNextStructField( mat_t *mat, matvar_t *matvar )
             return bytesread;
 
         matvar->data = malloc(matvar->nbytes);
-        if ( !matvar->data )
+        if ( NULL == matvar->data )
             return bytesread;
 
         fields = (matvar_t**)matvar->data;
@@ -4017,20 +4021,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4039,7 +4032,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4054,20 +4047,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4076,7 +4058,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4092,20 +4074,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4114,7 +4085,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4131,20 +4102,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4153,7 +4113,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4169,20 +4129,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4191,7 +4140,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4206,20 +4155,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4228,7 +4166,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4243,20 +4181,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4265,7 +4192,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4280,20 +4207,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4302,7 +4218,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4317,20 +4233,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4339,7 +4244,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4354,20 +4259,9 @@ Read5(mat_t *mat, matvar_t *matvar)
                 mat_complex_split_t *complex_data;
 
                 matvar->nbytes = len*matvar->data_size;
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                complex_data = ComplexMalloc(matvar->nbytes);
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(matvar->nbytes);
-                complex_data->Im = malloc(matvar->nbytes);
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",2*matvar->nbytes);
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,complex_data->Re,len);
@@ -4376,7 +4270,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else {
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
-                if ( !matvar->data ) {
+                if ( NULL == matvar->data ) {
                     Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                     break;
                 }
@@ -4431,7 +4325,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             matvar->data_size = sizeof(char);
             matvar->nbytes = len*matvar->data_size;
             matvar->data   = calloc(matvar->nbytes+1,1);
-            if ( !matvar->data ) {
+            if ( NULL == matvar->data ) {
                 Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
                 break;
             }
@@ -4471,8 +4365,10 @@ Read5(mat_t *mat, matvar_t *matvar)
             nfields = matvar->internal->num_fields;
             fields = (matvar_t **)matvar->data;
             for ( i = 0; i < len*nfields; i++ ) {
-                fields[i]->internal->fp = mat;
-                Read5(mat,fields[i]);
+                if ( NULL != fields[i] ) {
+                    fields[i]->internal->fp = mat;
+                    Read5(mat,fields[i]);
+                }
             }
             break;
         }
@@ -4480,14 +4376,16 @@ Read5(mat_t *mat, matvar_t *matvar)
         {
             matvar_t **cells;
 
-            if ( !matvar->data ) {
+            if ( NULL == matvar->data ) {
                 Mat_Critical("Data is NULL for Cell Array %s",matvar->name);
                 break;
             }
             cells = (matvar_t **)matvar->data;
             for ( i = 0; i < len; i++ ) {
-                cells[i]->internal->fp = mat;
-                Read5(mat,cells[i]);
+                if ( NULL != cells[i] ) {
+                    cells[i]->internal->fp = mat;
+                    Read5(mat,cells[i]);
+                }
             }
             /* FIXME: */
             matvar->data_type = MAT_T_CELL;
@@ -4684,25 +4582,10 @@ Read5(mat_t *mat, matvar_t *matvar)
                 data->ndata = N / s_type;
             }
             if ( matvar->isComplex ) {
-                mat_complex_split_t *complex_data;
-
-                complex_data = (mat_complex_split_t*)malloc(sizeof(*complex_data));
+                mat_complex_split_t *complex_data =
+                    ComplexMalloc(data->ndata*Mat_SizeOf(matvar->data_type));
                 if ( NULL == complex_data ) {
-                    Mat_Critical("Failed to allocate %d bytes",sizeof(*complex_data));
-                    break;
-                }
-                complex_data->Re = malloc(data->ndata*
-                                          Mat_SizeOf(matvar->data_type));
-                complex_data->Im = malloc(data->ndata*
-                                          Mat_SizeOf(matvar->data_type));
-                if ( NULL == complex_data->Re || NULL == complex_data->Im ) {
-                    if ( NULL != complex_data->Re )
-                        free(complex_data->Re);
-                    if ( NULL != complex_data->Im )
-                        free(complex_data->Im);
-                    free(complex_data);
-                    Mat_Critical("Failed to allocate %d bytes",
-                                 data->ndata* Mat_SizeOf(matvar->data_type));
+                    Mat_Critical("Memory allocation failure");
                     break;
                 }
                 if ( matvar->compression == MAT_COMPRESSION_NONE) {
@@ -5413,7 +5296,6 @@ GetDataSlab(void *data_in, void *data_out, enum matio_classes class_type,
                 memcpy(ptr++, ptr_in+i*stride, data_size); \
         } \
     } while (0)
-
 
 static int
 GetDataLinear(void *data_in, void *data_out, enum matio_classes class_type,
@@ -6894,7 +6776,7 @@ Mat_VarReadNextInfo5( mat_t *mat )
     matvar_t *matvar = NULL;
     mat_uint32_t array_flags;
 
-    if( mat == NULL )
+    if ( mat == NULL )
         return NULL;
 
     fpos = ftell((FILE*)mat->fp);
@@ -6965,62 +6847,64 @@ Mat_VarReadNextInfo5( mat_t *mat )
                     matvar->nbytes = uncomp_buf[3];
                 }
             }
-            /* Inflate dimensions */
-            bytesread += InflateDimensions(mat,matvar,uncomp_buf);
-            if ( mat->byteswap ) {
-                (void)Mat_uint32Swap(uncomp_buf);
-                (void)Mat_uint32Swap(uncomp_buf+1);
-            }
-            /* Rank and dimension */
-            if ( uncomp_buf[0] == MAT_T_INT32 ) {
-                nbytes = uncomp_buf[1];
-                matvar->rank = nbytes / 4;
-                matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
+            if ( matvar->class_type != MAT_C_OPAQUE ) {
+                /* Inflate dimensions */
+                bytesread += InflateDimensions(mat,matvar,uncomp_buf);
                 if ( mat->byteswap ) {
-                    for ( i = 0; i < matvar->rank; i++ )
-                        matvar->dims[i] = Mat_uint32Swap(&(uncomp_buf[2+i]));
-                } else {
-                    for ( i = 0; i < matvar->rank; i++ )
-                        matvar->dims[i] = uncomp_buf[2+i];
+                    (void)Mat_uint32Swap(uncomp_buf);
+                    (void)Mat_uint32Swap(uncomp_buf+1);
                 }
-            }
-            /* Inflate variable name tag */
-            bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
-            if ( mat->byteswap )
-                (void)Mat_uint32Swap(uncomp_buf);
-            /* Name of variable */
-            if ( uncomp_buf[0] == MAT_T_INT8 ) {    /* Name not in tag */
-                int len;
+                /* Rank and dimension */
+                if ( uncomp_buf[0] == MAT_T_INT32 ) {
+                    nbytes = uncomp_buf[1];
+                    matvar->rank = nbytes / 4;
+                    matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
+                    if ( mat->byteswap ) {
+                        for ( i = 0; i < matvar->rank; i++ )
+                            matvar->dims[i] = Mat_uint32Swap(&(uncomp_buf[2+i]));
+                    } else {
+                        for ( i = 0; i < matvar->rank; i++ )
+                            matvar->dims[i] = uncomp_buf[2+i];
+                    }
+                }
+                /* Inflate variable name tag */
+                bytesread += InflateVarNameTag(mat,matvar,uncomp_buf);
                 if ( mat->byteswap )
-                    len = Mat_uint32Swap(uncomp_buf+1);
-                else
-                    len = uncomp_buf[1];
+                    (void)Mat_uint32Swap(uncomp_buf);
+                /* Name of variable */
+                if ( uncomp_buf[0] == MAT_T_INT8 ) {    /* Name not in tag */
+                    int len;
+                    if ( mat->byteswap )
+                        len = Mat_uint32Swap(uncomp_buf+1);
+                    else
+                        len = uncomp_buf[1];
 
-                if ( len % 8 == 0 )
-                    i = len;
-                else
-                    i = len+(8-(len % 8));
-                matvar->name = (char*)malloc(i+1);
-                /* Inflate variable name */
-                bytesread += InflateVarName(mat,matvar,matvar->name,i);
-                matvar->name[len] = '\0';
-            } else if ( ((uncomp_buf[0] & 0x0000ffff) == MAT_T_INT8) &&
-                        ((uncomp_buf[0] & 0xffff0000) != 0x00) ) {
-                /* Name packed in tag */
-                int len;
-                len = (uncomp_buf[0] & 0xffff0000) >> 16;
-                matvar->name = (char*)malloc(len+1);
-                memcpy(matvar->name,uncomp_buf+1,len);
-                matvar->name[len] = '\0';
-            }
-            if ( matvar->class_type == MAT_C_STRUCT )
-                (void)ReadNextStructField(mat,matvar);
-            else if ( matvar->class_type == MAT_C_CELL )
-                (void)ReadNextCell(mat,matvar);
-            (void)fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
-            matvar->internal->datapos = ftell((FILE*)mat->fp);
-            if ( matvar->internal->datapos == -1L ) {
-                Mat_Critical("Couldn't determine file position");
+                    if ( len % 8 == 0 )
+                        i = len;
+                    else
+                        i = len+(8-(len % 8));
+                    matvar->name = (char*)malloc(i+1);
+                    /* Inflate variable name */
+                    bytesread += InflateVarName(mat,matvar,matvar->name,i);
+                    matvar->name[len] = '\0';
+                } else if ( ((uncomp_buf[0] & 0x0000ffff) == MAT_T_INT8) &&
+                            ((uncomp_buf[0] & 0xffff0000) != 0x00) ) {
+                    /* Name packed in tag */
+                    int len;
+                    len = (uncomp_buf[0] & 0xffff0000) >> 16;
+                    matvar->name = (char*)malloc(len+1);
+                    memcpy(matvar->name,uncomp_buf+1,len);
+                    matvar->name[len] = '\0';
+                }
+                if ( matvar->class_type == MAT_C_STRUCT )
+                    (void)ReadNextStructField(mat,matvar);
+                else if ( matvar->class_type == MAT_C_CELL )
+                    (void)ReadNextCell(mat,matvar);
+                (void)fseek((FILE*)mat->fp,-(int)matvar->internal->z->avail_in,SEEK_CUR);
+                matvar->internal->datapos = ftell((FILE*)mat->fp);
+                if ( matvar->internal->datapos == -1L ) {
+                    Mat_Critical("Couldn't determine file position");
+                }
             }
             (void)fseek((FILE*)mat->fp,nBytes+8+fpos,SEEK_SET);
             break;
