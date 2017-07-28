@@ -263,9 +263,11 @@ Mat_Open(const char *matname,int mode)
         return NULL;
     }
     mat->filename      = NULL;
-    mat->byteswap      = 0;
     mat->version       = 0;
+    mat->byteswap      = 0;
+    mat->num_datasets  = 0;
     mat->refs_id       = -1;
+    mat->dir           = NULL;
 
     bytesread += fread(mat->header,1,116,fp);
     mat->header[116] = '\0';
@@ -341,7 +343,6 @@ Mat_Open(const char *matname,int mode)
     if ( mat->version == 0x0200 ) {
         fclose((FILE*)mat->fp);
 #if defined(MAT73) && MAT73
-
         mat->fp = malloc(sizeof(hid_t));
 
         if ( (mode & 0x01) == MAT_ACC_RDONLY )
@@ -350,9 +351,9 @@ Mat_Open(const char *matname,int mode)
             *(hid_t*)mat->fp=H5Fopen(mat->filename,H5F_ACC_RDWR,H5P_DEFAULT);
 
         if ( -1 < *(hid_t*)mat->fp ) {
-            H5G_info_t group_info;
+            H5G_info_t group_info = {0};
             H5Gget_info(*(hid_t*)mat->fp, &group_info);
-            mat->num_datasets = group_info.nlinks;
+            mat->num_datasets = (size_t)group_info.nlinks;
             mat->refs_id      = -1;
         }
 #else
@@ -387,14 +388,22 @@ Mat_Close( mat_t *mat )
             mat->fp = NULL;
         }
 #endif
-        if ( mat->fp )
+        if ( NULL != mat->fp )
             fclose((FILE*)mat->fp);
-        if ( mat->header )
+        if ( NULL != mat->header )
             free(mat->header);
-        if ( mat->subsys_offset )
+        if ( NULL != mat->subsys_offset )
             free(mat->subsys_offset);
-        if ( mat->filename )
+        if ( NULL != mat->filename )
             free(mat->filename);
+        if ( NULL != mat->dir ) {
+            size_t i;
+            for ( i = 0; i < mat->num_datasets; i++ ) {
+                if ( NULL != mat->dir[i] )
+                    free(mat->dir[i]);
+            }
+            free(mat->dir);
+        }
         free(mat);
     }
     return 0;
@@ -404,15 +413,15 @@ Mat_Close( mat_t *mat )
  *
  * Gets the filename for the given MAT file
  * @ingroup MAT
- * @param matfp Pointer to the MAT file
+ * @param mat Pointer to the MAT file
  * @return MAT filename
  */
 const char *
-Mat_GetFilename(mat_t *matfp)
+Mat_GetFilename(mat_t *mat)
 {
     const char *filename = NULL;
-    if ( NULL != matfp )
-        filename = matfp->filename;
+    if ( NULL != mat )
+        filename = mat->filename;
     return filename;
 }
 
@@ -420,16 +429,111 @@ Mat_GetFilename(mat_t *matfp)
  *
  * Gets the version of the given MAT file
  * @ingroup MAT
- * @param matfp Pointer to the MAT file
+ * @param mat Pointer to the MAT file
  * @return MAT file version
  */
 enum mat_ft
-Mat_GetVersion(mat_t *matfp)
+Mat_GetVersion(mat_t *mat)
 {
     enum mat_ft file_type = MAT_FT_UNDEFINED;
-    if ( NULL != matfp )
-        file_type = (enum mat_ft)matfp->version;
+    if ( NULL != mat )
+        file_type = (enum mat_ft)mat->version;
     return file_type;
+}
+
+/** @brief Gets a list of the variables of a MAT file
+ *
+ * Gets a list of the variables of a MAT file
+ * @ingroup MAT
+ * @param mat Pointer to the MAT file
+ * @param[out] n Number of variables in the given MAT file
+ * @return Array of variable names
+ */
+char **
+Mat_GetDir(mat_t *mat, size_t *n)
+{
+    char ** dir = NULL;
+
+    if ( NULL == n )
+        return dir;
+
+    if ( NULL == mat ) {
+        *n = 0;
+        return dir;
+    }
+
+    if ( NULL == mat->dir ) {
+        matvar_t *matvar = NULL;
+
+        if ( mat->version == MAT_FT_MAT73 ) {
+            size_t i = 0;
+            size_t fpos = mat->next_index;
+            if ( mat->num_datasets == 0) {
+                *n = 0;
+                return dir;
+            }
+            mat->dir = calloc(mat->num_datasets, sizeof(char*));
+            if ( NULL == mat->dir) {
+                *n = 0;
+                Mat_Critical("Couldn't allocate memory for the directory");
+                return dir;
+            }
+            mat->next_index = 0;
+            while ( mat->next_index < mat->num_datasets ) {
+                matvar = Mat_VarReadNextInfo(mat);
+                if ( NULL != matvar ) {
+                    if ( NULL != matvar->name ) {
+                        mat->dir[i++] = strdup_printf("%s",
+                            matvar->name);
+                    }
+                    Mat_VarFree(matvar);
+                } else {
+                    Mat_Critical("An error occurred in reading the MAT file");
+                    break;
+                }
+            }
+            mat->next_index = fpos;
+            *n = i;
+        } else {
+            long fpos = ftell((FILE*)mat->fp);
+            if ( fpos == -1L ) {
+                *n = 0;
+                Mat_Critical("Couldn't determine file position");
+                return dir;
+            }
+            (void)fseek((FILE*)mat->fp,mat->bof,SEEK_SET);
+            mat->num_datasets = 0;
+            do {
+                matvar = Mat_VarReadNextInfo(mat);
+                if ( NULL != matvar ) {
+                    if ( NULL != matvar->name ) {
+                        if ( NULL == mat->dir ) {
+                            dir = malloc(sizeof(char*));
+                        } else {
+                            dir = realloc(mat->dir,
+                                (mat->num_datasets + 1)*(sizeof(char*)));
+                        }
+                        if ( NULL != dir ) {
+                            mat->dir = dir;
+                            mat->dir[mat->num_datasets++] =
+                                strdup_printf("%s", matvar->name);
+                        } else {
+                            Mat_Critical("Couldn't allocate memory for the directory");
+                            break;
+                        }
+                    }
+                    Mat_VarFree(matvar);
+                } else if (!feof((FILE *)mat->fp)) {
+                    Mat_Critical("An error occurred in reading the MAT file");
+                    break;
+                }
+            } while ( !feof((FILE *)mat->fp) );
+            (void)fseek((FILE*)mat->fp,fpos,SEEK_SET);
+            *n = mat->num_datasets;
+        }
+    }
+    dir = mat->dir;
+    return dir;
 }
 
 /** @brief Rewinds a Matlab MAT file to the first variable
@@ -445,11 +549,11 @@ Mat_Rewind( mat_t *mat )
     int err = 0;
 
     switch ( mat->version ) {
-        case MAT_FT_MAT73:
-            mat->next_index = 0;
-            break;
         case MAT_FT_MAT5:
             (void)fseek((FILE*)mat->fp,128L,SEEK_SET);
+            break;
+        case MAT_FT_MAT73:
+            mat->next_index = 0;
             break;
         case MAT_FT_MAT4:
             (void)fseek((FILE*)mat->fp,0L,SEEK_SET);
@@ -458,6 +562,7 @@ Mat_Rewind( mat_t *mat )
             err = -1;
             break;
     }
+
     return err;
 }
 
@@ -1047,15 +1152,15 @@ void
 Mat_VarFree(matvar_t *matvar)
 {
     size_t nmemb = 0, i;
-    if ( !matvar )
+    if ( NULL == matvar )
         return;
-    if ( matvar->dims ) {
+    if ( NULL != matvar->dims ) {
         nmemb = 1;
         for ( i = 0; i < matvar->rank; i++ )
             nmemb *= matvar->dims[i];
         free(matvar->dims);
     }
-    if ( matvar->data != NULL) {
+    if ( NULL != matvar->data) {
         switch (matvar->class_type ) {
             case MAT_C_STRUCT:
                 if ( !matvar->mem_conserve ) {
@@ -1204,7 +1309,7 @@ Mat_VarFree(matvar_t *matvar)
         free(matvar->internal);
         matvar->internal = NULL;
     }
-    if ( matvar->name )
+    if ( NULL != matvar->name )
         free(matvar->name);
     /* FIXME: Why does this cause a SEGV? */
 #if 0
@@ -1388,13 +1493,13 @@ Mat_VarGetSize(matvar_t *matvar)
     size_t bytes = 0;
     size_t overhead = 0;
 
-    if ( SIZEOF_VOID_P == 8 ) {
-        /* 112 bytes cell/struct overhead for 64-bit system */
-        overhead = 112;
-    } else if ( SIZEOF_VOID_P == 4 ) {
-        /* 60 bytes cell/struct overhead for 32-bit system */
-        overhead = 60;
-    }
+#if defined(_WIN64) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 8)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 8))
+    /* 112 bytes cell/struct overhead for 64-bit system */
+    overhead = 112;
+#elif defined(_WIN32) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 4)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 4))
+    /* 60 bytes cell/struct overhead for 32-bit system */
+    overhead = 60;
+#endif
 
     if ( matvar->class_type == MAT_C_STRUCT ) {
         int nfields = matvar->internal->num_fields;
@@ -1426,13 +1531,13 @@ Mat_VarGetSize(matvar_t *matvar)
             bytes = sparse->ndata*Mat_SizeOf(matvar->data_type);
             if ( matvar->isComplex )
                 bytes *= 2;
-            if ( SIZEOF_VOID_P == 8 ) {
-                /* 8 byte integers for 64-bit system (as displayed in MATLAB (x64) whos) */
-                bytes += (sparse->nir + sparse->njc)*8;
-            } else if ( SIZEOF_VOID_P == 4 ) {
-                /* 4 byte integers for 32-bit system (as defined by mat_sparse_t) */
-                bytes += (sparse->nir + sparse->njc)*4;
-            }
+#if defined(_WIN64) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 8)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 8))
+            /* 8 byte integers for 64-bit system (as displayed in MATLAB (x64) whos) */
+            bytes += (sparse->nir + sparse->njc)*8;
+#elif defined(_WIN32) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 4)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 4))
+            /* 4 byte integers for 32-bit system (as defined by mat_sparse_t) */
+            bytes += (sparse->nir + sparse->njc)*4;
+#endif
             if ( sparse->ndata == 0 || sparse->nir == 0 || sparse->njc == 0 )
                 bytes += matvar->isLogical ? 1 : 8;
         }
@@ -1483,6 +1588,9 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
     }
 
     switch ( mat->version ) {
+        case MAT_FT_MAT5:
+            err = ReadData5(mat,matvar,data,start,stride,edge);
+            break;
         case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
             err = Mat_VarReadData73(mat,matvar,data,start,stride,edge);
@@ -1490,11 +1598,11 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
             err = 1;
 #endif
             break;
-        case MAT_FT_MAT5:
-            err = ReadData5(mat,matvar,data,start,stride,edge);
-            break;
         case MAT_FT_MAT4:
             err = ReadData4(mat,matvar,data,start,stride,edge);
+            break;
+        default:
+            err = 2;
             break;
     }
 
@@ -1558,6 +1666,9 @@ Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
     }
 
     switch ( mat->version ) {
+        case MAT_FT_MAT5:
+            err = Mat_VarReadDataLinear5(mat,matvar,data,start,stride,edge);
+            break;
         case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
             err = Mat_VarReadDataLinear73(mat,matvar,data,start,stride,edge);
@@ -1565,11 +1676,11 @@ Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
             err = 1;
 #endif
             break;
-        case MAT_FT_MAT5:
-            err = Mat_VarReadDataLinear5(mat,matvar,data,start,stride,edge);
-            break;
         case MAT_FT_MAT4:
             err = Mat_VarReadDataLinear4(mat,matvar,data,start,stride,edge);
+            break;
+        default:
+            err = 2;
             break;
     }
 
@@ -1589,7 +1700,7 @@ Mat_VarReadDataLinear(mat_t *mat,matvar_t *matvar,void *data,int start,
 matvar_t *
 Mat_VarReadNextInfo( mat_t *mat )
 {
-    matvar_t *matvar = NULL;
+    matvar_t *matvar;
     if ( mat == NULL )
         return NULL;
 
@@ -1600,10 +1711,15 @@ Mat_VarReadNextInfo( mat_t *mat )
         case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
             matvar = Mat_VarReadNextInfo73(mat);
+#else
+            matvar = NULL;
 #endif
             break;
         case MAT_FT_MAT4:
             matvar = Mat_VarReadNextInfo4(mat);
+            break;
+        default:
+            matvar = NULL;
             break;
     }
 
@@ -1624,14 +1740,13 @@ Mat_VarReadNextInfo( mat_t *mat )
 matvar_t *
 Mat_VarReadInfo( mat_t *mat, const char *name )
 {
-    long fpos;
     matvar_t *matvar = NULL;
 
     if ( (mat == NULL) || (name == NULL) )
         return NULL;
 
     if ( mat->version == MAT_FT_MAT73 ) {
-        fpos = mat->next_index;
+        size_t fpos = mat->next_index;
         mat->next_index = 0;
         while ( NULL == matvar && mat->next_index < mat->num_datasets ) {
             matvar = Mat_VarReadNextInfo(mat);
@@ -1647,7 +1762,7 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
         }
         mat->next_index = fpos;
     } else {
-        fpos = ftell((FILE*)mat->fp);
+        long fpos = ftell((FILE*)mat->fp);
         if ( fpos != -1L ) {
             (void)fseek((FILE*)mat->fp,mat->bof,SEEK_SET);
             do {
@@ -1682,30 +1797,27 @@ Mat_VarReadInfo( mat_t *mat, const char *name )
 matvar_t *
 Mat_VarRead( mat_t *mat, const char *name )
 {
-    long fpos;
     matvar_t *matvar = NULL;
 
     if ( (mat == NULL) || (name == NULL) )
         return NULL;
 
     if ( MAT_FT_MAT73 != mat->version ) {
-        fpos = ftell((FILE*)mat->fp);
+        long fpos = ftell((FILE*)mat->fp);
         if ( fpos == -1L ) {
             Mat_Critical("Couldn't determine file position");
             return NULL;
         }
-    } else {
-        fpos = mat->next_index;
-        mat->next_index = 0;
-    }
-
-    matvar = Mat_VarReadInfo(mat,name);
-    if ( matvar )
-        ReadData(mat,matvar);
-
-    if ( MAT_FT_MAT73 != mat->version ) {
+        matvar = Mat_VarReadInfo(mat,name);
+        if ( matvar )
+            ReadData(mat,matvar);
         (void)fseek((FILE*)mat->fp,fpos,SEEK_SET);
     } else {
+        size_t fpos = mat->next_index;
+        mat->next_index = 0;
+        matvar = Mat_VarReadInfo(mat,name);
+        if ( matvar )
+            ReadData(mat,matvar);
         mat->next_index = fpos;
     }
     return matvar;
@@ -1858,26 +1970,62 @@ Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
 int
 Mat_VarWrite(mat_t *mat,matvar_t *matvar,enum matio_compression compress)
 {
-    matvar_t *matvar2 = NULL;
+    int err;
 
     if ( NULL == mat || NULL == matvar )
         return -1;
 
-    matvar2 = Mat_VarReadInfo(mat, matvar->name);
-    if ( NULL != matvar2 ) {
-        Mat_VarFree(matvar2);
-        Mat_Critical("Variable %s already exists.", matvar->name);
-        return 1;
+    if ( NULL == mat->dir) {
+        size_t n = 0;
+        (void)Mat_GetDir(mat, &n);
     }
 
-    if ( mat->version == MAT_FT_MAT4 )
-        return Mat_VarWrite4(mat,matvar);
-    else if ( mat->version == MAT_FT_MAT5 )
-        return Mat_VarWrite5(mat,matvar,compress);
-#if defined(MAT73) && MAT73
-    else if ( mat->version == MAT_FT_MAT73 )
-        return Mat_VarWrite73(mat,matvar,compress);
-#endif
+    {
+        /* Error if MAT variable already exists in MAT file*/
+        size_t i;
+        for ( i = 0; i < mat->num_datasets; i++ ) {
+            if ( NULL != mat->dir[i] &&
+                0 == strcmp(mat->dir[i], matvar->name) ) {
+                Mat_Critical("Variable %s already exists.", matvar->name);
+                return 1;
+            }
+        }
+    }
 
-    return 1;
+    if ( mat->version == MAT_FT_MAT5 )
+        err = Mat_VarWrite5(mat,matvar,compress);
+    else if ( mat->version == MAT_FT_MAT73 )
+#if defined(MAT73) && MAT73
+        err = Mat_VarWrite73(mat,matvar,compress);
+#else
+        err = 1;
+#endif
+    else if ( mat->version == MAT_FT_MAT4 )
+        err = Mat_VarWrite4(mat,matvar);
+    else
+        err = 2;
+
+    if ( err == 0 ) {
+        char **dir;
+        if ( NULL == mat->dir ) {
+            dir = malloc(sizeof(char*));
+        } else {
+            dir = realloc(mat->dir,
+            (mat->num_datasets + 1)*(sizeof(char*)));
+        }
+        if ( NULL != dir ) {
+            mat->dir = dir;
+            if ( NULL != matvar->name ) {
+                mat->dir[mat->num_datasets++] =
+                    strdup_printf("%s", matvar->name);
+            } else {
+                mat->dir[mat->num_datasets++] = NULL;
+            }
+        } else {
+            err = 3;
+            Mat_Critical("Couldn't allocate memory for the directory");
+        }
+    }
+
+    return err;
 }
