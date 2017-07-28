@@ -24,6 +24,7 @@ sync:
 	-cp -f ../matio/src/mat4.h src/matio/
 	-cp -f ../matio/src/mat4.c src/matio/
 	-cp -f ../matio/src/mat5.h src/matio/
+	-cp -f ../matio/src/mat5.c src/matio/
 	-cp -f ../matio/src/matio.h src/matio/
 	-cp -f ../matio/src/matio_private.h src/matio/
 	-cp -f ../matio/src/matvar_cell.c src/matio/
@@ -33,6 +34,7 @@ sync:
 	-cd src/matio && patch -i ../../patches/read_data.c.patch
 	-cd src/matio && patch -i ../../patches/mat.c.patch
 	-cd src/matio && patch -i ../../patches/mat5.h.patch
+	-cd src/matio && patch -i ../../patches/mat5.c.patch
 	-cd src/matio && patch -i ../../patches/matio.h.patch
 	-cd src/matio && patch -i ../../patches/matio_private.h.patch
 

@@ -1,0 +1,44 @@
+*** mat5.c.orig	2017-07-28 11:25:04.121663479 +0200
+--- mat5.c	2017-07-28 11:13:31.920797146 +0200
+***************
+*** 48,53 ****
+--- 48,86 ----
+  
+  static mat_complex_split_t null_complex_data = {NULL,NULL};
+  
++ /* Stefan Widgren 2014-01-05: Moved the following forward declarations
++  * from mat5.h to silent compiler warnings on windows*/
++ static size_t GetStructFieldBufSize(matvar_t *matvar);
++ static size_t GetCellArrayFieldBufSize(matvar_t *matvar);
++ static size_t GetMatrixMaxBufSize(matvar_t *matvar);
++ static size_t GetEmptyMatrixMaxBufSize(const char *name,int rank);
++ static size_t WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type);
++ static size_t WriteEmptyData(mat_t *mat,int N,enum matio_types data_type);
++ static size_t ReadNextCell( mat_t *mat, matvar_t *matvar );
++ static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar );
++ static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar);
++ static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar);
++ static int WriteCellArrayField(mat_t *mat,matvar_t *matvar );
++ static int WriteStructField(mat_t *mat,matvar_t *matvar);
++ static size_t Mat_WriteEmptyVariable5(mat_t *mat,const char *name,int rank,
++                   size_t *dims);
++ #if defined(HAVE_ZLIB)
++ static size_t WriteCompressedCharData(mat_t *mat,z_stream *z,void *data,int N,
++                   enum matio_types data_type);
++ /* Stefan Widgren 2014-01-05: Commented out to silent compiler warning
++  * unused function */
++ /* static int    WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N, */
++ /*                   enum matio_types data_type); */
++ static size_t WriteCompressedData(mat_t *mat,z_stream *z,void *data,int N,
++                   enum matio_types data_type);
++ static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar,
++                   z_stream *z);
++ static size_t WriteCompressedStructField(mat_t *mat,matvar_t *matvar,
++                   z_stream *z);
++ static size_t Mat_WriteCompressedEmptyVariable5(mat_t *mat,const char *name,
++                   int rank,size_t *dims,z_stream *z);
++ #endif
++ 
+  /*
+   * -------------------------------------------------------------
+   *   Private Functions
