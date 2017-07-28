@@ -1,5 +1,5 @@
-*** mat5.c.orig	2017-07-28 11:25:04.121663479 +0200
---- mat5.c	2017-07-28 11:13:31.920797146 +0200
+*** mat5.c.orig	2017-07-28 16:34:40.199539616 +0200
+--- mat5.c	2017-07-28 16:31:32.849977076 +0200
 ***************
 *** 48,53 ****
 --- 48,86 ----
@@ -42,3 +42,165 @@
   /*
    * -------------------------------------------------------------
    *   Private Functions
+***************
+*** 1025,1183 ****
+      return nBytes;
+  }
+  
+- #if defined(HAVE_ZLIB)
+- static size_t
+- WriteCompressedEmptyData(mat_t *mat,z_streamp z,int N,
+-     enum matio_types data_type)
+- {
+-     int nBytes = 0, data_size, i;
+-     size_t byteswritten = 0;
+- 
+-     if ( (mat == NULL) || (mat->fp == NULL) )
+-         return 0;
+- 
+-     data_size = Mat_SizeOf(data_type);
+- 
+-     switch ( data_type ) {
+-         case MAT_T_DOUBLE:
+-         {
+-             mat_uint32_t uncomp_buf[32] = {0,};
+-             mat_uint32_t comp_buf[32] = {0,};
+-             double data_uncomp_buf[4] = {0.0,};
+- 
+-             nBytes = N*data_size;
+-             uncomp_buf[0] = data_type;
+-             uncomp_buf[1] = 0;
+-             z->next_in  = ZLIB_BYTE_PTR(uncomp_buf);
+-             z->avail_in = 8;
+-             do {
+-                 z->next_out  = ZLIB_BYTE_PTR(comp_buf);
+-                 z->avail_out = 32*sizeof(*comp_buf);
+-                 deflate(z,Z_NO_FLUSH);
+-                 byteswritten += fwrite(comp_buf,1,32*sizeof(*comp_buf)-z->avail_out,(FILE*)mat->fp);
+-             } while ( z->avail_out == 0 );
+-             for ( i = 0; i < N; i++ ) {
+-                 z->next_in  = ZLIB_BYTE_PTR(data_uncomp_buf);
+-                 z->avail_in = 8;
+-                 do {
+-                     z->next_out  = ZLIB_BYTE_PTR(comp_buf);
+-                     z->avail_out = 32*sizeof(*comp_buf);
+-                     deflate(z,Z_NO_FLUSH);
+-                     byteswritten += fwrite(comp_buf,32*sizeof(*comp_buf)-z->avail_out,1,(FILE*)mat->fp);
+-                 } while ( z->avail_out == 0 );
+-             }
+-             break;
+-         }
+-         case MAT_T_SINGLE:
+-         {
+-             float f = 0.0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&f,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_INT8:
+-         {
+-             mat_int8_t i8 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&i8,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_UINT8:
+-         {
+-             mat_uint8_t ui8 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&ui8,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_INT16:
+-         {
+-             mat_int16_t i16 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&i16,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_UINT16:
+-         {
+-             mat_uint16_t ui16 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&ui16,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_INT32:
+-         {
+-             mat_int32_t i32 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&i32,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+-         case MAT_T_UINT32:
+-         {
+-             mat_uint32_t ui32 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&ui32,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+- #ifdef HAVE_MAT_INT64_T
+-         case MAT_T_INT64:
+-         {
+-             mat_int64_t i64 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&i64,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+- #endif
+- #ifdef HAVE_MAT_UINT64_T
+-         case MAT_T_UINT64:
+-         {
+-             mat_uint64_t ui64 = 0;
+- 
+-             nBytes = N*data_size;
+-             fwrite(&data_type,4,1,(FILE*)mat->fp);
+-             fwrite(&nBytes,4,1,(FILE*)mat->fp);
+-             for ( i = 0; i < N; i++ )
+-                 fwrite(&ui64,data_size,1,(FILE*)mat->fp);
+-             break;
+-         }
+- #endif
+-         default:
+-             nBytes = 0;
+-     }
+-     return byteswritten;
+- }
+- #endif
+- 
+  /** @if mat_devman
+   * @param Writes a 2-D slab of data to the MAT file
+   *
+--- 1058,1063 ----
