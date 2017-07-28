@@ -195,6 +195,8 @@ Mat_CreateVer(const char *matname,const char *hdr_str,enum mat_ft mat_file_ver)
         case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
             mat = Mat_Create73(matname,hdr_str);
+#else
+            mat = NULL;
 #endif
             break;
         default:
@@ -1008,6 +1010,8 @@ Mat_VarDuplicate(const matvar_t *in, int opt)
                 out_sparse->data = malloc(in_sparse->ndata*Mat_SizeOf(in->data_type));
                 if ( NULL != out_sparse->data )
                     memcpy(out_sparse->data, in_sparse->data, in_sparse->ndata*Mat_SizeOf(in->data_type));
+            } else {
+                out_sparse->data = NULL;
             }
         }
     } else if ( in->data != NULL ) {
@@ -1051,8 +1055,6 @@ Mat_VarFree(matvar_t *matvar)
             nmemb *= matvar->dims[i];
         free(matvar->dims);
     }
-    if ( matvar->name )
-        free(matvar->name);
     if ( matvar->data != NULL) {
         switch (matvar->class_type ) {
             case MAT_C_STRUCT:
@@ -1118,6 +1120,7 @@ Mat_VarFree(matvar_t *matvar)
             case MAT_C_EMPTY:
             case MAT_C_OBJECT:
             case MAT_C_FUNCTION:
+            case MAT_C_OPAQUE:
                 break;
         }
     }
@@ -1201,6 +1204,8 @@ Mat_VarFree(matvar_t *matvar)
         free(matvar->internal);
         matvar->internal = NULL;
     }
+    if ( matvar->name )
+        free(matvar->name);
     /* FIXME: Why does this cause a SEGV? */
 #if 0
     memset(matvar,0,sizeof(matvar_t));
@@ -1398,11 +1403,12 @@ Mat_VarGetSize(matvar_t *matvar)
             nmemb *= matvar->dims[i];
         if ( nmemb*nfields > 0 ) {
             matvar_t **fields = (matvar_t**)matvar->data;
-            if ( NULL != fields )
+            if ( NULL != fields ) {
                 bytes = nmemb*nfields*overhead;
                 for ( i = 0; i < nmemb*nfields; i++ )
                     if ( NULL != fields[i] )
                         bytes += Mat_VarGetSize(fields[i]);
+            }
         }
         bytes += 64 /* max field name length */ *nfields;
     } else if ( matvar->class_type == MAT_C_CELL ) {
