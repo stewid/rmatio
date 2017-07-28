@@ -3200,14 +3200,14 @@ ReadCompressedDataSlab1(mat_t *mat,z_streamp z,void *data,
     enum matio_classes class_type,enum matio_types data_type,int start,
     int stride,int edge)
 {
-    int nBytes = 0, i, err;
+    int nBytes = 0, i;
     z_stream z_copy = {0,};
 
     if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) )
         return 0;
 
     stride--;
-    err = inflateCopy(&z_copy,z);
+    inflateCopy(&z_copy,z);
     InflateSkipData(mat,&z_copy,data_type,start);
     switch ( class_type ) {
         case MAT_C_DOUBLE:
@@ -3337,7 +3337,7 @@ ReadCompressedDataSlab2(mat_t *mat,z_streamp z,void *data,
     enum matio_classes class_type,enum matio_types data_type,size_t *dims,
     int *start,int *stride,int *edge)
 {
-    int nBytes = 0, i, j, err;
+    int nBytes = 0, i, j;
     int pos, row_stride, col_stride;
     z_stream z_copy = {0,};
 
@@ -3346,7 +3346,7 @@ ReadCompressedDataSlab2(mat_t *mat,z_streamp z,void *data,
         return 0;
     }
 
-    err = inflateCopy(&z_copy,z);
+    inflateCopy(&z_copy,z);
     switch ( class_type ) {
         case MAT_C_DOUBLE:
         {

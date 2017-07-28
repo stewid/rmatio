@@ -1,5 +1,5 @@
-*** read_data.c.orig	2017-07-28 16:00:19.310938201 +0200
---- read_data.c	2017-07-28 16:00:19.322938291 +0200
+*** read_data.c.orig	2017-07-28 19:12:38.478135278 +0200
+--- read_data.c	2017-07-28 19:11:25.156384621 +0200
 ***************
 *** 30,45 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -48,3 +48,68 @@
   
   #define READ_DATA(SwapFunc) \
       do { \
+***************
+*** 3187,3200 ****
+      enum matio_classes class_type,enum matio_types data_type,int start,
+      int stride,int edge)
+  {
+!     int nBytes = 0, i, err;
+      z_stream z_copy = {0,};
+  
+      if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) )
+          return 0;
+  
+      stride--;
+!     err = inflateCopy(&z_copy,z);
+      InflateSkipData(mat,&z_copy,data_type,start);
+      switch ( class_type ) {
+          case MAT_C_DOUBLE:
+--- 3200,3213 ----
+      enum matio_classes class_type,enum matio_types data_type,int start,
+      int stride,int edge)
+  {
+!     int nBytes = 0, i;
+      z_stream z_copy = {0,};
+  
+      if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) )
+          return 0;
+  
+      stride--;
+!     inflateCopy(&z_copy,z);
+      InflateSkipData(mat,&z_copy,data_type,start);
+      switch ( class_type ) {
+          case MAT_C_DOUBLE:
+***************
+*** 3324,3330 ****
+      enum matio_classes class_type,enum matio_types data_type,size_t *dims,
+      int *start,int *stride,int *edge)
+  {
+!     int nBytes = 0, i, j, err;
+      int pos, row_stride, col_stride;
+      z_stream z_copy = {0,};
+  
+--- 3337,3343 ----
+      enum matio_classes class_type,enum matio_types data_type,size_t *dims,
+      int *start,int *stride,int *edge)
+  {
+!     int nBytes = 0, i, j;
+      int pos, row_stride, col_stride;
+      z_stream z_copy = {0,};
+  
+***************
+*** 3333,3339 ****
+          return 0;
+      }
+  
+!     err = inflateCopy(&z_copy,z);
+      switch ( class_type ) {
+          case MAT_C_DOUBLE:
+          {
+--- 3346,3352 ----
+          return 0;
+      }
+  
+!     inflateCopy(&z_copy,z);
+      switch ( class_type ) {
+          case MAT_C_DOUBLE:
+          {
