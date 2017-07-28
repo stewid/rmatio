@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-27 20:05:15.727107801 +0200
---- mat.c	2017-07-27 20:05:35.559124484 +0200
+*** mat.c.orig	2017-07-28 15:38:55.270532103 +0200
+--- mat.c	2017-07-28 15:38:55.302534297 +0200
 ***************
 *** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -48,7 +48,7 @@
   #include "mat5.h"
   #include "mat4.h"
 ***************
-*** 72,133 ****
+*** 78,139 ****
       return;
   }
   
@@ -111,7 +111,7 @@
       }
   }
   
---- 66,115 ----
+--- 72,121 ----
       return;
   }
   
@@ -163,7 +163,7 @@
   }
   
 ***************
-*** 819,920 ****
+*** 847,948 ****
       return 0;
   }
   
@@ -266,9 +266,9 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 801,806 ----
+--- 829,834 ----
 ***************
-*** 1495,1707 ****
+*** 1555,1767 ****
       return bytes;
   }
   
@@ -482,4 +482,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1381,1386 ----
+--- 1441,1446 ----
