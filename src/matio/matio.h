@@ -44,6 +44,7 @@
 #define Mat_Critical Rf_error
 #define Mat_Warning Rf_warning
 #define strdup_printf(format, str) strdup((str))
+#define mat_snprintf snprintf
 
 #include <stdlib.h>
 #include <stdio.h>
