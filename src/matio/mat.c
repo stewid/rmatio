@@ -896,46 +896,6 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
     return matvar;
 }
 
-/** @brief Copies a file
- *
- * @param src source file path
- * @param dst destination file path
- * @retval 0 on success
- */
-static int
-mat_copy(const char* src, const char* dst)
-{
-    size_t len;
-    char buf[BUFSIZ] = {'\0'};
-    FILE* in;
-    FILE* out;
-
-    in = fopen(src, "rb");
-    if (in == NULL) {
-        Mat_Critical("Cannot open file \"%s\" for reading.", src);
-        return -1;
-    }
-
-    out = fopen(dst, "wb");
-    if (out == NULL) {
-        fclose(in);
-        Mat_Critical("Cannot open file \"%s\" for writing.", dst);
-        return -1;
-    }
-
-    while ((len = fread(buf, sizeof(char), BUFSIZ, in)) > 0) {
-        if (len != fwrite(buf, sizeof(char), len, out)) {
-            fclose(in);
-            fclose(out);
-            Mat_Critical("Error writing to file \"%s\".", dst);
-            return -1;
-        }
-    }
-    fclose(in);
-    fclose(out);
-    return 0;
-}
-
 /** @brief Duplicates a matvar_t structure
  *
  * Provides a clean function for duplicating a matvar_t structure.

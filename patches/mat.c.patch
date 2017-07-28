@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-28 16:00:19.294938080 +0200
---- mat.c	2017-07-28 16:02:25.714156443 +0200
+*** mat.c.orig	2017-07-28 19:07:03.054132178 +0200
+--- mat.c	2017-07-28 19:06:37.161515266 +0200
 ***************
 *** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -163,10 +163,50 @@
   }
   
 ***************
-*** 954,1088 ****
-      return 0;
+*** 914,1088 ****
+      return matvar;
   }
   
+- /** @brief Copies a file
+-  *
+-  * @param src source file path
+-  * @param dst destination file path
+-  * @retval 0 on success
+-  */
+- static int
+- mat_copy(const char* src, const char* dst)
+- {
+-     size_t len;
+-     char buf[BUFSIZ] = {'\0'};
+-     FILE* in;
+-     FILE* out;
+- 
+-     in = fopen(src, "rb");
+-     if (in == NULL) {
+-         Mat_Critical("Cannot open file \"%s\" for reading.", src);
+-         return -1;
+-     }
+- 
+-     out = fopen(dst, "wb");
+-     if (out == NULL) {
+-         fclose(in);
+-         Mat_Critical("Cannot open file \"%s\" for writing.", dst);
+-         return -1;
+-     }
+- 
+-     while ((len = fread(buf, sizeof(char), BUFSIZ, in)) > 0) {
+-         if (len != fwrite(buf, sizeof(char), len, out)) {
+-             fclose(in);
+-             fclose(out);
+-             Mat_Critical("Error writing to file \"%s\".", dst);
+-             return -1;
+-         }
+-     }
+-     fclose(in);
+-     fclose(out);
+-     return 0;
+- }
+- 
 - /** @brief Deletes a variable from a file
 -  *
 -  * @ingroup MAT
@@ -299,7 +339,7 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 936,941 ----
+--- 896,901 ----
 ***************
 *** 1699,1911 ****
       return bytes;
@@ -515,4 +555,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1552,1557 ----
+--- 1512,1517 ----
