@@ -4935,7 +4935,6 @@ GetDataSlab(void *data_in, void *data_out, enum matio_classes class_type,
     int rank, size_t nbytes)
 {
     int err = 0;
-    int data_size = Mat_SizeOf(data_type);
     int same_type = 0;
     if (( class_type == MAT_C_DOUBLE && data_type == MAT_T_DOUBLE ) ||
         ( class_type == MAT_C_SINGLE && data_type == MAT_T_SINGLE ) ||
@@ -5711,7 +5710,7 @@ GetDataSlab(void *data_in, void *data_out, enum matio_classes class_type,
             }
         }
     } else {
-        int nBytes = 0, i, j, N, I = 0;
+        int i, j, N, I = 0;
         int inc[10] = {0,}, cnt[10] = {0,}, dimp[10] = {0,};
 
         switch ( class_type ) {

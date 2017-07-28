@@ -1,5 +1,5 @@
-*** mat5.c.orig	2017-07-28 16:34:40.199539616 +0200
---- mat5.c	2017-07-28 16:31:32.849977076 +0200
+*** mat5.c.orig	2017-07-28 19:04:19.494239124 +0200
+--- mat5.c	2017-07-28 19:02:08.619133650 +0200
 ***************
 *** 48,53 ****
 --- 48,86 ----
@@ -204,3 +204,30 @@
    * @param Writes a 2-D slab of data to the MAT file
    *
 --- 1058,1063 ----
+***************
+*** 5055,5061 ****
+      int rank, size_t nbytes)
+  {
+      int err = 0;
+-     int data_size = Mat_SizeOf(data_type);
+      int same_type = 0;
+      if (( class_type == MAT_C_DOUBLE && data_type == MAT_T_DOUBLE ) ||
+          ( class_type == MAT_C_SINGLE && data_type == MAT_T_SINGLE ) ||
+--- 4935,4940 ----
+***************
+*** 5831,5837 ****
+              }
+          }
+      } else {
+!         int nBytes = 0, i, j, N, I = 0;
+          int inc[10] = {0,}, cnt[10] = {0,}, dimp[10] = {0,};
+  
+          switch ( class_type ) {
+--- 5710,5716 ----
+              }
+          }
+      } else {
+!         int i, j, N, I = 0;
+          int inc[10] = {0,}, cnt[10] = {0,}, dimp[10] = {0,};
+  
+          switch ( class_type ) {
