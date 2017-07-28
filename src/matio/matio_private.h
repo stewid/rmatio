@@ -94,12 +94,6 @@ struct matvar_internal {
 #endif
 };
 
-/*    snprintf.c    */
-EXTERN int mat_snprintf(char *str,size_t count,const char *fmt,...);
-EXTERN int mat_asprintf(char **ptr,const char *format, ...);
-EXTERN int mat_vsnprintf(char *str,size_t count,const char *fmt,va_list args);
-EXTERN int mat_vasprintf(char **ptr,const char *format,va_list ap);
-
 /*   endian.c     */
 EXTERN double        Mat_doubleSwap(double  *a);
 EXTERN float         Mat_floatSwap(float   *a);

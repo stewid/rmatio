@@ -1,5 +1,5 @@
-*** matio_private.h.orig	2017-07-21 22:51:00.669108618 +0200
---- matio_private.h	2017-07-21 22:51:00.697107295 +0200
+*** matio_private.h.orig	2017-07-28 12:13:25.556042959 +0200
+--- matio_private.h	2017-07-28 12:12:51.135227842 +0200
 ***************
 *** 28,34 ****
   #ifndef MATIO_PRIVATE_H
@@ -19,45 +19,37 @@
   #if defined(HAVE_ZLIB)
   #   include <zlib.h>
 ***************
-*** 94,123 ****
+*** 93,124 ****
+  #endif
   };
   
-  /*    snprintf.c    */
-! #if !HAVE_VSNPRINTF
-! int rpl_vsnprintf(char *, size_t, const char *, va_list);
-! #define mat_vsnprintf rpl_vsnprintf
-! #else
-! #define mat_vsnprintf vsnprintf
-! #endif	/* !HAVE_VSNPRINTF */
-! #if !HAVE_SNPRINTF
-! int rpl_snprintf(char *, size_t, const char *, ...);
-! #define mat_snprintf rpl_snprintf
-! #else
-! #define mat_snprintf snprintf
-! #endif	/* !HAVE_SNPRINTF */
-! #if !HAVE_VASPRINTF
-! int rpl_vasprintf(char **, const char *, va_list);
-! #define mat_vasprintf rpl_vasprintf
-! #else
-! #define mat_vasprintf vasprintf
-! #endif	/* !HAVE_VASPRINTF */
-! #if !HAVE_ASPRINTF
-! int rpl_asprintf(char **, const char *, ...);
-! #define mat_asprintf rpl_asprintf
-! #else
-! #define mat_asprintf asprintf
-! #endif	/* !HAVE_ASPRINTF */
-  
+- /*    snprintf.c    */
+- #if !HAVE_VSNPRINTF
+- int rpl_vsnprintf(char *, size_t, const char *, va_list);
+- #define mat_vsnprintf rpl_vsnprintf
+- #else
+- #define mat_vsnprintf vsnprintf
+- #endif	/* !HAVE_VSNPRINTF */
+- #if !HAVE_SNPRINTF
+- int rpl_snprintf(char *, size_t, const char *, ...);
+- #define mat_snprintf rpl_snprintf
+- #else
+- #define mat_snprintf snprintf
+- #endif	/* !HAVE_SNPRINTF */
+- #if !HAVE_VASPRINTF
+- int rpl_vasprintf(char **, const char *, va_list);
+- #define mat_vasprintf rpl_vasprintf
+- #else
+- #define mat_vasprintf vasprintf
+- #endif	/* !HAVE_VASPRINTF */
+- #if !HAVE_ASPRINTF
+- int rpl_asprintf(char **, const char *, ...);
+- #define mat_asprintf rpl_asprintf
+- #else
+- #define mat_asprintf asprintf
+- #endif	/* !HAVE_ASPRINTF */
+- 
   /*   endian.c     */
   EXTERN double        Mat_doubleSwap(double  *a);
---- 95,104 ----
-  };
-  
-  /*    snprintf.c    */
-! EXTERN int mat_snprintf(char *str,size_t count,const char *fmt,...);
-! EXTERN int mat_asprintf(char **ptr,const char *format, ...);
-! EXTERN int mat_vsnprintf(char *str,size_t count,const char *fmt,va_list args);
-! EXTERN int mat_vasprintf(char **ptr,const char *format,va_list ap);
-  
-  /*   endian.c     */
-  EXTERN double        Mat_doubleSwap(double  *a);
+  EXTERN float         Mat_floatSwap(float   *a);
+--- 94,99 ----
