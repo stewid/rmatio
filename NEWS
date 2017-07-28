@@ -1,5 +1,5 @@
-rmatio 0.11.0.9000
-------------------
+rmatio 0.12.0
+-------------
 
 * Fixed registration of native routines called from R.
 
