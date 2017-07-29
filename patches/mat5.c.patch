@@ -1,49 +1,56 @@
-*** mat5.c.orig	2017-07-28 19:04:19.494239124 +0200
---- mat5.c	2017-07-28 19:02:08.619133650 +0200
+*** mat5.c.orig	2017-07-29 17:12:59.941302424 +0200
+--- mat5.c	2017-07-29 17:11:51.510159039 +0200
 ***************
 *** 48,53 ****
---- 48,86 ----
+--- 48,93 ----
   
   static mat_complex_split_t null_complex_data = {NULL,NULL};
   
 + /* Stefan Widgren 2014-01-05: Moved the following forward declarations
 +  * from mat5.h to silent compiler warnings on windows*/
++ static size_t GetTypeBufSize(matvar_t *matvar);
 + static size_t GetStructFieldBufSize(matvar_t *matvar);
 + static size_t GetCellArrayFieldBufSize(matvar_t *matvar);
 + static size_t GetMatrixMaxBufSize(matvar_t *matvar);
 + static size_t GetEmptyMatrixMaxBufSize(const char *name,int rank);
++ static size_t WriteCharData(mat_t *mat, void *data, int N,enum matio_types data_type);
 + static size_t WriteEmptyCharData(mat_t *mat, int N, enum matio_types data_type);
 + static size_t WriteEmptyData(mat_t *mat,int N,enum matio_types data_type);
 + static size_t ReadNextCell( mat_t *mat, matvar_t *matvar );
 + static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar );
 + static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar);
++ static int WriteType(mat_t *mat,matvar_t *matvar);
 + static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar);
 + static int WriteCellArrayField(mat_t *mat,matvar_t *matvar );
 + static int WriteStructField(mat_t *mat,matvar_t *matvar);
 + static size_t Mat_WriteEmptyVariable5(mat_t *mat,const char *name,int rank,
 +                   size_t *dims);
 + #if defined(HAVE_ZLIB)
-+ static size_t WriteCompressedCharData(mat_t *mat,z_stream *z,void *data,int N,
++ static size_t WriteCompressedCharData(mat_t *mat,z_streamp z,void *data,int N,
 +                   enum matio_types data_type);
 + /* Stefan Widgren 2014-01-05: Commented out to silent compiler warning
 +  * unused function */
-+ /* static int    WriteCompressedEmptyData(mat_t *mat,z_stream *z,int N, */
++ /* static size_t WriteCompressedEmptyData(mat_t *mat,z_streamp z,int N, */
 + /*                   enum matio_types data_type); */
-+ static size_t WriteCompressedData(mat_t *mat,z_stream *z,void *data,int N,
++ static size_t WriteCompressedData(mat_t *mat,z_streamp z,void *data,int N,
 +                   enum matio_types data_type);
++ static size_t WriteCompressedTypeArrayFlags(mat_t *mat,matvar_t *matvar,
++                   z_streamp z);
++ static size_t WriteCompressedType(mat_t *mat,matvar_t *matvar,z_streamp z);
 + static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar,
-+                   z_stream *z);
++                   z_streamp z);
 + static size_t WriteCompressedStructField(mat_t *mat,matvar_t *matvar,
-+                   z_stream *z);
++                   z_streamp z);
 + static size_t Mat_WriteCompressedEmptyVariable5(mat_t *mat,const char *name,
-+                   int rank,size_t *dims,z_stream *z);
++                   int rank,size_t *dims,z_streamp z);
 + #endif
++ 
 + 
   /*
    * -------------------------------------------------------------
    *   Private Functions
 ***************
-*** 1025,1183 ****
+*** 856,911 ****
       return nBytes;
   }
   
@@ -55,7 +62,7 @@
 -     int nBytes = 0, data_size, i;
 -     size_t byteswritten = 0;
 - 
--     if ( (mat == NULL) || (mat->fp == NULL) )
+-     if ( mat == NULL || mat->fp == NULL )
 -         return 0;
 - 
 -     data_size = Mat_SizeOf(data_type);
@@ -90,122 +97,19 @@
 -             }
 -             break;
 -         }
--         case MAT_T_SINGLE:
--         {
--             float f = 0.0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&f,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_INT8:
--         {
--             mat_int8_t i8 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&i8,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_UINT8:
--         {
--             mat_uint8_t ui8 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&ui8,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_INT16:
--         {
--             mat_int16_t i16 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&i16,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_UINT16:
--         {
--             mat_uint16_t ui16 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&ui16,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_INT32:
--         {
--             mat_int32_t i32 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&i32,data_size,1,(FILE*)mat->fp);
--             break;
--         }
--         case MAT_T_UINT32:
--         {
--             mat_uint32_t ui32 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&ui32,data_size,1,(FILE*)mat->fp);
--             break;
--         }
-- #ifdef HAVE_MAT_INT64_T
--         case MAT_T_INT64:
--         {
--             mat_int64_t i64 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&i64,data_size,1,(FILE*)mat->fp);
--             break;
--         }
-- #endif
-- #ifdef HAVE_MAT_UINT64_T
--         case MAT_T_UINT64:
--         {
--             mat_uint64_t ui64 = 0;
-- 
--             nBytes = N*data_size;
--             fwrite(&data_type,4,1,(FILE*)mat->fp);
--             fwrite(&nBytes,4,1,(FILE*)mat->fp);
--             for ( i = 0; i < N; i++ )
--                 fwrite(&ui64,data_size,1,(FILE*)mat->fp);
--             break;
--         }
-- #endif
 -         default:
--             nBytes = 0;
+-             nBytes = WriteEmptyData(mat,N,data_type);
 -     }
 -     return byteswritten;
 - }
 - #endif
 - 
-  /** @if mat_devman
-   * @param Writes a 2-D slab of data to the MAT file
-   *
---- 1058,1063 ----
+  #define WRITE_DATA_SLAB2 \
+      do { \
+          int i, j; \
+--- 896,901 ----
 ***************
-*** 5055,5061 ****
+*** 4311,4317 ****
       int rank, size_t nbytes)
   {
       int err = 0;
@@ -213,9 +117,9 @@
       int same_type = 0;
       if (( class_type == MAT_C_DOUBLE && data_type == MAT_T_DOUBLE ) ||
           ( class_type == MAT_C_SINGLE && data_type == MAT_T_SINGLE ) ||
---- 4935,4940 ----
+--- 4301,4306 ----
 ***************
-*** 5831,5837 ****
+*** 4407,4413 ****
               }
           }
       } else {
@@ -223,7 +127,7 @@
           int inc[10] = {0,}, cnt[10] = {0,}, dimp[10] = {0,};
   
           switch ( class_type ) {
---- 5710,5716 ----
+--- 4396,4402 ----
               }
           }
       } else {

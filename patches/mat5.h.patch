@@ -1,10 +1,11 @@
-*** mat5.h.orig	2017-07-21 09:25:23.975395321 +0200
---- mat5.h	2017-07-21 09:31:05.251530433 +0200
+*** mat5.h.orig	2017-07-29 16:59:57.490664820 +0200
+--- mat5.h	2017-07-29 17:04:24.259613199 +0200
 ***************
-*** 34,68 ****
+*** 34,73 ****
   #   define EXTERN extern
   #endif
   
+! static size_t GetTypeBufSize(matvar_t *matvar);
 ! static size_t GetStructFieldBufSize(matvar_t *matvar);
 ! static size_t GetCellArrayFieldBufSize(matvar_t *matvar);
 ! static size_t GetMatrixMaxBufSize(matvar_t *matvar);
@@ -15,6 +16,7 @@
 ! static size_t ReadNextCell( mat_t *mat, matvar_t *matvar );
 ! static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar );
 ! static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar);
+! static int WriteType(mat_t *mat,matvar_t *matvar);
 ! static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar);
 ! static int WriteCellArrayField(mat_t *mat,matvar_t *matvar );
 ! static int WriteStructField(mat_t *mat,matvar_t *matvar);
@@ -27,6 +29,9 @@
 !                   enum matio_types data_type);
 ! static size_t WriteCompressedData(mat_t *mat,z_streamp z,void *data,int N,
 !                   enum matio_types data_type);
+! static size_t WriteCompressedTypeArrayFlags(mat_t *mat,matvar_t *matvar,
+!                   z_streamp z);
+! static size_t WriteCompressedType(mat_t *mat,matvar_t *matvar,z_streamp z);
 ! static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar,
 !                   z_streamp z);
 ! static size_t WriteCompressedStructField(mat_t *mat,matvar_t *matvar,
@@ -37,12 +42,13 @@
   
   /*   mat5.c    */
   EXTERN mat_t *Mat_Create5(const char *matname,const char *hdr_str);
---- 34,70 ----
+--- 34,75 ----
   #   define EXTERN extern
   #endif
   
 ! /* Stefan Widgren 2014-01-05: Moved the following forward declarations
 !  * to mat5.c to silent compiler warnings on windows*/
+! /* static size_t GetTypeBufSize(matvar_t *matvar); */
 ! /* static size_t GetStructFieldBufSize(matvar_t *matvar); */
 ! /* static size_t GetCellArrayFieldBufSize(matvar_t *matvar); */
 ! /* static size_t GetMatrixMaxBufSize(matvar_t *matvar); */
@@ -53,6 +59,7 @@
 ! /* static size_t ReadNextCell( mat_t *mat, matvar_t *matvar ); */
 ! /* static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar ); */
 ! /* static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar); */
+! /* static int WriteType(mat_t *mat,matvar_t *matvar); */
 ! /* static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar); */
 ! /* static int WriteCellArrayField(mat_t *mat,matvar_t *matvar ); */
 ! /* static int WriteStructField(mat_t *mat,matvar_t *matvar); */
@@ -65,6 +72,9 @@
 ! /*                   enum matio_types data_type); */
 ! /* static size_t WriteCompressedData(mat_t *mat,z_streamp z,void *data,int N, */
 ! /*                   enum matio_types data_type); */
+! /* static size_t WriteCompressedTypeArrayFlags(mat_t *mat,matvar_t *matvar, */
+! /*                   z_streamp z); */
+! /* static size_t WriteCompressedType(mat_t *mat,matvar_t *matvar,z_streamp z); */
 ! /* static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar, */
 ! /*                   z_streamp z); */
 ! /* static size_t WriteCompressedStructField(mat_t *mat,matvar_t *matvar, */
