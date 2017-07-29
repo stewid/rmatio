@@ -266,7 +266,9 @@ Mat_Open(const char *matname,int mode)
     mat->version       = 0;
     mat->byteswap      = 0;
     mat->num_datasets  = 0;
+#if defined(MAT73) && MAT73
     mat->refs_id       = -1;
+#endif
     mat->dir           = NULL;
 
     bytesread += fread(mat->header,1,116,fp);
@@ -318,7 +320,9 @@ Mat_Open(const char *matname,int mode)
         mat->mode          = mode;
         mat->bof           = 0;
         mat->next_index    = 0;
+#if defined(MAT73) && MAT73
         mat->refs_id       = -1;
+#endif
 
         Mat_Rewind(mat);
         var = Mat_VarReadNextInfo4(mat);
@@ -645,9 +649,11 @@ Mat_VarCalloc(void)
             free(matvar);
             matvar = NULL;
         } else {
+#if defined(MAT73) && MAT73
             matvar->internal->hdf5_name  = NULL;
             matvar->internal->hdf5_ref   =  0;
             matvar->internal->id         = -1;
+#endif
             matvar->internal->fpos       = 0;
             matvar->internal->datapos    = 0;
             matvar->internal->fp         = NULL;
@@ -933,11 +939,13 @@ Mat_VarDuplicate(const matvar_t *in, int opt)
     out->dims = NULL;
     out->data = NULL;
 
+#if defined(MAT73) && MAT73
     if ( NULL != in->internal->hdf5_name )
         out->internal->hdf5_name = strdup(in->internal->hdf5_name);
 
     out->internal->hdf5_ref = in->internal->hdf5_ref;
     out->internal->id       = in->internal->id;
+#endif
     out->internal->fpos     = in->internal->fpos;
     out->internal->datapos  = in->internal->datapos;
 #if defined(HAVE_ZLIB)
@@ -1450,15 +1458,16 @@ size_t
 Mat_VarGetSize(matvar_t *matvar)
 {
     int i;
-    size_t bytes = 0;
-    size_t overhead = 0;
+    size_t bytes = 0, overhead = 0, ptr = 0;
 
 #if defined(_WIN64) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 8)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 8))
     /* 112 bytes cell/struct overhead for 64-bit system */
     overhead = 112;
+    ptr = 8;
 #elif defined(_WIN32) || (defined(__SIZEOF_POINTER__) && (__SIZEOF_POINTER__ == 4)) || (defined(SIZEOF_VOID_P) && (SIZEOF_VOID_P == 4))
     /* 60 bytes cell/struct overhead for 32-bit system */
     overhead = 60;
+    ptr = 4;
 #endif
 
     if ( matvar->class_type == MAT_C_STRUCT ) {
@@ -1470,9 +1479,14 @@ Mat_VarGetSize(matvar_t *matvar)
             matvar_t **fields = (matvar_t**)matvar->data;
             if ( NULL != fields ) {
                 bytes = nmemb*nfields*overhead;
-                for ( i = 0; i < nmemb*nfields; i++ )
-                    if ( NULL != fields[i] )
-                        bytes += Mat_VarGetSize(fields[i]);
+                for ( i = 0; i < nmemb*nfields; i++ ) {
+                    if ( NULL != fields[i] ) {
+                        if ( MAT_C_EMPTY != fields[i]->class_type )
+                            bytes += Mat_VarGetSize(fields[i]);
+                        else
+                            bytes += ptr - overhead;
+                    }
+                }
             }
         }
         bytes += 64 /* max field name length */ *nfields;
@@ -1481,9 +1495,14 @@ Mat_VarGetSize(matvar_t *matvar)
         if ( NULL != cells ) {
             int ncells = matvar->nbytes / matvar->data_size;
             bytes = ncells*overhead;
-            for ( i = 0; i < ncells; i++ )
-                if ( NULL != cells[i] )
-                    bytes += Mat_VarGetSize(cells[i]);
+            for ( i = 0; i < ncells; i++ ) {
+                if ( NULL != cells[i] ) {
+                    if ( MAT_C_EMPTY != cells[i]->class_type )
+                        bytes += Mat_VarGetSize(cells[i]);
+                    else
+                        bytes += ptr - overhead;
+                }
+            }
         }
     } else if ( matvar->class_type == MAT_C_SPARSE ) {
         mat_sparse_t *sparse = (mat_sparse_t*)matvar->data;

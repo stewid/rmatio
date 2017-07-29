@@ -36,6 +36,7 @@
 
 /* Stefan Widgren 2014-01-05: Moved the following forward declarations
  * to mat5.c to silent compiler warnings on windows*/
+/* static size_t GetTypeBufSize(matvar_t *matvar); */
 /* static size_t GetStructFieldBufSize(matvar_t *matvar); */
 /* static size_t GetCellArrayFieldBufSize(matvar_t *matvar); */
 /* static size_t GetMatrixMaxBufSize(matvar_t *matvar); */
@@ -46,6 +47,7 @@
 /* static size_t ReadNextCell( mat_t *mat, matvar_t *matvar ); */
 /* static size_t ReadNextStructField( mat_t *mat, matvar_t *matvar ); */
 /* static size_t ReadNextFunctionHandle(mat_t *mat, matvar_t *matvar); */
+/* static int WriteType(mat_t *mat,matvar_t *matvar); */
 /* static int WriteCellArrayFieldInfo(mat_t *mat,matvar_t *matvar); */
 /* static int WriteCellArrayField(mat_t *mat,matvar_t *matvar ); */
 /* static int WriteStructField(mat_t *mat,matvar_t *matvar); */
@@ -58,6 +60,9 @@
 /*                   enum matio_types data_type); */
 /* static size_t WriteCompressedData(mat_t *mat,z_streamp z,void *data,int N, */
 /*                   enum matio_types data_type); */
+/* static size_t WriteCompressedTypeArrayFlags(mat_t *mat,matvar_t *matvar, */
+/*                   z_streamp z); */
+/* static size_t WriteCompressedType(mat_t *mat,matvar_t *matvar,z_streamp z); */
 /* static size_t WriteCompressedCellArrayField(mat_t *mat,matvar_t *matvar, */
 /*                   z_streamp z); */
 /* static size_t WriteCompressedStructField(mat_t *mat,matvar_t *matvar, */
