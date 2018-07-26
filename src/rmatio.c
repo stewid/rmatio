@@ -72,9 +72,7 @@ write_elmt(const SEXP elmt,
 static int
 map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
 {
-    if (R_NilValue == elmt
-        || NULL == rank
-        || NULL == dims)
+    if (isNull(elmt) || NULL == rank || NULL == dims)
         return 1;
 
     /* Check that the type of elmt is the expected */
@@ -118,8 +116,7 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
 static int
 map_vec_len(const SEXP elmt, int *len)
 {
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt))
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt))
         return 1;
 
     if (LENGTH(elmt)) {
@@ -150,12 +147,12 @@ map_vec_len(const SEXP elmt, int *len)
             case CPLXSXP:
             case LGLSXP:
                 if (first_lookup) {
-                    if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                    if (!isNull(Rf_getAttrib(elmt, R_NamesSymbol)))
                         *len = LENGTH(item);
                     else
                         *len = LENGTH(elmt);
                     first_lookup = 0;
-                } else if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                } else if (!isNull(Rf_getAttrib(elmt, R_NamesSymbol))) {
                     if (*len != LENGTH(item))
                         return 1;
                 } else if (*len != LENGTH(elmt)) {
@@ -170,12 +167,12 @@ map_vec_len(const SEXP elmt, int *len)
                 if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
                     || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
                     if (first_lookup) {
-                        if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                        if (!isNull(Rf_getAttrib(elmt, R_NamesSymbol)))
                             *len = 1;
                         else
                             *len = LENGTH(elmt);
                         first_lookup = 0;
-                    } else if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                    } else if (!isNull(Rf_getAttrib(elmt, R_NamesSymbol))) {
                         return 1;
                     } else if (*len != LENGTH(elmt)) {
                         return 1;
@@ -194,7 +191,7 @@ map_vec_len(const SEXP elmt, int *len)
         *len = 0;
     }
 
-    if (*len && Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+    if (*len && !isNull(Rf_getAttrib(elmt, R_NamesSymbol)))
         *len = 1;
 
     return 0;
@@ -211,8 +208,7 @@ map_vec_len(const SEXP elmt, int *len)
 static int
 map_R_object_dims(const SEXP elmt, size_t *dims)
 {
-    if (R_NilValue == elmt
-        || NULL == dims)
+    if (isNull(elmt) || NULL == dims)
         return 1;
 
     switch (TYPEOF(elmt)) {
@@ -220,7 +216,7 @@ map_R_object_dims(const SEXP elmt, size_t *dims)
     {
         int tmp = 0;
 
-        if (R_NilValue == Rf_getAttrib(elmt, R_NamesSymbol))
+        if (isNull(Rf_getAttrib(elmt, R_NamesSymbol)))
             tmp = LENGTH(elmt);
         else if (map_vec_len(elmt, &tmp))
             return 1;
@@ -275,8 +271,7 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
     size_t len=0;
     int vecsxp = 0;
 
-    if (R_NilValue == elmt || VECSXP != TYPEOF(elmt) ||
-        NULL == dims || NULL == empty)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || NULL == dims || NULL == empty)
         return 1;
 
     *empty = 0;
@@ -339,9 +334,7 @@ check_string_lengths(const SEXP elmt, int *equal_length)
 {
     size_t n;
 
-    if (R_NilValue == elmt
-        || STRSXP != TYPEOF(elmt)
-        || NULL == equal_length)
+    if (isNull(elmt) || STRSXP != TYPEOF(elmt) || NULL == equal_length)
         return 1;
 
     n = LENGTH(elmt);
@@ -371,9 +364,7 @@ check_string_lengths(const SEXP elmt, int *equal_length)
 static int
 check_ragged(const SEXP elmt, int *ragged)
 {
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || NULL == ragged)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || NULL == ragged)
         return 1;
 
     *ragged = 0;
@@ -388,7 +379,7 @@ check_ragged(const SEXP elmt, int *ragged)
             {
                 int tmp = 0;
 
-                if (R_NilValue == Rf_getAttrib(item, R_NamesSymbol))
+                if (isNull(Rf_getAttrib(item, R_NamesSymbol)))
                     tmp = LENGTH(item);
                 else if (map_vec_len(item, &tmp))
                     return 1;
@@ -467,7 +458,7 @@ Mat_VarCreateEmpty(const SEXP elmt)
     size_t dims_0_1[2] = {0, 1};
     const int rank = 2;
 
-    if (R_NilValue == elmt)
+    if (isNull(elmt))
         return NULL;
 
     switch (TYPEOF(elmt)) {
@@ -588,8 +579,7 @@ write_charsxp(const SEXP elmt,
     matvar_t *matvar;
     mat_uint16_t *buf;
 
-    if (R_NilValue == elmt
-        || CHARSXP != TYPEOF(elmt))
+    if (isNull(elmt) || CHARSXP != TYPEOF(elmt))
         return 1;
 
     dims[0] = 1;
@@ -655,8 +645,7 @@ write_realsxp(const SEXP elmt,
     int rank;
     matvar_t *matvar=NULL;
 
-    if (R_NilValue == elmt
-        || REALSXP != TYPEOF(elmt))
+    if (isNull(elmt) || REALSXP != TYPEOF(elmt))
         return 1;
 
     if (map_R_object_rank_and_dims(elmt, &rank, &dims))
@@ -713,8 +702,7 @@ write_intsxp(const SEXP elmt,
     int rank;
     matvar_t *matvar=NULL;
 
-    if (R_NilValue == elmt
-        || INTSXP != TYPEOF(elmt))
+    if (isNull(elmt) || INTSXP != TYPEOF(elmt))
         return 1;
 
     if (map_R_object_rank_and_dims(elmt, &rank, &dims))
@@ -774,8 +762,7 @@ write_cplxsxp(const SEXP elmt,
     double *im = NULL;
     struct mat_complex_split_t z;
 
-    if (R_NilValue == elmt
-        || CPLXSXP != TYPEOF(elmt))
+    if (isNull(elmt) || CPLXSXP != TYPEOF(elmt))
         return 1;
 
     if (map_R_object_rank_and_dims(elmt, &rank, &dims))
@@ -855,8 +842,7 @@ write_lglsxp(const SEXP elmt,
     matvar_t *matvar = NULL;
     mat_uint8_t *logical = NULL;
 
-    if (R_NilValue == elmt
-        || LGLSXP != TYPEOF(elmt))
+    if (isNull(elmt) || LGLSXP != TYPEOF(elmt))
         return 1;
 
     if (map_R_object_rank_and_dims(elmt, &rank, &dims))
@@ -930,9 +916,8 @@ write_strsxp(const SEXP elmt,
     const int rank = 2;
     int equal_length;
 
-    if (R_NilValue == elmt
-        || STRSXP != TYPEOF(elmt)
-        || !isNull(Rf_getAttrib(elmt, R_DimSymbol)))
+    if (isNull(elmt) || STRSXP != TYPEOF(elmt) ||
+        !isNull(Rf_getAttrib(elmt, R_DimSymbol)))
         return 1;
 
     if (mat_struct
@@ -1053,8 +1038,7 @@ write_dgCMatrix(const SEXP elmt,
     matvar_t *matvar;
     mat_sparse_t  sparse = {0,};
 
-    if (R_NilValue == elmt
-        || 2 != LENGTH(GET_SLOT(elmt, Rf_install("Dim"))))
+    if (isNull(elmt) || 2 != LENGTH(GET_SLOT(elmt, Rf_install("Dim"))))
         return 1;
 
     dims[0] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[0];
@@ -1116,8 +1100,7 @@ write_lgCMatrix(const SEXP elmt,
     matvar_t *matvar;
     mat_sparse_t  sparse = {0,};
 
-    if (R_NilValue == elmt
-        || 2 != LENGTH(GET_SLOT(elmt, Rf_install("Dim"))))
+    if (isNull(elmt) || 2 != LENGTH(GET_SLOT(elmt, Rf_install("Dim"))))
         return 1;
 
     dims[0] = INTEGER(GET_SLOT(elmt, Rf_install("Dim")))[0];
@@ -1174,7 +1157,7 @@ write_ragged_data(SEXP elmt,
                   size_t len,
                   int compression)
 {
-    if (R_NilValue == elmt)
+    if (isNull(elmt))
         return 1;
 
     switch (TYPEOF(elmt)) {
@@ -1227,9 +1210,7 @@ write_ragged(const SEXP elmt,
     size_t dims[2] = {0, 0};
     const int rank = 2;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || NULL == matvar)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || NULL == matvar)
         return 1;
 
     for (size_t i=0;i<LENGTH(elmt);i++) {
@@ -1239,7 +1220,7 @@ write_ragged(const SEXP elmt,
         if (map_R_object_dims(VECTOR_ELT(elmt, i), dims))
             return 1;
 
-        if (R_NilValue != names)
+        if (!isNull(names))
             fieldname = CHAR(STRING_ELT(names, i));
 
         cell = Mat_VarCreate(fieldname,
@@ -1252,7 +1233,7 @@ write_ragged(const SEXP elmt,
 
         if (NULL == cell)
             return 1;
-        if (R_NilValue == names)
+        if (isNull(names))
             Mat_VarSetCell(matvar, i, cell);
         else
             Mat_VarSetStructFieldByIndex(matvar, i, 0, cell);
@@ -1287,10 +1268,7 @@ write_vecsxp_data(const SEXP elmt,
                        int ragged,
                        int compression)
 {
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || !LENGTH(elmt)
-        || NULL == dims)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || !LENGTH(elmt) || NULL == dims)
         return 1;
 
     for (size_t i=0;i<LENGTH(elmt);i++) {
@@ -1308,7 +1286,7 @@ write_vecsxp_data(const SEXP elmt,
             item = VECTOR_ELT(elmt, i);
             if (VECSXP == TYPEOF(item)) {
                 if ((mat_struct && VECSXP != TYPEOF(VECTOR_ELT(item, j)))
-                    || (mat_cell && Rf_getAttrib(item, R_NamesSymbol) == R_NilValue))
+                    || (mat_cell && isNull(Rf_getAttrib(item, R_NamesSymbol))))
                     item = VECTOR_ELT(item, j);
             }
 
@@ -1358,10 +1336,8 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
     const int rank = 2;
     const char **fieldnames = NULL;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || !LENGTH(elmt)
-        || R_NilValue != Rf_getAttrib(elmt, R_NamesSymbol))
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || !LENGTH(elmt) ||
+        !isNull(Rf_getAttrib(elmt, R_NamesSymbol)))
         return 1;
 
     len = LENGTH(elmt);
@@ -1384,7 +1360,7 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
 
         case VECSXP:
             names = Rf_getAttrib(item, R_NamesSymbol);
-            if (R_NilValue != names) {
+            if (!isNull(names)) {
                 if (LENGTH(item)) {
                     dims[0] = 1;
                     dims[1] = LENGTH(item);
@@ -1491,8 +1467,7 @@ write_vecsxp_as_cell(const SEXP elmt,
     int err = 1;
     int empty, ragged;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt))
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt))
         return 1;
 
     if (check_ragged(elmt, &ragged))
@@ -1564,10 +1539,7 @@ write_structure_array_with_empty_fields(const SEXP elmt,
 {
     size_t len;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || !LENGTH(elmt)
-        || R_NilValue == names)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || !LENGTH(elmt) || isNull(names))
         return 1;
 
     len = LENGTH(elmt);
@@ -1623,9 +1595,7 @@ write_vecsxp_as_struct(const SEXP elmt,
     int err = 1;
     int empty, ragged;
 
-    if (R_NilValue == elmt
-        || VECSXP != TYPEOF(elmt)
-        || R_NilValue == names)
+    if (isNull(elmt) || VECSXP != TYPEOF(elmt) || isNull(names))
         return 1;
 
     if (check_ragged(elmt, &ragged))
@@ -1721,7 +1691,7 @@ write_vecsxp(const SEXP elmt,
     SEXP names = R_NilValue;
 
     names = Rf_getAttrib(elmt, R_NamesSymbol);
-    if (R_NilValue == names)
+    if (isNull(names))
         return write_vecsxp_as_cell(elmt,
                                     mat,
                                     name,
@@ -1773,7 +1743,7 @@ write_elmt(const SEXP elmt,
 {
     SEXP class_name;
 
-    if (R_NilValue == elmt)
+    if (isNull(elmt))
         return 1;
 
     switch (TYPEOF(elmt)) {
@@ -2681,7 +2651,7 @@ read_structure_array_with_fields(SEXP list,
                 goto cleanup;
         }
 
-        if (R_NilValue != s) {
+        if (!isNull(s)) {
             SET_VECTOR_ELT(struc, i, s);
             UNPROTECT(1);
             protected--;
@@ -3012,7 +2982,7 @@ read_cell_array_with_arrays(SEXP list,
             case MAT_C_UINT32:
             case MAT_C_UINT16:
             case MAT_C_UINT8:
-                if (R_NilValue == cell_row) {
+                if (isNull(cell_row)) {
                     if (mat_cell->isLogical)
                         err = read_logical(cell, i, mat_cell);
                     else if (mat_cell->isComplex)
@@ -3030,28 +3000,28 @@ read_cell_array_with_arrays(SEXP list,
                 break;
 
             case MAT_C_SPARSE:
-                if (R_NilValue == cell_row)
+                if (isNull(cell_row))
                     err = read_sparse(cell, i, mat_cell);
                 else
                     err = read_sparse(cell_row, j, mat_cell);
                 break;
 
             case MAT_C_CHAR:
-                if (R_NilValue == cell_row)
+                if (isNull(cell_row))
                     err = read_mat_char(cell, i, mat_cell);
                 else
                     err = read_mat_char(cell_row, j, mat_cell);
                 break;
 
             case MAT_C_STRUCT:
-                if (R_NilValue == cell_row)
+                if (isNull(cell_row))
                     err = read_mat_struct(cell, i, mat_cell);
                 else
                     err = read_mat_struct(cell_row, j, mat_cell);
                 break;
 
             case MAT_C_CELL:
-                if (R_NilValue == cell_row)
+                if (isNull(cell_row))
                     err = read_mat_cell(cell, i, mat_cell);
                 else
                     err = read_mat_cell(cell_row, j, mat_cell);
@@ -3066,7 +3036,7 @@ read_cell_array_with_arrays(SEXP list,
                 goto cleanup;
         }
 
-        if (R_NilValue != cell_row) {
+        if (!isNull(cell_row)) {
             SET_VECTOR_ELT(cell, i, cell_row);
             UNPROTECT(1);
             protected--;
@@ -3183,7 +3153,7 @@ SEXP read_mat(const SEXP filename)
     const char err_mat_c_object[] = "Not implemented support to read matio class type MAT_C_OBJECT";
     const char *err_msg = NULL;
 
-    if (filename == R_NilValue)
+    if (isNull(filename))
         error("'filename' equals R_NilValue.");
     if (!isString(filename))
         error("'filename' must be a string.");
@@ -3306,15 +3276,15 @@ write_mat(const SEXP list,
     mat_t *mat;
     int use_compression = MAT_COMPRESSION_NONE;
 
-    if (R_NilValue == list)
+    if (isNull(list))
         error("'list' equals R_NilValue.");
-    if (R_NilValue == filename)
+    if (isNull(filename))
         error("'filename' equals R_NilValue.");
-    if (R_NilValue == compression)
+    if (isNull(compression))
         error("'compression' equals R_NilValue.");
-    if (R_NilValue == version)
+    if (isNull(version))
         error("'version' equals R_NilValue.");
-    if (R_NilValue == header)
+    if (isNull(header))
         error("'header' equals R_NilValue.");
     if (!isNewList(list))
         error("'list' must be a list.");
