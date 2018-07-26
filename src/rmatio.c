@@ -1984,16 +1984,18 @@ read_sparse(SEXP list,
             return 1;
         }
     } else {
-        SEXP ir, jc;
+        SEXP ir, jc, cls;
         int *ir_ptr;  /* Array of size nnzero where ir_ptr[k] is the
                        * row of data[k] */
         int *jc_ptr;  /* Array of size ncol+1, jc_ptr[k] index to data
                        * of first non-zero element in row k */
 
         if (matvar->isLogical)
-            PROTECT(m = NEW_OBJECT(MAKE_CLASS("lgCMatrix")));
+            PROTECT(cls = MAKE_CLASS("lgCMatrix"));
         else
-            PROTECT(m = NEW_OBJECT(MAKE_CLASS("dgCMatrix")));
+            PROTECT(cls = MAKE_CLASS("dgCMatrix"));
+        PROTECT(m = NEW_OBJECT(cls));
+        UNPROTECT(1);
 
         dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
         dims[0] = matvar->dims[0];
