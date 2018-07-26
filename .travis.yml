@@ -15,7 +15,8 @@ matrix:
     - r: 3.3
     - r: oldrel
     - r: release
-    - r: devel
+      r_packages: covr
+      env: R_CODECOV=true    - r: devel
     - os: osx
       disable_homebrew: true
 
@@ -23,6 +24,7 @@ after_failure:
   - cat "${RCHECK_DIR}/00install.out"
 
 after_success:
+  - test ${R_CODECOV} && Rscript -e "covr::coveralls(exclusions=list.files('src/matio', pattern='[.](c|h)$', full.names=TRUE))"
   - cat "${RCHECK_DIR}/00install.out"
 
 notifications:
