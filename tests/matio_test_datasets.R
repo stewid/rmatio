@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2014  Stefan Widgren
+## Copyright (C) 2013-2018  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -269,8 +269,11 @@
 ##
 ## Load rmatio
 ##
-library(rmatio)
-library(Matrix)
+library("rmatio")
+library("Matrix")
+
+## For debugging
+sessionInfo()
 
 test_mat_v4_file <- function(x) {
     ## var1 read as double
