@@ -2639,7 +2639,7 @@ read_structure_array_with_fields(SEXP list,
             case MAT_C_FUNCTION:
             case MAT_C_OPAQUE:
                 err = 0;
-                warning("Function class type read as NULL: %s", fieldnames[i]);
+                Rf_warning("Function class type read as NULL: %s", fieldnames[i]);
                 break;
 
             default:
@@ -3223,7 +3223,7 @@ SEXP read_mat(const SEXP filename)
         case MAT_C_FUNCTION:
         case MAT_C_OPAQUE:
             err = 0;
-            warning("Function class type read as NULL: %s", matvar->name);
+            Rf_warning("Function class type read as NULL: %s", matvar->name);
             break;
 
         default:
