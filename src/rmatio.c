@@ -3154,13 +3154,13 @@ SEXP read_mat(const SEXP filename)
     const char *err_msg = NULL;
 
     if (Rf_isNull(filename))
-        error("'filename' equals R_NilValue.");
+        Rf_error("'filename' equals R_NilValue.");
     if (!isString(filename))
-        error("'filename' must be a string.");
+        Rf_error("'filename' must be a string.");
 
     mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDONLY);
     if (!mat)
-        error("Unable to open file.");
+        Rf_error("Unable to open file.");
 
     n = number_of_variables(mat);
     PROTECT(list = Rf_allocVector(VECSXP, n));
@@ -3250,7 +3250,7 @@ cleanup:
         Mat_Close(mat);
     UNPROTECT(2);
     if (err)
-        error(err_msg);
+        Rf_error(err_msg);
 
     return list;
 }
@@ -3277,25 +3277,25 @@ write_mat(const SEXP list,
     int use_compression = MAT_COMPRESSION_NONE;
 
     if (Rf_isNull(list))
-        error("'list' equals R_NilValue.");
+        Rf_error("'list' equals R_NilValue.");
     if (Rf_isNull(filename))
-        error("'filename' equals R_NilValue.");
+        Rf_error("'filename' equals R_NilValue.");
     if (Rf_isNull(compression))
-        error("'compression' equals R_NilValue.");
+        Rf_error("'compression' equals R_NilValue.");
     if (Rf_isNull(version))
-        error("'version' equals R_NilValue.");
+        Rf_error("'version' equals R_NilValue.");
     if (Rf_isNull(header))
-        error("'header' equals R_NilValue.");
+        Rf_error("'header' equals R_NilValue.");
     if (!isNewList(list))
-        error("'list' must be a list.");
+        Rf_error("'list' must be a list.");
     if (!isString(filename))
-        error("'filename' must be a string.");
+        Rf_error("'filename' must be a string.");
 
     mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)),
                         CHAR(STRING_ELT(header, 0)),
                         INTEGER(version)[0]);
     if (!mat)
-        error("Unable to open file.");
+        Rf_error("Unable to open file.");
 
     if (INTEGER(compression)[0])
         use_compression = MAT_COMPRESSION_ZLIB;
@@ -3313,7 +3313,7 @@ write_mat(const SEXP list,
                        0,
                        use_compression)) {
             Mat_Close(mat);
-            error("Unable to write list");
+            Rf_error("Unable to write list");
         }
     }
 
