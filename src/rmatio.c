@@ -3286,7 +3286,7 @@ write_mat(const SEXP list,
         Rf_error("'version' equals R_NilValue.");
     if (Rf_isNull(header))
         Rf_error("'header' equals R_NilValue.");
-    if (!isNewList(list))
+    if (!Rf_isNewList(list))
         Rf_error("'list' must be a list.");
     if (!Rf_isString(filename))
         Rf_error("'filename' must be a string.");
