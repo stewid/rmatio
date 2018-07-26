@@ -88,7 +88,7 @@ map_R_object_rank_and_dims(const SEXP elmt, int *rank, size_t **dims)
         return 1;
     }
 
-    if (isNull(getAttrib(elmt, R_DimSymbol))) {
+    if (isNull(Rf_getAttrib(elmt, R_DimSymbol))) {
         *rank = 2;
         *dims = malloc((*rank)*sizeof(size_t));
         if (NULL == dims)
@@ -150,12 +150,12 @@ map_vec_len(const SEXP elmt, int *len)
             case CPLXSXP:
             case LGLSXP:
                 if (first_lookup) {
-                    if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                    if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
                         *len = LENGTH(item);
                     else
                         *len = LENGTH(elmt);
                     first_lookup = 0;
-                } else if (getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                } else if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
                     if (*len != LENGTH(item))
                         return 1;
                 } else if (*len != LENGTH(elmt)) {
@@ -166,16 +166,16 @@ map_vec_len(const SEXP elmt, int *len)
             case S4SXP:
             {
                 /* Check that the S4 class is the expected */
-                SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+                SEXP class_name = Rf_getAttrib(elmt, R_ClassSymbol);
                 if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
                     || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
                     if (first_lookup) {
-                        if (getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+                        if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
                             *len = 1;
                         else
                             *len = LENGTH(elmt);
                         first_lookup = 0;
-                    } else if (getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
+                    } else if (Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue) {
                         return 1;
                     } else if (*len != LENGTH(elmt)) {
                         return 1;
@@ -194,7 +194,7 @@ map_vec_len(const SEXP elmt, int *len)
         *len = 0;
     }
 
-    if (*len && getAttrib(elmt, R_NamesSymbol) != R_NilValue)
+    if (*len && Rf_getAttrib(elmt, R_NamesSymbol) != R_NilValue)
         *len = 1;
 
     return 0;
@@ -220,7 +220,7 @@ map_R_object_dims(const SEXP elmt, size_t *dims)
     {
         int tmp = 0;
 
-        if (R_NilValue == getAttrib(elmt, R_NamesSymbol))
+        if (R_NilValue == Rf_getAttrib(elmt, R_NamesSymbol))
             tmp = LENGTH(elmt);
         else if (map_vec_len(elmt, &tmp))
             return 1;
@@ -242,7 +242,7 @@ map_R_object_dims(const SEXP elmt, size_t *dims)
     case S4SXP:
     {
         /* Check that the S4 class is the expected */
-        SEXP class_name = getAttrib(elmt, R_ClassSymbol);
+        SEXP class_name = Rf_getAttrib(elmt, R_ClassSymbol);
         if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
             || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
             dims[0] = 1;
@@ -299,7 +299,7 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
     }
 
     if (!LENGTH(elmt)) {
-        if (isNull(getAttrib(elmt, R_NamesSymbol))) {
+        if (isNull(Rf_getAttrib(elmt, R_NamesSymbol))) {
             dims[0] = 0;
             dims[1] = 0;
         } else {
@@ -307,7 +307,7 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
             dims[1] = 1;
         }
     } else if (!len) {
-        if (isNull(getAttrib(elmt, R_NamesSymbol)) || !vecsxp) {
+        if (isNull(Rf_getAttrib(elmt, R_NamesSymbol)) || !vecsxp) {
             dims[0] = 1;
             dims[1] = LENGTH(elmt);
             *empty = 1;
@@ -315,7 +315,7 @@ map_R_vecsxp_dims(const SEXP elmt, size_t *dims, int *empty)
             dims[0] = 0;
             dims[1] = 1;
         }
-    } else if (isNull(getAttrib(elmt, R_NamesSymbol))) {
+    } else if (isNull(Rf_getAttrib(elmt, R_NamesSymbol))) {
         dims[0] = LENGTH(elmt);
         dims[1] = len;
     } else {
@@ -388,7 +388,7 @@ check_ragged(const SEXP elmt, int *ragged)
             {
                 int tmp = 0;
 
-                if (R_NilValue == getAttrib(item, R_NamesSymbol))
+                if (R_NilValue == Rf_getAttrib(item, R_NamesSymbol))
                     tmp = LENGTH(item);
                 else if (map_vec_len(item, &tmp))
                     return 1;
@@ -427,7 +427,7 @@ check_ragged(const SEXP elmt, int *ragged)
             case S4SXP:
             {
                 /* Check that the S4 class is the expected */
-                SEXP class_name = getAttrib(item, R_ClassSymbol);
+                SEXP class_name = Rf_getAttrib(item, R_ClassSymbol);
                 if ((strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
                     || (strcmp(CHAR(STRING_ELT(class_name, 0)), "lgCMatrix") == 0)) {
                     if(!i)
@@ -932,7 +932,7 @@ write_strsxp(const SEXP elmt,
 
     if (R_NilValue == elmt
         || STRSXP != TYPEOF(elmt)
-        || !isNull(getAttrib(elmt, R_DimSymbol)))
+        || !isNull(Rf_getAttrib(elmt, R_DimSymbol)))
         return 1;
 
     if (mat_struct
@@ -1308,7 +1308,7 @@ write_vecsxp_data(const SEXP elmt,
             item = VECTOR_ELT(elmt, i);
             if (VECSXP == TYPEOF(item)) {
                 if ((mat_struct && VECSXP != TYPEOF(VECTOR_ELT(item, j)))
-                    || (mat_cell && getAttrib(item, R_NamesSymbol) == R_NilValue))
+                    || (mat_cell && Rf_getAttrib(item, R_NamesSymbol) == R_NilValue))
                     item = VECTOR_ELT(item, j);
             }
 
@@ -1361,7 +1361,7 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
     if (R_NilValue == elmt
         || VECSXP != TYPEOF(elmt)
         || !LENGTH(elmt)
-        || R_NilValue != getAttrib(elmt, R_NamesSymbol))
+        || R_NilValue != Rf_getAttrib(elmt, R_NamesSymbol))
         return 1;
 
     len = LENGTH(elmt);
@@ -1383,7 +1383,7 @@ write_cell_array_with_empty_arrays(const SEXP elmt, matvar_t *mat_cell)
             break;
 
         case VECSXP:
-            names = getAttrib(item, R_NamesSymbol);
+            names = Rf_getAttrib(item, R_NamesSymbol);
             if (R_NilValue != names) {
                 if (LENGTH(item)) {
                     dims[0] = 1;
@@ -1720,7 +1720,7 @@ write_vecsxp(const SEXP elmt,
 {
     SEXP names = R_NilValue;
 
-    names = getAttrib(elmt, R_NamesSymbol);
+    names = Rf_getAttrib(elmt, R_NamesSymbol);
     if (R_NilValue == names)
         return write_vecsxp_as_cell(elmt,
                                     mat,
@@ -1842,7 +1842,7 @@ write_elmt(const SEXP elmt,
                             index,
                             compression);
     case S4SXP:
-        class_name = getAttrib(elmt, R_ClassSymbol);
+        class_name = Rf_getAttrib(elmt, R_ClassSymbol);
         if (strcmp(CHAR(STRING_ELT(class_name, 0)), "dgCMatrix") == 0)
             return write_dgCMatrix(elmt,
                                    mat,
@@ -3330,7 +3330,7 @@ write_mat(const SEXP list,
     if (INTEGER(compression)[0])
         use_compression = MAT_COMPRESSION_ZLIB;
 
-    PROTECT(names = getAttrib(list, R_NamesSymbol));
+    PROTECT(names = Rf_getAttrib(list, R_NamesSymbol));
 
     for (int i = 0; i < length(list); i++) {
         if (write_elmt(VECTOR_ELT(list, i),
