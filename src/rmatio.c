@@ -1903,7 +1903,7 @@ read_mat_char(SEXP list,
             for (size_t j=0;j<matvar->dims[1];j++)
                 buf[j] = ((char*)matvar->data)[matvar->dims[0]*j + i];
             buf[matvar->dims[1]] = 0;
-            SET_STRING_ELT(c, i, mkChar(buf));
+            SET_STRING_ELT(c, i, Rf_mkChar(buf));
         }
         free(buf);
         break;
@@ -2390,7 +2390,7 @@ read_empty_structure_array_with_fields(SEXP list,
             err = 1;
             goto cleanup;
         }
-        SET_STRING_ELT(names, i, mkChar(fieldnames[i]));
+        SET_STRING_ELT(names, i, Rf_mkChar(fieldnames[i]));
         PROTECT(s = Rf_allocVector(VECSXP, 0));
         SET_VECTOR_ELT(struc, i, s);
         UNPROTECT(1);
@@ -2443,7 +2443,7 @@ read_structure_array_with_empty_fields(SEXP list,
             err = 1;
             goto cleanup;
         }
-        SET_STRING_ELT(names, i, mkChar(field_names[i]));
+        SET_STRING_ELT(names, i, Rf_mkChar(field_names[i]));
 
         field = Mat_VarGetStructFieldByIndex(matvar, i, 0);
         if (NULL == field) {
@@ -2551,7 +2551,7 @@ read_structure_array_with_fields(SEXP list,
         SEXP s = R_NilValue;
 
         if (fieldnames[i])
-            SET_STRING_ELT(names, i, mkChar(fieldnames[i]));
+            SET_STRING_ELT(names, i, Rf_mkChar(fieldnames[i]));
 
         switch (Mat_VarGetStructFieldByIndex(matvar, i, 0)->class_type) {
         case MAT_C_CHAR:
@@ -2613,7 +2613,7 @@ read_structure_array_with_fields(SEXP list,
                     for (size_t k=0;k<field->dims[1];k++)
                         buf[k] = ((char*)field->data)[k];
                     buf[field->dims[1]] = 0;
-                    SET_STRING_ELT(s, j, mkChar(buf));
+                    SET_STRING_ELT(s, j, Rf_mkChar(buf));
                     free(buf);
                     break;
                 }
@@ -2832,7 +2832,7 @@ read_cell_array_with_empty_arrays(SEXP list,
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     for (size_t j=0;j<Mat_VarGetNumberOfFields(cell);j++) {
                         SEXP field_item;
-                        SET_STRING_ELT(names, j, mkChar(fieldnames[j]));
+                        SET_STRING_ELT(names, j, Rf_mkChar(fieldnames[j]));
                         PROTECT(field_item = Rf_allocVector(VECSXP, 0));
                         SET_VECTOR_ELT(cell_item, j, field_item);
                         UNPROTECT(1);
@@ -2860,7 +2860,7 @@ read_cell_array_with_empty_arrays(SEXP list,
                         }
 
                         if (fieldnames[j])
-                            SET_STRING_ELT(names, j, mkChar(fieldnames[j]));
+                            SET_STRING_ELT(names, j, Rf_mkChar(fieldnames[j]));
 
                         if (field->isComplex) {
                             PROTECT(field_item = Rf_allocVector(CPLXSXP, 0));
@@ -3173,7 +3173,7 @@ SEXP read_mat(const SEXP filename)
     }
 
     while ((matvar = Mat_VarReadNext(mat)) != NULL) {
-        SET_STRING_ELT(names, i, mkChar(matvar->name));
+        SET_STRING_ELT(names, i, Rf_mkChar(matvar->name));
 
         switch (matvar->class_type) {
         case MAT_C_EMPTY:
