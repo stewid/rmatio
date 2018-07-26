@@ -2,6 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/2o68xusy0vacygrq?svg=true)](https://ci.appveyor.com/project/stewid/rmatio)
 [![CRAN status](http://www.r-pkg.org/badges/version/rmatio)](http://cran.r-project.org/web/packages/rmatio/index.html)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/last-month/rmatio)](http://cran.r-project.org/web/packages/rmatio/index.html)
+[![Coverage Status](https://coveralls.io/repos/github/stewid/rmatio/badge.svg?branch=master)](https://coveralls.io/github/stewid/rmatio?branch=master)
 
 rmatio
 ======
