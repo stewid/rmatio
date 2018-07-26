@@ -1688,28 +1688,36 @@ write_vecsxp(const SEXP elmt,
              size_t index,
              int compression)
 {
-    SEXP names = R_NilValue;
+    int error;
+    SEXP names;
 
-    names = Rf_getAttrib(elmt, R_NamesSymbol);
-    if (Rf_isNull(names))
-        return write_vecsxp_as_cell(elmt,
-                                    mat,
-                                    name,
-                                    mat_struct,
-                                    mat_cell,
-                                    field_index,
-                                    index,
-                                    compression);
+    PROTECT(names = Rf_getAttrib(elmt, R_NamesSymbol));
+    if (Rf_isNull(names)) {
+        error = write_vecsxp_as_cell(
+            elmt,
+            mat,
+            name,
+            mat_struct,
+            mat_cell,
+            field_index,
+            index,
+            compression);
+    } else {
+        error = write_vecsxp_as_struct(
+            elmt,
+            names,
+            mat,
+            name,
+            mat_struct,
+            mat_cell,
+            field_index,
+            index,
+            compression);
+    }
 
-    return write_vecsxp_as_struct(elmt,
-                                  names,
-                                  mat,
-                                  name,
-                                  mat_struct,
-                                  mat_cell,
-                                  field_index,
-                                  index,
-                                  compression);
+    UNPROTECT(1);
+
+    return error;
 }
 
 /** @brief
