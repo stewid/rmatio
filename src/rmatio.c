@@ -1887,7 +1887,7 @@ set_dim(SEXP m,
         PROTECT(dim = Rf_allocVector(INTSXP, matvar->rank));
         for (size_t j=0;j<matvar->rank;j++)
             INTEGER(dim)[j] = matvar->dims[j];
-        setAttrib(m, R_DimSymbol, dim);
+        Rf_setAttrib(m, R_DimSymbol, dim);
         UNPROTECT(1);
     }
 
@@ -2371,7 +2371,7 @@ read_empty_structure_array(SEXP list,
 
     PROTECT(struc = Rf_allocVector(VECSXP, 0));
     PROTECT(names = Rf_allocVector(STRSXP, 0));
-    setAttrib(struc, R_NamesSymbol, names);
+    Rf_setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
     UNPROTECT(2);
 
@@ -2426,7 +2426,7 @@ read_empty_structure_array_with_fields(SEXP list,
         UNPROTECT(1);
     }
 
-    setAttrib(struc, R_NamesSymbol, names);
+    Rf_setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
 
 cleanup:
@@ -2517,7 +2517,7 @@ read_structure_array_with_empty_fields(SEXP list,
         UNPROTECT(1);
     }
 
-    setAttrib(struc, R_NamesSymbol, names);
+    Rf_setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
 
 cleanup:
@@ -2688,7 +2688,7 @@ read_structure_array_with_fields(SEXP list,
         }
     }
 
-    setAttrib(struc, R_NamesSymbol, names);
+    Rf_setAttrib(struc, R_NamesSymbol, names);
     SET_VECTOR_ELT(list, index, struc);
 
 cleanup:
@@ -2856,7 +2856,7 @@ read_cell_array_with_empty_arrays(SEXP list,
 
                     PROTECT(names = Rf_allocVector(STRSXP,
                                                 Mat_VarGetNumberOfFields(cell)));
-                    setAttrib(cell_item, R_NamesSymbol, names);
+                    Rf_setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
 
                     fieldnames = Mat_VarGetStructFieldnames(cell);
@@ -2871,14 +2871,14 @@ read_cell_array_with_empty_arrays(SEXP list,
                     PROTECT(cell_item = Rf_allocVector(VECSXP, 0));
                     protected++;
                     PROTECT(names = Rf_allocVector(STRSXP, 0));
-                    setAttrib(cell_item, R_NamesSymbol, names);
+                    Rf_setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
                 } else if (cell->dims[0] == 1 && cell->dims[1] > 1) {
                     fieldnames = Mat_VarGetStructFieldnames(cell);
                     PROTECT(cell_item = Rf_allocVector(VECSXP, cell->dims[1]));
                     protected++;
                     PROTECT(names = Rf_allocVector(STRSXP, cell->dims[1]));
-                    setAttrib(cell_item, R_NamesSymbol, names);
+                    Rf_setAttrib(cell_item, R_NamesSymbol, names);
                     UNPROTECT(1);
 
                     for (size_t j=0;j<cell->dims[1];j++) {
@@ -3271,7 +3271,7 @@ SEXP read_mat(const SEXP filename)
         i++;
     }
 
-    setAttrib(list, R_NamesSymbol, names);
+    Rf_setAttrib(list, R_NamesSymbol, names);
 
 cleanup:
     if (matvar)
