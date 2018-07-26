@@ -1,4 +1,4 @@
-PKG_CPPFLAGS = @CPPFLAGS@
+PKG_CPPFLAGS = -DR_NO_REMAP -DSTRICT_R_HEADERS @CPPFLAGS@
 PKG_LIBS = @LIBS@
 
 OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
