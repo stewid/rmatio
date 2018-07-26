@@ -3155,7 +3155,7 @@ SEXP read_mat(const SEXP filename)
 
     if (Rf_isNull(filename))
         Rf_error("'filename' equals R_NilValue.");
-    if (!isString(filename))
+    if (!Rf_isString(filename))
         Rf_error("'filename' must be a string.");
 
     mat = Mat_Open(CHAR(STRING_ELT(filename, 0)), MAT_ACC_RDONLY);
@@ -3288,7 +3288,7 @@ write_mat(const SEXP list,
         Rf_error("'header' equals R_NilValue.");
     if (!isNewList(list))
         Rf_error("'list' must be a list.");
-    if (!isString(filename))
+    if (!Rf_isString(filename))
         Rf_error("'filename' must be a string.");
 
     mat = Mat_CreateVer(CHAR(STRING_ELT(filename, 0)),
