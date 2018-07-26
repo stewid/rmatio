@@ -71,5 +71,5 @@ str(m)
 }
 }
 \seealso{
-See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
+See \code{\link{write.mat}} for more details and examples.
 }

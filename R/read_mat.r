@@ -36,7 +36,7 @@
 ##' @title Read Matlab file
 ##' @param filename Character string, with the MAT file or URL to read.
 ##' @return A list with the variables read.
-##' @seealso See \code{\link[rmatio:write.mat]{write.mat}} for more details and examples.
+##' @seealso See \code{\link{write.mat}} for more details and examples.
 ##' @export
 ##' @examples
 ##' \dontrun{
