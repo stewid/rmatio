@@ -1752,7 +1752,7 @@ write_elmt(const SEXP elmt,
     SEXP class_name;
 
     if (Rf_isNull(elmt))
-        return 1;
+        return 0;
 
     switch (TYPEOF(elmt)) {
     case CHARSXP:
