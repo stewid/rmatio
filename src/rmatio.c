@@ -1,6 +1,6 @@
 /*
  * rmatio, a R interface to the C library matio, MAT File I/O Library.
- * Copyright (C) 2013-2018  Stefan Widgren
+ * Copyright (C) 2013-2019  Stefan Widgren
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -3183,7 +3183,8 @@ SEXP read_mat(const SEXP filename)
     }
 
     while ((matvar = Mat_VarReadNext(mat)) != NULL) {
-        SET_STRING_ELT(names, i, Rf_mkChar(matvar->name));
+        if (matvar->name != NULL)
+            SET_STRING_ELT(names, i, Rf_mkChar(matvar->name));
 
         switch (matvar->class_type) {
         case MAT_C_EMPTY:
@@ -3233,7 +3234,8 @@ SEXP read_mat(const SEXP filename)
         case MAT_C_FUNCTION:
         case MAT_C_OPAQUE:
             err = 0;
-            Rf_warning("Function class type read as NULL: %s", matvar->name);
+            Rf_warning("Function class type read as NULL: %s",
+                       matvar->name == NULL ? "" : matvar->name);
             break;
 
         default:
