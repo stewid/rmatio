@@ -35,7 +35,7 @@
 ##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
 ##' @keywords methods
-##' @include have_lib.r
+##' @include have_lib.R
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{

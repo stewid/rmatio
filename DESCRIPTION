@@ -27,8 +27,9 @@ Imports:
 Depends:
     R(>= 3.0.2)
 Collate:
-    'have_lib.r'
-    'read_mat.r'
-    'rmatio.r'
-    'write_mat.r'
-RoxygenNote: 6.0.1
+    'have_lib.R'
+    'read_mat.R'
+    'rmatio.R'
+    'write_mat.R'
+Encoding: UTF-8
+RoxygenNote: 6.1.1
