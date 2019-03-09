@@ -49,7 +49,7 @@ check:
 	cd .. && R CMD build --no-build-vignettes $(PKG_NAME)
 	cd .. && _R_CHECK_CRAN_INCOMING_=FALSE NOT_CRAN=true \
         R CMD check --as-cran --no-manual --no-vignettes \
-        --no-build-vignettes --no-stop-on-test-error $(PKG_TAR)
+        --no-build-vignettes --no-stop-on-test-error --run-dontrun $(PKG_TAR)
 
 # Build and check package with valgrind
 check_valgrind: clean
@@ -111,8 +111,12 @@ revdep_results:
           -e "results" \
           -e "cat('\n\n')"
 
+configure: configure.ac
+	autoconf ./configure.ac > ./configure
+	chmod +x ./configure
+
 clean:
 	./cleanup
 
 .PHONY: install roxygen pdf check check_valgrind valgrind revdep revdep_install \
-        revdep_check revdep_results clean
+        revdep_check revdep_results configure clean

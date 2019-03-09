@@ -6569,7 +6569,7 @@ $as_echo "" >&6; }
 
 
 
-ac_config_files="$ac_config_files R/have_lib.r src/Makevars"
+ac_config_files="$ac_config_files R/have_lib.R src/Makevars"
 
 
 cat >confcache <<\_ACEOF
@@ -7262,7 +7262,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "src/matio/config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/matio/config.h" ;;
-    "R/have_lib.r") CONFIG_FILES="$CONFIG_FILES R/have_lib.r" ;;
+    "R/have_lib.R") CONFIG_FILES="$CONFIG_FILES R/have_lib.R" ;;
     "src/Makevars") CONFIG_FILES="$CONFIG_FILES src/Makevars" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
