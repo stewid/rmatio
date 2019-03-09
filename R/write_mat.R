@@ -39,6 +39,7 @@
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
+##' library("Matrix")
 ##' filename <- tempfile(fileext = ".mat")
 ##'
 ##' ## Example how to read and write an integer vector with rmatio

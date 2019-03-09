@@ -36,9 +36,6 @@ Reads the values in a mat-file and stores them in a list.
 }
 }
 \examples{
-\dontrun{
-library(rmatio)
-
 ## Read a version 4 MAT file with little-endian byte ordering
 filename <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
 m <- read.mat(filename)
@@ -59,16 +56,6 @@ m <- read.mat(filename)
 
 ## View content
 str(m)
-
-## Read a compressed version 5 MAT file
-url <- paste("https://sourceforge.net/p/matio/matio_test_datasets/ci/",
-             "master/tree/matio_test_cases_compressed_le.mat?format=raw",
-             sep="")
-m <- read.mat(url)
-
-## View content
-str(m)
-}
 }
 \seealso{
 See \code{\link{write.mat}} for more details and examples.
