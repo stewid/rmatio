@@ -1419,6 +1419,6 @@ CHECK_MATIO_UINT8_T
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LIBS)
 
-AC_CONFIG_FILES([R/have_lib.r src/Makevars])
+AC_CONFIG_FILES([R/have_lib.R src/Makevars])
 
 AC_OUTPUT
