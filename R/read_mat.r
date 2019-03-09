@@ -12,7 +12,7 @@
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ##' Reads the values in a mat-file to a list.
 ##'
@@ -64,7 +64,7 @@
 ##' str(m)
 ##'
 ##' ## Read a compressed version 5 MAT file
-##' url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
+##' url <- paste("https://sourceforge.net/p/matio/matio_test_datasets/ci/",
 ##'              "master/tree/matio_test_cases_compressed_le.mat?format=raw",
 ##'              sep="")
 ##' m <- read.mat(url)

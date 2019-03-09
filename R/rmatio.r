@@ -12,7 +12,7 @@
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ##' \pkg{rmatio}: reading and writing Matlab MAT files from R
 ##'
@@ -29,10 +29,10 @@
 ##' @useDynLib rmatio, .registration=TRUE
 ##' @references \itemize{
 ##'   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.2.\cr
-##'   \url{http://sourceforge.net/projects/matio/files/matio/1.5.2/matio_user_guide.pdf}
+##'   \url{https://sourceforge.net/projects/matio/files/matio/1.5.2/matio_user_guide.pdf}
 ##'
 ##'   \item The MathWorks Inc., MATLAB - MAT-File Format, version R2013b, September 2013.\cr
-##'   \url{http://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf}
+##'   \url{https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf}
 ##' }
 ##' @docType package
 NULL
