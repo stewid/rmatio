@@ -76,7 +76,6 @@ AC_CHECK_LIB(z, inflate,
 [
         RMATIO_HAVE_ZLIB=TRUE
         AC_DEFINE_UNQUOTED([HAVE_ZLIB],[1],[Have zlib])
-        AC_DEFINE_UNQUOTED([ZLIB_LIBS],[-lz],[])
         LIBS="${LIBS} -lz"
 ],
 [

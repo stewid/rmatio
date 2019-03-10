@@ -3215,10 +3215,6 @@ cat >>confdefs.h <<_ACEOF
 #define HAVE_ZLIB 1
 _ACEOF
 
-        cat >>confdefs.h <<_ACEOF
-#define ZLIB_LIBS -lz
-_ACEOF
-
         LIBS="${LIBS} -lz"
 
 else
