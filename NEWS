@@ -1,6 +1,12 @@
 rmatio 0.13.0.9000
 ------------------
 
+BUG FIXES
+
+* Fixed memory protection errors reported by the 'rchk' tool.
+
+* Fixed memory leaks reported by valgrind.
+
 rmatio 0.13.0
 -------------
 
