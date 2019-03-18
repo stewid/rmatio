@@ -1947,30 +1947,41 @@ read_sparse(SEXP list,
             int index,
             matvar_t *matvar)
 {
-    SEXP m, data;
+    int error = 0, nprotect = 0;
+    SEXP m, data, ir, jc, cls;
+    int *ir_ptr;  /* Array of size nnzero where ir_ptr[k] is the row
+                   * of data[k] */
+    int *jc_ptr;  /* Array of size ncol+1, jc_ptr[k] index to data of
+                   * first non-zero element in row k */
     int *dims;
     mat_sparse_t *sparse;
 
-    if (NULL == matvar
-        || 2 != matvar->rank
-        || NULL == matvar->dims
-        || NULL == matvar->data)
-        return 1;
+    if (NULL == matvar || 2 != matvar->rank ||
+        NULL == matvar->dims || NULL == matvar->data)
+    {
+        error = 1;
+        goto cleanup;
+    }
 
     sparse = matvar->data;
-    if (NULL == sparse->ir || NULL == sparse->jc)
-        return 1;
+    if (NULL == sparse->ir || NULL == sparse->jc) {
+        error = 1;
+        goto cleanup;
+    }
 
     if (matvar->isComplex)  {
         size_t len;
         mat_complex_split_t *complex_data;
 
         complex_data = sparse->data;
-        if (NULL == complex_data->Im || NULL == complex_data->Re)
-            return 1;
+        if (NULL == complex_data->Im || NULL == complex_data->Re) {
+            error = 1;
+            goto cleanup;
+        }
 
         len = matvar->dims[0] * matvar->dims[1];
         PROTECT(m = Rf_allocVector(CPLXSXP, len));
+        nprotect++;
 
         for (size_t j=0;j<len;j++) {
             COMPLEX(m)[j].r = 0;
@@ -1988,64 +1999,62 @@ read_sparse(SEXP list,
         }
 
         if (set_dim(m, matvar)) {
-            UNPROTECT(1);
-            return 1;
+            error = 1;
+            goto cleanup;
         }
     } else {
-        SEXP ir, jc, cls;
-        int *ir_ptr;  /* Array of size nnzero where ir_ptr[k] is the
-                       * row of data[k] */
-        int *jc_ptr;  /* Array of size ncol+1, jc_ptr[k] index to data
-                       * of first non-zero element in row k */
-
         if (matvar->isLogical)
             PROTECT(cls = MAKE_CLASS("lgCMatrix"));
         else
             PROTECT(cls = MAKE_CLASS("dgCMatrix"));
+        nprotect++;
         PROTECT(m = NEW_OBJECT(cls));
-        UNPROTECT(1);
+        nprotect++;
 
         dims = INTEGER(GET_SLOT(m, Rf_install("Dim")));
         dims[0] = matvar->dims[0];
         dims[1] = matvar->dims[1];
 
         PROTECT(ir = Rf_allocVector(INTSXP, sparse->nir));
+        nprotect++;
         SET_SLOT(m, Rf_install("i"), ir);
         ir_ptr = INTEGER(ir);
         for (int j=0; j<sparse->nir; ++j)
             ir_ptr[j] = sparse->ir[j];
-        UNPROTECT(1);
 
         PROTECT(jc = Rf_allocVector(INTSXP, sparse->njc));
+        nprotect++;
         SET_SLOT(m, Rf_install("p"), jc);
         jc_ptr = INTEGER(jc);
         for (int j=0; j<sparse->njc; ++j)
             jc_ptr[j] = sparse->jc[j];
-        UNPROTECT(1);
 
         if (matvar->isLogical) {
             int *data_ptr;
             PROTECT(data = Rf_allocVector(LGLSXP, sparse->nir));
+            nprotect++;
             SET_SLOT(m, Rf_install("x"), data);
             data_ptr = LOGICAL(data);
             for (int j=0; j<sparse->nir; ++j)
                 data_ptr[j] = 1;
-            UNPROTECT(1);
         } else {
             double *data_ptr;
             PROTECT(data = Rf_allocVector(REALSXP, sparse->ndata));
+            nprotect++;
             SET_SLOT(m, Rf_install("x"), data);
             data_ptr = REAL(data);
             for (int j=0; j<sparse->ndata; ++j)
                 data_ptr[j] = ((double*)sparse->data)[j];
-            UNPROTECT(1);
         }
     }
 
     SET_VECTOR_ELT(list, index, m);
-    UNPROTECT(1);
 
-    return 0;
+cleanup:
+    if (nprotect)
+        UNPROTECT(nprotect);
+
+    return error;
 }
 
 /** @brief Read complex data
