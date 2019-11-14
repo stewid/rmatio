@@ -1,22 +1,20 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-sudo: false
 cache: packages
 warnings_are_errors: true
-fortran: false
-latex: false
-pandoc: false
 
 matrix:
   include:
     - r: 3.1
     - r: 3.2
     - r: 3.3
+    - r: 3.4
     - r: oldrel
     - r: release
       r_packages: covr
-      env: R_CODECOV=true
+      r_github_packages: jimhester/lintr
+      env: R_CODECOV=true R_LINTR=true
     - r: devel
     - os: osx
       disable_homebrew: true
@@ -24,8 +22,11 @@ matrix:
 after_failure:
   - cat "${RCHECK_DIR}/00install.out"
 
+# Only report coverage for the release version on linux
 after_success:
   - test ${R_CODECOV} && Rscript -e "covr::coveralls(exclusions=list.files('src/matio', pattern='[.](c|h)$', full.names=TRUE))"
+  - test ${R_LINTR} && R CMD INSTALL $PKG_TARBALL
+  - test ${R_LINTR} && Rscript -e "lintr::lint_package(linters = lintr::with_defaults(object_name_linter = NULL, object_usage_linter = NULL))"
   - cat "${RCHECK_DIR}/00install.out"
 
 notifications:
