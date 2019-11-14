@@ -4,6 +4,11 @@ language: r
 cache: packages
 warnings_are_errors: true
 
+addons:
+  apt:
+    packages:
+      - devscripts
+
 matrix:
   include:
     - r: 3.1
