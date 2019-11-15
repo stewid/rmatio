@@ -28,7 +28,7 @@ sessionInfo()
 ##
 ## array: case-1
 ##
-a1.exp <- array(seq_len(32^3), c(32,32,32))
+a1.exp <- array(seq_len(32^3), c(32, 32, 32))
 storage.mode(a1.exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a1.exp), filename = filename, compression = FALSE, version = "MAT5")
@@ -50,7 +50,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## array: case-2
 ##
-a2.exp <- array(seq_len(32^3), c(32,32,32))
+a2.exp <- array(seq_len(32^3), c(32, 32, 32))
 storage.mode(a2.exp) <- "double"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a2.exp), filename = filename, compression = FALSE, version = "MAT5")
@@ -96,7 +96,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## array: case-4
 ##
-a4.exp <- array(seq_len(32^3), c(32,32,32));
+a4.exp <- array(seq_len(32^3), c(32, 32, 32));
 storage.mode(a4.exp) <- "double"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a4.exp), filename = filename, compression = FALSE, version = "MAT5")
@@ -118,7 +118,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## array: case-5
 ##
-a5.exp <- array(seq_len(32^3), c(32,32,32));
+a5.exp <- array(seq_len(32^3), c(32, 32, 32));
 storage.mode(a5.exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a5.exp), filename = filename, compression = FALSE, version = "MAT5")
@@ -140,7 +140,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## array: case-6
 ##
-a6.exp <- array(c(seq_len(32767), 32767), c(32,32,32));
+a6.exp <- array(c(seq_len(32767), 32767), c(32, 32, 32));
 storage.mode(a6.exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a6.exp), filename = filename, compression = FALSE, version = "MAT5")
@@ -162,7 +162,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## array: case-7
 ##
-a7.exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32,32,32))
+a7.exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32, 32, 32))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a7.exp), filename = filename, compression = FALSE, version = "MAT5")
 a7.obs <- read.mat(filename)[["a"]]

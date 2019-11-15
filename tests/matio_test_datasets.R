@@ -217,38 +217,38 @@
 ## uint16_data = intmin('uint16'):intmax('uint16');
 ## int8_data = int8(-128:127);
 ## uint8_data = uint8(0:255);
-## var70 = reshape(1:32*32*32,32,32,32);
-## var71 = reshape(single(1:32*32*32),32,32,32);
-## var72 = reshape(int64(1:32*32*32),32,32,32);
-## var73 = reshape(uint64(1:32*32*32),32,32,32);
-## var74 = reshape(int32(1:32*32*32),32,32,32);
-## var75 = reshape(uint32(1:32*32*32),32,32,32);
-## var76 = reshape(int16(1:32*32*32),32,32,32);
-## var77 = reshape(uint16(1:32*32*32),32,32,32);
-## I = round(1+(numel(int8_data)-1)*rand(32,32,32));
-## J = round(1+(numel(int8_data)-1)*rand(32,32,32));
-## var78 = reshape(int8_data(I),32,32,32);
-## I = round(1+(numel(uint8_data)-1)*rand(32,32,32));
-## J = round(1+(numel(uint8_data)-1)*rand(32,32,32));
-## var79 = reshape(uint8_data(I),32,32,32);
-## var80 = reshape((1:2:2*32^3) + j*(2:2:2*32^3),32,32,32);
-## var81 = reshape(single((1:2:2*32^3) + j*(2:2:2*32^3)),32,32,32);
-## var82 = reshape(int64((1:2:2*32^3) + j*(2:2:2*32^3)),32,32,32);
-## var83 = reshape(uint64((1:2:2*32^3) + j*(2:2:2*32^3)),32,32,32);
-## var84 = reshape(int32((1:2:2*32^3) + j*(2:2:2*32^3)),32,32,32);
-## var85 = reshape(uint32((1:2:2*32^3) + j*(2:2:2*32^3)),32,32,32);
-## I = round(1+(numel(int16_data)-1)*rand(32,32,32));
-## J = round(1+(numel(int16_data)-1)*rand(32,32,32));
-## var86 = reshape(complex(int16_data(I),int16_data(J)),32,32,32);
-## I = round(1+(numel(uint16_data)-1)*rand(32,32,32));
-## J = round(1+(numel(uint16_data)-1)*rand(32,32,32));
-## var87 = reshape(complex(uint16_data(I),uint16_data(J)),32,32,32);
-## I = round(1+(numel(int8_data)-1)*rand(32,32,32));
-## J = round(1+(numel(int8_data)-1)*rand(32,32,32));
-## var88 = reshape(complex(int8_data(I),int8_data(J)),32,32,32);
-## I = round(1+(numel(uint8_data)-1)*rand(32,32,32));
-## J = round(1+(numel(uint8_data)-1)*rand(32,32,32));
-## var89 = reshape(complex(uint8_data(I),uint8_data(J)),32,32,32);
+## var70 = reshape(1:32*32*32, 32, 32, 32);
+## var71 = reshape(single(1:32*32*32),32, 32, 32);
+## var72 = reshape(int64(1:32*32*32),32, 32, 32);
+## var73 = reshape(uint64(1:32*32*32),32, 32, 32);
+## var74 = reshape(int32(1:32*32*32),32, 32, 32);
+## var75 = reshape(uint32(1:32*32*32),32, 32, 32);
+## var76 = reshape(int16(1:32*32*32),32, 32, 32);
+## var77 = reshape(uint16(1:32*32*32),32, 32, 32);
+## I = round(1+(numel(int8_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(int8_data)-1)*rand(32, 32, 32));
+## var78 = reshape(int8_data(I),32, 32, 32);
+## I = round(1+(numel(uint8_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(uint8_data)-1)*rand(32, 32, 32));
+## var79 = reshape(uint8_data(I),32, 32, 32);
+## var80 = reshape((1:2:2*32^3) + j*(2:2:2*32^3),32, 32, 32);
+## var81 = reshape(single((1:2:2*32^3) + j*(2:2:2*32^3)),32, 32, 32);
+## var82 = reshape(int64((1:2:2*32^3) + j*(2:2:2*32^3)),32, 32, 32);
+## var83 = reshape(uint64((1:2:2*32^3) + j*(2:2:2*32^3)),32, 32, 32);
+## var84 = reshape(int32((1:2:2*32^3) + j*(2:2:2*32^3)),32, 32, 32);
+## var85 = reshape(uint32((1:2:2*32^3) + j*(2:2:2*32^3)),32, 32, 32);
+## I = round(1+(numel(int16_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(int16_data)-1)*rand(32, 32, 32));
+## var86 = reshape(complex(int16_data(I),int16_data(J)),32, 32, 32);
+## I = round(1+(numel(uint16_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(uint16_data)-1)*rand(32, 32, 32));
+## var87 = reshape(complex(uint16_data(I),uint16_data(J)),32, 32, 32);
+## I = round(1+(numel(int8_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(int8_data)-1)*rand(32, 32, 32));
+## var88 = reshape(complex(int8_data(I),int8_data(J)),32, 32, 32);
+## I = round(1+(numel(uint8_data)-1)*rand(32, 32, 32));
+## J = round(1+(numel(uint8_data)-1)*rand(32, 32, 32));
+## var89 = reshape(complex(uint8_data(I),uint8_data(J)),32, 32, 32);
 
 ## var90 = tril(true(5));
 ## var91 = [struct('field1',logical(mod(reshape(0:19,4,5),2)),...
@@ -637,7 +637,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var69, var69))
 
     ## var70, ..., var73 read as double
-    var70 = array(seq_len(32^3), c(32,32,32));
+    var70 = array(seq_len(32^3), c(32, 32, 32));
     storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
@@ -645,7 +645,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var73, var70))
 
     ## var74 read as integer
-    var74 = array(seq_len(32^3), c(32,32,32));
+    var74 = array(seq_len(32^3), c(32, 32, 32));
     storage.mode(var74) <- "integer"
     stopifnot(identical(x$var74, var74))
 
@@ -653,13 +653,13 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var75, var70))
 
     ## var76 read as integer
-    ## var76 = reshape(int16(1:32*32*32),32,32,32);
-    var76 = array(c(seq_len(32767), 32767), c(32,32,32));
+    ## var76 = reshape(int16(1:32*32*32),32, 32, 32);
+    var76 = array(c(seq_len(32767), 32767), c(32, 32, 32));
     storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
     ## var77 read as integer
-    ## var77 = reshape(uint16(1:32*32*32),32,32,32);
+    ## var77 = reshape(uint16(1:32*32*32),32, 32, 32);
     stopifnot(identical(x$var77, var74))
 
     ## var78 read as integer
@@ -702,7 +702,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var79[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var79_slab))
 
     ## var80, ..., var85 read as complex
-    var80 = array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32,32,32))
+    var80 = array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32, 32, 32))
     stopifnot(identical(x$var80, var80))
     stopifnot(identical(x$var81, var80))
     stopifnot(identical(x$var82, var80))
