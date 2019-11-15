@@ -30,16 +30,16 @@ sessionInfo()
 ##
 a1.exp <- array(complex(real=1:20,imaginary=21:40), c(4,5))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
+write.mat(list(a = a1.exp), filename = filename, compression = FALSE, version = "MAT5")
 a1.obs <- read.mat(filename)[['a']]
 unlink(filename)
 str(a1.obs)
 stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a = a1.exp), filename = filename, compression = TRUE, version = "MAT5")
     a1.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a1.zlib.obs)

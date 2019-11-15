@@ -29,7 +29,7 @@ stopifnot(identical(read.mat(filename), list(x = 1, y = 2)))
 unlink(filename)
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(n1, filename = filename, compression = TRUE, version = c("MAT5"))
     stopifnot(identical(read.mat(filename), list(x = 1, y = 2)))

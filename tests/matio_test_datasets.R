@@ -960,15 +960,15 @@ stopifnot(identical(x.in$x, pi))
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE, version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+    write.mat(x.in, filename = filename, compression = TRUE, version = "MAT5")
     x.out <- read.mat(filename)
     unlink(filename)
     stopifnot(identical(x.out$x, pi))
@@ -983,15 +983,15 @@ stopifnot(identical(x.in$x, pi))
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE, version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+    write.mat(x.in, filename = filename, compression = TRUE, version = "MAT5")
     x.out <- read.mat(filename)
     unlink(filename)
     stopifnot(identical(x.out$x, pi))
@@ -1006,15 +1006,15 @@ test_mat_v4_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE, version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+    write.mat(x.in, filename = filename, compression = TRUE, version = "MAT5")
     x.out <- read.mat(filename)
     unlink(filename)
     test_mat_v4_file(x.out)
@@ -1029,15 +1029,15 @@ test_mat_v4_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE, version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+    write.mat(x.in, filename = filename, compression = TRUE, version = "MAT5")
     x.out <- read.mat(filename)
     unlink(filename)
     test_mat_v4_file(x.out)
@@ -1052,15 +1052,15 @@ test_mat_v5_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE, version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v5_file(x.out)
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+    write.mat(x.in, filename = filename, compression = TRUE, version = "MAT5")
     x.out <- read.mat(filename)
     unlink(filename)
     test_mat_v5_file(x.out)

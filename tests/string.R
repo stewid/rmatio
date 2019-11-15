@@ -42,16 +42,16 @@ a1.exp <- c("abcdefghijklmnopqrstuvwxyz",
           "1234567890!@#$%^&*()-_=+`~", #
           "[{]}\\|;:'\",<.>/?          ")
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
+write.mat(list(a = a1.exp), filename = filename, compression = FALSE, version = "MAT5")
 a1.obs <- read.mat(filename)[['a']]
 unlink(filename)
 str(a1.obs)
 stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a = a1.exp), filename = filename, compression = TRUE, version = "MAT5")
     a1.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a1.zlib.obs)
@@ -64,16 +64,16 @@ if(rmatio:::have.zlib()) {
 a2.in <- c("a", "bb")
 a2.exp <- list("a", "bb")
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a2.in), filename=filename, compression=FALSE, version='MAT5')
+write.mat(list(a = a2.in), filename = filename, compression = FALSE, version = "MAT5")
 a2.obs <- read.mat(filename)[['a']]
 unlink(filename)
 str(a2.obs)
 stopifnot(identical(a2.obs, a2.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a2.in), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a = a2.in), filename = filename, compression = TRUE, version = "MAT5")
     a2.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a2.zlib.obs)
@@ -86,16 +86,16 @@ if(rmatio:::have.zlib()) {
 a3.in <- list(y=c("a", "bb"))
 a3.exp <- list(y=list("a", "bb"))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a3.in), filename=filename, compression=FALSE, version='MAT5')
+write.mat(list(a = a3.in), filename = filename, compression = FALSE, version = "MAT5")
 a3.obs <- read.mat(filename)[['a']]
 unlink(filename)
 str(a3.obs)
 stopifnot(identical(a3.obs, a3.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a3.in), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a = a3.in), filename = filename, compression = TRUE, version = "MAT5")
     a3.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a3.zlib.obs)
@@ -108,16 +108,16 @@ if(rmatio:::have.zlib()) {
 a4.in <- list(c("a", "bb"))
 a4.exp <- list(list("a", "bb"))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a4.in), filename=filename, compression=FALSE, version='MAT5')
+write.mat(list(a = a4.in), filename = filename, compression = FALSE, version = "MAT5")
 a4.obs <- read.mat(filename)[['a']]
 unlink(filename)
 str(a4.obs)
 stopifnot(identical(a4.obs, a4.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
+if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a4.in), filename=filename, compression=TRUE, version='MAT5')
+    write.mat(list(a = a4.in), filename = filename, compression = TRUE, version = "MAT5")
     a4.zlib.obs <- read.mat(filename)[['a']]
     unlink(filename)
     str(a4.zlib.obs)
