@@ -282,10 +282,10 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var1, var1))
 
     ## var11 read as complex
-    var11 <- array(c(1+21i, 2+22i, 3+23i, 4+24i, 5+25i, 6+26i, 7+27i,
-                     8+28i, 9+29i, 10+30i, 11+31i, 12+32i, 13+33i,
-                     14+34i, 15+35i, 16+36i, 17+37i, 18+38i, 19+39i,
-                     20+40i), c(4,5))
+    var11 <- array(c(1 + 21i, 2 + 22i, 3 + 23i, 4 + 24i, 5 + 25i, 6 + 26i, 7 + 27i,
+                     8 + 28i, 9 + 29i, 10 + 30i, 11 + 31i, 12 + 32i, 13 + 33i,
+                     14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i,
+                     20 + 40i), c(4,5))
     stopifnot(identical(x$var11, var11))
 
     ## var21 read as a sparse matrix
@@ -293,11 +293,11 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a complex matrix
-    var22 <- structure(c(1+6i, 0+0i, 0+0i, 0+0i, 0+0i,
-                         0+0i, 2+7i, 0+0i, 0+0i, 0+0i,
-                         0+0i, 0+0i, 3+8i, 0+0i, 0+0i,
-                         0+0i, 0+0i, 0+0i, 4+9i, 0+0i,
-                         0+0i, 0+0i, 0+0i, 0+0i, 5+10i),
+    var22 <- structure(c(1 + 6i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 2 + 7i, 0 + 0i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 3 + 8i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 0 + 0i, 4 + 9i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 10i),
                        .Dim = c(5L, 5L))
     stopifnot(identical(x$var22, var22))
 
@@ -332,10 +332,10 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var10, var5))
 
     ## var11, ..., var20 read as complex
-    var11 <- array(c(1+21i, 2+22i, 3+23i, 4+24i, 5+25i, 6+26i, 7+27i,
-                     8+28i, 9+29i, 10+30i, 11+31i, 12+32i, 13+33i,
-                     14+34i, 15+35i, 16+36i, 17+37i, 18+38i, 19+39i,
-                     20+40i), c(4,5))
+    var11 <- array(c(1 + 21i, 2 + 22i, 3 + 23i, 4 + 24i, 5 + 25i, 6 + 26i, 7 + 27i,
+                     8 + 28i, 9 + 29i, 10 + 30i, 11 + 31i, 12 + 32i, 13 + 33i,
+                     14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i,
+                     20 + 40i), c(4,5))
     stopifnot(identical(x$var11, var11))
     stopifnot(identical(x$var12, var11))
     stopifnot(identical(x$var13, var11))
@@ -352,9 +352,9 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a dense complex matrix
-    var22 <- array(c(1+6i, 0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 2+7i, 0+0i,
-    0+0i, 0+0i, 0+0i, 0+0i, 3+8i, 0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 4+9i,
-    0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 5+10i), c(5L, 5L))
+    var22 <- array(c(1 + 6i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 2 + 7i, 0 + 0i,
+    0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 3 + 8i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 4 + 9i,
+    0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 10i), c(5L, 5L))
     stopifnot(identical(x$var22, var22))
 
     ## var23 read as double
@@ -404,12 +404,12 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var37, var32))
 
     ## var38, ..., var47 read as complex
-    var38 <- list(field1=list(1+51i, 14+64i),
-                  field2=list(array(c(2+52i, 3+53i, 4+54i, 5+55i,
-                  6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
-                  13+63i), c(3,4)), array(c(15+65i, 16+66i, 17+67i,
-                  18+68i, 19+69i, 20+70i, 21+71i, 22+72i, 23+73i,
-                  24+74i, 25+75i, 26+76i), c(3,4))))
+    var38 <- list(field1=list(1 + 51i, 14 + 64i),
+                  field2=list(array(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
+                  13 + 63i), c(3,4)), array(c(15 + 65i, 16 + 66i, 17 + 67i,
+                  18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i, 23 + 73i,
+                  24 + 74i, 25 + 75i, 26 + 76i), c(3,4))))
 
     stopifnot(identical(x$var38, var38))
     stopifnot(identical(x$var39, var38))
@@ -426,13 +426,13 @@ test_mat_v5_file <- function(x) {
                   field2=list(tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
     stopifnot(identical(x$var48, var48))
 
-    var49 <- list(field1=list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i,
-                      6+26i, 0+0i, 0+0i, 9+29i, 10+30i, 11+31i, 0+0i,
-                      13+33i, 14+34i, 15+35i, 16+36i, 17+37i, 18+38i,
-                      19+39i, 20+40i), c(4,5))),
+    var49 <- list(field1=list(array(c(1 + 21i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 25i,
+                      6 + 26i, 0 + 0i, 0 + 0i, 9 + 29i, 10 + 30i, 11 + 31i, 0 + 0i,
+                      13 + 33i, 14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i, 18 + 38i,
+                      19 + 39i, 20 + 40i), c(4,5))),
                   field2=list(array(c(1-21i, 5-25i, 9-29i, 13-33i, 17-37i,
-                      0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
-                      11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
+                      0 + 0i, 6-26i, 10-30i, 14-34i, 18-38i, 0 + 0i, 0 + 0i,
+                      11-31i, 15-35i, 19-39i, 0 + 0i, 0 + 0i, 0 + 0i,
                       16-36i, 20-40i), c(5,4))))
 
     stopifnot(identical(x$var49, var49))
@@ -485,13 +485,13 @@ test_mat_v5_file <- function(x) {
                        tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
     stopifnot(identical(x$var63, var63))
 
-    var64 <- list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i,
-                          6+26i, 0+0i, 0+0i, 9+29i, 10+30i, 11+31i, 0+0i,
-                          13+33i, 14+34i, 15+35i, 16+36i, 17+37i, 18+38i,
-                          19+39i, 20+40i), c(4,5)),
+    var64 <- list(array(c(1 + 21i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 25i,
+                          6 + 26i, 0 + 0i, 0 + 0i, 9 + 29i, 10 + 30i, 11 + 31i, 0 + 0i,
+                          13 + 33i, 14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i, 18 + 38i,
+                          19 + 39i, 20 + 40i), c(4,5)),
                   array(c(1-21i, 5-25i, 9-29i, 13-33i, 17-37i,
-                          0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
-                          11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
+                          0 + 0i, 6-26i, 10-30i, 14-34i, 18-38i, 0 + 0i, 0 + 0i,
+                          11-31i, 15-35i, 19-39i, 0 + 0i, 0 + 0i, 0+0i,
                           16-36i, 20-40i), c(5,4)))
     stopifnot(identical(x$var64, var64))
 
