@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2014  Stefan Widgren
+## Copyright (C) 2013-2019  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -145,7 +145,7 @@ setGeneric("write.mat",
            function(object,
                     filename = NULL,
                     compression = TRUE,
-                    version = c('MAT5')) standardGeneric("write.mat"))
+                    version = c("MAT5")) standardGeneric("write.mat"))
 
 ##' @rdname write.mat-methods
 ##' @export
@@ -157,20 +157,20 @@ setMethod("write.mat",
                    version)
           {
             ## Check filename
-            if(any(!is.character(filename),
-                   !identical(length(filename), 1L),
-                   nchar(filename) < 1)) {
+            if (any(!is.character(filename),
+                    !identical(length(filename), 1L),
+                    nchar(filename) < 1)) {
               stop("'filename' must be a character vector of length one")
             }
 
             ## Check compression
-            if(any(!is.logical(compression),
-                   !identical(length(compression), 1L))) {
+            if (any(!is.logical(compression),
+                    !identical(length(compression), 1L))) {
               stop("'compression' must be a logical vector of length one")
             }
 
-            if(identical(compression, TRUE)) {
-                if(!have.zlib()) {
+            if (identical(compression, TRUE)) {
+                if (!have.zlib()) {
                     stop(paste("Sorry, library 'zlib' is not available.",
                                "Use 'compression=FALSE' or install with 'zlib'"))
                 }
@@ -181,20 +181,20 @@ setMethod("write.mat",
 
             ## Check version
             version <- match.arg(version)
-            if(identical(version, 'MAT5')) {
+            if (identical(version, "MAT5")) {
               version <- 0x0100L
               header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
                                 R.version$platform[[1]],
                                 utils::packageVersion('rmatio'),
                                 date())
             } else {
-              stop('Unsupported version')
+              stop("Unsupported version")
             }
 
             ## Check names in object
-            if(any(is.null(names(object)),
-                   !all(nchar(names(object))),
-                   any(duplicated(names(object))))) {
+            if (any(is.null(names(object)),
+                    !all(nchar(names(object))),
+                    any(duplicated(names(object))))) {
               stop("All values in the list must have a unique name")
             }
 
