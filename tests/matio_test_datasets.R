@@ -289,7 +289,7 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var11, var11))
 
     ## var21 read as a sparse matrix
-    var21 <- as(diag(1:5), 'dgCMatrix')
+    var21 <- as(diag(1:5), "dgCMatrix")
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a complex matrix
@@ -311,7 +311,7 @@ test_mat_v4_file <- function(x) {
 test_mat_v5_file <- function(x) {
     ## var1, ..., var4 read as double
     var1 <- array(seq_len(20), c(4,5))
-    storage.mode(var1) <- 'double'
+    storage.mode(var1) <- "double"
     stopifnot(identical(x$var1, var1))
     stopifnot(identical(x$var2, var1))
     stopifnot(identical(x$var3, var1))
@@ -319,7 +319,7 @@ test_mat_v5_file <- function(x) {
 
     ## var5 read as integer
     var5 <- array(seq_len(20), c(4,5))
-    storage.mode(var5) <- 'integer'
+    storage.mode(var5) <- "integer"
     stopifnot(identical(x$var5, var5))
 
     ## var6 read as double
@@ -348,7 +348,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var20, var11))
 
     ## var21 read as a sparse matrix
-    var21 <- as(diag(1:5), 'dgCMatrix')
+    var21 <- as(diag(1:5), "dgCMatrix")
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a dense complex matrix
@@ -638,7 +638,7 @@ test_mat_v5_file <- function(x) {
 
     ## var70, ..., var73 read as double
     var70 = array(seq_len(32^3), c(32,32,32));
-    storage.mode(var70) <- 'double'
+    storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
     stopifnot(identical(x$var72, var70))
@@ -646,7 +646,7 @@ test_mat_v5_file <- function(x) {
 
     ## var74 read as integer
     var74 = array(seq_len(32^3), c(32,32,32));
-    storage.mode(var74) <- 'integer'
+    storage.mode(var74) <- "integer"
     stopifnot(identical(x$var74, var74))
 
     ## var75 read as double
@@ -655,7 +655,7 @@ test_mat_v5_file <- function(x) {
     ## var76 read as integer
     ## var76 = reshape(int16(1:32*32*32),32,32,32);
     var76 = array(c(seq_len(32767), 32767), c(32,32,32));
-    storage.mode(var76) <- 'integer'
+    storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
     ## var77 read as integer
@@ -954,7 +954,7 @@ test_mat_v5_file <- function(x) {
 ##
 ## small_v4_le.mat
 ##
-infile <- system.file('extdata/small_v4_le.mat', package='rmatio')
+infile <- system.file("extdata/small_v4_le.mat", package="rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
@@ -977,7 +977,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## small_v4_be.mat
 ##
-infile <- system.file('extdata/small_v4_be.mat', package='rmatio')
+infile <- system.file("extdata/small_v4_be.mat", package="rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
@@ -1000,7 +1000,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_v4_le.mat
 ##
-infile <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_v4_le.mat", package="rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
@@ -1023,7 +1023,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_v4_be.mat
 ##
-infile <- system.file('extdata/matio_test_cases_v4_be.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_v4_be.mat", package="rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
@@ -1046,7 +1046,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_compressed_le.mat
 ##
-infile <- system.file('extdata/matio_test_cases_compressed_le.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_compressed_le.mat", package="rmatio")
 x.in <- read.mat(infile)
 test_mat_v5_file(x.in)
 

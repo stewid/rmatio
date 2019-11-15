@@ -32,10 +32,10 @@ filename <- tempfile(fileext = ".mat")
 ##
 ## 'filename' must be a character vector of length one
 ##
-tools::assertError(write.mat(list(a=1:5), filename=NULL))
-tools::assertError(write.mat(list(a=1:5), filename=5))
-tools::assertError(write.mat(list(a=1:5), filename=c('a', 'b')))
-tools::assertError(write.mat(list(a=1:5), filename=''))
+tools::assertError(write.mat(list(a=1:5), filename = NULL))
+tools::assertError(write.mat(list(a=1:5), filename = 5))
+tools::assertError(write.mat(list(a=1:5), filename = c("a", "b")))
+tools::assertError(write.mat(list(a=1:5), filename = ""))
 
 ##
 ## 'compression' must be a logical vector of length one

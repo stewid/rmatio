@@ -42,7 +42,7 @@ sessionInfo()
 a1.exp <- list()
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a1.exp), filename = filename, compression = FALSE, version = "MAT5")
-a1.obs <- read.mat(filename)[['a']]
+a1.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a1.obs)
 stopifnot(identical(a1.obs, a1.exp))
@@ -51,7 +51,7 @@ stopifnot(identical(a1.obs, a1.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a1.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a1.zlib.obs <- read.mat(filename)[['a']]
+    a1.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a1.zlib.obs)
     stopifnot(identical(a1.zlib.obs, a1.exp))
@@ -63,7 +63,7 @@ if (rmatio:::have.zlib()) {
 a2.exp <- list(complex(0), logical(0), character(0), numeric(0), integer(0))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a2.exp), filename = filename, compression = FALSE, version = "MAT5")
-a2.obs <- read.mat(filename)[['a']]
+a2.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a2.obs)
 stopifnot(identical(a2.obs, a2.exp))
@@ -72,7 +72,7 @@ stopifnot(identical(a2.obs, a2.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a2.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a2.zlib.obs <- read.mat(filename)[['a']]
+    a2.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a2.zlib.obs)
     stopifnot(identical(a2.zlib.obs, a2.exp))
@@ -89,7 +89,7 @@ a3.exp <- list(list(array(c(1, 3, 2, 4), c(2, 2)),
                     array(c(29, 31, 33, 35, 30, 32, 34, 36), c(4, 2))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a3.exp), filename = filename, compression = FALSE, version = "MAT5")
-a3.obs <- read.mat(filename)[['a']]
+a3.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a3.obs)
 stopifnot(identical(a3.obs, a3.exp))
@@ -98,7 +98,7 @@ stopifnot(identical(a3.obs, a3.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a3.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a3.zlib.obs <- read.mat(filename)[['a']]
+    a3.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a3.zlib.obs)
     stopifnot(identical(a3.zlib.obs, a3.exp))
@@ -115,7 +115,7 @@ a4.exp <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
                    array(c(29L, 31L, 33L, 35L, 30L, 32L, 34L, 36L), c(4, 2))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a4.exp), filename = filename, compression = FALSE, version = "MAT5")
-a4.obs <- read.mat(filename)[['a']]
+a4.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a4.obs)
 stopifnot(identical(a4.obs, a4.exp))
@@ -124,7 +124,7 @@ stopifnot(identical(a4.obs, a4.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a4.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a4.zlib.obs <- read.mat(filename)[['a']]
+    a4.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a4.zlib.obs)
     stopifnot(identical(a4.zlib.obs, a4.exp))
@@ -137,7 +137,7 @@ a5.exp <- list(list(triu(Matrix(1:20, nrow=4, ncol=5, sparse=TRUE)),
                     tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a5.exp), filename = filename, compression = FALSE, version = "MAT5")
-a5.obs <- read.mat(filename)[['a']]
+a5.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a5.obs)
 stopifnot(identical(a5.obs, a5.exp))
@@ -146,7 +146,7 @@ stopifnot(identical(a5.obs, a5.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a5.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a5.zlib.obs <- read.mat(filename)[['a']]
+    a5.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a5.zlib.obs)
     stopifnot(identical(a5.zlib.obs, a5.exp))
@@ -165,7 +165,7 @@ a6.exp <- list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i,
                        16-36i, 20-40i), c(5,4)))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a6.exp), filename = filename, compression = FALSE, version = "MAT5")
-a6.obs <- read.mat(filename)[['a']]
+a6.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a6.obs)
 stopifnot(identical(a6.obs, a6.exp))
@@ -174,7 +174,7 @@ stopifnot(identical(a6.obs, a6.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a6.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a6.zlib.obs <- read.mat(filename)[['a']]
+    a6.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a6.zlib.obs)
     stopifnot(identical(a6.zlib.obs, a6.exp))
@@ -189,7 +189,7 @@ a7.exp <- list(list("abcdefghijklmnopqrstuvwxyz",
                     "[{]}\\|;:'\",<.>/?          "))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a7.exp), filename = filename, compression = FALSE, version = "MAT5")
-a7.obs <- read.mat(filename)[['a']]
+a7.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a7.obs)
 stopifnot(identical(a7.obs, a7.exp))
@@ -198,7 +198,7 @@ stopifnot(identical(a7.obs, a7.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a7.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a7.zlib.obs <- read.mat(filename)[['a']]
+    a7.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a7.zlib.obs)
     stopifnot(identical(a7.zlib.obs, a7.exp))
@@ -214,7 +214,7 @@ a8.exp <- list(structure(list(), .Names = character(0)),
                          .Names = c("field1", "field2")))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a8.exp), filename = filename, compression = FALSE, version = "MAT5")
-a8.obs <- read.mat(filename)[['a']]
+a8.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a8.obs)
 stopifnot(identical(a8.obs, a8.exp))
@@ -223,7 +223,7 @@ stopifnot(identical(a8.obs, a8.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a8.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a8.zlib.obs <- read.mat(filename)[['a']]
+    a8.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a8.zlib.obs)
     stopifnot(identical(a8.zlib.obs, a8.exp))
@@ -384,7 +384,7 @@ a9.exp <- list(list(structure(list(
                              .Names = c("field1", "field2"))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a9.exp), filename = filename, compression = FALSE, version = "MAT5")
-a9.obs <- read.mat(filename)[['a']]
+a9.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a9.obs)
 stopifnot(identical(a9.obs, a9.exp))
@@ -393,7 +393,7 @@ stopifnot(identical(a9.obs, a9.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a9.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a9.zlib.obs <- read.mat(filename)[['a']]
+    a9.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a9.zlib.obs)
     stopifnot(identical(a9.zlib.obs, a9.exp))
@@ -418,7 +418,7 @@ a10.exp <- list(list(field1=list(triu(Matrix(1:20, nrow=4,
                          c(5,4)))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a10.exp), filename = filename, compression = FALSE, version = "MAT5")
-a10.obs <- read.mat(filename)[['a']]
+a10.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a10.obs)
 stopifnot(identical(a10.obs, a10.exp))
@@ -427,7 +427,7 @@ stopifnot(identical(a10.obs, a10.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a10.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a10.zlib.obs <- read.mat(filename)[['a']]
+    a10.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a10.zlib.obs)
     stopifnot(identical(a10.zlib.obs, a10.exp))
@@ -442,7 +442,7 @@ a11.exp <- list(list(field1 = "abcdefghijklmnopqrstuvwxyz",
                      field2 = "[{]}\\|;:'\",<.>/?          "))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a11.exp), filename = filename, compression = FALSE, version = "MAT5")
-a11.obs <- read.mat(filename)[['a']]
+a11.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a11.obs)
 stopifnot(identical(a11.obs, a11.exp))
@@ -451,7 +451,7 @@ stopifnot(identical(a11.obs, a11.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a11.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a11.zlib.obs <- read.mat(filename)[['a']]
+    a11.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a11.zlib.obs)
     stopifnot(identical(a11.zlib.obs, a11.exp))
@@ -487,7 +487,7 @@ a12.exp <- list(structure(c(FALSE, TRUE, FALSE, TRUE, FALSE,
                           .Dim = c(5L, 5L)))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a12.exp), filename = filename, compression = FALSE, version = "MAT5")
-a12.obs <- read.mat(filename)[['a']]
+a12.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a12.obs)
 stopifnot(identical(a12.obs, a12.exp))
@@ -496,7 +496,7 @@ stopifnot(identical(a12.obs, a12.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a12.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a12.zlib.obs <- read.mat(filename)[['a']]
+    a12.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a12.zlib.obs)
     stopifnot(identical(a12.zlib.obs, a12.exp))
@@ -513,7 +513,7 @@ a13.exp <- list(structure(list(),
                           .Names = c("field1", "field2")))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a13.exp), filename = filename, compression = FALSE, version = "MAT5")
-a13.obs <- read.mat(filename)[['a']]
+a13.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a13.obs)
 stopifnot(identical(a13.obs, a13.exp))
@@ -522,7 +522,7 @@ stopifnot(identical(a13.obs, a13.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a13.exp), filename = filename, compression = TRUE, version = "MAT5")
-    a13.zlib.obs <- read.mat(filename)[['a']]
+    a13.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a13.zlib.obs)
     stopifnot(identical(a13.zlib.obs, a13.exp))
@@ -535,7 +535,7 @@ a14.in <- list(c("a", "bb"), c("c", "dd"))
 a14.exp <- list(list("a", "bb"), list("c", "dd"))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a14.in), filename = filename, compression = FALSE, version = "MAT5")
-a14.obs <- read.mat(filename)[['a']]
+a14.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a14.obs)
 stopifnot(identical(a14.obs, a14.exp))
@@ -544,7 +544,7 @@ stopifnot(identical(a14.obs, a14.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a14.in), filename = filename, compression = TRUE, version = "MAT5")
-    a14.zlib.obs <- read.mat(filename)[['a']]
+    a14.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a14.zlib.obs)
     stopifnot(identical(a14.zlib.obs, a14.exp))
@@ -557,7 +557,7 @@ a15.in <- list(c("a", "bb"), list(c("d", "eee")))
 a15.exp <- list(list("a", "bb"), list(list(list("d", "eee"))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a15.in), filename = filename, compression = FALSE, version = "MAT5")
-a15.obs <- read.mat(filename)[['a']]
+a15.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a15.obs)
 stopifnot(identical(a15.obs, a15.exp))
@@ -566,7 +566,7 @@ stopifnot(identical(a15.obs, a15.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a15.in), filename = filename, compression = TRUE, version = "MAT5")
-    a15.zlib.obs <- read.mat(filename)[['a']]
+    a15.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a15.zlib.obs)
     stopifnot(identical(a15.zlib.obs, a15.exp))
@@ -582,7 +582,7 @@ a16.in <- list(c("a", "bb"), Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
 a16.exp <- list(list("a", "bb"), list(a16.in[[2]]))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a16.in), filename = filename, compression = FALSE, version = "MAT5")
-a16.obs <- read.mat(filename)[['a']]
+a16.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a16.obs)
 stopifnot(identical(a16.obs, a16.exp))
@@ -591,7 +591,7 @@ stopifnot(identical(a16.obs, a16.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a16.in), filename = filename, compression = TRUE, version = "MAT5")
-    a16.zlib.obs <- read.mat(filename)[['a']]
+    a16.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a16.zlib.obs)
     stopifnot(identical(a16.zlib.obs, a16.exp))
@@ -604,7 +604,7 @@ a17.in <- list(list(c("a", "bb")), list())
 a17.exp <- list(list(list(list("a", "bb"))), list())
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a17.in), filename = filename, compression = FALSE, version = "MAT5")
-a17.obs <- read.mat(filename)[['a']]
+a17.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a17.obs)
 stopifnot(identical(a17.obs, a17.exp))
@@ -613,7 +613,7 @@ stopifnot(identical(a17.obs, a17.exp))
 if (rmatio:::have.zlib()) {
     filename <- tempfile(fileext = ".mat")
     write.mat(list(a = a17.in), filename = filename, compression = TRUE, version = "MAT5")
-    a17.zlib.obs <- read.mat(filename)[['a']]
+    a17.zlib.obs <- read.mat(filename)[["a"]]
     unlink(filename)
     str(a17.zlib.obs)
     stopifnot(identical(a17.zlib.obs, a17.exp))
