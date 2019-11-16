@@ -1,11 +1,12 @@
-*** mat.c.orig	2019-11-16 17:11:30.229260201 +0100
---- mat.c	2019-11-16 17:11:30.253260125 +0100
+*** mat.c.orig	2019-11-16 17:53:29.871309124 +0100
+--- mat.c	2019-11-16 17:53:29.896309048 +0100
 ***************
-*** 28,53 ****
+*** 28,54 ****
    * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 ! /* FIXME: Implement Unicode support */
+! #include "safe-math.h"
 ! #include <stdlib.h>
 ! #include <string.h>
 ! #include <stdio.h>
@@ -49,7 +50,7 @@
   #include "mat5.h"
   #include "mat4.h"
 ***************
-*** 77,138 ****
+*** 78,139 ****
       return;
   }
   
@@ -164,7 +165,7 @@
   }
   
 ***************
-*** 972,1146 ****
+*** 1038,1212 ****
       return matvar;
   }
   
@@ -340,10 +341,10 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 953,958 ----
+--- 1018,1023 ----
 ***************
-*** 1779,1784 ****
---- 1591,1597 ----
+*** 1840,1845 ****
+--- 1651,1657 ----
       return bytes;
   }
   
@@ -352,8 +353,8 @@
    *
    * Prints to stdout the values of the @ref matvar_t structure
 ***************
-*** 2023,2028 ****
---- 1836,1842 ----
+*** 2086,2091 ****
+--- 1898,1904 ----
   
       return;
   }
