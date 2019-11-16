@@ -3,31 +3,29 @@
  * @ingroup MAT
  */
 /*
- * Copyright (C) 2005-2017   Christopher C. Hulbert
- *
+ * Copyright (c) 2005-2018, Christopher C. Hulbert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- *    1. Redistributions of source code must retain the above copyright notice,
- *       this list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
  *
- *    2. Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY CHRISTOPHER C. HULBERT ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL CHRISTOPHER C. HULBERT OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <stdlib.h>
@@ -354,7 +352,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                     return;
                 }
                 ReadDoubleData(mat, &tmp, data_type, 1);
-                matvar->dims[0] = tmp;
+                matvar->dims[0] = (size_t)tmp;
 
                 fpos = ftell((FILE*)mat->fp);
                 if ( fpos == -1L ) {
@@ -594,6 +592,7 @@ Read4(mat_t *mat,matvar_t *matvar)
             }
             else {
                 Mat_Critical("Memory allocation failure");
+                return;
             }
         default:
             Mat_Critical("MAT V4 data type error");
@@ -734,7 +733,8 @@ Mat_VarReadDataLinear4(mat_t *mat,matvar_t *matvar,void *data,int start,
 matvar_t *
 Mat_VarReadNextInfo4(mat_t *mat)
 {
-    int       tmp,M,O,data_type,class_type;
+    int       M,O,data_type,class_type;
+    mat_int32_t tmp;
     long      nBytes;
     size_t    err;
     matvar_t *matvar = NULL;
@@ -764,13 +764,13 @@ Mat_VarReadNextInfo4(mat_t *mat)
         }
     }
 
-    M = floor(tmp / 1000.0);
+    M = (int)floor(tmp / 1000.0);
     tmp -= M*1000;
-    O = floor(tmp / 100.0);
+    O = (int)floor(tmp / 100.0);
     tmp -= O*100;
-    data_type = floor(tmp / 10.0);
+    data_type = (int)floor(tmp / 10.0);
     tmp -= data_type*10;
-    class_type = floor(tmp / 1.0);
+    class_type = (int)floor(tmp / 1.0);
 
     switch ( M ) {
         case 0:
@@ -854,6 +854,10 @@ Mat_VarReadNextInfo4(mat_t *mat)
 
     err = fread(&(matvar->isComplex),sizeof(int),1,(FILE*)mat->fp);
     if ( !err ) {
+        Mat_VarFree(matvar);
+        return NULL;
+    }
+    if ( matvar->isComplex && MAT_C_CHAR == matvar->class_type ) {
         Mat_VarFree(matvar);
         return NULL;
     }
