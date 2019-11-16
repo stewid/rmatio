@@ -1,5 +1,5 @@
-*** mat.c.orig	2017-07-29 16:59:57.454665215 +0200
---- mat.c	2017-07-29 16:59:57.490664820 +0200
+*** mat.c.orig	2019-11-16 16:05:10.185082861 +0100
+--- mat.c	2019-11-16 16:05:10.207082791 +0100
 ***************
 *** 30,54 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -163,7 +163,7 @@
   }
   
 ***************
-*** 920,1094 ****
+*** 924,1098 ****
       return matvar;
   }
   
@@ -182,20 +182,20 @@
 -     FILE* out;
 - 
 -     in = fopen(src, "rb");
--     if (in == NULL) {
+-     if ( in == NULL ) {
 -         Mat_Critical("Cannot open file \"%s\" for reading.", src);
 -         return -1;
 -     }
 - 
 -     out = fopen(dst, "wb");
--     if (out == NULL) {
+-     if ( out == NULL ) {
 -         fclose(in);
 -         Mat_Critical("Cannot open file \"%s\" for writing.", dst);
 -         return -1;
 -     }
 - 
--     while ((len = fread(buf, sizeof(char), BUFSIZ, in)) > 0) {
--         if (len != fwrite(buf, sizeof(char), len, out)) {
+-     while ( (len = fread(buf, sizeof(char), BUFSIZ, in)) > 0 ) {
+-         if ( len != fwrite(buf, sizeof(char), len, out) ) {
 -             fclose(in);
 -             fclose(out);
 -             Mat_Critical("Error writing to file \"%s\".", dst);
@@ -339,9 +339,9 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 902,907 ----
+--- 906,911 ----
 ***************
-*** 1718,1931 ****
+*** 1720,1933 ****
       return bytes;
   }
   
@@ -556,4 +556,4 @@
   /** @brief Reads MAT variable data from a file
    *
    * Reads data from a MAT variable.  The variable must have been read by
---- 1531,1536 ----
+--- 1533,1538 ----

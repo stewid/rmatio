@@ -1,5 +1,5 @@
-*** matio_private.h.orig	2017-07-29 16:59:57.470665039 +0200
---- matio_private.h	2017-07-29 16:59:57.498664732 +0200
+*** matio_private.h.orig	2019-11-16 16:03:49.562342151 +0100
+--- matio_private.h	2019-11-16 16:03:49.585342091 +0100
 ***************
 *** 28,34 ****
   #ifndef MATIO_PRIVATE_H
@@ -19,7 +19,7 @@
   #if defined(HAVE_ZLIB)
   #   include <zlib.h>
 ***************
-*** 95,126 ****
+*** 93,124 ****
   #endif
   };
   
@@ -52,4 +52,4 @@
   /* endian.c */
   EXTERN double        Mat_doubleSwap(double  *a);
   EXTERN float         Mat_floatSwap(float   *a);
---- 96,101 ----
+--- 94,99 ----

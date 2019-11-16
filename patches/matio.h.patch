@@ -1,5 +1,5 @@
-*** matio.h.orig	2017-07-28 16:00:19.306938170 +0200
---- matio.h	2017-07-28 16:00:19.334938381 +0200
+*** matio.h.orig	2019-11-16 15:32:39.090724774 +0100
+--- matio.h	2019-11-16 15:34:48.824288845 +0100
 ***************
 *** 30,43 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -50,19 +50,19 @@
   /* io.c */
 ! EXTERN char  *strdup_vprintf(const char *format, va_list ap);
 ! EXTERN char  *strdup_printf(const char *format, ...);
-! EXTERN int    Mat_SetVerbose( int verb, int s );
-! EXTERN int    Mat_SetDebug( int d );
-! EXTERN void   Mat_Critical( const char *format, ... );
-! EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR;
-! EXTERN void   Mat_Help( const char *helpstr[] );
-! EXTERN int    Mat_LogInit( const char *progname );
+! EXTERN int    Mat_SetVerbose(int verb, int s);
+! EXTERN int    Mat_SetDebug(int d);
+! EXTERN void   Mat_Critical(const char *format, ...);
+! EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR;
+! EXTERN void   Mat_Help(const char *helpstr[]);
+! EXTERN int    Mat_LogInit(const char *progname);
 ! EXTERN int    Mat_LogClose(void);
 ! EXTERN int    Mat_LogInitFunc(const char *prog_name,
-!                   void (*log_func)(int log_level, char *message) );
-! EXTERN int    Mat_Message( const char *format, ... );
-! EXTERN int    Mat_DebugMessage( int level, const char *format, ... );
-! EXTERN int    Mat_VerbMessage( int level, const char *format, ... );
-! EXTERN void   Mat_Warning( const char *format, ... );
+!                   void (*log_func)(int log_level, char *message));
+! EXTERN int    Mat_Message(const char *format, ...);
+! EXTERN int    Mat_DebugMessage(int level, const char *format, ...);
+! EXTERN int    Mat_VerbMessage(int level, const char *format, ...);
+! EXTERN void   Mat_Warning(const char *format, ...);
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
@@ -74,19 +74,19 @@
   /* io.c */
 ! /* EXTERN char  *strdup_vprintf(const char *format, va_list ap); */
 ! /* EXTERN char  *strdup_printf(const char *format, ...); */
-! /* EXTERN int    Mat_SetVerbose( int verb, int s ); */
-! /* EXTERN int    Mat_SetDebug( int d ); */
-! /* EXTERN void   Mat_Critical( const char *format, ... ); */
-! /* EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR; */
-! /* EXTERN void   Mat_Help( const char *helpstr[] ); */
-! /* EXTERN int    Mat_LogInit( const char *progname ); */
+! /* EXTERN int    Mat_SetVerbose(int verb, int s); */
+! /* EXTERN int    Mat_SetDebug(int d); */
+! /* EXTERN void   Mat_Critical(const char *format, ...); */
+! /* EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR; */
+! /* EXTERN void   Mat_Help(const char *helpstr[]); */
+! /* EXTERN int    Mat_LogInit(const char *progname); */
 ! /* EXTERN int    Mat_LogClose(void); */
 ! /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
-! /*                   void (*log_func)(int log_level, char *message) ); */
-! /* EXTERN int    Mat_Message( const char *format, ... ); */
-! /* EXTERN int    Mat_DebugMessage( int level, const char *format, ... ); */
-! /* EXTERN int    Mat_VerbMessage( int level, const char *format, ... ); */
-! /* EXTERN void   Mat_Warning( const char *format, ... ); */
+! /*                   void (*log_func)(int log_level, char *message)); */
+! /* EXTERN int    Mat_Message(const char *format, ...); */
+! /* EXTERN int    Mat_DebugMessage(int level, const char *format, ...); */
+! /* EXTERN int    Mat_VerbMessage(int level, const char *format, ...); */
+! /* EXTERN void   Mat_Warning(const char *format, ...); */
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   

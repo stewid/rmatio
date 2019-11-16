@@ -1,5 +1,5 @@
-*** read_data.c.orig	2017-07-29 16:59:57.474664996 +0200
---- read_data.c	2017-07-29 16:59:57.486664863 +0200
+*** read_data.c.orig	2019-11-16 15:49:23.921611107 +0100
+--- read_data.c	2019-11-16 15:49:23.927611091 +0100
 ***************
 *** 30,45 ****
    * POSSIBILITY OF SUCH DAMAGE.
@@ -16,8 +16,8 @@
 ! #   include <zlib.h>
 ! #endif
   
-  #define READ_DATA(SwapFunc) \
-      do { \
+  #if !defined(READ_BLOCK_SIZE)
+  #define READ_BLOCK_SIZE (256)
 --- 30,58 ----
    * POSSIBILITY OF SUCH DAMAGE.
    */
@@ -46,10 +46,10 @@
 ! /* #   include <zlib.h> */
 ! /* #endif */
   
-  #define READ_DATA(SwapFunc) \
-      do { \
+  #if !defined(READ_BLOCK_SIZE)
+  #define READ_BLOCK_SIZE (256)
 ***************
-*** 2037,2050 ****
+*** 2063,2076 ****
       enum matio_classes class_type,enum matio_types data_type,int start,
       int stride,int edge)
   {
@@ -64,7 +64,7 @@
       InflateSkipData(mat,&z_copy,data_type,start);
       switch ( class_type ) {
           case MAT_C_DOUBLE:
---- 2050,2063 ----
+--- 2076,2089 ----
       enum matio_classes class_type,enum matio_types data_type,int start,
       int stride,int edge)
   {
@@ -80,7 +80,7 @@
       switch ( class_type ) {
           case MAT_C_DOUBLE:
 ***************
-*** 2174,2180 ****
+*** 2200,2206 ****
       enum matio_classes class_type,enum matio_types data_type,size_t *dims,
       int *start,int *stride,int *edge)
   {
@@ -88,7 +88,7 @@
       int pos, row_stride, col_stride;
       z_stream z_copy = {0,};
   
---- 2187,2193 ----
+--- 2213,2219 ----
       enum matio_classes class_type,enum matio_types data_type,size_t *dims,
       int *start,int *stride,int *edge)
   {
@@ -97,7 +97,7 @@
       z_stream z_copy = {0,};
   
 ***************
-*** 2183,2189 ****
+*** 2209,2215 ****
           return 0;
       }
   
@@ -105,7 +105,7 @@
       switch ( class_type ) {
           case MAT_C_DOUBLE:
           {
---- 2196,2202 ----
+--- 2222,2228 ----
           return 0;
       }
   
