@@ -3,7 +3,7 @@
  * @ingroup MAT
  */
 /*
- * Copyright (c) 2005-2018, Christopher C. Hulbert
+ * Copyright (c) 2005-2019, Christopher C. Hulbert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,13 +60,13 @@ ReadData(mat_t *mat, matvar_t *matvar)
     if ( mat == NULL || matvar == NULL || mat->fp == NULL )
         return;
     else if ( mat->version == MAT_FT_MAT5 )
-        Read5(mat,matvar);
+        Mat_VarRead5(mat,matvar);
 #if defined(MAT73) && MAT73
     else if ( mat->version == MAT_FT_MAT73 )
         Mat_VarRead73(mat,matvar);
 #endif
     else if ( mat->version == MAT_FT_MAT4 )
-        Read4(mat,matvar);
+        Mat_VarRead4(mat,matvar);
     return;
 }
 
@@ -854,7 +854,7 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
                 while ( fields[nfields] != NULL )
                     nfields++;
                 if ( nmemb )
-                    nfields = nfields / nmemb;
+                    nfields /= nmemb;
                 matvar->internal->num_fields = nfields;
                 if ( nfields ) {
                     size_t i;
@@ -1635,7 +1635,7 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
         printf(" (logical)");
     printf("\n");
     if ( matvar->data_type ) {
-        const char *data_type_desc[23] = {"Unknown","8-bit, signed integer",
+        const char *data_type_desc[25] = {"Unknown","8-bit, signed integer",
            "8-bit, unsigned integer","16-bit, signed integer",
            "16-bit, unsigned integer","32-bit, signed integer",
            "32-bit, unsigned integer","IEEE 754 single-precision","RESERVED",
@@ -1643,8 +1643,8 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
            "64-bit, signed integer","64-bit, unsigned integer", "Matlab Array",
            "Compressed Data","Unicode UTF-8 Encoded Character Data",
            "Unicode UTF-16 Encoded Character Data",
-           "Unicode UTF-32 Encoded Character Data","","String","Cell Array",
-           "Structure"};
+           "Unicode UTF-32 Encoded Character Data","RESERVED","String","Cell Array",
+           "Structure","Array","Function"};
         printf(" Data Type: %s\n", data_type_desc[matvar->data_type]);
     }
 
@@ -1875,7 +1875,7 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
 
     switch ( mat->version ) {
         case MAT_FT_MAT5:
-            err = ReadData5(mat,matvar,data,start,stride,edge);
+            err = Mat_VarReadData5(mat,matvar,data,start,stride,edge);
             break;
         case MAT_FT_MAT73:
 #if defined(MAT73) && MAT73
@@ -1885,7 +1885,7 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
 #endif
             break;
         case MAT_FT_MAT4:
-            err = ReadData4(mat,matvar,data,start,stride,edge);
+            err = Mat_VarReadData4(mat,matvar,data,start,stride,edge);
             break;
         default:
             err = 2;
@@ -1897,7 +1897,7 @@ Mat_VarReadData(mat_t *mat,matvar_t *matvar,void *data,
 
 /** @brief Reads all the data for a matlab variable
  *
- * Allocates memory for an reads the data for a given matlab variable.
+ * Allocates memory and reads the data for a given matlab variable.
  * @ingroup MAT
  * @param mat Matlab MAT file structure pointer
  * @param matvar Variable whose data is to be read
@@ -2152,21 +2152,17 @@ Mat_VarReadNext( mat_t *mat )
  * @ingroup MAT
  * @param mat MAT file to write to
  * @param matvar MAT variable information to write
- * @retval 0 on success
+ * @retval 1
+ * @deprecated
+ * @see Mat_VarWrite/Mat_VarWriteAppend
  */
 int
 Mat_VarWriteInfo(mat_t *mat, matvar_t *matvar )
 {
-    int err = 0;
-
-    if ( mat == NULL || matvar == NULL || mat->fp == NULL )
-        return -1;
-    else if ( mat->version == MAT_FT_MAT5 )
-        WriteInfo5(mat,matvar);
-    else
-        err = 1;
-
-    return err;
+    Mat_Critical("Mat_VarWriteInfo/Mat_VarWriteData is not supported. "
+        "Use %s instead!", mat->version == MAT_FT_MAT73 ?
+        "Mat_VarWrite/Mat_VarWriteAppend" : "Mat_VarWrite");
+    return 1;
 }
 
 /** @brief Writes the given data to the MAT variable
@@ -2180,68 +2176,18 @@ Mat_VarWriteInfo(mat_t *mat, matvar_t *matvar )
  * @param start array of starting indices
  * @param stride stride of data
  * @param edge array specifying the number to read in each direction
- * @retval 0 on success
+ * @retval 1
+ * @deprecated
+ * @see Mat_VarWrite/Mat_VarWriteAppend
  */
 int
 Mat_VarWriteData(mat_t *mat,matvar_t *matvar,void *data,
       int *start,int *stride,int *edge)
 {
-    int err = 0, k, N = 1;
-
-    if ( mat == NULL || matvar == NULL )
-        return -1;
-
-    if ( NULL != matvar->internal )
-        (void)fseek((FILE*)mat->fp,matvar->internal->datapos+8,SEEK_SET);
-
-    if ( data == NULL ) {
-        err = -1;
-    } else if ( start == NULL && stride == NULL && edge == NULL ) {
-        for ( k = 0; k < matvar->rank; k++ )
-            N *= matvar->dims[k];
-        if ( matvar->compression == MAT_COMPRESSION_NONE )
-            WriteData(mat,data,N,matvar->data_type);
-#if 0
-        else if ( matvar->compression == MAT_COMPRESSION_ZLIB ) {
-            WriteCompressedData(mat,matvar->internal->z,data,N,matvar->data_type);
-            (void)deflateEnd(matvar->internal->z);
-            free(matvar->internal->z);
-            matvar->internal->z = NULL;
-        }
-#endif
-    } else if ( start == NULL || stride == NULL || edge == NULL ) {
-        err = 1;
-    } else if ( matvar->rank == 2 ) {
-        if ( (size_t)stride[0]*(edge[0]-1)+start[0]+1 > matvar->dims[0] ) {
-            err = 1;
-        } else if ( (size_t)stride[1]*(edge[1]-1)+start[1]+1 > matvar->dims[1] ) {
-            err = 1;
-        } else {
-            switch ( matvar->class_type ) {
-                case MAT_C_DOUBLE:
-                case MAT_C_SINGLE:
-                case MAT_C_INT64:
-                case MAT_C_UINT64:
-                case MAT_C_INT32:
-                case MAT_C_UINT32:
-                case MAT_C_INT16:
-                case MAT_C_UINT16:
-                case MAT_C_INT8:
-                case MAT_C_UINT8:
-                    WriteDataSlab2(mat,data,matvar->data_type,matvar->dims,
-                                   start,stride,edge);
-                    break;
-                case MAT_C_CHAR:
-                    WriteCharDataSlab2(mat,data,matvar->data_type,matvar->dims,
-                                   start,stride,edge);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    return err;
+    Mat_Critical("Mat_VarWriteInfo/Mat_VarWriteData is not supported. "
+        "Use %s instead!", mat->version == MAT_FT_MAT73 ?
+        "Mat_VarWrite/Mat_VarWriteAppend" : "Mat_VarWrite");
+    return 1;
 }
 
 /** @brief Writes the given MAT variable to a MAT file

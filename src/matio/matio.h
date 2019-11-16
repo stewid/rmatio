@@ -3,7 +3,7 @@
  * @ingroup MAT
  */
 /*
- * Copyright (c) 2005-2018, Christopher C. Hulbert
+ * Copyright (c) 2005-2019, Christopher C. Hulbert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -250,7 +250,7 @@ EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
 /* EXTERN void   Mat_Critical(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
 /* EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR MATIO_FORMATATTR_PRINTF1; */
 /* EXTERN void   Mat_Help(const char *helpstr[]); */
-/* EXTERN int    Mat_LogInit(const char *progname); */
+/* EXTERN int    Mat_LogInit(const char *prog_name); */
 /* EXTERN int    Mat_LogClose(void); */
 /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
 /*                   void (*log_func)(int log_level, char *message)); */
