@@ -174,9 +174,9 @@ setMethod("write.mat",
                                  "Use 'compression = FALSE' or",
                                  "install with 'zlib'"))
                   }
-                  compression = 1L
+                  compression <- 1L
               } else {
-                  compression = 0L
+                  compression <- 0L
               }
 
               ## Check version
@@ -187,7 +187,7 @@ setMethod("write.mat",
                                            "Platform: %s, ",
                                            "Created By: rmatio v%s on %s"),
                                     R.version$platform[[1]],
-                                    utils::packageVersion('rmatio'),
+                                    utils::packageVersion("rmatio"),
                                     date())
               } else {
                   stop("Unsupported version")
