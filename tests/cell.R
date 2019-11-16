@@ -27,14 +27,14 @@ sessionInfo()
 ##
 ## In rmatio, cell arrays are mapped to an unnamed list
 
-##
-## Note:
-## If the list contains elements of differents lengths i.e.
-## a14.in <- list(c("a", "bb"), c("c", "dd"))
-## then the expected result is not identical, since each element
-## is saved in a cell and the expected result of a14.in is therefore
-## a14.exp <- list(list("a", "bb"), list("c", "dd"))
-##
+##'
+##' Note:
+##' If the list contains elements of differents lengths i.e.
+##' a14.in <- list(c("a", "bb"), c("c", "dd"))
+##' then the expected result is not identical, since each element
+##' is saved in a cell and the expected result of a14.in is therefore
+##' a14.exp <- list(list("a", "bb"), list("c", "dd"))
+##'
 
 ##
 ## cell: case-1
@@ -86,7 +86,7 @@ if (rmatio:::have.zlib()) {
 ## cell: case-3
 ##
 a3.exp <- list(list(array(c(1, 3, 2, 4), c(2, 2)),
-                    array(c(5, 8, 6, 9, 7, 10), c(2,3)),
+                    array(c(5, 8, 6, 9, 7, 10), c(2, 3)),
                     array(c(11, 15, 12, 16, 13, 17, 14, 18), c(2, 4))),
                list(array(c(19, 21, 20, 22), c(2, 2)),
                     array(c(23, 25, 27, 24, 26, 28), c(3L, 2L)),
@@ -114,7 +114,7 @@ if (rmatio:::have.zlib()) {
 ## cell: case-4
 ##
 a4.exp <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
-                   array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2,3)),
+                   array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2, 3)),
                    array(c(11L, 15L, 12L, 16L, 13L, 17L, 14L, 18L), c(2, 4))),
               list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
                    array(c(23L, 25L, 27L, 24L, 26L, 28L), c(3L, 2L)),
@@ -170,10 +170,11 @@ if (rmatio:::have.zlib()) {
 a6.exp <- list(array(c(1 + 21i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 25i, 6 + 26i,
                        0 + 0i, 0 + 0i, 9 + 29i, 10 + 30i, 11 + 31i, 0 + 0i,
                        13 + 33i, 14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i,
-                       18 + 38i, 19 + 39i, 20 + 40i), c(4,5)),
-               array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i, 17 - 37i, 0 + 0i, 6 - 26i,
-                       10 - 30i, 14 - 34i, 18 - 38i, 0 + 0i, 0 + 0i, 11 - 31i, 15 - 35i,
-                       19 - 39i, 0 + 0i, 0 + 0i, 0 + 0i, 16 - 36i, 20 - 40i), c(5,4)))
+                       18 + 38i, 19 + 39i, 20 + 40i), c(4, 5)),
+               array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i, 17 - 37i, 0 + 0i,
+                       6 - 26i, 10 - 30i, 14 - 34i, 18 - 38i, 0 + 0i, 0 + 0i,
+                       11 - 31i, 15 - 35i, 19 - 39i, 0 + 0i, 0 + 0i, 0 + 0i,
+                       16 - 36i, 20 - 40i), c(5, 4)))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a6.exp), filename = filename,
           compression = FALSE, version = "MAT5")
@@ -260,8 +261,8 @@ a9.exp <- list(list(structure(list(
         field1 = list(1, 14),
         field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
                                 .Dim = 3:4),
-                      structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26),
-                                .Dim = 3:4))),
+                      structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                  25, 26), .Dim = 3:4))),
         .Names = c("field1", "field2")),
     structure(list(
         field1 = list(1, 14),
@@ -284,8 +285,8 @@ a9.exp <- list(list(structure(list(
         .Names = c("field1", "field2")),
     structure(list(
         field1 = list(1, 14),
-        field2 = list( structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
-                                 .Dim = 3:4),
+        field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                .Dim = 3:4),
                       structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
                                   25, 26), .Dim = 3:4))),
         .Names = c("field1", "field2")),
@@ -365,10 +366,10 @@ a9.exp <- list(list(structure(list(
             .Names = c("field1", "field2")),
         structure(list(
             field1 = list(1 + 51i, 14 + 64i),
-            field2 = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                                       6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
-                                       10 + 60i, 11 + 61i, 12 + 62i, 13 + 63i),
-                                     .Dim = 3:4),
+            field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                      6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                      10 + 60i, 11 + 61i, 12 + 62i, 13 + 63i),
+                                    .Dim = 3:4),
                           structure(c(15 + 65i, 16 + 66i, 17 + 67i, 18 + 68i,
                                       19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
                                       23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i),
@@ -445,15 +446,21 @@ a10.exp <- list(list(field1 = list(triu(Matrix(1:20, nrow = 4,
                      field2 = list(tril(Matrix(1:20, nrow = 5, ncol = 4,
                          sparse = TRUE, byrow = TRUE)))),
                 list(field1 = list(array(c(1 + 21i, 0 + 0i,
-                         0 + 0i, 0 + 0i, 5 + 25i, 6 + 26i, 0 + 0i, 0 + 0i, 9 + 29i,
-                         10 + 30i, 11 + 31i, 0 + 0i, 13 + 33i, 14 + 34i, 15 + 35i,
-                         16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i, 20 + 40i),
-                         c(4,5))),
-                     field2 = list(array(c(1 - 21i, 5 - 25i,
-                         9 - 29i, 13 - 33i, 17 - 37i, 0 + 0i, 6 - 26i, 10 - 30i,
-                         14 - 34i, 18 - 38i, 0 + 0i, 0 + 0i, 11 - 31i, 15 - 35i,
-                         19 - 39i, 0 + 0i, 0 + 0i, 0 + 0i, 16 - 36i, 20 - 40i),
-                         c(5,4)))))
+                                           0 + 0i, 0 + 0i, 5 + 25i, 6 + 26i,
+                                           0 + 0i, 0 + 0i, 9 + 29i,
+                                           10 + 30i, 11 + 31i, 0 + 0i,
+                                           13 + 33i, 14 + 34i, 15 + 35i,
+                                           16 + 36i, 17 + 37i, 18 + 38i,
+                                           19 + 39i, 20 + 40i),
+                                         c(4, 5))),
+                     field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i,
+                                           13 - 33i, 17 - 37i, 0 + 0i,
+                                           6 - 26i, 10 - 30i, 14 - 34i,
+                                           18 - 38i, 0 + 0i, 0 + 0i,
+                                           11 - 31i, 15 - 35i, 19 - 39i,
+                                           0 + 0i, 0 + 0i, 0 + 0i,
+                                           16 - 36i, 20 - 40i),
+                                         c(5, 4)))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a10.exp), filename = filename,
           compression = FALSE, version = "MAT5")
@@ -518,7 +525,7 @@ a12.exp <- list(structure(c(FALSE, TRUE, FALSE, TRUE, FALSE,
                             TRUE, TRUE, FALSE, FALSE, TRUE,
                             TRUE, TRUE, FALSE, FALSE, FALSE,
                             TRUE, TRUE, FALSE, FALSE, FALSE,
-                            FALSE, TRUE ),
+                            FALSE, TRUE),
                           .Dim = c(5L, 5L)),
                 structure(c(TRUE, FALSE,
                             FALSE, FALSE, FALSE, TRUE, TRUE,
