@@ -33,7 +33,6 @@ sync:
 	-cd src/matio && patch -i ../../patches/inflate.c.patch
 	-cd src/matio && patch -i ../../patches/read_data.c.patch
 	-cd src/matio && patch -i ../../patches/mat.c.patch
-	-cd src/matio && patch -i ../../patches/mat5.c.patch
 	-cd src/matio && patch -i ../../patches/matio.h.patch
 	-cd src/matio && patch -i ../../patches/matio_private.h.patch
 
