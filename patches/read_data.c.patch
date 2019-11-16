@@ -1,11 +1,12 @@
-*** read_data.c.orig	2019-11-16 16:48:19.959686978 +0100
---- read_data.c	2019-11-16 16:48:19.966686956 +0100
+*** read_data.c.orig	2019-11-16 17:05:21.824425179 +0100
+--- read_data.c	2019-11-16 17:07:59.865925420 +0100
 ***************
-*** 28,43 ****
+*** 28,44 ****
    * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 ! /* FIXME: Implement Unicode support */
+! #include <stddef.h>
 ! #include <stdlib.h>
 ! #include <string.h>
 ! #include <stdio.h>
@@ -34,14 +35,14 @@
 ! #include <R.h>
   #include "matio_private.h"
 ! 
-! /* FIXME: Implement Unicode support */
+! /* /\* FIXME: Implement Unicode support *\/ */
+! /* #include <stddef.h> */
 ! /* #include <stdlib.h> */
 ! /* #include <string.h> */
 ! /* #include <stdio.h> */
 ! /* #include <math.h> */
 ! /* #include <time.h> */
 ! /* #include "matio_private.h" */
-! 
 ! /* #if defined(HAVE_ZLIB) */
 ! /* #   include <zlib.h> */
 ! /* #endif */
@@ -49,7 +50,7 @@
   #if !defined(READ_BLOCK_SIZE)
   #define READ_BLOCK_SIZE (256)
 ***************
-*** 2204,2210 ****
+*** 2205,2211 ****
       enum matio_classes class_type,enum matio_types data_type,size_t *dims,
       int *start,int *stride,int *edge)
   {
@@ -66,7 +67,7 @@
       z_stream z_copy = {0,};
   
 ***************
-*** 2213,2219 ****
+*** 2214,2220 ****
           return 0;
       }
   

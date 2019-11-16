@@ -1,5 +1,5 @@
-*** mat.c.orig	2019-11-16 16:56:55.634025853 +0100
---- mat.c	2019-11-16 16:56:55.660025770 +0100
+*** mat.c.orig	2019-11-16 17:11:30.229260201 +0100
+--- mat.c	2019-11-16 17:11:30.253260125 +0100
 ***************
 *** 28,53 ****
    * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -164,7 +164,7 @@
   }
   
 ***************
-*** 963,1137 ****
+*** 972,1146 ****
       return matvar;
   }
   
@@ -340,10 +340,10 @@
   /** @brief Duplicates a matvar_t structure
    *
    * Provides a clean function for duplicating a matvar_t structure.
---- 944,949 ----
+--- 953,958 ----
 ***************
-*** 1763,1768 ****
---- 1575,1581 ----
+*** 1779,1784 ****
+--- 1591,1597 ----
       return bytes;
   }
   
@@ -352,8 +352,8 @@
    *
    * Prints to stdout the values of the @ref matvar_t structure
 ***************
-*** 2007,2012 ****
---- 1820,1826 ----
+*** 2023,2028 ****
+--- 1836,1842 ----
   
       return;
   }
