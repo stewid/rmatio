@@ -54,7 +54,7 @@
 mat_t *
 Mat_Create4(const char* matname)
 {
-    FILE *fp = NULL;
+    FILE *fp;
     mat_t *mat = NULL;
 
     fp = fopen(matname,"w+b");
@@ -78,7 +78,9 @@ Mat_Create4(const char* matname)
     mat->bof           = 0;
     mat->next_index    = 0;
     mat->num_datasets  = 0;
+#if defined(MAT73) && MAT73
     mat->refs_id       = -1;
+#endif
     mat->dir           = NULL;
 
     Mat_Rewind(mat);
@@ -182,7 +184,7 @@ Mat_VarWrite4(mat_t *mat,matvar_t *matvar)
             x.imagf = matvar->isComplex ? 1 : 0;
             fwrite(&x, sizeof(Fmatrix), 1, (FILE*)mat->fp);
             fwrite(matvar->name, sizeof(char), x.namelen, (FILE*)mat->fp);
-            if (matvar->isComplex) {
+            if ( matvar->isComplex ) {
                 mat_complex_split_t *complex_data;
 
                 complex_data = (mat_complex_split_t*)matvar->data;
@@ -670,6 +672,7 @@ ReadData4(mat_t *mat,matvar_t *matvar,void *data,
         ReadDataSlabN(mat,data,matvar->class_type,matvar->data_type,
             matvar->rank,matvar->dims,start,stride,edge);
     }
+
     return err;
 }
 
@@ -744,14 +747,6 @@ Mat_VarReadNextInfo4(mat_t *mat)
         return NULL;
     else if ( NULL == (matvar = Mat_VarCalloc()) )
         return NULL;
-
-    matvar->internal->fp   = mat;
-    matvar->internal->fpos = ftell((FILE*)mat->fp);
-    if ( matvar->internal->fpos == -1L ) {
-        Mat_VarFree(matvar);
-        Mat_Critical("Couldn't determine file position");
-        return NULL;
-    }
 
     err = fread(&tmp,sizeof(int),1,(FILE*)mat->fp);
     if ( !err ) {

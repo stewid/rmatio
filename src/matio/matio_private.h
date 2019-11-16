@@ -36,9 +36,6 @@
 #endif
 #if defined(MAT73) && MAT73
 #   include <hdf5.h>
-#else
-#   define hobj_ref_t int
-#   define hid_t int
 #endif
 
 #ifndef EXTERN
@@ -62,16 +59,18 @@
  */
 struct _mat_t {
     void  *fp;              /**< File pointer for the MAT file */
-    char  *header;          /**< MAT File header string */
+    char  *header;          /**< MAT file header string */
     char  *subsys_offset;   /**< Offset */
     char  *filename;        /**< Filename of the MAT file */
-    int    version;         /**< MAT File version */
+    int    version;         /**< MAT file version */
     int    byteswap;        /**< 1 if byte swapping is required, 0 otherwise */
     int    mode;            /**< Access mode */
     long   bof;             /**< Beginning of file not including any header */
     size_t next_index;      /**< Index/File position of next variable to read */
     size_t num_datasets;    /**< Number of datasets in the file */
+#if defined(MAT73) && MAT73
     hid_t  refs_id;         /**< Id of the /#refs# group in HDF5 */
+#endif
     char **dir;             /**< Names of the datasets in the file */
 };
 
@@ -81,12 +80,12 @@ struct _mat_t {
  * @endif
  */
 struct matvar_internal {
-    char *hdf5_name;        /**< Name */
+#if defined(MAT73) && MAT73
+    char      *hdf5_name;   /**< Name */
     hobj_ref_t hdf5_ref;    /**< Reference */
     hid_t      id;          /**< Id */
-    long       fpos;        /**< Offset from the beginning of the MAT file to the variable */
+#endif
     long       datapos;     /**< Offset from the beginning of the MAT file to the data */
-    mat_t     *fp;          /**< Pointer to the MAT file structure (mat_t) */
     unsigned   num_fields;  /**< Number of fields */
     char     **fieldnames;  /**< Pointer to fieldnames */
 #if defined(HAVE_ZLIB)

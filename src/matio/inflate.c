@@ -244,7 +244,7 @@ InflateVarTag(mat_t *mat, matvar_t *matvar, void *buf)
     int    err;
     size_t bytesread = 0;
 
-    if (buf == NULL)
+    if ( buf == NULL )
         return 0;
 
     if ( !matvar->internal->z->avail_in ) {
@@ -295,7 +295,8 @@ InflateArrayFlags(mat_t *mat, matvar_t *matvar, void *buf)
     int    err;
     size_t bytesread = 0;
 
-    if (buf == NULL) return 0;
+    if ( buf == NULL )
+        return 0;
 
     if ( !matvar->internal->z->avail_in ) {
         matvar->internal->z->avail_in = 1;
