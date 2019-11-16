@@ -179,6 +179,46 @@ ClassType2DataType(enum matio_classes class_type)
     }
 }
 
+/** @brief Gets number of elements from a variable
+ *
+ * Gets number of elements from a variable by overflow-safe
+ * multiplication
+ * @ingroup MAT
+ * @param matvar MAT variable information
+ * @param nelems Number of elements
+ * @retval 0 on success
+ */
+int SafeMulDims(const matvar_t *matvar, size_t* nelems)
+{
+    int i;
+
+    for ( i = 0; i < matvar->rank; i++ ) {
+        if ( !psnip_safe_size_mul(nelems, *nelems, matvar->dims[i]) ) {
+            *nelems = 0;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/** @brief Multiplies two unsigned integers
+ *
+ * @param res Result
+ * @param a First operand
+ * @param b Second operand
+ * @retval 0 on success
+ */
+int SafeMul(size_t* res, size_t a, size_t b)
+{
+    if ( !psnip_safe_size_mul(res, a, b) ) {
+        *res = 0;
+        return 1;
+    }
+
+    return 0;
+}
+
 /*
  *===================================================================
  *                 Public Functions
@@ -479,6 +519,22 @@ Mat_GetFilename(mat_t *mat)
     return filename;
 }
 
+/** @brief Gets the header for the given MAT file
+ *
+ * Gets the header for the given MAT file
+ * @ingroup MAT
+ * @param mat Pointer to the MAT file
+ * @return MAT header
+ */
+const char *
+Mat_GetHeader(mat_t *mat)
+{
+    const char *header = NULL;
+    if ( NULL != mat )
+        header = mat->header;
+    return header;
+}
+
 /** @brief Gets the version of the given MAT file
  *
  * Gets the version of the given MAT file
@@ -583,6 +639,15 @@ Mat_GetDir(mat_t *mat, size_t *n)
                 }
             } while ( !feof((FILE *)mat->fp) );
             (void)fseek((FILE*)mat->fp,fpos,SEEK_SET);
+            *n = mat->num_datasets;
+        }
+    } else {
+        if ( mat->version == MAT_FT_MAT73 ) {
+            *n = 0;
+            while ( *n < mat->num_datasets && NULL != mat->dir[*n] ) {
+                (*n)++;
+            }
+        } else {
             *n = mat->num_datasets;
         }
     }
@@ -777,7 +842,7 @@ matvar_t *
 Mat_VarCreate(const char *name,enum matio_classes class_type,
     enum matio_types data_type,int rank,size_t *dims,void *data,int opt)
 {
-    size_t nmemb = 1, data_size;
+    size_t nelems = 1, data_size;
     matvar_t *matvar = NULL;
     int j;
 
@@ -798,7 +863,7 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
     matvar->dims = (size_t*)malloc(matvar->rank*sizeof(*matvar->dims));
     for ( j = 0; j < matvar->rank; j++ ) {
         matvar->dims[j] = dims[j];
-        nmemb *= dims[j];
+        nelems *= dims[j];
     }
     matvar->class_type = class_type;
     matvar->data_type  = data_type;
@@ -853,8 +918,8 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
                 size_t nfields = 0;
                 while ( fields[nfields] != NULL )
                     nfields++;
-                if ( nmemb )
-                    nfields /= nmemb;
+                if ( nelems )
+                    nfields /= nelems;
                 matvar->internal->num_fields = nfields;
                 if ( nfields ) {
                     size_t i;
@@ -862,7 +927,7 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
                         (char**)calloc(nfields,sizeof(*matvar->internal->fieldnames));
                     for ( i = 0; i < nfields; i++ )
                         matvar->internal->fieldnames[i] = strdup(fields[i]->name);
-                    nmemb *= nfields;
+                    SafeMul(&nelems, nelems, nfields);
                 }
             }
             break;
@@ -877,11 +942,11 @@ Mat_VarCreate(const char *name,enum matio_classes class_type,
         matvar->nbytes    = matvar->data_size;
     } else {
         matvar->data_size = data_size;
-        matvar->nbytes = nmemb*matvar->data_size;
+        SafeMul(&matvar->nbytes, nelems, matvar->data_size);
     }
     if ( data == NULL ) {
-        if ( MAT_C_CELL == matvar->class_type && nmemb > 0 )
-            matvar->data = calloc(nmemb,sizeof(matvar_t*));
+        if ( MAT_C_CELL == matvar->class_type && nelems > 0 )
+            matvar->data = calloc(nelems,sizeof(matvar_t*));
         else
             matvar->data = NULL;
     } else if ( opt & MAT_F_DONT_COPY_DATA ) {
@@ -1100,10 +1165,10 @@ Mat_VarDuplicate(const matvar_t *in, int opt)
     } else if ( (in->data != NULL) && (in->class_type == MAT_C_CELL) ) {
         out->data = malloc(in->nbytes);
         if ( out->data != NULL && in->data_size > 0 ) {
-            size_t ncells = in->nbytes / in->data_size;
+            size_t nelems = in->nbytes / in->data_size;
             matvar_t **incells  = (matvar_t **)in->data;
             matvar_t **outcells = (matvar_t **)out->data;
-            for ( i = 0; i < ncells; i++ ) {
+            for ( i = 0; i < nelems; i++ ) {
                 outcells[i] = Mat_VarDuplicate(incells[i],opt);
             }
         }
@@ -1175,15 +1240,13 @@ Mat_VarDuplicate(const matvar_t *in, int opt)
 void
 Mat_VarFree(matvar_t *matvar)
 {
-    size_t nmemb = 0;
+    size_t nelems = 0;
 
     if ( NULL == matvar )
         return;
     if ( NULL != matvar->dims ) {
-        int j;
-        nmemb = 1;
-        for ( j = 0; j < matvar->rank; j++ )
-            nmemb *= matvar->dims[j];
+        nelems = 1;
+        SafeMulDims(matvar, &nelems);
         free(matvar->dims);
     }
     if ( NULL != matvar->data ) {
@@ -1191,8 +1254,9 @@ Mat_VarFree(matvar_t *matvar)
             case MAT_C_STRUCT:
                 if ( !matvar->mem_conserve ) {
                     matvar_t **fields = (matvar_t**)matvar->data;
-                    size_t nfields = matvar->internal->num_fields, i;
-                    for ( i = 0; i < nmemb*nfields; i++ )
+                    size_t nelems_x_nfields, i;
+                    SafeMul(&nelems_x_nfields, nelems, matvar->internal->num_fields);
+                    for ( i = 0; i < nelems_x_nfields; i++ )
                         Mat_VarFree(fields[i]);
 
                     free(matvar->data);
@@ -1202,7 +1266,7 @@ Mat_VarFree(matvar_t *matvar)
                 if ( !matvar->mem_conserve ) {
                     matvar_t **cells = (matvar_t**)matvar->data;
                     size_t i;
-                    for ( i = 0; i < nmemb; i++ )
+                    for ( i = 0; i < nelems; i++ )
                         Mat_VarFree(cells[i]);
 
                     free(matvar->data);
@@ -1249,9 +1313,13 @@ Mat_VarFree(matvar_t *matvar)
                     }
                 }
                 break;
+            case MAT_C_FUNCTION:
+                if ( !matvar->mem_conserve ) {
+                    free(matvar->data);
+                }
+                break;
             case MAT_C_EMPTY:
             case MAT_C_OBJECT:
-            case MAT_C_FUNCTION:
             case MAT_C_OPAQUE:
                 break;
         }
@@ -1526,32 +1594,27 @@ Mat_VarGetSize(matvar_t *matvar)
 #endif
 
     if ( matvar->class_type == MAT_C_STRUCT ) {
-        int nfields = matvar->internal->num_fields;
-        size_t nmemb = 1;
-        int j;
-        for ( j = 0; j < matvar->rank; j++ )
-            nmemb *= matvar->dims[j];
-        if ( nmemb*nfields > 0 ) {
-            matvar_t **fields = (matvar_t**)matvar->data;
-            if ( NULL != fields ) {
-                bytes = nmemb*nfields*overhead;
-                for ( i = 0; i < nmemb*nfields; i++ ) {
-                    if ( NULL != fields[i] ) {
-                        if ( MAT_C_EMPTY != fields[i]->class_type )
-                            bytes += Mat_VarGetSize(fields[i]);
-                        else
-                            bytes += ptr - overhead;
-                    }
+        matvar_t **fields = (matvar_t**)matvar->data;
+        if ( NULL != fields ) {
+            size_t nelems_x_nfields = matvar->internal->num_fields;
+            SafeMulDims(matvar, &nelems_x_nfields);
+            SafeMul(&bytes, nelems_x_nfields, overhead);
+            for ( i = 0; i < nelems_x_nfields; i++ ) {
+                if ( NULL != fields[i] ) {
+                    if ( MAT_C_EMPTY != fields[i]->class_type )
+                        bytes += Mat_VarGetSize(fields[i]);
+                    else
+                        bytes += ptr - overhead;
                 }
             }
         }
-        bytes += 64 /* max field name length */ *nfields;
+        bytes += 64 /* max field name length */ *matvar->internal->num_fields;
     } else if ( matvar->class_type == MAT_C_CELL ) {
         matvar_t **cells = (matvar_t**)matvar->data;
         if ( NULL != cells ) {
-            size_t ncells = matvar->nbytes / matvar->data_size;
-            bytes = ncells*overhead;
-            for ( i = 0; i < ncells; i++ ) {
+            size_t nelems = matvar->nbytes / matvar->data_size;
+            bytes = nelems*overhead;
+            for ( i = 0; i < nelems; i++ ) {
                 if ( NULL != cells[i] ) {
                     if ( MAT_C_EMPTY != cells[i]->class_type )
                         bytes += Mat_VarGetSize(cells[i]);
@@ -1578,11 +1641,8 @@ Mat_VarGetSize(matvar_t *matvar)
         }
     } else {
         if ( matvar->rank > 0 ) {
-            size_t nmemb = 1;
-            int j;
-            for ( j = 0; j < matvar->rank; j++ )
-                nmemb *= matvar->dims[j];
-            bytes = nmemb*Mat_SizeOfClass(matvar->class_type);
+            bytes = Mat_SizeOfClass(matvar->class_type);
+            SafeMulDims(matvar, &bytes);
             if ( matvar->isComplex )
                 bytes *= 2;
         }
@@ -1602,7 +1662,7 @@ Mat_VarGetSize(matvar_t *matvar)
 void
 Mat_VarPrint( matvar_t *matvar, int printdata )
 {
-    size_t nmemb = 0, i, j;
+    size_t nelems = 0, i, j;
     const char *class_type_desc[18] = {"Undefined","Cell Array","Structure",
        "Object","Character Array","Sparse Array","Double Precision Array",
        "Single Precision Array", "8-bit, signed integer array",
@@ -1620,11 +1680,11 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
         return;
     if ( NULL != matvar->dims ) {
         int k;
+        nelems = 1;
+        SafeMulDims(matvar, &nelems);
         printf("Dimensions: %" SIZE_T_FMTSTR,matvar->dims[0]);
-        nmemb = matvar->dims[0];
         for ( k = 1; k < matvar->rank; k++ ) {
             printf(" x %" SIZE_T_FMTSTR,matvar->dims[k]);
-            nmemb *= matvar->dims[k];
         }
         printf("\n");
     }
@@ -1651,9 +1711,11 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
     if ( MAT_C_STRUCT == matvar->class_type ) {
         matvar_t **fields = (matvar_t **)matvar->data;
         size_t nfields = matvar->internal->num_fields;
-        if ( nmemb*nfields > 0 ) {
-            printf("Fields[%" SIZE_T_FMTSTR "] {\n", nfields*nmemb);
-            for ( i = 0; i < nfields*nmemb; i++ ) {
+        size_t nelems_x_nfields = 1;
+        SafeMul(&nelems_x_nfields, nelems, nfields);
+        if ( nelems_x_nfields > 0 ) {
+            printf("Fields[%" SIZE_T_FMTSTR "] {\n", nelems_x_nfields);
+            for ( i = 0; i < nelems_x_nfields; i++ ) {
                 if ( NULL == fields[i] ) {
                     printf("      Name: %s\n      Rank: %d\n",
                            matvar->internal->fieldnames[i%nfields],0);
@@ -1676,9 +1738,9 @@ Mat_VarPrint( matvar_t *matvar, int printdata )
         return;
     } else if ( MAT_C_CELL == matvar->class_type ) {
         matvar_t **cells = (matvar_t **)matvar->data;
-        size_t ncells = matvar->nbytes / matvar->data_size;
+        nelems = matvar->nbytes / matvar->data_size;
         printf("{\n");
-        for ( i = 0; i < ncells; i++ )
+        for ( i = 0; i < nelems; i++ )
             Mat_VarPrint(cells[i],printdata);
         printf("}\n");
         return;
