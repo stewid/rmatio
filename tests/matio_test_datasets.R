@@ -519,125 +519,208 @@ test_mat_v5_file <- function(x) {
                             .Names = c("field1", "field2")))
     stopifnot(identical(x$var66, var66))
 
-    var67 <- list(list(structure(list(field1 = list(1, 14), field2 =
-                  list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-                  12, 13), .Dim = 3:4), structure(c(15, 16, 17, 18,
-                  19, 20, 21, 22, 23, 24, 25, 26 ), .Dim = 3:4))),
-                  .Names = c("field1", "field2")), structure(list(
-                  field1 = list(1, 14), field2 = list(structure(c(2,
-                  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), .Dim = 3:4),
-                  structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-                  25, 26), .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list(field1 = list(1, 14),
-                  field2 = list( structure(c(2, 3, 4, 5, 6, 7, 8, 9,
-                  10, 11, 12, 13), .Dim = 3:4), structure(c(15, 16,
-                  17, 18, 19, 20, 21, 22, 23, 24, 25, 26 ), .Dim =
-                  3:4))), .Names = c("field1", "field2")),
-                  structure(list( field1 = list(1, 14), field2 =
-                  list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                  13), .Dim = 3:4), structure(c(15, 16, 17, 18, 19,
-                  20, 21, 22, 23, 24, 25, 26), .Dim = 3:4))), .Names =
-                  c("field1", "field2")), structure(list(field1 =
-                  list(1L, 14L), field2 = list( structure(2:13, .Dim =
-                  3:4), structure(15:26, .Dim = 3:4))), .Names =
-                  c("field1", "field2")), structure(list(field1 =
-                  list(1, 14), field2 = list( structure(c(2, 3, 4, 5,
-                  6, 7, 8, 9, 10, 11, 12, 13), .Dim = 3:4),
-                  structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-                  25, 26 ), .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list( field1 = list(1L, 14L),
-                  field2 = list(structure(2:13, .Dim = 3:4),
-                  structure(15:26, .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
-                  structure(15:26, .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
-                  structure(15:26, .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
-                  structure(15:26, .Dim = 3:4))), .Names = c("field1",
-                  "field2"))), list(structure(list(field1 =
-                  list(1 + 51i, 14 + 64i), field2 =
-                  list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i, 6 + 56i,
-                  7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2")),
-                  structure(list(field1 = list(1 + 51i, 14 + 64i), field2
-                  = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
-                  6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i, 10 + 60i, 11 + 61i, 12 + 62i,
-                  13 + 63i), .Dim = 3:4), structure(c(15 + 65i, 16 + 66i,
-                  17 + 67i, 18 + 68i, 19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
-                  23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i), .Dim = 3:4))),
-                  .Names = c("field1", "field2"))))
+    var67 <- list(
+        list(structure(list(
+            field1 = list(1, 14),
+            field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                    .Dim = 3:4),
+                          structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                      25, 26),
+                                .Dim = 3:4))),
+        .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1, 14),
+            field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                    .Dim = 3:4),
+                          structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                      25, 26),
+                                    .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1, 14),
+            field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                    .Dim = 3:4),
+                          structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                      25, 26),
+                                    .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1, 14),
+            field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                    .Dim = 3:4),
+                          structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                      25, 26),
+                                    .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1L, 14L),
+            field2 = list(structure(2:13, .Dim = 3:4),
+                          structure(15:26, .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1, 14),
+            field2 = list( structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
+                                     .Dim = 3:4),
+                          structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                                      25, 26),
+                                    .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1L, 14L),
+            field2 = list(structure(2:13, .Dim = 3:4),
+                          structure(15:26, .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1L, 14L),
+            field2 = list( structure(2:13, .Dim = 3:4),
+                          structure(15:26, .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1L, 14L),
+            field2 = list(structure(2:13, .Dim = 3:4),
+                          structure(15:26, .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+        structure(list(
+            field1 = list(1L, 14L),
+            field2 = list(structure(2:13, .Dim = 3:4),
+                          structure(15:26, .Dim = 3:4))),
+            .Names = c("field1", "field2"))),
+        list(structure(list(
+            field1 = list(1 + 51i, 14 + 64i),
+            field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                      6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                      10 + 60i, 11 + 61i, 12 + 62i, 13 + 63i),
+                                    .Dim = 3:4),
+                          structure(c(15 + 65i, 16 + 66i, 17 + 67i, 18 + 68i,
+                                      19 + 69i, 20 + 70i, 21 + 71i, 22 + 72i,
+                                      23 + 73i, 24 + 74i, 25 + 75i, 26 + 76i),
+                                    .Dim = 3:4))),
+            .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                           6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                           10 + 60i, 11 + 61i, 12 + 62i,
+                                           13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list( structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                           6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                           10 + 60i, 11 + 61i, 12 + 62i,
+                                           13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                          6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                          10 + 60i, 11 + 61i, 12 + 62i,
+                                          13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2")),
+            structure(list(
+                field1 = list(1 + 51i, 14 + 64i),
+                field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i, 5 + 55i,
+                                           6 + 56i, 7 + 57i, 8 + 58i, 9 + 59i,
+                                           10 + 60i, 11 + 61i, 12 + 62i,
+                                           13 + 63i), .Dim = 3:4),
+                              structure(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                          18 + 68i, 19 + 69i, 20 + 70i,
+                                          21 + 71i, 22 + 72i, 23 + 73i,
+                                          24 + 74i, 25 + 75i, 26 + 76i),
+                                        .Dim = 3:4))),
+                .Names = c("field1", "field2"))))
     stopifnot(identical(x$var67, var67))
 
-    var68 <- list(list(field1 = list(triu(Matrix(1:20, nrow = 4, ncol = 5, sparse = TRUE))),
-                       field2 = list(tril(Matrix(1:20, nrow=5, ncol=4, sparse = TRUE, byrow = TRUE)))),
-                  list(field1 = list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i, 6+26i, 0+0i, 0+0i, 9+29i,
-                                           10+30i, 11+31i, 0+0i, 13+33i, 14+34i, 15+35i, 16+36i,
-                                           17+37i, 18+38i, 19+39i, 20+40i), c(4, 5))),
-                       field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i, 17 - 37i, 0+0i, 6 - 26i, 10 - 30i,
-                                14 - 34i, 18 - 38i, 0+0i, 0+0i, 11 - 31i, 15 - 35i, 19 - 39i, 0+0i, 0+0i, 0+0i,
-                                16 - 36i, 20 - 40i), c(5, 4)))))
+    var68 <- list(list(
+        field1 = list(triu(Matrix(1:20, nrow = 4, ncol = 5,
+                                  sparse = TRUE))),
+        field2 = list(tril(Matrix(1:20, nrow = 5, ncol = 4,
+                                  sparse = TRUE, byrow = TRUE)))),
+        list(field1 = list(array(c(1 + 21i, 0 + 0i, 0 + 0i, 0 + 0i,
+                                   5 + 25i, 6 + 26i, 0 + 0i, 0 + 0i, 9 + 29i,
+                                   10 + 30i, 11 + 31i, 0 + 0i, 13 + 33i,
+                                   14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i,
+                                   18 + 38i, 19 + 39i, 20 + 40i), c(4, 5))),
+             field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i,
+                                   17 - 37i, 0+0i, 6 - 26i, 10 - 30i, 14 - 34i,
+                                   18 - 38i, 0+0i, 0+0i, 11 - 31i, 15 - 35i,
+                                   19 - 39i, 0+0i, 0+0i, 0+0i, 16 - 36i,
+                                   20 - 40i), c(5, 4)))))
     stopifnot(identical(x$var68, var68))
 
     var69 <- list(list(field1 = "abcdefghijklmnopqrstuvwxyz",
@@ -674,19 +757,23 @@ test_mat_v5_file <- function(x) {
 
     ## var78 read as integer
     var78_slab <- array(c(1L, 37L, -55L, -70L, -48L, -84L, -96L, -93L,
-    -91L, -24L, -123L, -92L, 39L, 109L, -69L, 68L, 76L, -42L, -4L,
-    36L, 45L, -89L, -60L, -19L, 99L, 85L, 76L, 109L, 96L, -60L, 24L,
-    112L, 74L, -52L, -57L, 2L, 106L, -34L, -77L, 92L, 30L, -126L,
-    -55L, 3L, 95L, -75L, -77L, -83L, -112L, 69L, -57L, -97L, 36L, 37L,
-    90L, -76L, 117L, 12L, -108L, 51L, -35L, -105L, -1L, 99L, -103L,
-    55L, -77L, 27L, 59L, -38L, -96L, 32L, -52L, -32L, 123L, 63L, 122L,
-    59L, -19L, 84L, -99L, -27L, 121L, 25L, -22L, 8L, -70L, 9L, 40L,
-    27L, 90L, 122L, 124L, 7L, -2L, -84L, -45L, -79L, -120L, 39L, 88L,
-    -55L, -95L, -27L, -5L, -11L, 48L, 125L, 94L, 36L, 115L, -121L,
-    99L, 47L, -108L, -99L, -9L, -70L, 67L, -89L, 107L, -80L, 113L,
-    27L, 45L, 94L, 124L, 7L, 54L, 76L, -54L, -48L),
-                   c(11L, 6L, 2L))
-    stopifnot(identical(x$var78[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var78_slab))
+                          -91L, -24L, -123L, -92L, 39L, 109L, -69L, 68L,
+                          76L, -42L, -4L, 36L, 45L, -89L, -60L, -19L, 99L,
+                          85L, 76L, 109L, 96L, -60L, 24L, 112L, 74L, -52L,
+                          -57L, 2L, 106L, -34L, -77L, 92L, 30L, -126L, -55L,
+                          3L, 95L, -75L, -77L, -83L, -112L, 69L, -57L, -97L,
+                          36L, 37L, 90L, -76L, 117L, 12L, -108L, 51L, -35L,
+                          -105L, -1L, 99L, -103L, 55L, -77L, 27L, 59L, -38L,
+                          -96L, 32L, -52L, -32L, 123L, 63L, 122L, 59L, -19L,
+                          84L, -99L, -27L, 121L, 25L, -22L, 8L, -70L, 9L, 40L,
+                          27L, 90L, 122L, 124L, 7L, -2L, -84L, -45L, -79L,
+                          -120L, 39L, 88L, -55L, -95L, -27L, -5L, -11L, 48L,
+                          125L, 94L, 36L, 115L, -121L, 99L, 47L, -108L, -99L,
+                          -9L, -70L, 67L, -89L, 107L, -80L, 113L, 27L, 45L,
+                          94L, 124L, 7L, 54L, 76L, -54L, -48L),
+                        c(11L, 6L, 2L))
+    stopifnot(identical(x$var78[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)],
+                        var78_slab))
 
     ## var79 read as integer
     var79_slab <- structure(c(36L, 154L, 198L, 69L, 227L, 194L, 140L,
@@ -708,11 +795,13 @@ test_mat_v5_file <- function(x) {
                               88L, 40L, 115L, 185L, 226L, 23L, 22L,
                               160L, 111L, 100L, 44L, 145L, 144L, 223L,
                               123L, 48L, 190L, 70L, 115L, 113L, 7L),
-                              .Dim = c(11L, 6L, 2L))
-    stopifnot(identical(x$var79[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var79_slab))
+                            .Dim = c(11L, 6L, 2L))
+    stopifnot(identical(x$var79[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)],
+                        var79_slab))
 
     ## var80, ..., var85 read as complex
-    var80 = array(complex(real = seq(1, 2 * 32^3, 2), imaginary = seq(2, 2*32^3, 2)), c(32, 32, 32))
+    var80 = array(complex(real = seq(1, 2 * 32^3, 2),
+                          imaginary = seq(2, 2 * 32^3, 2)), c(32, 32, 32))
     stopifnot(identical(x$var80, var80))
     stopifnot(identical(x$var81, var80))
     stopifnot(identical(x$var82, var80))
@@ -774,8 +863,8 @@ test_mat_v5_file <- function(x) {
                               -666 - 21153i, 6202 + 23652i, -27772 + 7728i,
                               24485 + 27017i, 7898 + 4210i, 8062 + 28365i,
                               -28910 - 21963i, 7298 - 10445i,
-                              29980 + 25776i, 5019 - 2720i), .Dim = c(11L,
-                              6L, 2L))
+                              29980 + 25776i, 5019 - 2720i),
+                            .Dim = c(11L, 6L, 2L))
     stopifnot(identical(x$var86[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)],
                         var86_slab))
 
