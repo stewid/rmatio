@@ -41,6 +41,7 @@
 
 #include <Rdefines.h>
 #include "config.h"
+#include "safe-math.h"
 #include "matio_private.h"
 #include "mat5.h"
 #include "mat4.h"
