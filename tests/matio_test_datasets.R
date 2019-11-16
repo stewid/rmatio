@@ -724,10 +724,11 @@ test_mat_v5_file <- function(x) {
                                    14 + 34i, 15 + 35i, 16 + 36i, 17 + 37i,
                                    18 + 38i, 19 + 39i, 20 + 40i), c(4, 5))),
              field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i,
-                                   17 - 37i, 0 + 0i, 6 - 26i, 10 - 30i, 14 - 34i,
-                                   18 - 38i, 0 + 0i, 0 + 0i, 11 - 31i, 15 - 35i,
-                                   19 - 39i, 0 + 0i, 0 + 0i, 0 + 0i, 16 - 36i,
-                                   20 - 40i), c(5, 4)))))
+                                   17 - 37i, 0 + 0i, 6 - 26i, 10 - 30i,
+                                   14 - 34i, 18 - 38i, 0 + 0i, 0 + 0i,
+                                   11 - 31i, 15 - 35i, 19 - 39i, 0 + 0i,
+                                   0 + 0i, 0 + 0i, 16 - 36i, 20 - 40i),
+                                 c(5, 4)))))
     stopifnot(identical(x$var68, var68))
 
     var69 <- list(list(field1 = "abcdefghijklmnopqrstuvwxyz",
