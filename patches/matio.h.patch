@@ -1,5 +1,5 @@
-*** matio.h.orig	2019-11-16 17:03:29.476780436 +0100
---- matio.h	2019-11-16 17:04:30.676586911 +0100
+*** matio.h.orig	2019-11-16 17:44:43.271924576 +0100
+--- matio.h	2019-11-16 17:46:35.189569051 +0100
 ***************
 *** 28,41 ****
    * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -55,7 +55,7 @@
 ! EXTERN void   Mat_Critical(const char *format, ...) MATIO_FORMATATTR_PRINTF1;
 ! EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR MATIO_FORMATATTR_PRINTF1;
 ! EXTERN void   Mat_Help(const char *helpstr[]);
-! EXTERN int    Mat_LogInit(const char *progname);
+! EXTERN int    Mat_LogInit(const char *prog_name);
 ! EXTERN int    Mat_LogClose(void);
 ! EXTERN int    Mat_LogInitFunc(const char *prog_name,
 !                   void (*log_func)(int log_level, char *message));
@@ -79,7 +79,7 @@
 ! /* EXTERN void   Mat_Critical(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
 ! /* EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR MATIO_FORMATATTR_PRINTF1; */
 ! /* EXTERN void   Mat_Help(const char *helpstr[]); */
-! /* EXTERN int    Mat_LogInit(const char *progname); */
+! /* EXTERN int    Mat_LogInit(const char *prog_name); */
 ! /* EXTERN int    Mat_LogClose(void); */
 ! /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
 ! /*                   void (*log_func)(int log_level, char *message)); */

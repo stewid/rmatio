@@ -1,5 +1,5 @@
-*** inflate.c.orig	2019-11-16 16:36:54.790902761 +0100
---- inflate.c	2019-11-16 16:36:54.807902706 +0100
+*** inflate.c.orig	2019-11-16 17:41:20.647568234 +0100
+--- inflate.c	2019-11-16 17:41:20.662568187 +0100
 ***************
 *** 28,34 ****
    * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -10,29 +10,3 @@
   
   #if HAVE_ZLIB
 --- 28,33 ----
-***************
-*** 379,388 ****
-          Mat_int32Swap(tag);
-          Mat_int32Swap(tag+1);
-      }
-!     if ( (tag[0] & 0x0000ffff) != MAT_T_INT32 ) {
-!         Mat_Critical("InflateDimensions: Reading dimensions expected type MAT_T_INT32");
-          return bytesread;
--     }
-      rank = tag[1];
-      if ( rank % 8 != 0 )
-          i = 8-(rank %8);
---- 378,390 ----
-          Mat_int32Swap(tag);
-          Mat_int32Swap(tag+1);
-      }
-! 
-!     /**
-!      *  Stefan Widgren: 2014-04-28
-!      *  Removed throwing an error if the data type not equals MAT_T_INT32
-!      */
-!     if ( (tag[0] & 0x0000ffff) != MAT_T_INT32 )
-          return bytesread;
-      rank = tag[1];
-      if ( rank % 8 != 0 )
-          i = 8-(rank %8);
