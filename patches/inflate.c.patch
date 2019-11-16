@@ -1,17 +1,17 @@
-*** inflate.c.orig	2019-11-16 15:17:06.548780288 +0100
---- inflate.c	2019-11-16 15:17:06.562780246 +0100
+*** inflate.c.orig	2019-11-16 16:36:54.790902761 +0100
+--- inflate.c	2019-11-16 16:36:54.807902706 +0100
 ***************
-*** 30,36 ****
-   * POSSIBILITY OF SUCH DAMAGE.
+*** 28,34 ****
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 - #include <stdlib.h>
   #include "matio_private.h"
   
   #if HAVE_ZLIB
---- 30,35 ----
+--- 28,33 ----
 ***************
-*** 381,390 ****
+*** 379,388 ****
           Mat_int32Swap(tag);
           Mat_int32Swap(tag+1);
       }
@@ -22,7 +22,7 @@
       rank = tag[1];
       if ( rank % 8 != 0 )
           i = 8-(rank %8);
---- 380,392 ----
+--- 378,390 ----
           Mat_int32Swap(tag);
           Mat_int32Swap(tag+1);
       }

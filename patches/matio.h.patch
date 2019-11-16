@@ -1,8 +1,8 @@
-*** matio.h.orig	2019-11-16 15:32:39.090724774 +0100
---- matio.h	2019-11-16 15:34:48.824288845 +0100
+*** matio.h.orig	2019-11-16 16:36:54.797902738 +0100
+--- matio.h	2019-11-16 16:36:54.822902657 +0100
 ***************
-*** 30,43 ****
-   * POSSIBILITY OF SUCH DAMAGE.
+*** 28,41 ****
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
   #ifndef MATIO_H
@@ -16,8 +16,8 @@
   
   #ifdef __cplusplus
   #   define EXTERN extern "C"
---- 30,54 ----
-   * POSSIBILITY OF SUCH DAMAGE.
+--- 28,52 ----
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 + /*
@@ -43,7 +43,7 @@
   #ifdef __cplusplus
   #   define EXTERN extern "C"
 ***************
-*** 232,253 ****
+*** 230,251 ****
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
@@ -66,7 +66,7 @@
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
---- 243,265 ----
+--- 241,263 ----
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
@@ -91,7 +91,7 @@
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
 ***************
-*** 270,276 ****
+*** 268,274 ****
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
@@ -99,7 +99,7 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
---- 282,293 ----
+--- 280,291 ----
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
