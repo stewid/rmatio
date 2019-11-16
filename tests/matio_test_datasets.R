@@ -478,10 +478,12 @@ test_mat_v5_file <- function(x) {
     ## var57 read as integer
     var57 <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
                        array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2, 3)),
-                       array(c(11L, 15L, 12L, 16L, 13L, 17L, 14L, 18L), c(2, 4))),
+                       array(c(11L, 15L, 12L, 16L, 13L, 17L, 14L, 18L),
+                             c(2, 4))),
                   list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
                        array(c(23L, 25L, 27L, 24L, 26L, 28L), c(3L, 2L)),
-                       array(c(29L, 31L, 33L, 35L, 30L, 32L, 34L, 36L), c(4, 2))))
+                       array(c(29L, 31L, 33L, 35L, 30L, 32L, 34L, 36L),
+                             c(4, 2))))
     stopifnot(identical(x$var57, var57))
 
     ## var58 read as double
@@ -506,7 +508,7 @@ test_mat_v5_file <- function(x) {
                   array(c(1 -  21i, 5 - 25i, 9 - 29i, 13 - 33i, 17 - 37i,
                           0 + 0i, 6 - 26i, 10 - 30i, 14 - 34i, 18 - 38i,
                           0 + 0i, 0 + 0i, 11 - 31i, 15 - 35i, 19 - 39i,
-                          0 + 0i, 0 + 0i, 0+0i, 16 - 36i, 20 - 40i),
+                          0 + 0i, 0 + 0i, 0 + 0i, 16 - 36i, 20 - 40i),
                         c(5, 4)))
     stopifnot(identical(x$var64, var64))
 
@@ -751,7 +753,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var75, var70))
 
     ## var76 read as integer
-    ##' var76 = reshape(int16(1:32*32*32),32, 32, 32);
+    ##' var76 = reshape(int16(1:32 * 32 * 32), 32, 32, 32);
     var76 <- array(c(seq_len(32767), 32767), c(32, 32, 32));
     storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
@@ -841,7 +843,7 @@ test_mat_v5_file <- function(x) {
                               -12123 - 23263i, -10874 + 25982i,
                               -11012 - 7600i, -10870 - 24078i,
                               -4181 + 21428i, 19441 - 25234i,
-                              27199-11909i, -4204 + 14748i,
+                              27199 - 11909i, -4204 + 14748i,
                               -12638 + 6522i, -21381 + 3874i, 10009 - 1227i,
                               23342 + 16514i, 27792 - 11483i,
                               -16194 - 25596i, 9911 - 20183i,
@@ -942,7 +944,7 @@ test_mat_v5_file <- function(x) {
                               -11 - 41i, -4 - 5i, 111 - 12i, -79 + 23i,
                               118 - 68i, 60 - 49i, -31 - 47i, 98 - 49i,
                               19 - 84i, 114 - 19i, 126 + 112i, 3 - 95i,
-                              -69-113i, -24 - 55i, -40 - 78i, 81 - 95i,
+                              -69 - 113i, -24 - 55i, -40 - 78i, 81 - 95i,
                               108 - 15i, -37 + 5i, 24 - 97i, 65 + 17i,
                               -79 - 19i, -54 - 36i, -99 - 15i, -92 - 70i,
                               115 + 62i, -29 - 52i, -121 + 61i, -62 + 101i,
@@ -1000,7 +1002,7 @@ test_mat_v5_file <- function(x) {
                               164 + 95i, 121 + 106i, 125 + 144i, 215 + 171i,
                               48 + 141i, 110 + 132i, 234 + 197i, 22 + 223i,
                               229 + 72i, 169 + 26i, 128 + 186i, 87 + 139i,
-                              152 + 77i, 17 + 58i, 215 + 242i, 62 + 229i ),
+                              152 + 77i, 17 + 58i, 215 + 242i, 62 + 229i),
                               .Dim = c(11L, 6L, 2L))
     stopifnot(identical(x$var89[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)],
                         var89_slab))
@@ -1062,7 +1064,7 @@ test_mat_v5_file <- function(x) {
 ##
 ## small_v4_le.mat
 ##
-infile <- system.file("extdata/small_v4_le.mat", package="rmatio")
+infile <- system.file("extdata/small_v4_le.mat", package = "rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
@@ -1087,7 +1089,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## small_v4_be.mat
 ##
-infile <- system.file("extdata/small_v4_be.mat", package="rmatio")
+infile <- system.file("extdata/small_v4_be.mat", package = "rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
@@ -1112,7 +1114,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_v4_le.mat
 ##
-infile <- system.file("extdata/matio_test_cases_v4_le.mat", package="rmatio")
+infile <- system.file("extdata/matio_test_cases_v4_le.mat", package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
@@ -1135,7 +1137,7 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_v4_be.mat
 ##
-infile <- system.file("extdata/matio_test_cases_v4_be.mat", package="rmatio")
+infile <- system.file("extdata/matio_test_cases_v4_be.mat", package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
@@ -1158,7 +1160,8 @@ if (rmatio:::have.zlib()) {
 ##
 ## matio_test_cases_compressed_le.mat
 ##
-infile <- system.file("extdata/matio_test_cases_compressed_le.mat", package = "rmatio")
+infile <- system.file("extdata/matio_test_cases_compressed_le.mat",
+                      package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v5_file(x.in)
 
