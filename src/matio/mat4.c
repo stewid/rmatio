@@ -282,7 +282,7 @@ Mat_VarWrite4(mat_t *mat,matvar_t *matvar)
 void
 Read4(mat_t *mat,matvar_t *matvar)
 {
-    unsigned int N;
+    size_t N;
 
     (void)fseek((FILE*)mat->fp,matvar->internal->datapos,SEEK_SET);
 
@@ -299,7 +299,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                     ReadDoubleData(mat, (double*)complex_data->Im, matvar->data_type, N);
                 }
                 else {
-                    Mat_Critical("Memory allocation failure");
+                    Mat_Critical("Couldn't allocate memory for the complex data");
                 }
             } else {
                 matvar->data = malloc(matvar->nbytes);
@@ -307,7 +307,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                     ReadDoubleData(mat, (double*)matvar->data, matvar->data_type, N);
                 }
                 else {
-                    Mat_Critical("Memory allocation failure");
+                    Mat_Critical("Couldn't allocate memory for the data");
                 }
             }
             /* Update data type to match format of matvar->data */
@@ -321,7 +321,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                 ReadUInt8Data(mat,(mat_uint8_t*)matvar->data,matvar->data_type,N);
             }
             else {
-                Mat_Critical("Memory allocation failure");
+                Mat_Critical("Couldn't allocate memory for the data");
             }
             matvar->data_type = MAT_T_UINT8;
             break;
@@ -348,7 +348,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                 } else {
                     free(matvar->data);
                     matvar->data = NULL;
-                    Mat_Critical("Memory allocation failure");
+                    Mat_Critical("Couldn't allocate memory for the sparse row array");
                     return;
                 }
                 ReadDoubleData(mat, &tmp, data_type, 1);
@@ -372,7 +372,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                     Mat_Critical("Invalid column dimension for sparse matrix");
                     return;
                 }
-                matvar->dims[1] = tmp < 0 ? 0 : ( tmp > INT_MAX-1 ? INT_MAX-1 : (size_t)tmp );
+                matvar->dims[1] = (size_t)tmp;
                 (void)fseek((FILE*)mat->fp,fpos,SEEK_SET);
                 if ( matvar->dims[1] > INT_MAX-1 ) {
                     free(sparse->ir);
@@ -403,14 +403,14 @@ Read4(mat_t *mat,matvar_t *matvar)
                         free(sparse->ir);
                         free(matvar->data);
                         matvar->data = NULL;
-                        Mat_Critical("Memory allocation failure");
+                        Mat_Critical("Couldn't allocate memory for the sparse index array");
                         return;
                     }
                 } else {
                     free(sparse->ir);
                     free(matvar->data);
                     matvar->data = NULL;
-                    Mat_Critical("Memory allocation failure");
+                    Mat_Critical("Couldn't allocate memory for the sparse index array");
                     return;
                 }
                 ReadDoubleData(mat, &tmp, data_type, 1);
@@ -494,7 +494,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                                 free(sparse->ir);
                                 free(matvar->data);
                                 matvar->data = NULL;
-                                Mat_Critical("Read4: %d is not a supported data type for ",
+                                Mat_Critical("Read4: %d is not a supported data type for "
                                     "extended sparse", data_type);
                                 return;
                         }
@@ -512,7 +512,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                         free(sparse->ir);
                         free(matvar->data);
                         matvar->data = NULL;
-                        Mat_Critical("Memory allocation failure");
+                        Mat_Critical("Couldn't allocate memory for the complex sparse data");
                         return;
                     }
                 } else {
@@ -571,7 +571,7 @@ Read4(mat_t *mat,matvar_t *matvar)
                                 free(sparse->ir);
                                 free(matvar->data);
                                 matvar->data = NULL;
-                                Mat_Critical("Read4: %d is not a supported data type for ",
+                                Mat_Critical("Read4: %d is not a supported data type for "
                                     "extended sparse", data_type);
                                 return;
                         }
@@ -584,14 +584,14 @@ Read4(mat_t *mat,matvar_t *matvar)
                         free(sparse->ir);
                         free(matvar->data);
                         matvar->data = NULL;
-                        Mat_Critical("Memory allocation failure");
+                        Mat_Critical("Couldn't allocate memory for the sparse data");
                         return;
                     }
                 }
                 break;
             }
             else {
-                Mat_Critical("Memory allocation failure");
+                Mat_Critical("Couldn't allocate memory for the data");
                 return;
             }
         default:
@@ -637,9 +637,9 @@ ReadData4(mat_t *mat,matvar_t *matvar,void *data,
     }
 
     if ( matvar->rank == 2 ) {
-        if ( stride[0]*(edge[0]-1)+start[0]+1 > matvar->dims[0] )
+        if ( (size_t)stride[0]*(edge[0]-1)+start[0]+1 > matvar->dims[0] )
             err = 1;
-        else if ( stride[1]*(edge[1]-1)+start[1]+1 > matvar->dims[1] )
+        else if ( (size_t)stride[1]*(edge[1]-1)+start[1]+1 > matvar->dims[1] )
             err = 1;
         if ( matvar->isComplex ) {
             mat_complex_split_t *cdata = (mat_complex_split_t*)data;
@@ -692,8 +692,8 @@ int
 Mat_VarReadDataLinear4(mat_t *mat,matvar_t *matvar,void *data,int start,
                        int stride,int edge)
 {
-    size_t i, nmemb = 1;
-    int err = 0;
+    size_t nmemb = 1;
+    int err = 0, i;
 
     (void)fseek((FILE*)mat->fp,matvar->internal->datapos,SEEK_SET);
 
@@ -702,7 +702,7 @@ Mat_VarReadDataLinear4(mat_t *mat,matvar_t *matvar,void *data,int start,
     for ( i = 0; i < matvar->rank; i++ )
         nmemb *= matvar->dims[i];
 
-    if ( stride*(edge-1)+start+1 > nmemb ) {
+    if ( (size_t)stride*(edge-1)+start+1 > nmemb ) {
         return 1;
     }
     if ( matvar->isComplex ) {
