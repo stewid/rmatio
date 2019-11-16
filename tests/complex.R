@@ -28,7 +28,7 @@ sessionInfo()
 ##
 ## complex: case-1
 ##
-a1.exp <- array(complex(real = 1:20, imaginary = 21:40), c(4,5))
+a1.exp <- array(complex(real = 1:20, imaginary = 21:40), c(4, 5))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a1.exp), filename = filename,
           compression = FALSE, version = "MAT5")

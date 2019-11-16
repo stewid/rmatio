@@ -28,7 +28,7 @@ sessionInfo()
 ##
 ## matrix: case-1
 ##
-a1.exp <- matrix(1:9, nrow=3)
+a1.exp <- matrix(1:9, nrow = 3)
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a1.exp), filename = filename,
           compression = FALSE, version = "MAT5")
