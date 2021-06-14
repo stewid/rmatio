@@ -1,3 +1,12 @@
+rmatio 0.15.0
+-------------
+
+CHANGES
+
+* Changed the R dependency to R(>= 3.2).
+
+* Refactoring of the Windows build configuration.
+
 rmatio 0.14.0
 -------------
 
