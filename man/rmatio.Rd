@@ -3,7 +3,6 @@
 \docType{package}
 \name{rmatio}
 \alias{rmatio}
-\alias{rmatio-package}
 \title{\pkg{rmatio}: reading and writing Matlab MAT files from R}
 \description{
 Reading and writing Matlab MAT files from R

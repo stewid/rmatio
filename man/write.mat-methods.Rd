@@ -6,11 +6,9 @@
 \alias{write.mat,list-method}
 \title{Write Matlab file}
 \usage{
-write.mat(object, filename = NULL, compression = TRUE,
-  version = c("MAT5"))
+write.mat(object, filename = NULL, compression = TRUE, version = c("MAT5"))
 
-\S4method{write.mat}{list}(object, filename = NULL, compression = TRUE,
-  version = c("MAT5"))
+\S4method{write.mat}{list}(object, filename = NULL, compression = TRUE, version = c("MAT5"))
 }
 \arguments{
 \item{object}{The \code{object} to write.}
