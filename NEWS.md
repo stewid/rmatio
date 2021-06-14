@@ -6,6 +6,8 @@
 
 * Refactoring of the Windows build configuration.
 
+* Removed the 'LazyData' field in the DESCRIPTION file.
+
 # rmatio 0.14.0
 
 ## BUG FIXES
