@@ -24,7 +24,7 @@ Imports:
     methods,
     utils
 Depends:
-    R(>= 3.0.2)
+    R(>= 3.2)
 Collate:
     'have_lib.R'
     'read_mat.R'
