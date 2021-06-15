@@ -10,6 +10,16 @@
 * Renamed the NEWS file to NEWS.md and changed to use markdown format
   style.
 
+# rmatio 0.15.0
+
+## CHANGES
+
+* Changed the R dependency to R(>= 3.2).
+
+* Refactoring of the Windows build configuration.
+
+* Removed the 'LazyData' field in the DESCRIPTION file.
+
 # rmatio 0.14.0
 
 ## BUG FIXES
@@ -30,6 +40,8 @@
   non-null pointer to the variable name when reading data.
 
 # rmatio 0.12.0
+
+## CHANGES
 
 * Fixed registration of native routines called from R.
 

@@ -1,25 +1,10 @@
-Z_LIB = $(shell "${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" -e \
-    "cat(ifelse(compareVersion(sprintf('%s.%s', R.version['major'], R.version['minor']), '3.1.2') > 0, '-lz', '-lRzlib'))")
-
-ifeq ($(Z_LIB),-lz)
-RMATIO_LOCAL_SOFT=$(shell "${R_HOME}/bin/R" CMD config LOCAL_SOFT)
-ifeq ($(wildcard "${RMATIO_LOCAL_SOFT}/include/zlib.h"),)
-ifneq ($(wildcard zlib/include/zlib.h),)
-RMATIO_ZLIB_LIB = -L"zlib/lib$(R_ARCH)"
-RMATIO_ZLIB_INCLUDE = -Izlib/include
-endif
-endif
-endif
-
 ifeq "$(WIN)" "64"
-PKG_CFLAGS = -I. $(RMATIO_ZLIB_INCLUDE) -DSIZEOF_VOID_P=8 \
-             -DSIZEOF_SIZE_T=8 -DR_NO_REMAP -DSTRICT_R_HEADERS
+PKG_CFLAGS = -I. -DSIZEOF_VOID_P=8 -DSIZEOF_SIZE_T=8 -DR_NO_REMAP -DSTRICT_R_HEADERS
 else
-PKG_CFLAGS = -I. $(RMATIO_ZLIB_INCLUDE) -DSIZEOF_VOID_P=4 \
-             -DSIZEOF_SIZE_T=4 -DR_NO_REMAP -DSTRICT_R_HEADERS
+PKG_CFLAGS = -I. -DSIZEOF_VOID_P=4 -DSIZEOF_SIZE_T=4 -DR_NO_REMAP -DSTRICT_R_HEADERS
 endif
 
-PKG_LIBS = $(RMATIO_ZLIB_LIB) $(Z_LIB)
+PKG_LIBS = -lz
 
 OBJECTS.matio = matio/endian.o matio/inflate.o matio/mat4.o \
                 matio/mat5.o matio/mat.o \

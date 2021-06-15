@@ -1,6 +1,6 @@
 Package: rmatio
 Title: Read and Write 'Matlab' Files
-Version: 0.14.0.9000
+Version: 0.15.0.9000
 Authors@R: c( person("Stefan", "Widgren", role = c("aut", "cre"),
     email = "stefan.widgren@gmail.com", comment = "Author of the R
     interface to the C-library matio"), person("Christopher",
@@ -18,18 +18,17 @@ License: GPL-3
 URL: https://github.com/stewid/rmatio
 SystemRequirements: zlib headers and library.
 Type: Package
-LazyData: true
 Biarch: true
 Imports:
     Matrix,
     methods,
     utils
 Depends:
-    R(>= 3.1)
+    R(>= 3.2)
 Collate:
     'have_lib.R'
     'read_mat.R'
     'rmatio.R'
     'write_mat.R'
 Encoding: UTF-8
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.1
