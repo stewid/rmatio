@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/stewid/rmatio.svg)](https://travis-ci.org/stewid/rmatio)
-[![Build status](https://ci.appveyor.com/api/projects/status/2o68xusy0vacygrq?svg=true)](https://ci.appveyor.com/project/stewid/rmatio)
 [![CRAN status](http://www.r-pkg.org/badges/version/rmatio)](http://cran.r-project.org/web/packages/rmatio/index.html)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/last-month/rmatio)](http://cran.r-project.org/web/packages/rmatio/index.html)
 [![Coverage Status](https://coveralls.io/repos/github/stewid/rmatio/badge.svg?branch=master)](https://coveralls.io/github/stewid/rmatio?branch=master)
@@ -7,9 +6,14 @@
 rmatio
 ======
 
-`rmatio` is a package for reading and writing Matlab MAT files from R. `rmatio` supports reading MAT version 4, MAT version 5 and MAT compressed version 5. `rmatio` can write version 5 MAT files and version 5 files with variable compression.
+`rmatio` is a package for reading and writing Matlab MAT files from
+R. `rmatio` supports reading MAT version 4, MAT version 5 and MAT
+compressed version 5. `rmatio` can write version 5 MAT files and
+version 5 files with variable compression.
 
-Internally, the `rmatio` package uses the C library [matio](http://sourceforge.net/projects/matio/) for reading/writing MATLAB MAT files.
+Internally, the `rmatio` package uses the C library
+[matio](http://sourceforge.net/projects/matio/) for reading/writing
+MATLAB MAT files.
 
 You can track (and contribute to) development of `rmatio`
 at https://github.com/stewid/rmatio.
@@ -23,7 +27,8 @@ To install the latest release on CRAN
 install.packages('rmatio')
 ```
 
-To install the development version of rmatio, it's easiest to use the `devtools` package:
+To install the development version of rmatio, it's easiest to use the
+`devtools` package:
 
 ```
 # install.packages("devtools")
