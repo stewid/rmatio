@@ -28,11 +28,11 @@ install.packages('rmatio')
 ```
 
 To install the development version of rmatio, it's easiest to use the
-`devtools` package:
+`remotes` package:
 
 ```
-# install.packages("devtools")
-library(devtools)
+# install.packages("remotes")
+library(remotes)
 install_github("stewid/rmatio")
 ```
 
@@ -46,9 +46,7 @@ library(rmatio)
 Read a compressed version 5 MAT file from an URL
 
 ```
-url <- paste("http://sourceforge.net/p/matio/matio_test_datasets/ci/",
-             "master/tree/matio_test_cases_compressed_le.mat?format=raw",
-             sep="")
+url <- "https://raw.githubusercontent.com/stewid/rmatio/master/inst/extdata/matio_test_cases_compressed_le.mat"
 m <- read.mat(url)
 ```
 
@@ -110,7 +108,8 @@ Included software
 License
 -------
 
-The `rmatio` package is licensed under the GPLv3. See these files for additional details:
+The `rmatio` package is licensed under the GPLv3. See these files for
+additional details:
 
 - LICENSE     - `rmatio` package license (GPLv3)
 - inst/NOTICE - Copyright notices for additional included software
