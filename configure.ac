@@ -33,7 +33,7 @@ dnl Included several of the configure script from matio into this file
 dnl Modified to be used to configure matio to build in the rmatio R package
 
 AC_PREREQ([2.69])
-AC_INIT([rmatio], [see.DESCRIPTION.file], [stefan.widgren@sva.se])
+AC_INIT([rmatio],[see.DESCRIPTION.file],[https://github.com/stewid/rmatio/issues])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
 
@@ -42,8 +42,7 @@ AC_PROG_CC
 
 # zlib include and library path
 AC_ARG_WITH([zlib-include],
-    AC_HELP_STRING([--with-zlib-include=INCLUDE_PATH],
-                   [the location of zlib header files]),
+    AS_HELP_STRING([--with-zlib-include=INCLUDE_PATH],[the location of zlib header files]),
     [zlib_include_path=$withval])
 if test [ -n "$zlib_include_path" ] ; then
   RMATIO_CPPFLAGS="-I. -I${zlib_include_path}"
@@ -52,8 +51,7 @@ else
 fi
 
 AC_ARG_WITH([zlib-lib],
-    AC_HELP_STRING([--with-zlib-lib=LIB_PATH],
-                   [the location of zlib libraries]),
+    AS_HELP_STRING([--with-zlib-lib=LIB_PATH],[the location of zlib libraries]),
     [zlib_lib_path=$withval])
 if test [ -n "$zlib_lib_path" ] ; then
   LIBS="-L${zlib_lib_path} ${LIBS}"
@@ -130,8 +128,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
 [
     AC_MSG_CHECKING([for mat_int8_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -139,9 +136,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [int8_t i = 0;],
-    ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+    ]], [[int8_t i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
     if test "x$ac_have_mat_int8_t" = "xyes"
     then
@@ -152,8 +147,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
     fi
     if test "x$ac_have_mat_int8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -165,9 +159,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
             #if CHAR_BIT != 8
             #matio sizeof(signed char) not 8 bits
             #endif
-        ],
-        [signed char i = 0;],
-        ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+        ]], [[signed char i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
         if test "x$ac_have_mat_int8_t" = "xyes"
         then
@@ -178,8 +170,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
     fi
     if test "x$ac_have_mat_int8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -191,9 +182,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
             #if CHAR_BIT*SIZEOF_SHORT != 8
             #matio sizeof(short) not 8 bits
             #endif
-        ],
-        [short i = 0;],
-        ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+        ]], [[short i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
         if test "x$ac_have_mat_int8_t" = "xyes"
         then
@@ -204,8 +193,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
     fi
     if test "x$ac_have_mat_int8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -217,9 +205,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
             #if CHAR_BIT*SIZEOF_INT != 8
             #matio sizeof(int) not 8 bits
             #endif
-        ],
-        [int i = 0;],
-        ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+        ]], [[int i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
         if test "x$ac_have_mat_int8_t" = "xyes"
         then
@@ -230,8 +216,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
     fi
     if test "x$ac_have_mat_int8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -243,9 +228,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
             #if CHAR_BIT*SIZEOF_LONG != 8
             #matio sizeof(long) not 8 bits
             #endif
-        ],
-        [long i = 0;],
-        ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+        ]], [[long i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
         if test "x$ac_have_mat_int8_t" = "xyes"
         then
@@ -256,8 +239,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
     fi
     if test "x$ac_have_mat_int8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -269,9 +251,7 @@ AC_DEFUN([CHECK_MATIO_INT8_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 8
             #matio sizeof(long long) not 8 bits
             #endif
-        ],
-        [long long i = 0;],
-        ac_have_mat_int8_t=yes,ac_have_mat_int8_t=no)
+        ]], [[long long i = 0;]])],[ac_have_mat_int8_t=yes],[ac_have_mat_int8_t=no])
 
         if test "x$ac_have_mat_int8_t" = "xyes"
         then
@@ -290,8 +270,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
 [
     AC_MSG_CHECKING([for mat_int16_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -299,9 +278,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [int16_t i = 0;],
-    ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+    ]], [[int16_t i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
     if test "x$ac_have_mat_int16_t" = "xyes"
     then
@@ -312,8 +289,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
     fi
     if test "x$ac_have_mat_int16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -325,9 +301,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
             #if CHAR_BIT != 16
             #matio sizeof(signed char) not 16 bits
             #endif
-        ],
-        [signed char i = 0;],
-        ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+        ]], [[signed char i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
         if test "x$ac_have_mat_int16_t" = "xyes"
         then
@@ -338,8 +312,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
     fi
     if test "x$ac_have_mat_int16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -351,9 +324,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
             #if CHAR_BIT*SIZEOF_SHORT != 16
             #matio sizeof(short) not 16 bits
             #endif
-        ],
-        [short i = 0;],
-        ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+        ]], [[short i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
         if test "x$ac_have_mat_int16_t" = "xyes"
         then
@@ -364,8 +335,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
     fi
     if test "x$ac_have_mat_int16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -377,9 +347,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
             #if CHAR_BIT*SIZEOF_INT != 16
             #matio sizeof(int) not 16 bits
             #endif
-        ],
-        [int i = 0;],
-        ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+        ]], [[int i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
         if test "x$ac_have_mat_int16_t" = "xyes"
         then
@@ -390,8 +358,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
     fi
     if test "x$ac_have_mat_int16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -403,9 +370,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
             #if CHAR_BIT*SIZEOF_LONG != 16
             #matio sizeof(long) not 16 bits
             #endif
-        ],
-        [long i = 0;],
-        ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+        ]], [[long i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
         if test "x$ac_have_mat_int16_t" = "xyes"
         then
@@ -416,8 +381,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
     fi
     if test "x$ac_have_mat_int16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -429,9 +393,7 @@ AC_DEFUN([CHECK_MATIO_INT16_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 16
             #matio sizeof(long long) not 16 bits
             #endif
-        ],
-        [long long i = 0;],
-        ac_have_mat_int16_t=yes,ac_have_mat_int16_t=no)
+        ]], [[long long i = 0;]])],[ac_have_mat_int16_t=yes],[ac_have_mat_int16_t=no])
 
         if test "x$ac_have_mat_int16_t" = "xyes"
         then
@@ -450,8 +412,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
 [
     AC_MSG_CHECKING([for mat_int32_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -459,9 +420,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [int32_t i = 0;],
-    ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+    ]], [[int32_t i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
     if test "x$ac_have_mat_int32_t" = "xyes"
     then
@@ -472,8 +431,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
     fi
     if test "x$ac_have_mat_int32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -485,9 +443,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
             #if CHAR_BIT != 32
             #matio sizeof(signed char) not 32 bits
             #endif
-        ],
-        [signed char i = 0;],
-        ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+        ]], [[signed char i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
         if test "x$ac_have_mat_int32_t" = "xyes"
         then
@@ -498,8 +454,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
     fi
     if test "x$ac_have_mat_int32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -511,9 +466,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
             #if CHAR_BIT*SIZEOF_SHORT != 32
             #matio sizeof(short) not 32 bits
             #endif
-        ],
-        [short i = 0;],
-        ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+        ]], [[short i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
         if test "x$ac_have_mat_int32_t" = "xyes"
         then
@@ -524,8 +477,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
     fi
     if test "x$ac_have_mat_int32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -537,9 +489,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
             #if CHAR_BIT*SIZEOF_INT != 32
             #matio sizeof(int) not 32 bits
             #endif
-        ],
-        [int i = 0;],
-        ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+        ]], [[int i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
         if test "x$ac_have_mat_int32_t" = "xyes"
         then
@@ -550,8 +500,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
     fi
     if test "x$ac_have_mat_int32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -563,9 +512,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
             #if CHAR_BIT*SIZEOF_LONG != 32
             #matio sizeof(long) not 32 bits
             #endif
-        ],
-        [long i = 0;],
-        ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+        ]], [[long i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
         if test "x$ac_have_mat_int32_t" = "xyes"
         then
@@ -576,8 +523,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
     fi
     if test "x$ac_have_mat_int32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -589,9 +535,7 @@ AC_DEFUN([CHECK_MATIO_INT32_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 32
             #matio sizeof(long long) not 32 bits
             #endif
-        ],
-        [long long i = 0;],
-        ac_have_mat_int32_t=yes,ac_have_mat_int32_t=no)
+        ]], [[long long i = 0;]])],[ac_have_mat_int32_t=yes],[ac_have_mat_int32_t=no])
 
         if test "x$ac_have_mat_int32_t" = "xyes"
         then
@@ -610,8 +554,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
 [
     AC_MSG_CHECKING([for mat_int64_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -619,9 +562,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [int64_t i = 0;],
-    ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+    ]], [[int64_t i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
     if test "x$ac_have_mat_int64_t" = "xyes"
     then
@@ -632,8 +573,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
     fi
     if test "x$ac_have_mat_int64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -645,9 +585,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
             #if CHAR_BIT != 64
             #matio sizeof(signed char) not 64 bits
             #endif
-        ],
-        [signed char i = 0;],
-        ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+        ]], [[signed char i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
         if test "x$ac_have_mat_int64_t" = "xyes"
         then
@@ -658,8 +596,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
     fi
     if test "x$ac_have_mat_int64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -671,9 +608,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
             #if CHAR_BIT*SIZEOF_SHORT != 64
             #matio sizeof(short) not 64 bits
             #endif
-        ],
-        [short i = 0;],
-        ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+        ]], [[short i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
         if test "x$ac_have_mat_int64_t" = "xyes"
         then
@@ -684,8 +619,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
     fi
     if test "x$ac_have_mat_int64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -697,9 +631,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
             #if CHAR_BIT*SIZEOF_INT != 64
             #matio sizeof(int) not 64 bits
             #endif
-        ],
-        [int i = 0;],
-        ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+        ]], [[int i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
         if test "x$ac_have_mat_int64_t" = "xyes"
         then
@@ -710,8 +642,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
     fi
     if test "x$ac_have_mat_int64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -723,9 +654,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
             #if CHAR_BIT*SIZEOF_LONG != 64
             #matio sizeof(long) not 64 bits
             #endif
-        ],
-        [long i = 0;],
-        ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+        ]], [[long i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
         if test "x$ac_have_mat_int64_t" = "xyes"
         then
@@ -736,8 +665,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
     fi
     if test "x$ac_have_mat_int64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -749,9 +677,7 @@ AC_DEFUN([CHECK_MATIO_INT64_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 64
             #matio sizeof(long long) not 64 bits
             #endif
-        ],
-        [long long i = 0;],
-        ac_have_mat_int64_t=yes,ac_have_mat_int64_t=no)
+        ]], [[long long i = 0;]])],[ac_have_mat_int64_t=yes],[ac_have_mat_int64_t=no])
 
         if test "x$ac_have_mat_int64_t" = "xyes"
         then
@@ -770,8 +696,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
 [
     AC_MSG_CHECKING([for mat_uint8_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -779,9 +704,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [uint8_t i = 0;],
-    ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+    ]], [[uint8_t i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
     if test "x$ac_have_mat_uint8_t" = "xyes"
     then
@@ -792,8 +715,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
     fi
     if test "x$ac_have_mat_uint8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -805,9 +727,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
             #if CHAR_BIT != 8
             #matio sizeof(signed char) not 8 bits
             #endif
-        ],
-        [unsigned char i = 0;],
-        ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+        ]], [[unsigned char i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
         if test "x$ac_have_mat_uint8_t" = "xyes"
         then
@@ -818,8 +738,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
     fi
     if test "x$ac_have_mat_uint8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -831,9 +750,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
             #if CHAR_BIT*SIZEOF_SHORT != 8
             #matio sizeof(short) not 8 bits
             #endif
-        ],
-        [unsigned short i = 0;],
-        ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+        ]], [[unsigned short i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
         if test "x$ac_have_mat_uint8_t" = "xyes"
         then
@@ -844,8 +761,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
     fi
     if test "x$ac_have_mat_uint8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -857,9 +773,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
             #if CHAR_BIT*SIZEOF_INT != 8
             #matio sizeof(int) not 8 bits
             #endif
-        ],
-        [unsigned int i = 0;],
-        ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+        ]], [[unsigned int i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
         if test "x$ac_have_mat_uint8_t" = "xyes"
         then
@@ -870,8 +784,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
     fi
     if test "x$ac_have_mat_uint8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -883,9 +796,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
             #if CHAR_BIT*SIZEOF_LONG != 8
             #matio sizeof(long) not 8 bits
             #endif
-        ],
-        [unsigned long i = 0;],
-        ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+        ]], [[unsigned long i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
         if test "x$ac_have_mat_uint8_t" = "xyes"
         then
@@ -896,8 +807,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
     fi
     if test "x$ac_have_mat_uint8_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -909,9 +819,7 @@ AC_DEFUN([CHECK_MATIO_UINT8_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 8
             #matio sizeof(long long) not 8 bits
             #endif
-        ],
-        [unsigned long long i = 0;],
-        ac_have_mat_uint8_t=yes,ac_have_mat_uint8_t=no)
+        ]], [[unsigned long long i = 0;]])],[ac_have_mat_uint8_t=yes],[ac_have_mat_uint8_t=no])
 
         if test "x$ac_have_mat_uint8_t" = "xyes"
         then
@@ -930,8 +838,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
 [
     AC_MSG_CHECKING([for mat_uint16_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -939,9 +846,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [uint16_t i = 0;],
-    ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+    ]], [[uint16_t i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
     if test "x$ac_have_mat_uint16_t" = "xyes"
     then
@@ -952,8 +857,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
     fi
     if test "x$ac_have_mat_uint16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -965,9 +869,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
             #if CHAR_BIT != 16
             #matio sizeof(signed char) not 16 bits
             #endif
-        ],
-        [unsigned char i = 0;],
-        ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+        ]], [[unsigned char i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
         if test "x$ac_have_mat_uint16_t" = "xyes"
         then
@@ -978,8 +880,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
     fi
     if test "x$ac_have_mat_uint16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -991,9 +892,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
             #if CHAR_BIT*SIZEOF_SHORT != 16
             #matio sizeof(short) not 16 bits
             #endif
-        ],
-        [unsigned short i = 0;],
-        ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+        ]], [[unsigned short i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
         if test "x$ac_have_mat_uint16_t" = "xyes"
         then
@@ -1004,8 +903,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
     fi
     if test "x$ac_have_mat_uint16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1017,9 +915,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
             #if CHAR_BIT*SIZEOF_INT != 16
             #matio sizeof(int) not 16 bits
             #endif
-        ],
-        [unsigned int i = 0;],
-        ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+        ]], [[unsigned int i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
         if test "x$ac_have_mat_uint16_t" = "xyes"
         then
@@ -1030,8 +926,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
     fi
     if test "x$ac_have_mat_uint16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1043,9 +938,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
             #if CHAR_BIT*SIZEOF_LONG != 16
             #matio sizeof(long) not 16 bits
             #endif
-        ],
-        [unsigned long i = 0;],
-        ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+        ]], [[unsigned long i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
         if test "x$ac_have_mat_uint16_t" = "xyes"
         then
@@ -1056,8 +949,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
     fi
     if test "x$ac_have_mat_uint16_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1069,9 +961,7 @@ AC_DEFUN([CHECK_MATIO_UINT16_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 16
             #matio sizeof(long long) not 16 bits
             #endif
-        ],
-        [unsigned long long i = 0;],
-        ac_have_mat_uint16_t=yes,ac_have_mat_uint16_t=no)
+        ]], [[unsigned long long i = 0;]])],[ac_have_mat_uint16_t=yes],[ac_have_mat_uint16_t=no])
 
         if test "x$ac_have_mat_uint16_t" = "xyes"
         then
@@ -1090,8 +980,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
 [
     AC_MSG_CHECKING([for mat_uint32_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -1099,9 +988,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [uint32_t i = 0;],
-    ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+    ]], [[uint32_t i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
     if test "x$ac_have_mat_uint32_t" = "xyes"
     then
@@ -1112,8 +999,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
     fi
     if test "x$ac_have_mat_uint32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1125,9 +1011,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
             #if CHAR_BIT != 32
             #matio sizeof(signed char) not 32 bits
             #endif
-        ],
-        [unsigned char i = 0;],
-        ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+        ]], [[unsigned char i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
         if test "x$ac_have_mat_uint32_t" = "xyes"
         then
@@ -1138,8 +1022,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
     fi
     if test "x$ac_have_mat_uint32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1151,9 +1034,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
             #if CHAR_BIT*SIZEOF_SHORT != 32
             #matio sizeof(short) not 32 bits
             #endif
-        ],
-        [unsigned short i = 0;],
-        ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+        ]], [[unsigned short i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
         if test "x$ac_have_mat_uint32_t" = "xyes"
         then
@@ -1164,8 +1045,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
     fi
     if test "x$ac_have_mat_uint32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1177,9 +1057,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
             #if CHAR_BIT*SIZEOF_INT != 32
             #matio sizeof(int) not 32 bits
             #endif
-        ],
-        [unsigned int i = 0;],
-        ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+        ]], [[unsigned int i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
         if test "x$ac_have_mat_uint32_t" = "xyes"
         then
@@ -1190,8 +1068,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
     fi
     if test "x$ac_have_mat_uint32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1203,9 +1080,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
             #if CHAR_BIT*SIZEOF_LONG != 32
             #matio sizeof(long) not 32 bits
             #endif
-        ],
-        [unsigned long i = 0;],
-        ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+        ]], [[unsigned long i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
         if test "x$ac_have_mat_uint32_t" = "xyes"
         then
@@ -1216,8 +1091,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
     fi
     if test "x$ac_have_mat_uint32_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1229,9 +1103,7 @@ AC_DEFUN([CHECK_MATIO_UINT32_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 32
             #matio sizeof(long long) not 32 bits
             #endif
-        ],
-        [unsigned long long i = 0;],
-        ac_have_mat_uint32_t=yes,ac_have_mat_uint32_t=no)
+        ]], [[unsigned long long i = 0;]])],[ac_have_mat_uint32_t=yes],[ac_have_mat_uint32_t=no])
 
         if test "x$ac_have_mat_uint32_t" = "xyes"
         then
@@ -1250,8 +1122,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
 [
     AC_MSG_CHECKING([for mat_uint64_t])
 
-    AC_TRY_LINK(
-    [
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
         #   include <inttypes.h>
@@ -1259,9 +1130,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
         #ifdef HAVE_STDINT_H
         #   include <stdint.h>
         #endif
-    ],
-    [uint64_t i = 0;],
-    ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+    ]], [[uint64_t i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
     if test "x$ac_have_mat_uint64_t" = "xyes"
     then
@@ -1272,8 +1141,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
     fi
     if test "x$ac_have_mat_uint64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1285,9 +1153,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
             #if CHAR_BIT != 64
             #matio sizeof(signed char) not 64 bits
             #endif
-        ],
-        [unsigned char i = 0;],
-        ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+        ]], [[unsigned char i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
         if test "x$ac_have_mat_uint64_t" = "xyes"
         then
@@ -1298,8 +1164,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
     fi
     if test "x$ac_have_mat_uint64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1311,9 +1176,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
             #if CHAR_BIT*SIZEOF_SHORT != 64
             #matio sizeof(short) not 64 bits
             #endif
-        ],
-        [unsigned short i = 0;],
-        ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+        ]], [[unsigned short i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
         if test "x$ac_have_mat_uint64_t" = "xyes"
         then
@@ -1324,8 +1187,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
     fi
     if test "x$ac_have_mat_uint64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1337,9 +1199,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
             #if CHAR_BIT*SIZEOF_INT != 64
             #matio sizeof(int) not 64 bits
             #endif
-        ],
-        [unsigned int i = 0;],
-        ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+        ]], [[unsigned int i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
         if test "x$ac_have_mat_uint64_t" = "xyes"
         then
@@ -1350,8 +1210,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
     fi
     if test "x$ac_have_mat_uint64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1363,9 +1222,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
             #if CHAR_BIT*SIZEOF_LONG != 64
             #matio sizeof(long) not 64 bits
             #endif
-        ],
-        [unsigned long i = 0;],
-        ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+        ]], [[unsigned long i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
         if test "x$ac_have_mat_uint64_t" = "xyes"
         then
@@ -1376,8 +1233,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
     fi
     if test "x$ac_have_mat_uint64_t" != "xyes"
     then
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
             #include <stdlib.h>
             #ifdef HAVE_INTTYPES_H
             #   include <inttypes.h>
@@ -1389,9 +1245,7 @@ AC_DEFUN([CHECK_MATIO_UINT64_T],
             #if CHAR_BIT*SIZEOF_LONG_LONG != 64
             #matio sizeof(long long) not 64 bits
             #endif
-        ],
-        [unsigned long long i = 0;],
-        ac_have_mat_uint64_t=yes,ac_have_mat_uint64_t=no)
+        ]], [[unsigned long long i = 0;]])],[ac_have_mat_uint64_t=yes],[ac_have_mat_uint64_t=no])
 
         if test "x$ac_have_mat_uint64_t" = "xyes"
         then
