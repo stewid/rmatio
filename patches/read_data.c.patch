@@ -1,11 +1,12 @@
-*** read_data.c.orig	2017-07-29 16:59:57.474664996 +0200
---- read_data.c	2017-07-29 16:59:57.486664863 +0200
+*** read_data.c.orig	2019-11-16 17:05:21.824425179 +0100
+--- read_data.c	2019-11-16 17:07:59.865925420 +0100
 ***************
-*** 30,45 ****
-   * POSSIBILITY OF SUCH DAMAGE.
+*** 28,44 ****
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 ! /* FIXME: Implement Unicode support */
+! #include <stddef.h>
 ! #include <stdlib.h>
 ! #include <string.h>
 ! #include <stdio.h>
@@ -16,10 +17,10 @@
 ! #   include <zlib.h>
 ! #endif
   
-  #define READ_DATA(SwapFunc) \
-      do { \
---- 30,58 ----
-   * POSSIBILITY OF SUCH DAMAGE.
+  #if !defined(READ_BLOCK_SIZE)
+  #define READ_BLOCK_SIZE (256)
+--- 28,56 ----
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 ! /*
@@ -34,53 +35,22 @@
 ! #include <R.h>
   #include "matio_private.h"
 ! 
-! /* FIXME: Implement Unicode support */
+! /* /\* FIXME: Implement Unicode support *\/ */
+! /* #include <stddef.h> */
 ! /* #include <stdlib.h> */
 ! /* #include <string.h> */
 ! /* #include <stdio.h> */
 ! /* #include <math.h> */
 ! /* #include <time.h> */
 ! /* #include "matio_private.h" */
-! 
 ! /* #if defined(HAVE_ZLIB) */
 ! /* #   include <zlib.h> */
 ! /* #endif */
   
-  #define READ_DATA(SwapFunc) \
-      do { \
+  #if !defined(READ_BLOCK_SIZE)
+  #define READ_BLOCK_SIZE (256)
 ***************
-*** 2037,2050 ****
-      enum matio_classes class_type,enum matio_types data_type,int start,
-      int stride,int edge)
-  {
-!     int nBytes = 0, i, err;
-      z_stream z_copy = {0,};
-  
-      if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) )
-          return 0;
-  
-      stride--;
-!     err = inflateCopy(&z_copy,z);
-      InflateSkipData(mat,&z_copy,data_type,start);
-      switch ( class_type ) {
-          case MAT_C_DOUBLE:
---- 2050,2063 ----
-      enum matio_classes class_type,enum matio_types data_type,int start,
-      int stride,int edge)
-  {
-!     int nBytes = 0, i;
-      z_stream z_copy = {0,};
-  
-      if ( (mat   == NULL) || (data   == NULL) || (mat->fp == NULL) )
-          return 0;
-  
-      stride--;
-!     inflateCopy(&z_copy,z);
-      InflateSkipData(mat,&z_copy,data_type,start);
-      switch ( class_type ) {
-          case MAT_C_DOUBLE:
-***************
-*** 2174,2180 ****
+*** 2205,2211 ****
       enum matio_classes class_type,enum matio_types data_type,size_t *dims,
       int *start,int *stride,int *edge)
   {
@@ -88,7 +58,7 @@
       int pos, row_stride, col_stride;
       z_stream z_copy = {0,};
   
---- 2187,2193 ----
+--- 2217,2223 ----
       enum matio_classes class_type,enum matio_types data_type,size_t *dims,
       int *start,int *stride,int *edge)
   {
@@ -97,7 +67,7 @@
       z_stream z_copy = {0,};
   
 ***************
-*** 2183,2189 ****
+*** 2214,2220 ****
           return 0;
       }
   
@@ -105,7 +75,7 @@
       switch ( class_type ) {
           case MAT_C_DOUBLE:
           {
---- 2196,2202 ----
+--- 2226,2232 ----
           return 0;
       }
   

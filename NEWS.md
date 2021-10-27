@@ -1,3 +1,15 @@
+# rmatio (development version)
+
+## IMPROVMENTS
+
+* Codebase is now tested with the `lintr` package to improve
+  readability.
+
+## CHANGES
+
+* Renamed the NEWS file to NEWS.md and changed to use markdown format
+  style.
+
 # rmatio 0.16.0
 
 ## CHANGES
