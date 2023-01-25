@@ -17,7 +17,7 @@ with variable compression.
 \references{
 \itemize{
   \item Christopher C. Hulbert, MATIO User Manual for version 1.5.2.\cr
-  \url{https://sourceforge.net/projects/matio/files/matio/1.5.2/matio_user_guide.pdf}
+  \url{https://sourceforge.net/projects/matio/files/matio/1.5.2/matio_user_guide.pdf/download}
 
   \item The MathWorks Inc., MATLAB - MAT-File Format, version R2013b, September 2013.\cr
   \url{https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf}
