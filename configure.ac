@@ -34,11 +34,9 @@ dnl Modified to be used to configure matio to build in the rmatio R package
 
 AC_PREREQ([2.69])
 AC_INIT([rmatio],[see.DESCRIPTION.file],[https://github.com/stewid/rmatio/issues])
+AC_CONFIG_AUX_DIR([tools])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
-
-# Checks for programs.
-AC_PROG_CC
 
 # zlib include and library path
 AC_ARG_WITH([zlib-include],

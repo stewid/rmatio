@@ -10,6 +10,13 @@
 * Renamed the NEWS file to NEWS.md and changed to use markdown format
   style.
 
+# rmatio 0.17.0
+
+## CHANGES
+
+* Updated the build configuration script to use R to find the compiler
+  to use.
+
 # rmatio 0.16.0
 
 ## CHANGES
