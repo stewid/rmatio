@@ -1,8 +1,8 @@
-*** matio.h.orig	2017-07-28 16:00:19.306938170 +0200
---- matio.h	2017-07-28 16:00:19.334938381 +0200
+*** matio.h.orig	2019-11-16 17:53:29.879309100 +0100
+--- matio.h	2019-11-16 17:53:29.901309033 +0100
 ***************
-*** 30,43 ****
-   * POSSIBILITY OF SUCH DAMAGE.
+*** 28,41 ****
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
   #ifndef MATIO_H
@@ -16,8 +16,8 @@
   
   #ifdef __cplusplus
   #   define EXTERN extern "C"
---- 30,54 ----
-   * POSSIBILITY OF SUCH DAMAGE.
+--- 28,52 ----
+   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    */
   
 + /*
@@ -43,55 +43,55 @@
   #ifdef __cplusplus
   #   define EXTERN extern "C"
 ***************
-*** 232,253 ****
+*** 230,251 ****
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
   /* io.c */
-! EXTERN char  *strdup_vprintf(const char *format, va_list ap);
-! EXTERN char  *strdup_printf(const char *format, ...);
-! EXTERN int    Mat_SetVerbose( int verb, int s );
-! EXTERN int    Mat_SetDebug( int d );
-! EXTERN void   Mat_Critical( const char *format, ... );
-! EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR;
-! EXTERN void   Mat_Help( const char *helpstr[] );
-! EXTERN int    Mat_LogInit( const char *progname );
+! EXTERN char  *strdup_vprintf(const char *format, va_list ap) MATIO_FORMATATTR_VPRINTF;
+! EXTERN char  *strdup_printf(const char *format, ...) MATIO_FORMATATTR_PRINTF1;
+! EXTERN int    Mat_SetVerbose(int verb, int s);
+! EXTERN int    Mat_SetDebug(int d);
+! EXTERN void   Mat_Critical(const char *format, ...) MATIO_FORMATATTR_PRINTF1;
+! EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR MATIO_FORMATATTR_PRINTF1;
+! EXTERN void   Mat_Help(const char *helpstr[]);
+! EXTERN int    Mat_LogInit(const char *prog_name);
 ! EXTERN int    Mat_LogClose(void);
 ! EXTERN int    Mat_LogInitFunc(const char *prog_name,
-!                   void (*log_func)(int log_level, char *message) );
-! EXTERN int    Mat_Message( const char *format, ... );
-! EXTERN int    Mat_DebugMessage( int level, const char *format, ... );
-! EXTERN int    Mat_VerbMessage( int level, const char *format, ... );
-! EXTERN void   Mat_Warning( const char *format, ... );
+!                   void (*log_func)(int log_level, char *message));
+! EXTERN int    Mat_Message(const char *format, ...) MATIO_FORMATATTR_PRINTF1;
+! EXTERN int    Mat_DebugMessage(int level, const char *format, ...) MATIO_FORMATATTR_PRINTF2;
+! EXTERN int    Mat_VerbMessage(int level, const char *format, ...) MATIO_FORMATATTR_PRINTF2;
+! EXTERN void   Mat_Warning(const char *format, ...) MATIO_FORMATATTR_PRINTF1;
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
---- 243,265 ----
+--- 241,263 ----
   /* Library function */
   EXTERN void Mat_GetLibraryVersion(int *major,int *minor,int *release);
   
 + /* Stefan Widgren 2014-01-01: Not used by rmatio */
   /* io.c */
-! /* EXTERN char  *strdup_vprintf(const char *format, va_list ap); */
-! /* EXTERN char  *strdup_printf(const char *format, ...); */
-! /* EXTERN int    Mat_SetVerbose( int verb, int s ); */
-! /* EXTERN int    Mat_SetDebug( int d ); */
-! /* EXTERN void   Mat_Critical( const char *format, ... ); */
-! /* EXTERN MATIO_NORETURN void Mat_Error( const char *format, ... ) MATIO_NORETURNATTR; */
-! /* EXTERN void   Mat_Help( const char *helpstr[] ); */
-! /* EXTERN int    Mat_LogInit( const char *progname ); */
+! /* EXTERN char  *strdup_vprintf(const char *format, va_list ap) MATIO_FORMATATTR_VPRINTF; */
+! /* EXTERN char  *strdup_printf(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
+! /* EXTERN int    Mat_SetVerbose(int verb, int s); */
+! /* EXTERN int    Mat_SetDebug(int d); */
+! /* EXTERN void   Mat_Critical(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
+! /* EXTERN MATIO_NORETURN void Mat_Error(const char *format, ...) MATIO_NORETURNATTR MATIO_FORMATATTR_PRINTF1; */
+! /* EXTERN void   Mat_Help(const char *helpstr[]); */
+! /* EXTERN int    Mat_LogInit(const char *prog_name); */
 ! /* EXTERN int    Mat_LogClose(void); */
 ! /* EXTERN int    Mat_LogInitFunc(const char *prog_name, */
-! /*                   void (*log_func)(int log_level, char *message) ); */
-! /* EXTERN int    Mat_Message( const char *format, ... ); */
-! /* EXTERN int    Mat_DebugMessage( int level, const char *format, ... ); */
-! /* EXTERN int    Mat_VerbMessage( int level, const char *format, ... ); */
-! /* EXTERN void   Mat_Warning( const char *format, ... ); */
+! /*                   void (*log_func)(int log_level, char *message)); */
+! /* EXTERN int    Mat_Message(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
+! /* EXTERN int    Mat_DebugMessage(int level, const char *format, ...) MATIO_FORMATATTR_PRINTF2; */
+! /* EXTERN int    Mat_VerbMessage(int level, const char *format, ...) MATIO_FORMATATTR_PRINTF2; */
+! /* EXTERN void   Mat_Warning(const char *format, ...) MATIO_FORMATATTR_PRINTF1; */
   EXTERN size_t Mat_SizeOf(enum matio_types data_type);
   EXTERN size_t Mat_SizeOfClass(int class_type);
   
 ***************
-*** 270,276 ****
+*** 269,275 ****
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);
@@ -99,7 +99,7 @@
   EXTERN matvar_t  *Mat_VarDuplicate(const matvar_t *in, int opt);
   EXTERN void       Mat_VarFree(matvar_t *matvar);
   EXTERN matvar_t  *Mat_VarGetCell(matvar_t *matvar,int index);
---- 282,293 ----
+--- 281,292 ----
                         void *data,int opt);
   EXTERN matvar_t  *Mat_VarCreateStruct(const char *name,int rank,size_t *dims,
                         const char **fields,unsigned nfields);

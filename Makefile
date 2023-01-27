@@ -19,6 +19,7 @@ roxygen:
 # Sync matio source code
 sync:
 	-cp -f ../matio/src/endian.c src/matio/
+	-cp -f ../matio/src/exact-int.h src/matio/
 	-cp -f ../matio/src/inflate.c src/matio/
 	-cp -f ../matio/src/mat.c src/matio/
 	-cp -f ../matio/src/mat4.h src/matio/
@@ -30,11 +31,10 @@ sync:
 	-cp -f ../matio/src/matvar_cell.c src/matio/
 	-cp -f ../matio/src/matvar_struct.c src/matio/
 	-cp -f ../matio/src/read_data.c src/matio/
+	-cp -f ../matio/src/safe-math.h src/matio/
 	-cd src/matio && patch -i ../../patches/inflate.c.patch
 	-cd src/matio && patch -i ../../patches/read_data.c.patch
 	-cd src/matio && patch -i ../../patches/mat.c.patch
-	-cd src/matio && patch -i ../../patches/mat5.h.patch
-	-cd src/matio && patch -i ../../patches/mat5.c.patch
 	-cd src/matio && patch -i ../../patches/matio.h.patch
 	-cd src/matio && patch -i ../../patches/matio_private.h.patch
 
