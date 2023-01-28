@@ -35,7 +35,6 @@
 ##' for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
 ##' @keywords methods
-##' @include have_lib.R
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
@@ -170,10 +169,6 @@ setMethod("write.mat",
             }
 
             if(identical(compression, TRUE)) {
-                if(!have.zlib()) {
-                    stop(paste("Sorry, library 'zlib' is not available.",
-                               "Use 'compression=FALSE' or install with 'zlib'"))
-                }
                 compression = 1L
             } else {
                 compression = 0L

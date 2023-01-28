@@ -26,7 +26,6 @@ Imports:
 Depends:
     R(>= 3.2)
 Collate:
-    'have_lib.R'
     'read_mat.R'
     'rmatio.R'
     'write_mat.R'
