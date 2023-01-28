@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2018  Stefan Widgren
+## Copyright (C) 2013-2023  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-library("rmatio")
+library(rmatio)
 
 ## For debugging
 sessionInfo()
@@ -37,11 +37,9 @@ str(a1.obs)
 stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
-if(rmatio:::have.zlib()) {
-    filename <- tempfile(fileext = ".mat")
-    write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
-    a1.zlib.obs <- read.mat(filename)[['a']]
-    unlink(filename)
-    str(a1.zlib.obs)
-    stopifnot(identical(a1.zlib.obs, a1.exp))
-}
+filename <- tempfile(fileext = ".mat")
+write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
+a1.zlib.obs <- read.mat(filename)[['a']]
+unlink(filename)
+str(a1.zlib.obs)
+stopifnot(identical(a1.zlib.obs, a1.exp))
