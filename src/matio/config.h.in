@@ -161,7 +161,7 @@
 #endif
 
 /* Have zlib */
-#undef HAVE_ZLIB
+#define HAVE_ZLIB 1
 
 /* MAT v7.3 file support */
 #undef MAT73
