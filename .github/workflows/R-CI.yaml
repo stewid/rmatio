@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  R_LIBS_USER: $HOME/R/library
+  R_LIBS_USER: '$(GITHUB_WORKSPACE)/../R/library'
 
 jobs:
   R-CI:
