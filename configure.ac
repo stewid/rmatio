@@ -1,3 +1,38 @@
+dnl  configure.ac
+dnl
+dnl  NOTE:  Process this file with GNU autoconf to produce a configure script.
+dnl
+dnl Copyright (C) 2005-2013   Christopher C. Hulbert
+dnl
+dnl All rights reserved.
+dnl
+dnl Redistribution and use in source and binary forms, with or without
+dnl modification, are permitted provided that the following conditions are met:
+dnl
+dnl    1. Redistributions of source code must retain the above copyright notice,
+dnl       this list of conditions and the following disclaimer.
+dnl
+dnl    2. Redistributions in binary form must reproduce the above copyright
+dnl       notice, this list of conditions and the following disclaimer in the
+dnl       documentation and/or other materials provided with the distribution.
+dnl
+dnl THIS SOFTWARE IS PROVIDED BY CHRISTOPHER C. HULBERT ``AS IS'' AND ANY
+dnl EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+dnl WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+dnl DISCLAIMED. IN NO EVENT SHALL CHRISTOPHER C. HULBERT OR CONTRIBUTORS BE
+dnl LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+dnl CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+dnl SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+dnl INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+dnl CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+dnl ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+dnl POSSIBILITY OF SUCH DAMAGE.
+
+dnl Stefan Widgren
+dnl Included several parts of the configure script from matio into
+dnl this file. Modified to be used to configure matio to build in the
+dnl rmatio R package
+
 AC_PREREQ([2.69])
 AC_INIT([rmatio],[see.DESCRIPTION.file],[https://github.com/stewid/rmatio/issues])
 AC_CONFIG_AUX_DIR([tools])
@@ -6,10 +41,10 @@ m4_include([tools/pkg.m4])
 
 AC_CONFIG_HEADERS([src/matio/config.h])
 
-# Check for pkg-config
+dnl Check for pkg-config
 PKG_PROG_PKG_CONFIG
 
-# Find the compiler and compiler flags to use
+dnl Find the compiler and compiler flags to use
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
@@ -118,7 +153,7 @@ if test "x${have_unistd_h}" = xyes; then
 fi
 rm -f conftest.o conftest.c conftest.so
 
-# Check for zlib
+dnl Check for zlib
 have_zlib=no
 
 if test [ -n "$PKG_CONFIG" ] ; then
@@ -316,12 +351,14 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
 rm -f conftest.o conftest.c conftest.so
-if test "x${ac_have_mat_int8_t}" = xyes; then
+if test "x$ac_have_mat_int8_t" = "xyes"
+then
     AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
     AC_DEFINE_UNQUOTED([_mat_int8_t],[int8_t],[int8 type])
     AC_MSG_RESULT([int8_t])
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
@@ -338,13 +375,15 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
         AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
         AC_DEFINE_UNQUOTED([_mat_int8_t],[signed char],[int8 type])
         AC_MSG_RESULT([signed char])
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
@@ -361,13 +400,15 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
         AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
         AC_DEFINE_UNQUOTED([_mat_int8_t],[short],[int8 type])
         AC_MSG_RESULT([short])
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
@@ -384,13 +425,15 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
         AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
         AC_DEFINE_UNQUOTED([_mat_int8_t],[int],[int8 type])
         AC_MSG_RESULT([int])
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
@@ -407,13 +450,15 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
         AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
         AC_DEFINE_UNQUOTED([_mat_int8_t],[long],[int8 type])
         AC_MSG_RESULT([long])
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
         #include <stdlib.h>
         #ifdef HAVE_INTTYPES_H
@@ -430,7 +475,8 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
         AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
         AC_DEFINE_UNQUOTED([_mat_int8_t],[long long],[int8 type])
         AC_MSG_RESULT([long long])
@@ -1336,6 +1382,156 @@ then
     fi
 fi
 if test "x$ac_have_mat_uint32_t" != "xyes"
+then
+    AC_MSG_RESULT([])
+fi
+
+AC_MSG_CHECKING([for mat_uint64_t])
+ac_have_mat_uint64_t=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+    #include <stdlib.h>
+    #ifdef HAVE_INTTYPES_H
+    #   include <inttypes.h>
+    #endif
+    #ifdef HAVE_STDINT_H
+    #   include <stdint.h>
+    #endif
+]], [[uint64_t i = 0;]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+rm -f conftest.o conftest.c conftest.so
+if test "x$ac_have_mat_uint64_t" = "xyes"
+then
+    AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+    AC_DEFINE_UNQUOTED([_mat_uint64_t],[uint64_t],[int64 type])
+    AC_MSG_RESULT([uint64_t])
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT != 64
+        #matio sizeof(signed char) not 64 bits
+        #endif
+    ]], [[unsigned char i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+        AC_DEFINE_UNQUOTED([_mat_uint64_t],[unsigned char],[int64 type])
+        AC_MSG_RESULT([unsigned char])
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_SHORT != 64
+        #matio sizeof(short) not 64 bits
+        #endif
+    ]], [[unsigned short i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+        AC_DEFINE_UNQUOTED([_mat_uint64_t],[unsigned short],[int64 type])
+        AC_MSG_RESULT([unsigned short])
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_INT != 64
+        #matio sizeof(int) not 64 bits
+        #endif
+    ]], [[unsigned int i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+        AC_DEFINE_UNQUOTED([_mat_uint64_t],[unsigned int],[int64 type])
+        AC_MSG_RESULT([unsigned int])
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG != 64
+        #matio sizeof(long) not 64 bits
+        #endif
+    ]], [[unsigned long i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+        AC_DEFINE_UNQUOTED([_mat_uint64_t],[unsigned long],[int64 type])
+        AC_MSG_RESULT([unsigned long])
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG_LONG != 64
+        #matio sizeof(long long) not 64 bits
+        #endif
+    ]], [[unsigned long long i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_UINT64_T],[],[Have MAT int64])
+        AC_DEFINE_UNQUOTED([_mat_uint64_t],[unsigned long long],[int64 type])
+        AC_MSG_RESULT([unsigned long long])
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
 then
     AC_MSG_RESULT([])
 fi

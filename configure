@@ -2182,7 +2182,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers src/matio/config.h"
 
 
-# Check for pkg-config
 
 
 
@@ -2314,7 +2313,6 @@ printf "%s\n" "no" >&6; }
 	fi
 fi
 
-# Find the compiler and compiler flags to use
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
@@ -2520,7 +2518,6 @@ if test "x${have_unistd_h}" = xyes; then
 fi
 rm -f conftest.o conftest.c conftest.so
 
-# Check for zlib
 have_zlib=no
 
 if test  -n "$PKG_CONFIG"  ; then
@@ -3882,7 +3879,8 @@ _ACEOF
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
 1>&5 2>&5 && ac_have_mat_int8_t=yes
 rm -f conftest.o conftest.c conftest.so
-if test "x${ac_have_mat_int8_t}" = xyes; then
+if test "x$ac_have_mat_int8_t" = "xyes"
+then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -3892,7 +3890,8 @@ printf "%s\n" "#define _mat_int8_t int8_t" >>confdefs.h
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: int8_t" >&5
 printf "%s\n" "int8_t" >&6; }
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -3919,7 +3918,8 @@ _ACEOF
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&5 2>&5 && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -3930,7 +3930,8 @@ printf "%s\n" "#define _mat_int8_t signed char" >>confdefs.h
 printf "%s\n" "signed char" >&6; }
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -3957,7 +3958,8 @@ _ACEOF
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&5 2>&5 && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -3968,7 +3970,8 @@ printf "%s\n" "#define _mat_int8_t short" >>confdefs.h
 printf "%s\n" "short" >&6; }
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -3995,7 +3998,8 @@ _ACEOF
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&5 2>&5 && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -4006,7 +4010,8 @@ printf "%s\n" "#define _mat_int8_t int" >>confdefs.h
 printf "%s\n" "int" >&6; }
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4033,7 +4038,8 @@ _ACEOF
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&5 2>&5 && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -4044,7 +4050,8 @@ printf "%s\n" "#define _mat_int8_t long" >>confdefs.h
 printf "%s\n" "long" >&6; }
     fi
 fi
-if test "x$ac_have_mat_int8_t" != "xyes"; then
+if test "x$ac_have_mat_int8_t" != "xyes"
+then
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4071,7 +4078,8 @@ _ACEOF
     "${R_HOME}/bin/R" CMD SHLIB conftest.c \
     1>&5 2>&5 && ac_have_mat_int8_t=yes
     rm -f conftest.o conftest.c conftest.so
-    if test "x$ac_have_mat_int8_t" = "xyes"; then
+    if test "x$ac_have_mat_int8_t" = "xyes"
+    then
 
 printf "%s\n" "#define HAVE_MAT_INT8_T /**/" >>confdefs.h
 
@@ -5533,6 +5541,248 @@ printf "%s\n" "unsigned long long" >&6; }
     fi
 fi
 if test "x$ac_have_mat_uint32_t" != "xyes"
+then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
+printf "%s\n" "" >&6; }
+fi
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for mat_uint64_t" >&5
+printf %s "checking for mat_uint64_t... " >&6; }
+ac_have_mat_uint64_t=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+    #include <stdlib.h>
+    #ifdef HAVE_INTTYPES_H
+    #   include <inttypes.h>
+    #endif
+    #ifdef HAVE_STDINT_H
+    #   include <stdint.h>
+    #endif
+
+int
+main (void)
+{
+uint64_t i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && ac_have_mat_uint64_t=yes
+rm -f conftest.o conftest.c conftest.so
+if test "x$ac_have_mat_uint64_t" = "xyes"
+then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t uint64_t" >>confdefs.h
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: uint64_t" >&5
+printf "%s\n" "uint64_t" >&6; }
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT != 64
+        #matio sizeof(signed char) not 64 bits
+        #endif
+
+int
+main (void)
+{
+unsigned char i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t unsigned char" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unsigned char" >&5
+printf "%s\n" "unsigned char" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_SHORT != 64
+        #matio sizeof(short) not 64 bits
+        #endif
+
+int
+main (void)
+{
+unsigned short i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t unsigned short" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unsigned short" >&5
+printf "%s\n" "unsigned short" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_INT != 64
+        #matio sizeof(int) not 64 bits
+        #endif
+
+int
+main (void)
+{
+unsigned int i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t unsigned int" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unsigned int" >&5
+printf "%s\n" "unsigned int" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG != 64
+        #matio sizeof(long) not 64 bits
+        #endif
+
+int
+main (void)
+{
+unsigned long i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t unsigned long" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unsigned long" >&5
+printf "%s\n" "unsigned long" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG_LONG != 64
+        #matio sizeof(long long) not 64 bits
+        #endif
+
+int
+main (void)
+{
+unsigned long long i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_uint64_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_uint64_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_UINT64_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_uint64_t unsigned long long" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unsigned long long" >&5
+printf "%s\n" "unsigned long long" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_uint64_t" != "xyes"
 then
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
 printf "%s\n" "" >&6; }
