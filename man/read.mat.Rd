@@ -7,7 +7,8 @@
 read.mat(filename)
 }
 \arguments{
-\item{filename}{Character string, with the MAT file or URL to read.}
+\item{filename}{Character string, with the MAT file or URL to
+read.}
 }
 \value{
 A list with the variables read.
@@ -26,7 +27,8 @@ Reads the values in a mat-file and stores them in a list.
 
   \item A sparse matrix is read as a 'dgCMatrix'
 
-  \item A matrix of dimension  \code{1 x n} or \code{n x 1} is read as a vector
+  \item A matrix of dimension \code{1 x n} or \code{n x 1} is read
+  as a vector
 
   \item A structure is read as a named list with fields.
 
@@ -37,26 +39,30 @@ Reads the values in a mat-file and stores them in a list.
 }
 \examples{
 ## Read a version 4 MAT file with little-endian byte ordering
-filename <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
+filename <- system.file("extdata/matio_test_cases_v4_le.mat",
+                        package = "rmatio")
 m <- read.mat(filename)
 
 ## View content
 str(m)
 
 ## Read a version 4 MAT file with big-endian byte ordering.
-filename <- system.file('extdata/matio_test_cases_v4_be.mat', package='rmatio')
+filename <- system.file("extdata/matio_test_cases_v4_be.mat",
+                        package = "rmatio")
 m <- read.mat(filename)
 
 ## View content
 str(m)
 
 ## Read a compressed version 5 MAT file
-filename <- system.file('extdata/matio_test_cases_compressed_le.mat', package='rmatio')
+filename <- system.file("extdata/matio_test_cases_compressed_le.mat",
+                        package = "rmatio")
 m <- read.mat(filename)
 
 ## View content
 str(m)
 }
 \seealso{
-See \code{\link{write.mat}} for more details and examples.
+See \code{\link{write.mat}} for more details and
+    examples.
 }
