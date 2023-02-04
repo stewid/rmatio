@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  R_LIBS_USER: $HOME/R/library
+
 jobs:
   R-CI:
     runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up R library
-        run: mkdir -p $HOME/R/library
+        run: mkdir -p $R_LIBS_USER
 
       - name: Get ansible playbook to check package
         run: curl -Ls https://stewid.github.io/ansible-r-ci/r-ci.yml -o ../r-ci.yml
