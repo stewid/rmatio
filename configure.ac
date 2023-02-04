@@ -55,6 +55,66 @@ if test "x${have_stdint_h}" = xyes; then
 fi
 rm -f conftest.o conftest.c conftest.so
 
+AC_MSG_CHECKING([strings.h])
+have_strings_h=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <strings.h>]], [[]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_strings_h=yes
+AC_MSG_RESULT([${have_strings_h}])
+if test "x${have_strings_h}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_STRINGS_H])
+fi
+rm -f conftest.o conftest.c conftest.so
+
+AC_MSG_CHECKING([string.h])
+have_string_h=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <string.h>]], [[]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_string_h=yes
+AC_MSG_RESULT([${have_string_h}])
+if test "x${have_string_h}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_STRING_H])
+fi
+rm -f conftest.o conftest.c conftest.so
+
+AC_MSG_CHECKING([sys/stat.h])
+have_sys_stat_h=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <sys/stat.h>]], [[]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_sys_stat_h=yes
+AC_MSG_RESULT([${have_sys_stat_h}])
+if test "x${have_sys_stat_h}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_SYS_STAT_H])
+fi
+rm -f conftest.o conftest.c conftest.so
+
+AC_MSG_CHECKING([sys/types.h])
+have_sys_types_h=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <sys/types.h>]], [[]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_sys_types_h=yes
+AC_MSG_RESULT([${have_sys_types_h}])
+if test "x${have_sys_types_h}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_SYS_TYPES_H])
+fi
+rm -f conftest.o conftest.c conftest.so
+
+AC_MSG_CHECKING([unistd.h])
+have_unistd_h=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+[[#include <unistd.h>]], [[]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_unistd_h=yes
+AC_MSG_RESULT([${have_unistd_h}])
+if test "x${have_unistd_h}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_UNISTD_H])
+fi
+rm -f conftest.o conftest.c conftest.so
+
 # Check for zlib
 have_zlib=no
 

@@ -2405,6 +2405,126 @@ if test "x${have_stdint_h}" = xyes; then
 fi
 rm -f conftest.o conftest.c conftest.so
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking strings.h" >&5
+printf %s "checking strings.h... " >&6; }
+have_strings_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <strings.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_strings_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_strings_h}" >&5
+printf "%s\n" "${have_strings_h}" >&6; }
+if test "x${have_strings_h}" = xyes; then
+    printf "%s\n" "#define HAVE_STRINGS_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking string.h" >&5
+printf %s "checking string.h... " >&6; }
+have_string_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <string.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_string_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_string_h}" >&5
+printf "%s\n" "${have_string_h}" >&6; }
+if test "x${have_string_h}" = xyes; then
+    printf "%s\n" "#define HAVE_STRING_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking sys/stat.h" >&5
+printf %s "checking sys/stat.h... " >&6; }
+have_sys_stat_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/stat.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_sys_stat_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_sys_stat_h}" >&5
+printf "%s\n" "${have_sys_stat_h}" >&6; }
+if test "x${have_sys_stat_h}" = xyes; then
+    printf "%s\n" "#define HAVE_SYS_STAT_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking sys/types.h" >&5
+printf %s "checking sys/types.h... " >&6; }
+have_sys_types_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <sys/types.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_sys_types_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_sys_types_h}" >&5
+printf "%s\n" "${have_sys_types_h}" >&6; }
+if test "x${have_sys_types_h}" = xyes; then
+    printf "%s\n" "#define HAVE_SYS_TYPES_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking unistd.h" >&5
+printf %s "checking unistd.h... " >&6; }
+have_unistd_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <unistd.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_unistd_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_unistd_h}" >&5
+printf "%s\n" "${have_unistd_h}" >&6; }
+if test "x${have_unistd_h}" = xyes; then
+    printf "%s\n" "#define HAVE_UNISTD_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
 # Check for zlib
 have_zlib=no
 
