@@ -285,7 +285,6 @@ rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_SIZE_T}])
 AC_DEFINE_UNQUOTED([SIZEOF_SIZE_T], [$SIZEOF_SIZE_T])
 
-dnl AC_CHECK_SIZEOF([void *])
 AC_MSG_CHECKING([size of void *])
 cat >conftest.c <<EOF
 [
@@ -302,6 +301,144 @@ SIZEOF_VOID_P=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_VOID_P}])
 AC_DEFINE_UNQUOTED([SIZEOF_VOID_P], [$SIZEOF_VOID_P])
+
+AC_MSG_CHECKING([for mat_int8_t])
+ac_have_mat_int8_t=no
+AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+    #include <stdlib.h>
+    #ifdef HAVE_INTTYPES_H
+    #   include <inttypes.h>
+    #endif
+    #ifdef HAVE_STDINT_H
+    #   include <stdint.h>
+    #endif
+]], [[int8_t i = 0;]])])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+rm -f conftest.o conftest.c conftest.so
+if test "x${ac_have_mat_int8_t}" = xyes; then
+    AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+    AC_DEFINE_UNQUOTED([_mat_int8_t],[int8_t],[int8 type])
+    AC_MSG_RESULT([int8_t])
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT != 8
+        #matio sizeof(signed char) not 8 bits
+        #endif
+    ]], [[signed char i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int8_t" = "xyes"; then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+        AC_DEFINE_UNQUOTED([_mat_int8_t],[signed char],[int8 type])
+        AC_MSG_RESULT([signed char])
+    fi
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_SHORT != 8
+        #matio sizeof(short) not 8 bits
+        #endif
+    ]], [[short i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int8_t" = "xyes"; then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+        AC_DEFINE_UNQUOTED([_mat_int8_t],[short],[int8 type])
+        AC_MSG_RESULT([short])
+    fi
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_INT != 8
+        #matio sizeof(int) not 8 bits
+        #endif
+    ]], [[int i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int8_t" = "xyes"; then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+        AC_DEFINE_UNQUOTED([_mat_int8_t],[int],[int8 type])
+        AC_MSG_RESULT([int])
+    fi
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG != 8
+        #matio sizeof(long) not 8 bits
+        #endif
+    ]], [[long i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int8_t" = "xyes"; then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+        AC_DEFINE_UNQUOTED([_mat_int8_t],[long],[int8 type])
+        AC_MSG_RESULT([long])
+    fi
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_LANG_CONFTEST([AC_LANG_PROGRAM([[
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG_LONG != 8
+        #matio sizeof(long long) not 8 bits
+        #endif
+    ]], [[long long i = 0;]])])
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_mat_int8_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int8_t" = "xyes"; then
+        AC_DEFINE_UNQUOTED([HAVE_MAT_INT8_T],[],[Have MAT int8])
+        AC_DEFINE_UNQUOTED([_mat_int8_t],[long long],[int8 type])
+        AC_MSG_RESULT([long long])
+    fi
+fi
+if test "x$ac_have_mat_int8_t" != "xyes"; then
+    AC_MSG_RESULT([])
+fi
 
 AC_CONFIG_FILES([src/Makevars])
 
