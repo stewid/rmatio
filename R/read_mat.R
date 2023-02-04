@@ -76,7 +76,7 @@ read.mat <- function(filename) {
         utils::download.file(filename, tmp, quiet = TRUE, mode = "wb")
         filename <- tmp
         on.exit(unlink(filename))
-    } else if(!file.exists(filename)) {
+    } else if (!file.exists(filename)) {
         stop(sprintf("File don't exists: %s", filename))
     }
 
