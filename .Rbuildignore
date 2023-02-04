@@ -1,8 +1,8 @@
 ^README\.md$
 ^LICENSE$
-^\.travis\.yml$
 ^Makefile$
 ^appveyor.yml$
 ^local320\.zip$
 ^patches$
 src/zlib
+^\.github$
