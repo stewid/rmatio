@@ -4087,6 +4087,249 @@ if test "x$ac_have_mat_int8_t" != "xyes"; then
 printf "%s\n" "" >&6; }
 fi
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for mat_int16_t" >&5
+printf %s "checking for mat_int16_t... " >&6; }
+ac_have_mat_int16_t=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+    #include <stdlib.h>
+    #ifdef HAVE_INTTYPES_H
+    #   include <inttypes.h>
+    #endif
+    #ifdef HAVE_STDINT_H
+    #   include <stdint.h>
+    #endif
+
+int
+main (void)
+{
+int16_t i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && ac_have_mat_int16_t=yes
+rm -f conftest.o conftest.c conftest.so
+if test "x$ac_have_mat_int16_t" = "xyes"
+then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t int16_t" >>confdefs.h
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: int16_t" >&5
+printf "%s\n" "int16_t" >&6; }
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT != 16
+        #matio sizeof(signed char) not 16 bits
+        #endif
+
+int
+main (void)
+{
+signed char i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_int16_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int16_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t signed char" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: signed char" >&5
+printf "%s\n" "signed char" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_SHORT != 16
+        #matio sizeof(short) not 16 bits
+        #endif
+
+int
+main (void)
+{
+short i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_int16_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int16_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t short" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: short" >&5
+printf "%s\n" "short" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_INT != 16
+        #matio sizeof(int) not 16 bits
+        #endif
+
+int
+main (void)
+{
+int i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_int16_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int16_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t int" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: int" >&5
+printf "%s\n" "int" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG != 16
+        #matio sizeof(long) not 16 bits
+        #endif
+
+int
+main (void)
+{
+long i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_int16_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int16_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t long" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: long" >&5
+printf "%s\n" "long" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+        #include <stdlib.h>
+        #ifdef HAVE_INTTYPES_H
+        #   include <inttypes.h>
+        #endif
+        #ifdef HAVE_STDINT_H
+        #   include <stdint.h>
+        #endif
+        #include <limits.h>
+        #if CHAR_BIT*SIZEOF_LONG_LONG != 16
+        #matio sizeof(long long) not 16 bits
+        #endif
+
+int
+main (void)
+{
+long long i = 0;
+  ;
+  return 0;
+}
+_ACEOF
+    "${R_HOME}/bin/R" CMD SHLIB conftest.c \
+    1>&5 2>&5 && ac_have_mat_int16_t=yes
+    rm -f conftest.o conftest.c conftest.so
+    if test "x$ac_have_mat_int16_t" = "xyes"
+    then
+
+printf "%s\n" "#define HAVE_MAT_INT16_T /**/" >>confdefs.h
+
+
+printf "%s\n" "#define _mat_int16_t long long" >>confdefs.h
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: long long" >&5
+printf "%s\n" "long long" >&6; }
+    fi
+fi
+if test "x$ac_have_mat_int16_t" != "xyes"
+then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
+printf "%s\n" "" >&6; }
+fi
+
+
 ac_config_files="$ac_config_files src/Makevars"
 
 
