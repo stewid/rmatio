@@ -2333,6 +2333,78 @@ CC=`"${R_HOME}/bin/R" CMD config CC`
 CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking inttypes.h" >&5
+printf %s "checking inttypes.h... " >&6; }
+have_inttypes_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <inttypes.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_inttypes_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_inttypes_h}" >&5
+printf "%s\n" "${have_inttypes_h}" >&6; }
+if test "x${have_inttypes_h}" = xyes; then
+    printf "%s\n" "#define HAVE_INTTYPES_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking stdlib.h" >&5
+printf %s "checking stdlib.h... " >&6; }
+have_stdlib_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdlib.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_stdlib_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_stdlib_h}" >&5
+printf "%s\n" "${have_stdlib_h}" >&6; }
+if test "x${have_stdlib_h}" = xyes; then
+    printf "%s\n" "#define HAVE_STDLIB_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking stdint.h" >&5
+printf %s "checking stdint.h... " >&6; }
+have_stdint_h=no
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdint.h>
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \
+1>&5 2>&5 && have_stdint_h=yes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${have_stdint_h}" >&5
+printf "%s\n" "${have_stdint_h}" >&6; }
+if test "x${have_stdint_h}" = xyes; then
+    printf "%s\n" "#define HAVE_STDINT_H 1" >>confdefs.h
+
+fi
+rm -f conftest.o conftest.c conftest.so
+
 # Check for zlib
 have_zlib=no
 
