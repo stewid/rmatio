@@ -617,15 +617,6 @@ PACKAGE_URL=''
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-SIZEOF_VOID_P
-SIZEOF_SIZE_T
-SIZEOF_LONG_LONG
-SIZEOF_LONG
-SIZEOF_INT
-SIZEOF_FLOAT
-SIZEOF_DOUBLE
-SIZEOF_SHORT
-SIZEOF_CHAR
 OBJEXT
 EXEEXT
 ac_ct_CC
@@ -3703,6 +3694,7 @@ SIZEOF_CHAR=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_CHAR}" >&5
 printf "%s\n" "${SIZEOF_CHAR}" >&6; }
+printf "%s\n" "#define SIZEOF_CHAR $SIZEOF_CHAR" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of short" >&5
@@ -3722,6 +3714,7 @@ SIZEOF_SHORT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_SHORT}" >&5
 printf "%s\n" "${SIZEOF_SHORT}" >&6; }
+printf "%s\n" "#define SIZEOF_SHORT $SIZEOF_SHORT" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of double" >&5
@@ -3741,6 +3734,7 @@ SIZEOF_DOUBLE=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_DOUBLE}" >&5
 printf "%s\n" "${SIZEOF_DOUBLE}" >&6; }
+printf "%s\n" "#define SIZEOF_DOUBLE $SIZEOF_DOUBLE" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of float" >&5
@@ -3760,6 +3754,7 @@ SIZEOF_FLOAT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_FLOAT}" >&5
 printf "%s\n" "${SIZEOF_FLOAT}" >&6; }
+printf "%s\n" "#define SIZEOF_FLOAT $SIZEOF_FLOAT" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of int" >&5
@@ -3779,6 +3774,7 @@ SIZEOF_INT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_INT}" >&5
 printf "%s\n" "${SIZEOF_INT}" >&6; }
+printf "%s\n" "#define SIZEOF_INT $SIZEOF_INT" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of long" >&5
@@ -3798,6 +3794,7 @@ SIZEOF_LONG=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_LONG}" >&5
 printf "%s\n" "${SIZEOF_LONG}" >&6; }
+printf "%s\n" "#define SIZEOF_LONG $SIZEOF_LONG" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of long long" >&5
@@ -3817,6 +3814,7 @@ SIZEOF_LONG_LONG=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_LONG_LONG}" >&5
 printf "%s\n" "${SIZEOF_LONG_LONG}" >&6; }
+printf "%s\n" "#define SIZEOF_LONG_LONG $SIZEOF_LONG_LONG" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of size_t" >&5
@@ -3836,6 +3834,7 @@ SIZEOF_SIZE_T=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_SIZE_T}" >&5
 printf "%s\n" "${SIZEOF_SIZE_T}" >&6; }
+printf "%s\n" "#define SIZEOF_SIZE_T $SIZEOF_SIZE_T" >>confdefs.h
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking size of void *" >&5
@@ -3855,6 +3854,7 @@ SIZEOF_VOID_P=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${SIZEOF_VOID_P}" >&5
 printf "%s\n" "${SIZEOF_VOID_P}" >&6; }
+printf "%s\n" "#define SIZEOF_VOID_P $SIZEOF_VOID_P" >>confdefs.h
 
 
 ac_config_files="$ac_config_files src/Makevars"
