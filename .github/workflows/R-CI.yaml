@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up R library
+        run: mkdir -p $HOME/R/library
+
       - name: Get ansible playbook to check package
         run: curl -Ls https://stewid.github.io/ansible-r-ci/r-ci.yml -o ../r-ci.yml
 
