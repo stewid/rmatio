@@ -2450,6 +2450,10 @@ printf "%s\n" "${have_string_h}" >&6; }
 if test "x${have_string_h}" = xyes; then
     printf "%s\n" "#define HAVE_STRING_H 1" >>confdefs.h
 
+    if test "x${have_stdlib_h}" = xyes; then
+        printf "%s\n" "#define STDC_HEADERS 1" >>confdefs.h
+
+    fi
 fi
 rm -f conftest.o conftest.c conftest.so
 

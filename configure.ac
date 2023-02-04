@@ -76,6 +76,9 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 AC_MSG_RESULT([${have_string_h}])
 if test "x${have_string_h}" = xyes; then
     AC_DEFINE_UNQUOTED([HAVE_STRING_H])
+    if test "x${have_stdlib_h}" = xyes; then
+        AC_DEFINE_UNQUOTED([STDC_HEADERS])
+    fi
 fi
 rm -f conftest.o conftest.c conftest.so
 
