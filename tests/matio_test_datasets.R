@@ -20,7 +20,8 @@
 ## (http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/)
 ##
 ## The script to generate the matio test datasets is included below
-## (http://sourceforge.net/p/matio/matio_test_datasets/ci/master/tree/matio_test_cases.m)
+## (http://sourceforge.net/p/matio/matio_test_datasets/
+##  ci/master/tree/matio_test_cases.m)
 ##
 ## The following datasets are included in rmatio (inst/extdata)
 ## - matio_test_cases_compressed_le.mat
@@ -29,30 +30,30 @@
 ## - small_v4_be.mat
 ## - small_v4_le.mat
 
-## % Generate test datasets for matio library
-## %
-## % Copyright 2010-2013 Christopher C. Hulbert. All rights reserved.
-## %
-## % Redistribution and use in source and binary forms, with or without
-## % modification, are permitted provided that the following conditions are met:
-## %
-## %    1. Redistributions of source code must retain the above copyright notice,
-## %       this list of conditions and the following disclaimer.
-## %
-## %    2. Redistributions in binary form must reproduce the above copyright
-## %       notice, this list of conditions and the following disclaimer in the
-## %       documentation and/or other materials provided with the distribution.
-## %
-## % THIS SOFTWARE IS PROVIDED BY CHRISTOPHER C. HULBERT ``AS IS'' AND ANY EXPRESS
-## % OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-## % OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-## % EVENT SHALL CHRISTOPHER C. HULBERT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-## % INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-## % (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-## % LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-## % ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-## % (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-## % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+## Generate test datasets for matio library
+##
+## Copyright 2010-2013 Christopher C. Hulbert. All rights reserved.
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions are met:
+##
+##    1. Redistributions of source code must retain the above copyright notice,
+##       this list of conditions and the following disclaimer.
+##
+##    2. Redistributions in binary form must reproduce the above copyright
+##       notice, this list of conditions and the following disclaimer in the
+##       documentation and/or other materials provided with the distribution.
+##
+## THIS SOFTWARE IS PROVIDED BY CHRISTOPHER C. HULBERT ``AS IS'' AND ANY EXPRESS
+## OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+## OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+## EVENT SHALL CHRISTOPHER C. HULBERT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+## INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+## (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+## LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+## ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+## SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## [c,m,e]=computer;
 ## if e == 'B'
@@ -282,10 +283,11 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var1, var1))
 
     ## var11 read as complex
-    var11 <- array(c(1+21i, 2+22i, 3+23i, 4+24i, 5+25i, 6+26i, 7+27i,
-                     8+28i, 9+29i, 10+30i, 11+31i, 12+32i, 13+33i,
-                     14+34i, 15+35i, 16+36i, 17+37i, 18+38i, 19+39i,
-                     20+40i), c(4,5))
+    var11 <- array(c(1 + 21i, 2 + 22i, 3 + 23i, 4 + 24i, 5 + 25i,
+                     6 + 26i, 7 + 27i, 8 + 28i, 9 + 29i, 10 + 30i,
+                     11 + 31i, 12 + 32i, 13 + 33i, 14 + 34i, 15 + 35i,
+                     16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i, 20 + 40i),
+                   c(4,5))
     stopifnot(identical(x$var11, var11))
 
     ## var21 read as a sparse matrix
@@ -293,11 +295,11 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a complex matrix
-    var22 <- structure(c(1+6i, 0+0i, 0+0i, 0+0i, 0+0i,
-                         0+0i, 2+7i, 0+0i, 0+0i, 0+0i,
-                         0+0i, 0+0i, 3+8i, 0+0i, 0+0i,
-                         0+0i, 0+0i, 0+0i, 4+9i, 0+0i,
-                         0+0i, 0+0i, 0+0i, 0+0i, 5+10i),
+    var22 <- structure(c(1 + 6i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 2 + 7i, 0 + 0i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 3 + 8i, 0 + 0i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 0 + 0i, 4 + 9i, 0 + 0i,
+                         0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 5 + 10i),
                        .Dim = c(5L, 5L))
     stopifnot(identical(x$var22, var22))
 
@@ -332,10 +334,11 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var10, var5))
 
     ## var11, ..., var20 read as complex
-    var11 <- array(c(1+21i, 2+22i, 3+23i, 4+24i, 5+25i, 6+26i, 7+27i,
-                     8+28i, 9+29i, 10+30i, 11+31i, 12+32i, 13+33i,
-                     14+34i, 15+35i, 16+36i, 17+37i, 18+38i, 19+39i,
-                     20+40i), c(4,5))
+    var11 <- array(c(1 + 21i, 2 + 22i, 3 + 23i, 4 + 24i, 5 + 25i,
+                     6 + 26i, 7 + 27i, 8 + 28i, 9 + 29i, 10 + 30i,
+                     11 + 31i, 12 + 32i, 13 + 33i, 14 + 34i, 15 + 35i,
+                     16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i, 20 + 40i),
+                   c(4,5))
     stopifnot(identical(x$var11, var11))
     stopifnot(identical(x$var12, var11))
     stopifnot(identical(x$var13, var11))
@@ -352,9 +355,12 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a dense complex matrix
-    var22 <- array(c(1+6i, 0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 2+7i, 0+0i,
-    0+0i, 0+0i, 0+0i, 0+0i, 3+8i, 0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 4+9i,
-    0+0i, 0+0i, 0+0i, 0+0i, 0+0i, 5+10i), c(5L, 5L))
+    var22 <- array(c(1 + 6i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                     2 + 7i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                     3 + 8i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                     4 + 9i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i, 0 + 0i,
+                     5 + 10i),
+                   c(5L, 5L))
     stopifnot(identical(x$var22, var22))
 
     ## var23 read as double
@@ -371,16 +377,16 @@ test_mat_v5_file <- function(x) {
     var25 <- structure(list(), .Names = character(0))
     stopifnot(identical(x$var25, var25))
 
-    var26 <- list(field1=list(), field2=list())
+    var26 <- list(field1 = list(), field2 = list())
     stopifnot(identical(x$var26, var26))
 
-    var27 <- list(field1=numeric(0), field2=character(0))
+    var27 <- list(field1 = numeric(0), field2 = character(0))
     stopifnot(identical(x$var27, var27))
 
     ## var28, ..., var31 read as double
-    var28 <- list(field1=list(1, 14),
-                  field2=list(array(as.numeric(2:13), c(3,4)),
-                      array(as.numeric(15:26), c(3,4))))
+    var28 <- list(field1 = list(1, 14),
+                  field2 = list(array(as.numeric(2:13), c(3, 4)),
+                                array(as.numeric(15:26), c(3, 4))))
 
     stopifnot(identical(x$var28, var28))
     stopifnot(identical(x$var29, var28))
@@ -388,9 +394,9 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var31, var28))
 
     ## var32 read as integer
-    var32 <- list(field1=list(1L, 14L),
-                  field2=list(array(2:13, c(3,4)),
-                      array(15:26, c(3,4))))
+    var32 <- list(field1 = list(1L, 14L),
+                  field2 = list(array(2:13, c(3, 4)),
+                                array(15:26, c(3, 4))))
 
     stopifnot(identical(x$var32, var32))
 
@@ -404,12 +410,17 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var37, var32))
 
     ## var38, ..., var47 read as complex
-    var38 <- list(field1=list(1+51i, 14+64i),
-                  field2=list(array(c(2+52i, 3+53i, 4+54i, 5+55i,
-                  6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
-                  13+63i), c(3,4)), array(c(15+65i, 16+66i, 17+67i,
-                  18+68i, 19+69i, 20+70i, 21+71i, 22+72i, 23+73i,
-                  24+74i, 25+75i, 26+76i), c(3,4))))
+    var38 <- list(field1 = list(1 + 51i, 14 + 64i),
+                  field2 = list(array(c(2 + 52i, 3 + 53i, 4 + 54i,
+                                        5 + 55i, 6 + 56i, 7 + 57i,
+                                        8 + 58i, 9 + 59i, 10 + 60i,
+                                        11 + 61i, 12 + 62i, 13 + 63i),
+                                      c(3, 4)),
+                                array(c(15 + 65i, 16 + 66i, 17 + 67i,
+                                        18 + 68i, 19 + 69i, 20 + 70i,
+                                        21 + 71i, 22 + 72i, 23 + 73i,
+                                        24 + 74i, 25 + 75i, 26 + 76i),
+                                      c(3, 4))))
 
     stopifnot(identical(x$var38, var38))
     stopifnot(identical(x$var39, var38))
@@ -422,18 +433,33 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var46, var38))
     stopifnot(identical(x$var47, var38))
 
-    var48 <- list(field1=list(triu(Matrix(1:20, nrow=4, ncol=5, sparse=TRUE))),
-                  field2=list(tril(Matrix(1:20, nrow=5, ncol=4, sparse=TRUE, byrow=TRUE))))
+    var48 <- list(field1 = list(triu(Matrix(1:20,
+                                            nrow = 4,
+                                            ncol = 5,
+                                            sparse = TRUE))),
+                  field2 = list(tril(Matrix(1:20,
+                                            nrow = 5,
+                                            ncol = 4,
+                                            sparse = TRUE,
+                                            byrow = TRUE))))
     stopifnot(identical(x$var48, var48))
 
-    var49 <- list(field1=list(array(c(1+21i, 0+0i, 0+0i, 0+0i, 5+25i,
-                      6+26i, 0+0i, 0+0i, 9+29i, 10+30i, 11+31i, 0+0i,
-                      13+33i, 14+34i, 15+35i, 16+36i, 17+37i, 18+38i,
-                      19+39i, 20+40i), c(4,5))),
-                  field2=list(array(c(1-21i, 5-25i, 9-29i, 13-33i, 17-37i,
-                      0+0i, 6-26i, 10-30i, 14-34i, 18-38i, 0+0i, 0+0i,
-                      11-31i, 15-35i, 19-39i, 0+0i, 0+0i, 0+0i,
-                      16-36i, 20-40i), c(5,4))))
+    var49 <- list(field1 = list(array(c(1 + 21i, 0 + 0i, 0 + 0i,
+                                        0 + 0i, 5 + 25i, 6 + 26i,
+                                        0 + 0i, 0 + 0i, 9 + 29i,
+                                        10 + 30i, 11 + 31i, 0 + 0i,
+                                        13 + 33i, 14 + 34i, 15 + 35i,
+                                        16 + 36i, 17 + 37i, 18 + 38i,
+                                        19 + 39i, 20 + 40i),
+                                      c(4, 5))),
+                  field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i,
+                                        13 - 33i, 17 - 37i, 0 + 0i,
+                                        6 - 26i, 10 - 30i, 14 - 34i,
+                                        18 - 38i, 0 + 0i, 0 + 0i,
+                                        11 - 31i, 15 - 35i, 19 - 39i,
+                                        0 + 0i, 0 + 0i, 0 + 0i,
+                                        16 - 36i, 20 - 40i),
+                                      c(5, 4))))
 
     stopifnot(identical(x$var49, var49))
 
