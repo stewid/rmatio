@@ -29,24 +29,29 @@ sessionInfo()
 ##
 ## dgCMatrix: case-1
 ##
-a1.exp <- Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 1, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 1),
-                 nrow=3,
-                 ncol=9,
-                 byrow=TRUE,
-                 sparse=TRUE)
+a1.exp <- Matrix(c(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                   0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
+                 nrow = 3,
+                 ncol = 9,
+                 byrow = TRUE,
+                 sparse = TRUE)
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
-a1.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a1.exp),
+          filename = filename,
+          compression = FALSE,
+          version = "MAT5")
+a1.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a1.obs)
 stopifnot(identical(a1.obs, a1.exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
-a1.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a1.exp),
+          filename = filename,
+          compression = TRUE,
+          version = "MAT5")
+a1.zlib.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a1.zlib.obs)
 stopifnot(identical(a1.zlib.obs, a1.exp))
@@ -54,18 +59,24 @@ stopifnot(identical(a1.zlib.obs, a1.exp))
 ##
 ## dgCMatrix: case-2
 ##
-a2.exp <- as(diag(1:5), 'dgCMatrix')
+a2.exp <- as(diag(1:5), "dgCMatrix")
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a2.exp), filename=filename, compression=FALSE, version='MAT5')
-a2.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a2.exp),
+          filename = filename,
+          compression = FALSE,
+          version = "MAT5")
+a2.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a2.obs)
 stopifnot(identical(a2.obs, a2.exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a2.exp), filename=filename, compression=TRUE, version='MAT5')
-a2.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a2.exp),
+          filename = filename,
+          compression = TRUE,
+          version = "MAT5")
+a2.zlib.obs <- read.mat(filename)[["a"]]
 unlink(filename)
 str(a2.zlib.obs)
 stopifnot(identical(a2.zlib.obs, a2.exp))
