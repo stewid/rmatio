@@ -279,7 +279,7 @@ sessionInfo()
 test_mat_v4_file <- function(x) {
     ## var1 read as double
     var1 <- array(seq_len(20), c(4,5))
-    storage.mode(var1) <- 'double'
+    storage.mode(var1) <- "double"
     stopifnot(identical(x$var1, var1))
 
     ## var11 read as complex
@@ -291,7 +291,7 @@ test_mat_v4_file <- function(x) {
     stopifnot(identical(x$var11, var11))
 
     ## var21 read as a sparse matrix
-    var21 <- as(diag(1:5), 'dgCMatrix')
+    var21 <- as(diag(1:5), "dgCMatrix")
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a complex matrix
@@ -313,7 +313,7 @@ test_mat_v4_file <- function(x) {
 test_mat_v5_file <- function(x) {
     ## var1, ..., var4 read as double
     var1 <- array(seq_len(20), c(4,5))
-    storage.mode(var1) <- 'double'
+    storage.mode(var1) <- "double"
     stopifnot(identical(x$var1, var1))
     stopifnot(identical(x$var2, var1))
     stopifnot(identical(x$var3, var1))
@@ -321,7 +321,7 @@ test_mat_v5_file <- function(x) {
 
     ## var5 read as integer
     var5 <- array(seq_len(20), c(4,5))
-    storage.mode(var5) <- 'integer'
+    storage.mode(var5) <- "integer"
     stopifnot(identical(x$var5, var5))
 
     ## var6 read as double
@@ -351,7 +351,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var20, var11))
 
     ## var21 read as a sparse matrix
-    var21 <- as(diag(1:5), 'dgCMatrix')
+    var21 <- as(diag(1:5), "dgCMatrix")
     stopifnot(identical(x$var21, var21))
 
     ## var22 read as a dense complex matrix
@@ -664,7 +664,7 @@ test_mat_v5_file <- function(x) {
 
     ## var70, ..., var73 read as double
     var70 = array(seq_len(32^3), c(32,32,32));
-    storage.mode(var70) <- 'double'
+    storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
     stopifnot(identical(x$var72, var70))
@@ -672,7 +672,7 @@ test_mat_v5_file <- function(x) {
 
     ## var74 read as integer
     var74 = array(seq_len(32^3), c(32,32,32));
-    storage.mode(var74) <- 'integer'
+    storage.mode(var74) <- "integer"
     stopifnot(identical(x$var74, var74))
 
     ## var75 read as double
@@ -681,7 +681,7 @@ test_mat_v5_file <- function(x) {
     ## var76 read as integer
     ## var76 = reshape(int16(1:32*32*32),32,32,32);
     var76 = array(c(seq_len(32767), 32767), c(32,32,32));
-    storage.mode(var76) <- 'integer'
+    storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
     ## var77 read as integer
@@ -795,60 +795,75 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var86[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var86_slab))
 
     ## var87 read as complex
-    var87_slab <- structure(c(63490+42712i, 29714+8391i, 61483+15861i,
-                              15850+33874i, 55082+3631i, 45390+5685i,
-                              10423+60745i, 44728+38383i,
-                              43170+36676i, 46711+20162i,
-                              49188+52357i, 48615+54935i,
-                              11083+51765i, 2973+2285i, 47407+28409i,
-                              33701+18840i, 34873+47323i, 13711+7195i,
-                              6046+45393i, 44211+53418i, 16574+31089i,
-                              41210+28626i, 14063+54325i,
-                              15062+33495i, 51022+34454i,
-                              60470+39080i, 44448+44287i,
-                              64996+30009i, 283+64783i, 18983+191i,
-                              3436+45327i, 44524+18230i, 15729+21345i,
-                              12093+4405i, 8834+7721i, 54420+31822i,
-                              26675+29151i, 42660+29044i,
-                              65323+50276i, 7139+32010i, 47157+29016i,
-                              35840+18163i, 15379+14923i,
-                              30214+63617i, 47337+59129i,
-                              62332+27780i, 3623+2694i, 11530+27741i,
-                              4141+36801i, 64250+50570i, 39722+49989i,
-                              26118+40150i, 28214+21931i,
-                              25798+27469i, 62573+58367i, 25576+6335i,
-                              12201+17545i, 49659+37636i,
-                              28187+58668i, 3135+5269i, 16458+14517i,
-                              31662+28316i, 38430+36198i,
-                              47450+50404i, 201+49160i, 50221+54517i,
-                              47469+42818i, 7124+35280i, 34741+37493i,
-                              44064+39694i, 6995+4154i, 7531+33600i,
-                              54978+37775i, 15416+23755i,
-                              27259+51376i, 64300+6331i, 1212+37261i,
-                              8920+61180i, 29466+54541i, 65042+23250i,
-                              1978+56271i, 14377+47601i, 12353+11382i,
-                              8336+45819i, 45530+55892i, 8908+40510i,
-                              11258+60909i, 56638+57033i,
-                              45303+55200i, 4881+31280i, 38207+48851i,
-                              807+7069i, 50473+21558i, 6544+29624i,
-                              52787+2034i, 5986+58345i, 57054+22602i,
-                              2935+55316i, 42851+16897i, 10001+43967i,
-                              48614+38397i, 14572+48016i,
-                              25265+24936i, 1715+40096i, 37345+13265i,
-                              11025+46066i, 37554+31865i, 4791+53489i,
-                              22789+15282i, 23465+10050i,
-                              58589+45954i, 9073+25270i, 20846+33025i,
-                              22905+59697i, 22981+42347i,
-                              24828+62213i, 46887+36422i,
-                              50013+60501i, 29781+52236i,
-                              37210+42165i, 37785+60771i,
-                              16219+17867i, 59934+13526i,
-                              58464+17576i, 34801+59568i,
-                              20649+30475i, 55999+42307i, 4464+16054i,
-                              23302+47556i, 24764+55871i,
-                              22331+53630i, 63541+34455i), .Dim =
-                              c(11L, 6L, 2L))
-    stopifnot(identical(x$var87[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var87_slab))
+    var87_slab <- structure(c(63490 + 42712i, 29714 + 8391i,
+                              61483 + 15861i, 15850 + 33874i,
+                              55082 + 3631i, 45390 + 5685i,
+                              10423 + 60745i, 44728 + 38383i,
+                              43170 + 36676i, 46711 + 20162i,
+                              49188 + 52357i, 48615 + 54935i,
+                              11083 + 51765i, 2973 + 2285i,
+                              47407 + 28409i, 33701 + 18840i,
+                              34873 + 47323i, 13711 + 7195i,
+                              6046 + 45393i, 44211 + 53418i,
+                              16574 + 31089i, 41210 + 28626i,
+                              14063 + 54325i, 15062 + 33495i,
+                              51022 + 34454i, 60470 + 39080i,
+                              44448 + 44287i, 64996 + 30009i,
+                              283 + 64783i, 18983 + 191i,
+                              3436 + 45327i, 44524 + 18230i,
+                              15729 + 21345i, 12093 + 4405i,
+                              8834 + 7721i, 54420 + 31822i,
+                              26675 + 29151i, 42660 + 29044i,
+                              65323 + 50276i, 7139 + 32010i,
+                              47157 + 29016i, 35840 + 18163i,
+                              15379 + 14923i, 30214 + 63617i,
+                              47337 + 59129i, 62332 + 27780i,
+                              3623 + 2694i, 11530 + 27741i,
+                              4141 + 36801i, 64250 + 50570i,
+                              39722 + 49989i, 26118 + 40150i,
+                              28214 + 21931i, 25798 + 27469i,
+                              62573 + 58367i, 25576 + 6335i,
+                              12201 + 17545i, 49659 + 37636i,
+                              28187 + 58668i, 3135 + 5269i,
+                              16458 + 14517i, 31662 + 28316i,
+                              38430 + 36198i, 47450 + 50404i,
+                              201 + 49160i, 50221 + 54517i,
+                              47469 + 42818i, 7124 + 35280i,
+                              34741 + 37493i, 44064 + 39694i,
+                              6995 + 4154i, 7531 + 33600i,
+                              54978 + 37775i, 15416 + 23755i,
+                              27259 + 51376i, 64300 + 6331i,
+                              1212 + 37261i, 8920 + 61180i,
+                              29466 + 54541i, 65042 + 23250i,
+                              1978 + 56271i, 14377 + 47601i,
+                              12353 + 11382i, 8336 + 45819i,
+                              45530 + 55892i, 8908 + 40510i,
+                              11258 + 60909i, 56638 + 57033i,
+                              45303 + 55200i, 4881 + 31280i,
+                              38207 + 48851i, 807 + 7069i,
+                              50473 + 21558i, 6544 + 29624i,
+                              52787 + 2034i, 5986 + 58345i,
+                              57054 + 22602i, 2935 + 55316i,
+                              42851 + 16897i, 10001 + 43967i,
+                              48614 + 38397i, 14572 + 48016i,
+                              25265 + 24936i, 1715 + 40096i,
+                              37345 + 13265i, 11025 + 46066i,
+                              37554 + 31865i, 4791 + 53489i,
+                              22789 + 15282i, 23465 + 10050i,
+                              58589 + 45954i, 9073 + 25270i,
+                              20846 + 33025i, 22905 + 59697i,
+                              22981 + 42347i, 24828 + 62213i,
+                              46887 + 36422i, 50013 + 60501i,
+                              29781 + 52236i, 37210 + 42165i,
+                              37785 + 60771i, 16219 + 17867i,
+                              59934 + 13526i, 58464 + 17576i,
+                              34801 + 59568i, 20649 + 30475i,
+                              55999 + 42307i, 4464 + 16054i,
+                              23302 + 47556i, 24764 + 55871i,
+                              22331 + 53630i, 63541 + 34455i),
+                            .Dim = c(11L, 6L, 2L))
+    stopifnot(identical(x$var87[seq(2, 32, 3), seq(4, 32, 5),
+                                seq(8, 32, 16)], var87_slab))
 
     ## var88 read as complex
     var88_slab <- structure(c(24-109i, -38+98i, -32+69i, 1-58i,
@@ -887,41 +902,53 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var88[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var88_slab))
 
     ## var89 read as complex
-    var89_slab <- structure(c(233+19i, 99+152i, 194+176i, 219+39i,
-                              182+250i, 198+121i, 70+99i, 250+205i,
-                              154+19i, 20+127i, 55+248i, 98+36i,
-                              129+239i, 246+207i, 42+97i, 209+14i,
-                              114+150i, 245+204i, 62+143i, 192+87i,
-                              88+125i, 254+59i, 145+191i, 23+137i,
-                              229+96i, 17+104i, 158+68i, 85+154i,
-                              207+145i, 112+116i, 135+182i, 138+79i,
-                              118+171i, 87+191i, 187+27i, 224+67i,
-                              96+230i, 66+32i, 196+72i, 239+53i,
-                              15+197i, 111+188i, 225+144i, 190+181i,
-                              30+24i, 149+230i, 56+158i, 114+96i,
-                              242+79i, 82+206i, 106+114i, 8+202i,
-                              87+217i, 138+126i, 26+138i, 142+157i,
-                              186+204i, 139+252i, 130+202i, 197+221i,
-                              169+34i, 160+148i, 131+129i, 255+157i,
-                              93+4i, 140+149i, 182+191i, 45+138i,
-                              41+32i, 74+142i, 173+106i, 14+5i,
-                              56+15i, 159+205i, 218+172i, 235+235i,
-                              253+46i, 212+183i, 121+33i, 193+87i,
-                              95+150i, 75+167i, 139+111i, 241+161i,
-                              62+17i, 165+198i, 249+244i, 207+210i,
-                              51+193i, 81+133i, 42+147i, 219+48i,
-                              185+124i, 65+8i, 120+240i, 24+19i,
-                              104+3i, 23+34i, 88+216i, 46+45i,
-                              90+128i, 171+187i, 105+53i, 23+168i,
-                              111+218i, 91+101i, 90+72i, 178+168i,
-                              172+79i, 176+42i, 16+249i, 137+65i,
-                              149+145i, 87+154i, 111+32i, 179+46i,
-                              164+95i, 121+106i, 125+144i, 215+171i,
-                              48+141i, 110+132i, 234+197i, 22+223i,
-                              229+72i, 169+26i, 128+186i, 87+139i,
-                              152+77i, 17+58i, 215+242i, 62+229i ),
-                              .Dim = c(11L, 6L, 2L))
-    stopifnot(identical(x$var89[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var89_slab))
+    var89_slab <- structure(c(233 + 19i, 99 + 152i, 194 + 176i,
+                              219 + 39i, 182 + 250i, 198 + 121i,
+                              70 + 99i, 250 + 205i, 154 + 19i,
+                              20 + 127i, 55 + 248i, 98 + 36i,
+                              129 + 239i, 246 + 207i, 42 + 97i,
+                              209 + 14i, 114 + 150i, 245 + 204i,
+                              62 + 143i, 192 + 87i, 88 + 125i,
+                              254 + 59i, 145 + 191i, 23 + 137i,
+                              229 + 96i, 17 + 104i, 158 + 68i,
+                              85 + 154i, 207 + 145i, 112 + 116i,
+                              135 + 182i, 138 + 79i, 118 + 171i,
+                              87 + 191i, 187 + 27i, 224 + 67i,
+                              96 + 230i, 66 + 32i, 196 + 72i,
+                              239 + 53i, 15 + 197i, 111 + 188i,
+                              225 + 144i, 190 + 181i, 30 + 24i,
+                              149 + 230i, 56 + 158i, 114 + 96i,
+                              242 + 79i, 82 + 206i, 106 + 114i,
+                              8 + 202i, 87 + 217i, 138 + 126i,
+                              26 + 138i, 142 + 157i, 186 + 204i,
+                              139 + 252i, 130 + 202i, 197 + 221i,
+                              169 + 34i, 160 + 148i, 131 + 129i,
+                              255 + 157i, 93 + 4i, 140 + 149i,
+                              182 + 191i, 45 + 138i, 41 + 32i,
+                              74 + 142i, 173 + 106i, 14 + 5i,
+                              56 + 15i, 159 + 205i, 218 + 172i,
+                              235 + 235i, 253 + 46i, 212 + 183i,
+                              121 + 33i, 193 + 87i, 95 + 150i,
+                              75 + 167i, 139 + 111i, 241 + 161i,
+                              62 + 17i, 165 + 198i, 249 + 244i,
+                              207 + 210i, 51 + 193i, 81 + 133i,
+                              42 + 147i, 219 + 48i, 185 + 124i,
+                              65 + 8i, 120 + 240i, 24 + 19i, 104 + 3i,
+                              23 + 34i, 88 + 216i, 46 + 45i,
+                              90 + 128i, 171 + 187i, 105 + 53i,
+                              23 + 168i, 111 + 218i, 91 + 101i,
+                              90 + 72i, 178 + 168i, 172 + 79i,
+                              176 + 42i, 16 + 249i, 137 + 65i,
+                              149 + 145i, 87 + 154i, 111 + 32i,
+                              179 + 46i, 164 + 95i, 121 + 106i,
+                              125 + 144i, 215 + 171i, 48 + 141i,
+                              110 + 132i, 234 + 197i, 22 + 223i,
+                              229 + 72i, 169 + 26i, 128 + 186i,
+                              87 + 139i, 152 + 77i, 17 + 58i,
+                              215 + 242i, 62 + 229i ),
+                            .Dim = c(11L, 6L, 2L))
+    stopifnot(identical(x$var89[seq(2,32,3), seq(4,32,5), seq(8,32,16)],
+                        var89_slab))
 
     var90 <- array(c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE,
                      TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
@@ -980,20 +1007,22 @@ test_mat_v5_file <- function(x) {
 ##
 ## small_v4_le.mat
 ##
-infile <- system.file('extdata/small_v4_le.mat', package='rmatio')
+infile <- system.file("extdata/small_v4_le.mat", package = "rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+write.mat(x.in, filename = filename, compression = TRUE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
@@ -1001,20 +1030,22 @@ stopifnot(identical(x.out$x, pi))
 ##
 ## small_v4_be.mat
 ##
-infile <- system.file('extdata/small_v4_be.mat', package='rmatio')
+infile <- system.file("extdata/small_v4_be.mat", package = "rmatio")
 x.in <- read.mat(infile)
 stopifnot(identical(x.in$x, pi))
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+write.mat(x.in, filename = filename, compression = TRUE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 stopifnot(identical(x.out$x, pi))
@@ -1022,20 +1053,23 @@ stopifnot(identical(x.out$x, pi))
 ##
 ## matio_test_cases_v4_le.mat
 ##
-infile <- system.file('extdata/matio_test_cases_v4_le.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_v4_le.mat",
+                      package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+write.mat(x.in, filename = filename, compression = TRUE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
@@ -1043,20 +1077,23 @@ test_mat_v4_file(x.out)
 ##
 ## matio_test_cases_v4_be.mat
 ##
-infile <- system.file('extdata/matio_test_cases_v4_be.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_v4_be.mat",
+                      package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v4_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+write.mat(x.in, filename = filename, compression = TRUE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v4_file(x.out)
@@ -1064,20 +1101,23 @@ test_mat_v4_file(x.out)
 ##
 ## matio_test_cases_compressed_le.mat
 ##
-infile <- system.file('extdata/matio_test_cases_compressed_le.mat', package='rmatio')
+infile <- system.file("extdata/matio_test_cases_compressed_le.mat",
+                      package = "rmatio")
 x.in <- read.mat(infile)
 test_mat_v5_file(x.in)
 
 ## Write as MAT5 uncompressed
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=FALSE, version='MAT5')
+write.mat(x.in, filename = filename, compression = FALSE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v5_file(x.out)
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(x.in, filename=filename, compression=TRUE, version='MAT5')
+write.mat(x.in, filename = filename, compression = TRUE,
+          version = "MAT5")
 x.out <- read.mat(filename)
 unlink(filename)
 test_mat_v5_file(x.out)
