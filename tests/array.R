@@ -28,140 +28,155 @@ sessionInfo()
 ##
 ## array: case-1
 ##
-a1.exp <- array(seq_len(32^3), c(32,32,32))
-storage.mode(a1.exp) <- 'integer'
+a1_exp <- array(seq_len(32^3), c(32, 32, 32))
+storage.mode(a1_exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=FALSE, version='MAT5')
-a1.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a1_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a1_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a1.obs)
-stopifnot(identical(a1.obs, a1.exp))
+str(a1_obs)
+stopifnot(identical(a1_obs, a1_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a1.exp), filename=filename, compression=TRUE, version='MAT5')
-a1.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a1_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a1_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a1.zlib.obs)
-stopifnot(identical(a1.zlib.obs, a1.exp))
+str(a1_zlib_obs)
+stopifnot(identical(a1_zlib_obs, a1_exp))
 
 ##
 ## array: case-2
 ##
-a2.exp <- array(seq_len(32^3), c(32,32,32))
-storage.mode(a2.exp) <- 'double'
+a2_exp <- array(seq_len(32^3), c(32, 32, 32))
+storage.mode(a2_exp) <- "double"
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a2.exp), filename=filename, compression=FALSE, version='MAT5')
-a2.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a2_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a2_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a2.obs)
-stopifnot(identical(a2.obs, a2.exp))
+str(a2_obs)
+stopifnot(identical(a2_obs, a2_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a2.exp), filename=filename, compression=TRUE, version='MAT5')
-a2.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a2_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a2_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a2.zlib.obs)
-stopifnot(identical(a2.zlib.obs, a2.exp))
+str(a2_zlib_obs)
+stopifnot(identical(a2_zlib_obs, a2_exp))
 
 ##
 ## array: case-3
 ##
-a3.exp <- array(c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE,
-                 TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE,
-                 FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE,
-                 FALSE, FALSE, TRUE), c(5L, 5L))
+a3_exp <- array(c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE,
+                  TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE,
+                  FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE,
+                  FALSE, TRUE), c(5L, 5L))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a3.exp), filename=filename, compression=FALSE, version='MAT5')
-a3.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a3_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a3_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a3.obs)
-stopifnot(identical(a3.obs, a3.exp))
+str(a3_obs)
+stopifnot(identical(a3_obs, a3_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a3.exp), filename=filename, compression=TRUE, version='MAT5')
-a3.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a3_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a3_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a3.zlib.obs)
-stopifnot(identical(a3.zlib.obs, a3.exp))
+str(a3_zlib_obs)
+stopifnot(identical(a3_zlib_obs, a3_exp))
 
 ##
 ## array: case-4
 ##
-a4.exp <- array(seq_len(32^3), c(32,32,32));
-storage.mode(a4.exp) <- 'double'
+a4_exp <- array(seq_len(32^3), c(32, 32, 32));
+storage.mode(a4_exp) <- "double"
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a4.exp), filename=filename, compression=FALSE, version='MAT5')
-a4.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a4_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a4_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a4.obs)
-stopifnot(identical(a4.obs, a4.exp))
+str(a4_obs)
+stopifnot(identical(a4_obs, a4_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a4.exp), filename=filename, compression=TRUE, version='MAT5')
-a4.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a4_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a4_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a4.zlib.obs)
-stopifnot(identical(a4.zlib.obs, a4.exp))
+str(a4_zlib_obs)
+stopifnot(identical(a4_zlib_obs, a4_exp))
 
 ##
 ## array: case-5
 ##
-a5.exp <- array(seq_len(32^3), c(32,32,32));
-storage.mode(a5.exp) <- 'integer'
+a5_exp <- array(seq_len(32^3), c(32, 32, 32));
+storage.mode(a5_exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a5.exp), filename=filename, compression=FALSE, version='MAT5')
-a5.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a5_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a5_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a5.obs)
-stopifnot(identical(a5.obs, a5.exp))
+str(a5_obs)
+stopifnot(identical(a5_obs, a5_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a5.exp), filename=filename, compression=TRUE, version='MAT5')
-a5.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a5_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a5_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a5.zlib.obs)
-stopifnot(identical(a5.zlib.obs, a5.exp))
+str(a5_zlib_obs)
+stopifnot(identical(a5_zlib_obs, a5_exp))
 
 ##
 ## array: case-6
 ##
-a6.exp <- array(c(seq_len(32767), 32767), c(32,32,32));
-storage.mode(a6.exp) <- 'integer'
+a6_exp <- array(c(seq_len(32767), 32767), c(32, 32, 32));
+storage.mode(a6_exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a6.exp), filename=filename, compression=FALSE, version='MAT5')
-a6.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a6_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a6_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a6.obs)
-stopifnot(identical(a6.obs, a6.exp))
+str(a6_obs)
+stopifnot(identical(a6_obs, a6_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a6.exp), filename=filename, compression=TRUE, version='MAT5')
-a6.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a6_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a6_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a6.zlib.obs)
-stopifnot(identical(a6.zlib.obs, a6.exp))
+str(a6_zlib_obs)
+stopifnot(identical(a6_zlib_obs, a6_exp))
 
 ##
 ## array: case-7
 ##
-a7.exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32,32,32))
+a7_exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)),
+                c(32, 32, 32))
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a7.exp), filename=filename, compression=FALSE, version='MAT5')
-a7.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a7_exp), filename = filename, compression = FALSE,
+          version = "MAT5")
+a7_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a7.obs)
-stopifnot(identical(a7.obs, a7.exp))
+str(a7_obs)
+stopifnot(identical(a7_obs, a7_exp))
 
 ## Run the same test with compression
 filename <- tempfile(fileext = ".mat")
-write.mat(list(a=a7.exp), filename=filename, compression=TRUE, version='MAT5')
-a7.zlib.obs <- read.mat(filename)[['a']]
+write.mat(list(a = a7_exp), filename = filename, compression = TRUE,
+          version = "MAT5")
+a7_zlib_obs <- read.mat(filename)[["a"]]
 unlink(filename)
-str(a7.zlib.obs)
-stopifnot(identical(a7.zlib.obs, a7.exp))
+str(a7_zlib_obs)
+stopifnot(identical(a7_zlib_obs, a7_exp))
