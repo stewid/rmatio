@@ -30,10 +30,10 @@ sessionInfo()
 ##
 ## Note:
 ## If the list contains elements of differents lengths i.e.
-## a14_in <- list(y = c("a", "bb"), z = c(1, 2))
+## a14_in <- list(y = c("a", "bb"), z = c(1, 2))                      # nolint
 ## then the expected result is not identical, since each element
 ## is saved in a cell and the expected result of a14_in is therefore
-## a14_exp <- list(y = list("a", "bb"), z = list(c(1, 2)))
+## a14_exp <- list(y = list("a", "bb"), z = list(c(1, 2)))            # nolint
 ##
 
 ##
@@ -60,7 +60,7 @@ stopifnot(identical(a1_zlib_obs, a1_exp))
 ##
 ## structure: case-2 (Empty structure array with fields)
 ##
-a2_exp <- list(field1=list(), field2=list())
+a2_exp <- list(field1 = list(), field2 = list())
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a2_exp), filename = filename, compression = FALSE,
           version = "MAT5")
@@ -292,7 +292,7 @@ stopifnot(identical(a9_zlib_obs, a9_exp))
 ##
 ## structure: case-10 (Structure array with empty fields)
 ##
-a10_exp <- list(field1=numeric(0))
+a10_exp <- list(field1 = numeric(0))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a10_exp),
           filename = filename,
@@ -314,7 +314,7 @@ stopifnot(identical(a10_zlib_obs, a10_exp))
 ##
 ## structure: case-11
 ##
-a11_exp <- list(field1=list(1))
+a11_exp <- list(field1 = list(1))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a11_exp), filename = filename, compression = FALSE,
           version = "MAT5")
@@ -741,8 +741,8 @@ stopifnot(identical(a27_zlib_obs, a27_exp))
 ##
 ## structure: case-28
 ##
-a28_in <- list(y=list(c("a", "bb")), z=list())
-a28_exp <- list(y=list(list(list("a", "bb"))), z=list())
+a28_in <- list(y = list(c("a", "bb")), z = list())
+a28_exp <- list(y = list(list(list("a", "bb"))), z = list())
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a28_in),
           filename = filename,
@@ -767,7 +767,7 @@ stopifnot(identical(a28_zlib_obs, a28_exp))
 ##
 ## structure: case-29
 ##
-a29_in <- list(y=list(c("a", "bb")), z=list())
+a29_in <- list(y = list(c("a", "bb")), z = list())
 a29_exp <- list(y = list(list("a", "bb")), z = list())
 filename <- tempfile(fileext = ".mat")
 write.mat(a29_in, filename = filename, compression = FALSE,
