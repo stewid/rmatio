@@ -156,40 +156,43 @@ setMethod("write.mat",
                    compression,
                    version) {
               ## Check filename
-              if(any(!is.character(filename),
-                     !identical(length(filename), 1L),
-                     nchar(filename) < 1)) {
+              if (any(!is.character(filename),
+                      !identical(length(filename), 1L),
+                      nchar(filename) < 1)) {
                   stop("'filename' must be a character vector of length one")
               }
 
               ## Check compression
-              if(any(!is.logical(compression),
-                     !identical(length(compression), 1L))) {
+              if (any(!is.logical(compression),
+                      !identical(length(compression), 1L))) {
                   stop("'compression' must be a logical vector of length one")
               }
 
-              if(identical(compression, TRUE)) {
-                  compression = 1L
+              if (identical(compression, TRUE)) {
+                  compression <- 1L
               } else {
-                  compression = 0L
+                  compression <- 0L
               }
 
               ## Check version
               version <- match.arg(version)
-              if(identical(version, "MAT5")) {
+              if (identical(version, "MAT5")) {
                   version <- 0x0100L
-                  header <- sprintf("MATLAB 5.0 MAT-file, Platform: %s, Created By: rmatio v%s on %s",
-                                    R.version$platform[[1]],
-                                    utils::packageVersion("rmatio"),
-                                    date())
+                  header <- sprintf(
+                      paste0("MATLAB 5.0 MAT-file, ",
+                             "Platform: %s, "
+                             "Created By: rmatio v%s on %s"),
+                      R.version$platform[[1]],
+                      utils::packageVersion("rmatio"),
+                      date())
               } else {
                   stop("Unsupported version")
               }
 
               ## Check names in object
-              if(any(is.null(names(object)),
-                     !all(nchar(names(object))),
-                     any(duplicated(names(object))))) {
+              if (any(is.null(names(object)),
+                      !all(nchar(names(object))),
+                      any(duplicated(names(object))))) {
                   stop("All values in the list must have a unique name")
               }
 
