@@ -1,4 +1,10 @@
 # rmatio 0.17.0
+## CHANGES
+
+* Refactoring of the build configuration script to use R to find the
+  settings to use.
+
+# rmatio 0.17.0 (2023-01-25)
 
 ## CHANGES
 
