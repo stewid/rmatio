@@ -289,7 +289,7 @@ test_mat_v4_file <- function(x) {
                      6 + 26i, 7 + 27i, 8 + 28i, 9 + 29i, 10 + 30i,
                      11 + 31i, 12 + 32i, 13 + 33i, 14 + 34i, 15 + 35i,
                      16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i, 20 + 40i),
-                   c(4,5))
+                   c(4, 5))
     stopifnot(identical(x$var11, var11))
 
     ## var21 read as a sparse matrix
@@ -314,7 +314,7 @@ test_mat_v4_file <- function(x) {
 
 test_mat_v5_file <- function(x) {
     ## var1, ..., var4 read as double
-    var1 <- array(seq_len(20), c(4,5))
+    var1 <- array(seq_len(20), c(4, 5))
     storage.mode(var1) <- "double"
     stopifnot(identical(x$var1, var1))
     stopifnot(identical(x$var2, var1))
@@ -322,7 +322,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var4, var1))
 
     ## var5 read as integer
-    var5 <- array(seq_len(20), c(4,5))
+    var5 <- array(seq_len(20), c(4, 5))
     storage.mode(var5) <- "integer"
     stopifnot(identical(x$var5, var5))
 
@@ -340,7 +340,7 @@ test_mat_v5_file <- function(x) {
                      6 + 26i, 7 + 27i, 8 + 28i, 9 + 29i, 10 + 30i,
                      11 + 31i, 12 + 32i, 13 + 33i, 14 + 34i, 15 + 35i,
                      16 + 36i, 17 + 37i, 18 + 38i, 19 + 39i, 20 + 40i),
-                   c(4,5))
+                   c(4, 5))
     stopifnot(identical(x$var11, var11))
     stopifnot(identical(x$var12, var11))
     stopifnot(identical(x$var13, var11))
@@ -481,7 +481,7 @@ test_mat_v5_file <- function(x) {
 
     ## var53, ..., var56 read as double
     var53 <- list(list(array(c(1, 3, 2, 4), c(2, 2)),
-                       array(c(5, 8, 6, 9, 7, 10), c(2,3)),
+                       array(c(5, 8, 6, 9, 7, 10), c(2, 3)),
                        array(c(11, 15, 12, 16, 13, 17, 14, 18),
                              c(2, 4))),
                   list(array(c(19, 21, 20, 22),
@@ -497,7 +497,7 @@ test_mat_v5_file <- function(x) {
 
     ## var57 read as integer
     var57 <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
-                       array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2,3)),
+                       array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2, 3)),
                        array(c(11L, 15L, 12L, 16L, 13L, 17L, 14L, 18L),
                              c(2, 4))),
                   list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
@@ -597,7 +597,7 @@ test_mat_v5_file <- function(x) {
                                       12, 13),
                                     .Dim = 3:4),
                           structure(c(15, 16, 17, 18, 19, 20, 21, 22,
-                                      23, 24, 25, 26 ),
+                                      23, 24, 25, 26),
                                     .Dim = 3:4))),
             .Names = c("field1", "field2")),
         structure(list(
@@ -813,7 +813,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var69, var69))
 
     ## var70, ..., var73 read as double
-    var70 = array(seq_len(32^3), c(32, 32, 32));
+    var70 <- array(seq_len(32^3), c(32, 32, 32));
     storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
@@ -821,7 +821,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var73, var70))
 
     ## var74 read as integer
-    var74 = array(seq_len(32^3), c(32, 32, 32));
+    var74 <- array(seq_len(32^3), c(32, 32, 32))
     storage.mode(var74) <- "integer"
     stopifnot(identical(x$var74, var74))
 
@@ -830,7 +830,7 @@ test_mat_v5_file <- function(x) {
 
     ## var76 read as integer
     ## var76 = reshape(int16(1:32*32*32), 32, 32, 32);
-    var76 = array(c(seq_len(32767), 32767), c(32, 32, 32));
+    var76 <- array(c(seq_len(32767), 32767), c(32, 32, 32))
     storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
@@ -1126,7 +1126,7 @@ test_mat_v5_file <- function(x) {
                               110 + 132i, 234 + 197i, 22 + 223i,
                               229 + 72i, 169 + 26i, 128 + 186i,
                               87 + 139i, 152 + 77i, 17 + 58i,
-                              215 + 242i, 62 + 229i ),
+                              215 + 242i, 62 + 229i),
                             .Dim = c(11L, 6L, 2L))
     stopifnot(identical(x$var89[seq(2, 32, 3), seq(4, 32, 5),
                                 seq(8, 32, 16)],
