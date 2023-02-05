@@ -30,10 +30,10 @@ sessionInfo()
 ##
 ## Note:
 ## If the list contains elements of differents lengths i.e.
-## a14_in <- list(c("a", "bb"), c("c", "dd"))
+## a14_in <- list(c("a", "bb"), c("c", "dd"))                         # nolint
 ## then the expected result is not identical, since each element
 ## is saved in a cell and the expected result of a14_in is therefore
-## a14_exp <- list(list("a", "bb"), list("c", "dd"))
+## a14_exp <- list(list("a", "bb"), list("c", "dd"))                  # nolint
 ##
 
 ##
@@ -90,7 +90,7 @@ stopifnot(identical(a2_zlib_obs, a2_exp))
 ## cell: case-3
 ##
 a3_exp <- list(list(array(c(1, 3, 2, 4), c(2, 2)),
-                    array(c(5, 8, 6, 9, 7, 10), c(2,3)),
+                    array(c(5, 8, 6, 9, 7, 10), c(2, 3)),
                     array(c(11, 15, 12, 16, 13, 17, 14, 18), c(2, 4))),
                list(array(c(19, 21, 20, 22), c(2, 2)),
                     array(c(23, 25, 27, 24, 26, 28), c(3L, 2L)),
@@ -120,7 +120,7 @@ stopifnot(identical(a3_zlib_obs, a3_exp))
 ## cell: case-4
 ##
 a4_exp <- list(list(array(c(1L, 3L, 2L, 4L), c(2, 2)),
-                   array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2,3)),
+                   array(c(5L, 8L, 6L, 9L, 7L, 10L), c(2, 3)),
                    array(c(11L, 15L, 12L, 16L, 13L, 17L, 14L, 18L), c(2, 4))),
               list(array(c(19L, 21L, 20L, 22L), c(2, 2)),
                    array(c(23L, 25L, 27L, 24L, 26L, 28L), c(3L, 2L)),
@@ -151,7 +151,7 @@ stopifnot(identical(a4_zlib_obs, a4_exp))
 ##
 a5_exp <- list(list(triu(Matrix(1:20, nrow = 4, ncol = 5, sparse = TRUE)),
                     tril(Matrix(1:20, nrow = 5, ncol = 4, sparse = TRUE,
-                                byrow=TRUE))))
+                                byrow = TRUE))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a5_exp),
           filename = filename,
@@ -273,7 +273,7 @@ a9_exp <- list(list(structure(list(
     field2 = list(
         structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
                   .Dim = 3:4),
-        structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 ),
+        structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26),
                   .Dim = 3:4))),
     .Names = c("field1", "field2")),
     structure(list(
@@ -292,7 +292,7 @@ a9_exp <- list(list(structure(list(
                                   13),
                                 .Dim = 3:4),
                       structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23,
-                                  24, 25, 26 ),
+                                  24, 25, 26),
                                 .Dim = 3:4))),
         .Names = c("field1", "field2")),
     structure(list(
@@ -306,7 +306,7 @@ a9_exp <- list(list(structure(list(
         .Names = c("field1", "field2")),
     structure(list(
         field1 = list(1L, 14L),
-        field2 = list( structure(2:13,
+        field2 = list(structure(2:13,
                                  .Dim = 3:4),
                       structure(15:26,
                                 .Dim = 3:4))),
@@ -317,7 +317,7 @@ a9_exp <- list(list(structure(list(
                                   13),
                                 .Dim = 3:4),
                       structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23,
-                                  24, 25, 26 ),
+                                  24, 25, 26),
                                 .Dim = 3:4))),
         .Names = c("field1", "field2")),
     structure(list(
@@ -502,27 +502,28 @@ stopifnot(identical(a9_zlib_obs, a9_exp))
 ##
 ## cell: case-10
 ##
-a10_exp <- list(list(field1 = list(triu(Matrix(1:20, nrow = 4, ncol=5,
+a10_exp <- list(list(field1 = list(triu(Matrix(1:20, nrow = 4, ncol = 5,
                                                sparse = TRUE))),
-                     field2=list(tril(Matrix(1:20, nrow = 5, ncol = 4,
+                     field2 = list(tril(Matrix(1:20, nrow = 5, ncol = 4,
                                              sparse = TRUE,
                                              byrow = TRUE)))),
-                list(field1=list(array(c(1 + 21i, 0 + 0i, 0 + 0i,
-                                         0 + 0i, 5 + 25i, 6 + 26i,
-                                         0 + 0i, 0 + 0i, 9 + 29i,
-                                         10 + 30i, 11 + 31i, 0 + 0i,
-                                         13 + 33i, 14 + 34i, 15 + 35i,
-                                         16 + 36i, 17 + 37i, 18 + 38i,
-                                         19 + 39i, 20 + 40i),
-                                       c(4, 5))),
-                     field2=list(array(c(1 - 21i, 5 - 25i, 9 - 29i,
-                                         13 - 33i, 17 - 37i, 0 + 0i,
-                                         6 - 26i, 10 - 30i, 14 - 34i,
-                                         18 - 38i, 0 + 0i, 0 + 0i,
-                                         11 - 31i, 15 - 35i, 19 - 39i,
-                                         0 + 0i, 0 + 0i, 0 + 0i,
-                                         16 - 36i, 20 - 40i),
-                                       c(5, 4)))))
+                list(field1 = list(array(c(1 + 21i, 0 + 0i, 0 + 0i,
+                                           0 + 0i, 5 + 25i, 6 + 26i,
+                                           0 + 0i, 0 + 0i, 9 + 29i,
+                                           10 + 30i, 11 + 31i, 0 + 0i,
+                                           13 + 33i, 14 + 34i,
+                                           15 + 35i, 16 + 36i,
+                                           17 + 37i, 18 + 38i,
+                                           19 + 39i, 20 + 40i),
+                                         c(4, 5))),
+                     field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i,
+                                           13 - 33i, 17 - 37i, 0 + 0i,
+                                           6 - 26i, 10 - 30i,
+                                           14 - 34i, 18 - 38i, 0 + 0i,
+                                           0 + 0i, 11 - 31i, 15 - 35i,
+                                           19 - 39i, 0 + 0i, 0 + 0i,
+                                           0 + 0i, 16 - 36i, 20 - 40i),
+                                         c(5, 4)))))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a10_exp),
           filename = filename,
