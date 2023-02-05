@@ -4,6 +4,10 @@
 * Refactoring of the build configuration script to use R to find the
   settings to use.
 
+* Static code analysis of the codebase has been performed using the
+  lintr package in order to improve code style, consistency and
+  readability.
+
 # rmatio 0.17.0 (2023-01-25)
 
 ## CHANGES
