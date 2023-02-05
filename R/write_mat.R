@@ -180,7 +180,7 @@ setMethod("write.mat",
                   version <- 0x0100L
                   header <- sprintf(
                       paste0("MATLAB 5.0 MAT-file, ",
-                             "Platform: %s, "
+                             "Platform: %s, ",
                              "Created By: rmatio v%s on %s"),
                       R.version$platform[[1]],
                       utils::packageVersion("rmatio"),
