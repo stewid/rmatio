@@ -886,8 +886,8 @@ test_mat_v5_file <- function(x) {
                         var79_slab))
 
     ## var80, ..., var85 read as complex # nolint
-    var80 = array(complex(real = seq(1, 2*32^3, 2),
-                          imaginary = seq(2, 2*32^3, 2)),
+    var80 <- array(complex(real = seq(1, 2 * 32^3, 2),
+                          imaginary = seq(2, 2 * 32^3, 2)),
                   c(32, 32, 32))
     stopifnot(identical(x$var80, var80))
     stopifnot(identical(x$var81, var80))
