@@ -55,119 +55,143 @@ CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 
 AC_MSG_CHECKING([inttypes.h])
-have_inttypes_h=no
+ac_have_inttypes_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <inttypes.h>]], [[]])])
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_inttypes_h=yes
-AC_MSG_RESULT([${have_inttypes_h}])
-if test "x${have_inttypes_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_INTTYPES_H])
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_inttypes_h=yes
+AC_MSG_RESULT([$ac_have_inttypes_h])
+if test "x$ac_have_inttypes_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_INTTYPES_H],
+        [1],
+        [Define to 1 if you have the <inttypes.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([stdlib.h])
-have_stdlib_h=no
+ac_have_stdlib_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <stdlib.h>]], [[]])])
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_stdlib_h=yes
-AC_MSG_RESULT([${have_stdlib_h}])
-if test "x${have_stdlib_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_STDLIB_H])
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_stdlib_h=yes
+AC_MSG_RESULT([$ac_have_stdlib_h])
+if test "x$ac_have_stdlib_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_STDLIB_H],
+        [1],
+        [Define to 1 if you have the <stdlib.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([stdint.h])
-have_stdint_h=no
+ac_have_stdint_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <stdint.h>]], [[]])])
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_stdint_h=yes
-AC_MSG_RESULT([${have_stdint_h}])
-if test "x${have_stdint_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_STDINT_H])
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_stdint_h=yes
+AC_MSG_RESULT([$ac_have_stdint_h])
+if test "x$ac_have_stdint_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_STDINT_H],
+        [1],
+        [Define to 1 if you have the <stdint.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([strings.h])
-have_strings_h=no
+ac_have_strings_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <strings.h>]], [[]])])
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_strings_h=yes
-AC_MSG_RESULT([${have_strings_h}])
-if test "x${have_strings_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_STRINGS_H])
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_strings_h=yes
+AC_MSG_RESULT([$ac_have_strings_h])
+if test "x$ac_have_strings_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_STRINGS_H],
+        [1],
+        [Define to 1 if you have the <strings.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([string.h])
-have_string_h=no
+ac_have_string_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <string.h>]], [[]])])
 "${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_string_h=yes
-AC_MSG_RESULT([${have_string_h}])
-if test "x${have_string_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_STRING_H])
-    if test "x${have_stdlib_h}" = xyes; then
-        AC_DEFINE_UNQUOTED([STDC_HEADERS])
+1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_string_h=yes
+AC_MSG_RESULT([$ac_have_string_h])
+if test "x$ac_have_string_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_STRING_H],
+        [1],
+        [Define to 1 if you have the <string.h> header file.])
+    if test "x$ac_have_stdlib_h" = xyes; then
+        AC_DEFINE_UNQUOTED(
+            [STDC_HEADERS],
+            [1],
+            [Define to 1 if you have the ANSI C header files.])
     fi
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([sys/stat.h])
-have_sys_stat_h=no
+ac_have_sys_stat_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <sys/stat.h>]], [[]])])
-"${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_sys_stat_h=yes
-AC_MSG_RESULT([${have_sys_stat_h}])
-if test "x${have_sys_stat_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_SYS_STAT_H])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_sys_stat_h=yes
+AC_MSG_RESULT([$ac_have_sys_stat_h])
+if test "x$ac_have_sys_stat_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_SYS_STAT_H],
+        [1],
+        [Define to 1 if you have the <sys/stat.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([sys/types.h])
-have_sys_types_h=no
+ac_have_sys_types_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <sys/types.h>]], [[]])])
-"${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_sys_types_h=yes
-AC_MSG_RESULT([${have_sys_types_h}])
-if test "x${have_sys_types_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_SYS_TYPES_H])
+"${R_HOME}/bin/R" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_sys_types_h=yes
+AC_MSG_RESULT([$ac_have_sys_types_h])
+if test "x$ac_have_sys_types_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_SYS_TYPES_H],
+        [1],
+        [Define to 1 if you have the <sys/types.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 AC_MSG_CHECKING([unistd.h])
-have_unistd_h=no
+ac_have_unistd_h=no
 AC_LANG_CONFTEST([AC_LANG_PROGRAM(
 [[#include <unistd.h>]], [[]])])
-"${R_HOME}/bin/R" CMD SHLIB conftest.c \
-1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && have_unistd_h=yes
+"${R_HOME}/bin/R" CMD SHLIB conftest.c \ 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_have_unistd_h=yes
 AC_MSG_RESULT([${have_unistd_h}])
-if test "x${have_unistd_h}" = xyes; then
-    AC_DEFINE_UNQUOTED([HAVE_UNISTD_H])
+if test "x$ac_have_unistd_h" = xyes; then
+    AC_DEFINE_UNQUOTED(
+        [HAVE_UNISTD_H],
+        [1],
+        [Define to 1 if you have the <unistd.h> header file.])
 fi
 rm -f conftest.o conftest.c conftest.so
 
 dnl Check for zlib
-have_zlib=no
+ac_have_zlib=no
 
 if test [ -n "$PKG_CONFIG" ] ; then
     PKG_CHECK_MODULES([zlib], [zlib],
                       [CPPFLAGS="${zlib_CFLAGS} ${CPPFLAGS}"
                        LIBS="${zlib_LIBS} ${LIBS}"
-                       have_zlib=yes], [ ])
+                       ac_have_zlib=yes], [ ])
 fi
 
-if test "x${have_zlib}" = xno; then
+if test "x$ac_have_zlib" = xno; then
     AC_SEARCH_LIBS([inflate], [z], [have_zlib=yes])
 fi
 
-if test "x${have_zlib}" = xno; then
+if test "x$ac_have_zlib" = xno; then
         AC_MSG_FAILURE([
   ---------------------------------------------
    The zlib library that is required to build
@@ -199,7 +223,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_CHAR=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_CHAR}])
-AC_DEFINE_UNQUOTED([SIZEOF_CHAR], [$SIZEOF_CHAR])
+AC_DEFINE_UNQUOTED(
+  [SIZEOF_CHAR],
+  [$SIZEOF_CHAR],
+  [The size of `char', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of short])
 cat >conftest.c <<EOF
@@ -216,7 +243,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_SHORT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_SHORT}])
-AC_DEFINE_UNQUOTED([SIZEOF_SHORT], [$SIZEOF_SHORT])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_SHORT],
+    [$SIZEOF_SHORT],
+    [The size of `short', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of double])
 cat >conftest.c <<EOF
@@ -233,7 +263,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_DOUBLE=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_DOUBLE}])
-AC_DEFINE_UNQUOTED([SIZEOF_DOUBLE], [$SIZEOF_DOUBLE])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_DOUBLE],
+    [$SIZEOF_DOUBLE],
+    [The size of `double', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of float])
 cat >conftest.c <<EOF
@@ -250,7 +283,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_FLOAT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_FLOAT}])
-AC_DEFINE_UNQUOTED([SIZEOF_FLOAT], [$SIZEOF_FLOAT])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_FLOAT],
+    [$SIZEOF_FLOAT],
+    [The size of `float', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of int])
 cat >conftest.c <<EOF
@@ -267,7 +303,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_INT=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_INT}])
-AC_DEFINE_UNQUOTED([SIZEOF_INT], [$SIZEOF_INT])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_INT],
+    [$SIZEOF_INT],
+    [The size of `int', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of long])
 cat >conftest.c <<EOF
@@ -284,7 +323,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_LONG=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_LONG}])
-AC_DEFINE_UNQUOTED([SIZEOF_LONG], [$SIZEOF_LONG])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_LONG],
+    [$SIZEOF_LONG],
+    [The size of `long', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of long long])
 cat >conftest.c <<EOF
@@ -301,7 +343,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_LONG_LONG=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_LONG_LONG}])
-AC_DEFINE_UNQUOTED([SIZEOF_LONG_LONG], [$SIZEOF_LONG_LONG])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_LONG_LONG],
+    [$SIZEOF_LONG_LONG],
+    [The size of `long long', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of size_t])
 cat >conftest.c <<EOF
@@ -318,7 +363,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_SIZE_T=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_SIZE_T}])
-AC_DEFINE_UNQUOTED([SIZEOF_SIZE_T], [$SIZEOF_SIZE_T])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_SIZE_T],
+    [$SIZEOF_SIZE_T],
+    [The size of `size_t', as computed by sizeof.])
 
 AC_MSG_CHECKING([size of void *])
 cat >conftest.c <<EOF
@@ -335,7 +383,10 @@ echo "dyn.load('conftest.so'); cat(.Call('sizeof_of_type'))" > conftest.R
 SIZEOF_VOID_P=`${R_HOME}/bin/R --slave --vanilla < conftest.R`
 rm -f conftest.o conftest.c conftest.so conftest.R
 AC_MSG_RESULT([${SIZEOF_VOID_P}])
-AC_DEFINE_UNQUOTED([SIZEOF_VOID_P], [$SIZEOF_VOID_P])
+AC_DEFINE_UNQUOTED(
+    [SIZEOF_VOID_P],
+    [$SIZEOF_VOID_P],
+    [The size of `void *', as computed by sizeof.])
 
 AC_MSG_CHECKING([for mat_int8_t])
 ac_have_mat_int8_t=no
