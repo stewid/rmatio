@@ -162,7 +162,8 @@ stopifnot(identical(a6_zlib_obs, a6_exp))
 ##
 ## array: case-7
 ##
-a7_exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary = seq(2, 2*32^3, 2)),
+a7_exp <- array(complex(real = seq(1, 2*32^3, 2),
+                        imaginary = seq(2, 2*32^3, 2)),
                 c(32, 32, 32))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a7_exp), filename = filename, compression = FALSE,

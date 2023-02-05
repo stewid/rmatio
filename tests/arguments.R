@@ -58,7 +58,7 @@ tools::assertError(write.mat(list(a = 1:5),
 ##
 tools::assertError(write.mat(list(1:5),
                              filename = filename,
-                             compression=FALSE))
+                             compression = FALSE))
 tools::assertError(write.mat(list(a = 1:5, 6:10),
                              filename = filename,
                              compression = FALSE))

@@ -280,7 +280,7 @@ sessionInfo()
 
 test_mat_v4_file <- function(x) {
     ## var1 read as double
-    var1 <- array(seq_len(20), c(4,5))
+    var1 <- array(seq_len(20), c(4, 5))
     storage.mode(var1) <- "double"
     stopifnot(identical(x$var1, var1))
 
@@ -621,7 +621,7 @@ test_mat_v5_file <- function(x) {
                           structure(15:26, .Dim = 3:4))),
             .Names = c("field1", "field2"))),
         list(structure(list(
-            field1 = list(1+51i, 14+64i),
+            field1 = list(1 + 51i, 14 + 64i),
             field2 = list(structure(c(2 + 52i, 3 + 53i, 4 + 54i,
                                       5 + 55i, 6 + 56i, 7 + 57i,
                                       8 + 58i, 9 + 59i, 10 + 60i,
@@ -798,12 +798,13 @@ test_mat_v5_file <- function(x) {
                                    15 + 35i, 16 + 36i, 17 + 37i,
                                    18 + 38i, 19 + 39i, 20 + 40i),
                                  c(4, 5))),
-             field2=list(array(c(1 - 21i, 5 - 25i, 9 - 29i, 13 - 33i,
-                                 17 - 37i, 0 + 0i, 6 - 26i, 10 - 30i,
-                                 14 - 34i, 18 - 38i, 0 + 0i, 0 + 0i,
-                                 11 - 31i, 15 - 35i, 19 - 39i, 0 + 0i,
-                                 0 + 0i, 0 + 0i, 16 - 36i, 20 - 40i),
-                               c(5, 4)))))
+             field2 = list(array(c(1 - 21i, 5 - 25i, 9 - 29i,
+                                   13 - 33i, 17 - 37i, 0 + 0i,
+                                   6 - 26i, 10 - 30i, 14 - 34i,
+                                   18 - 38i, 0 + 0i, 0 + 0i, 11 - 31i,
+                                   15 - 35i, 19 - 39i, 0 + 0i, 0 + 0i,
+                                   0 + 0i, 16 - 36i, 20 - 40i),
+                                 c(5, 4)))))
     stopifnot(identical(x$var68, var68))
 
     var69 <- list(list(field1 = "abcdefghijklmnopqrstuvwxyz",
@@ -813,7 +814,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var69, var69))
 
     ## var70, ..., var73 read as double
-    var70 <- array(seq_len(32^3), c(32, 32, 32));
+    var70 <- array(seq_len(32^3), c(32, 32, 32))
     storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
@@ -829,13 +830,13 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var75, var70))
 
     ## var76 read as integer
-    ## var76 = reshape(int16(1:32*32*32), 32, 32, 32);
+    ## var76 = reshape(int16(1:32*32*32), 32, 32, 32); # nolint
     var76 <- array(c(seq_len(32767), 32767), c(32, 32, 32))
     storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
     ## var77 read as integer
-    ## var77 = reshape(uint16(1:32*32*32), 32, 32, 32);
+    ## var77 = reshape(uint16(1:32*32*32), 32, 32, 32); # nolint
     stopifnot(identical(x$var77, var74))
 
     ## var78 read as integer
@@ -884,8 +885,9 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var79[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)],
                         var79_slab))
 
-    ## var80, ..., var85 read as complex
-    var80 = array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)),
+    ## var80, ..., var85 read as complex # nolint
+    var80 = array(complex(real = seq(1, 2*32^3, 2),
+                          imaginary = seq(2, 2*32^3, 2)),
                   c(32, 32, 32))
     stopifnot(identical(x$var80, var80))
     stopifnot(identical(x$var81, var80))
@@ -916,7 +918,7 @@ test_mat_v5_file <- function(x) {
                               29557 - 23198i, -26196 - 27443i,
                               17138 + 17163i, 4173 + 22551i,
                               21456 - 372i, -12554 - 766i,
-                              -11899 + 26000i, -13223-7784i,
+                              -11899 + 26000i, -13223 - 7784i,
                               -25303 + 5509i, 16352 + 363i,
                               9743 - 9728i, 6783 - 16717i,
                               27364 - 31769i, 845 - 5483i,
@@ -955,8 +957,8 @@ test_mat_v5_file <- function(x) {
                               9084 + 8866i, 12787 + 16795i,
                               27522 + 650i, 7219 - 25890i,
                               -16811 - 5838i, 22569 + 6221i,
-                              21757-28407i, -2817 + 10293i,
-                              -666-21153i, 6202 + 23652i,
+                              21757 - 28407i, -2817 + 10293i,
+                              -666 - 21153i, 6202 + 23652i,
                               -27772 + 7728i, 24485 + 27017i,
                               7898 + 4210i, 8062 + 28365i,
                               -28910 - 21963i, 7298 - 10445i,
@@ -1039,35 +1041,35 @@ test_mat_v5_file <- function(x) {
     ## var88 read as complex
     var88_slab <- structure(c(24 - 109i, -38 + 98i, -32 + 69i,
                               1 - 58i, 106 + 37i, 23 - 118i,
-                              86 - 117i, 3 - 10i, -94 + 111i, 43-69i,
-                              37 + 24i, 5 + 103i, -71 - 109i,
-                              -9 + 76i, 52 - 40i, -48 + 1i, -1 - 71i,
-                              43 + 106i, 121 - 39i, 68 + 45i, 9 + 7i,
-                              49 - 122i, 79 - 98i, -125 - 9i,
-                              -81 - 45i, -30 + 6i, 109 - 65i,
-                              -111 - 88i, -21 - 57i, -59 - 22i,
-                              64 - 47i, 38 + 36i, 32 + 84i, -11 - 41i,
-                              -4 - 5i, 111 - 12i, -79 + 23i,
-                              118 - 68i, 60 - 49i, -31 - 47i,
-                              98 - 49i, 19 - 84i, 114-19i, 126 + 112i,
-                              3 - 95i, -69 - 113i, -24 - 55i,
-                              -40 - 78i, 81 - 95i, 108 - 15i,
-                              -37 + 5i, 24 - 97i, 65 + 17i, -79 - 19i,
-                              -54 - 36i, -99 - 15i, -92 - 70i,
-                              115 + 62i, -29 - 52i, -121 + 61i,
-                              -62 + 101i, -72 + 52i, -110 - 111i,
-                              126 + 124i, 85 - 44i, -32 + 42i,
-                              10 + 105i, -88 - 104i, 82 + 96i,
-                              98 - 85i, -66 - 27i, 83 - 12i,
-                              -18 - 32i, 58 - 92i, -59 - 89i,
-                              -45 + 16i, -36 - 68i, -120 - 94i,
-                              69 + 16i, 5 + 114i, 80 + 42i, -7 + 4i,
-                              74 + 84i, 83 + 76i, -74 + 93i,
-                              -124 + 7i, -61 + 54i, 3 - 83i,
-                              -79 - 87i, -50 + 8i, -13 - 48i,
-                              51 - 21i, -95 + 3i, -115 - 5i,
-                              117 + 120i, 66 + 29i, 64 + 10i,
-                              54 - 101i, 51 + 74i, 55 - 21i,
+                              86 - 117i, 3 - 10i, -94 + 111i,
+                              43 - 69i, 37 + 24i, 5 + 103i,
+                              -71 - 109i, -9 + 76i, 52 - 40i,
+                              -48 + 1i, -1 - 71i, 43 + 106i,
+                              121 - 39i, 68 + 45i, 9 + 7i, 49 - 122i,
+                              79 - 98i, -125 - 9i, -81 - 45i,
+                              -30 + 6i, 109 - 65i, -111 - 88i,
+                              -21 - 57i, -59 - 22i, 64 - 47i,
+                              38 + 36i, 32 + 84i, -11 - 41i, -4 - 5i,
+                              111 - 12i, -79 + 23i, 118 - 68i,
+                              60 - 49i, -31 - 47i, 98 - 49i, 19 - 84i,
+                              114 - 19i, 126 + 112i, 3 - 95i,
+                              -69 - 113i, -24 - 55i, -40 - 78i,
+                              81 - 95i, 108 - 15i, -37 + 5i, 24 - 97i,
+                              65 + 17i, -79 - 19i, -54 - 36i,
+                              -99 - 15i, -92 - 70i, 115 + 62i,
+                              -29 - 52i, -121 + 61i, -62 + 101i,
+                              -72 + 52i, -110 - 111i, 126 + 124i,
+                              85 - 44i, -32 + 42i, 10 + 105i,
+                              -88 - 104i, 82 + 96i, 98 - 85i,
+                              -66 - 27i, 83 - 12i, -18 - 32i,
+                              58 - 92i, -59 - 89i, -45 + 16i,
+                              -36 - 68i, -120 - 94i, 69 + 16i,
+                              5 + 114i, 80 + 42i, -7 + 4i, 74 + 84i,
+                              83 + 76i, -74 + 93i, -124 + 7i,
+                              -61 + 54i, 3 - 83i, -79 - 87i, -50 + 8i,
+                              -13 - 48i, 51 - 21i, -95 + 3i,
+                              -115 - 5i, 117 + 120i, 66 + 29i,
+                              64 + 10i, 54 - 101i, 51 + 74i, 55 - 21i,
                               -78 + 49i, -61 + 22i, 74 - 73i,
                               -26 + 71i, 81 + 0i, -45 - 123i,
                               -8 + 58i, 63 - 124i, -83 - 112i,

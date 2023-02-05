@@ -145,7 +145,10 @@ setGeneric("write.mat",
            function(object,
                     filename = NULL,
                     compression = TRUE,
-                    version = c("MAT5")) standardGeneric("write.mat"))
+                    version = c("MAT5")) {
+               standardGeneric("write.mat")
+           }
+)
 
 ##' @rdname write.mat-methods
 ##' @export

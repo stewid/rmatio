@@ -65,7 +65,7 @@
 ##'
 ##' ## View content
 ##' str(m)
-read.mat <- function(filename) {
+read.mat <- function(filename) { # nolint
     ## Argument checking
     stopifnot(is.character(filename),
               identical(length(filename), 1L),
