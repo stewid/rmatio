@@ -544,49 +544,49 @@ test_mat_v5_file <- function(x) {
 
     var66 <- list(structure(list(),
                             .Names = character(0)),
-                  list(field1=list(), field2=list()),
+                  list(field1 = list(), field2 = list()),
                   structure(list(field1 = numeric(0),
                                  field2 = character(0)),
                             .Names = c("field1", "field2")))
     stopifnot(identical(x$var66, var66))
 
     var67 <- list(list(structure(list(field1 = list(1, 14), field2 =
-                  list( structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                  list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
                   12, 13), .Dim = 3:4), structure(c(15, 16, 17, 18,
-                  19, 20, 21, 22, 23, 24, 25, 26 ), .Dim = 3:4))),
+                  19, 20, 21, 22, 23, 24, 25, 26), .Dim = 3:4))),
                   .Names = c("field1", "field2")), structure(list(
                   field1 = list(1, 14), field2 = list(structure(c(2,
                   3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), .Dim = 3:4),
                   structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
                   25, 26), .Dim = 3:4))), .Names = c("field1",
                   "field2")), structure(list(field1 = list(1, 14),
-                  field2 = list( structure(c(2, 3, 4, 5, 6, 7, 8, 9,
+                  field2 = list(structure(c(2, 3, 4, 5, 6, 7, 8, 9,
                   10, 11, 12, 13), .Dim = 3:4), structure(c(15, 16,
                   17, 18, 19, 20, 21, 22, 23, 24, 25, 26 ), .Dim =
                   3:4))), .Names = c("field1", "field2")),
-                  structure(list( field1 = list(1, 14), field2 =
+                  structure(list(field1 = list(1, 14), field2 =
                   list(structure(c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
                   13), .Dim = 3:4), structure(c(15, 16, 17, 18, 19,
                   20, 21, 22, 23, 24, 25, 26), .Dim = 3:4))), .Names =
                   c("field1", "field2")), structure(list(field1 =
-                  list(1L, 14L), field2 = list( structure(2:13, .Dim =
+                  list(1L, 14L), field2 = list(structure(2:13, .Dim =
                   3:4), structure(15:26, .Dim = 3:4))), .Names =
                   c("field1", "field2")), structure(list(field1 =
-                  list(1, 14), field2 = list( structure(c(2, 3, 4, 5,
+                  list(1, 14), field2 = list(structure(c(2, 3, 4, 5,
                   6, 7, 8, 9, 10, 11, 12, 13), .Dim = 3:4),
                   structure(c(15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
                   25, 26 ), .Dim = 3:4))), .Names = c("field1",
-                  "field2")), structure(list( field1 = list(1L, 14L),
+                  "field2")), structure(list(field1 = list(1L, 14L),
                   field2 = list(structure(2:13, .Dim = 3:4),
                   structure(15:26, .Dim = 3:4))), .Names = c("field1",
                   "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
+                  field2 = list(structure(2:13, .Dim = 3:4),
                   structure(15:26, .Dim = 3:4))), .Names = c("field1",
                   "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
+                  field2 = list(structure(2:13, .Dim = 3:4),
                   structure(15:26, .Dim = 3:4))), .Names = c("field1",
                   "field2")), structure(list(field1 = list(1L, 14L),
-                  field2 = list( structure(2:13, .Dim = 3:4),
+                  field2 = list(structure(2:13, .Dim = 3:4),
                   structure(15:26, .Dim = 3:4))), .Names = c("field1",
                   "field2"))), list(structure(list(field1 =
                   list(1+51i, 14+64i), field2 =
@@ -597,63 +597,63 @@ test_mat_v5_file <- function(x) {
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
                   23+73i, 24+74i, 25+75i, 26+76i), .Dim = 3:4))),
                   .Names = c("field1", "field2")),
                   structure(list(field1 = list(1+51i, 14+64i), field2
-                  = list( structure(c(2+52i, 3+53i, 4+54i, 5+55i,
+                  = list(structure(c(2+52i, 3+53i, 4+54i, 5+55i,
                   6+56i, 7+57i, 8+58i, 9+59i, 10+60i, 11+61i, 12+62i,
                   13+63i), .Dim = 3:4), structure(c(15+65i, 16+66i,
                   17+67i, 18+68i, 19+69i, 20+70i, 21+71i, 22+72i,
@@ -678,7 +678,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var69, var69))
 
     ## var70, ..., var73 read as double
-    var70 = array(seq_len(32^3), c(32,32,32));
+    var70 = array(seq_len(32^3), c(32, 32, 32));
     storage.mode(var70) <- "double"
     stopifnot(identical(x$var70, var70))
     stopifnot(identical(x$var71, var70))
@@ -686,7 +686,7 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var73, var70))
 
     ## var74 read as integer
-    var74 = array(seq_len(32^3), c(32,32,32));
+    var74 = array(seq_len(32^3), c(32, 32, 32));
     storage.mode(var74) <- "integer"
     stopifnot(identical(x$var74, var74))
 
@@ -694,30 +694,36 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var75, var70))
 
     ## var76 read as integer
-    ## var76 = reshape(int16(1:32*32*32),32,32,32);
-    var76 = array(c(seq_len(32767), 32767), c(32,32,32));
+    ## var76 = reshape(int16(1:32*32*32), 32, 32, 32);
+    var76 = array(c(seq_len(32767), 32767), c(32, 32, 32));
     storage.mode(var76) <- "integer"
     stopifnot(identical(x$var76, var76))
 
     ## var77 read as integer
-    ## var77 = reshape(uint16(1:32*32*32),32,32,32);
+    ## var77 = reshape(uint16(1:32*32*32), 32, 32, 32);
     stopifnot(identical(x$var77, var74))
 
     ## var78 read as integer
     var78_slab <- array(c(1L, 37L, -55L, -70L, -48L, -84L, -96L, -93L,
-    -91L, -24L, -123L, -92L, 39L, 109L, -69L, 68L, 76L, -42L, -4L,
-    36L, 45L, -89L, -60L, -19L, 99L, 85L, 76L, 109L, 96L, -60L, 24L,
-    112L, 74L, -52L, -57L, 2L, 106L, -34L, -77L, 92L, 30L, -126L,
-    -55L, 3L, 95L, -75L, -77L, -83L, -112L, 69L, -57L, -97L, 36L, 37L,
-    90L, -76L, 117L, 12L, -108L, 51L, -35L, -105L, -1L, 99L, -103L,
-    55L, -77L, 27L, 59L, -38L, -96L, 32L, -52L, -32L, 123L, 63L, 122L,
-    59L, -19L, 84L, -99L, -27L, 121L, 25L, -22L, 8L, -70L, 9L, 40L,
-    27L, 90L, 122L, 124L, 7L, -2L, -84L, -45L, -79L, -120L, 39L, 88L,
-    -55L, -95L, -27L, -5L, -11L, 48L, 125L, 94L, 36L, 115L, -121L,
-    99L, 47L, -108L, -99L, -9L, -70L, 67L, -89L, 107L, -80L, 113L,
-    27L, 45L, 94L, 124L, 7L, 54L, 76L, -54L, -48L),
-                   c(11L, 6L, 2L))
-    stopifnot(identical(x$var78[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var78_slab))
+                          -91L, -24L, -123L, -92L, 39L, 109L, -69L,
+                          68L, 76L, -42L, -4L, 36L, 45L, -89L, -60L,
+                          -19L, 99L, 85L, 76L, 109L, 96L, -60L, 24L,
+                          112L, 74L, -52L, -57L, 2L, 106L, -34L, -77L,
+                          92L, 30L, -126L, -55L, 3L, 95L, -75L, -77L,
+                          -83L, -112L, 69L, -57L, -97L, 36L, 37L, 90L,
+                          -76L, 117L, 12L, -108L, 51L, -35L, -105L,
+                          -1L, 99L, -103L, 55L, -77L, 27L, 59L, -38L,
+                          -96L, 32L, -52L, -32L, 123L, 63L, 122L, 59L,
+                          -19L, 84L, -99L, -27L, 121L, 25L, -22L, 8L,
+                          -70L, 9L, 40L, 27L, 90L, 122L, 124L, 7L,
+                          -2L, -84L, -45L, -79L, -120L, 39L, 88L,
+                          -55L, -95L, -27L, -5L, -11L, 48L, 125L, 94L,
+                          36L, 115L, -121L, 99L, 47L, -108L, -99L,
+                          -9L, -70L, 67L, -89L, 107L, -80L, 113L, 27L,
+                          45L, 94L, 124L, 7L, 54L, 76L, -54L, -48L),
+                        c(11L, 6L, 2L))
+    stopifnot(identical(x$var78[seq(2, 32, 3), seq(4, 32, 5),
+                                seq(8, 32, 16)], var78_slab))
 
     ## var79 read as integer
     var79_slab <- structure(c(36L, 154L, 198L, 69L, 227L, 194L, 140L,
@@ -740,10 +746,10 @@ test_mat_v5_file <- function(x) {
                               160L, 111L, 100L, 44L, 145L, 144L, 223L,
                               123L, 48L, 190L, 70L, 115L, 113L, 7L),
                               .Dim = c(11L, 6L, 2L))
-    stopifnot(identical(x$var79[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var79_slab))
+    stopifnot(identical(x$var79[seq(2, 32, 3), seq(4, 32, 5), seq(8, 32, 16)], var79_slab))
 
     ## var80, ..., var85 read as complex
-    var80 = array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32,32,32))
+    var80 = array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)), c(32, 32, 32))
     stopifnot(identical(x$var80, var80))
     stopifnot(identical(x$var81, var80))
     stopifnot(identical(x$var82, var80))
@@ -752,62 +758,75 @@ test_mat_v5_file <- function(x) {
     stopifnot(identical(x$var85, var80))
 
     ## var86 read as complex
-    var86_slab <- structure(c(31419+12074i, 11550+31935i,
-                              14036-25970i, 12950-26466i,
-                              11549-13221i, 8802-13913i, -8540+20686i,
-                              82-2536i, 6556+25498i, -22761-19987i,
-                              -14602-32033i, -16493-9400i,
-                              15688+20383i, -10204-15596i,
-                              14390-20232i, -21008+3161i,
-                              22712-11293i, 16110-30851i, 6298-2954i,
-                              -10732-25971i, -15133+15777i,
-                              -23705+32679i, 2771-10261i,
-                              -25754-31533i, 27007-3499i, -7948-4034i,
-                              1047-17085i, 28781-6213i, 22132+27840i,
-                              -2300-1878i, 14919-19351i,
-                              -32577+15858i, 28973-16332i,
-                              -13965+16888i, -1934-19892i,
-                              24973-17196i, 29557-23198i,
-                              -26196-27443i, 17138+17163i,
-                              4173+22551i, 21456-372i, -12554-766i,
-                              -11899+26000i, -13223-7784i,
-                              -25303+5509i, 16352+363i, 9743-9728i,
-                              6783-16717i, 27364-31769i, 845-5483i,
-                              -5927+30238i, 9080+5283i, 25263-12552i,
-                              -6594+9643i, -21471-8832i, 13196+15195i,
-                              -12123-23263i, -10874+25982i,
-                              -11012-7600i, -10870-24078i,
-                              -4181+21428i, 19441-25234i,
-                              27199-11909i, -4204+14748i,
-                              -12638+6522i, -21381+3874i, 10009-1227i,
-                              23342+16514i, 27792-11483i,
-                              -16194-25596i, 9911-20183i,
-                              -28341+22322i, 3508-7880i, 20369-482i,
-                              -4578+21351i, 18426+31578i,
-                              -26016+17152i, 23621+10035i,
-                              -26955-8794i, 3884+18834i, 25669+17940i,
-                              19480-25157i, -24243-10527i,
-                              4464+28510i, -6616-24233i, -14599-1762i,
-                              -19424+6424i, -29786+14220i,
-                              -22333-20060i, -28080-30034i,
-                              -24965+30996i, 11506-19238i,
-                              -5438+17227i, 6325+19908i, 16761+20643i,
-                              18192-20736i, -18629+17622i,
-                              2759-21496i, 15764+18250i, -28782+3888i,
-                              -26055-4279i, 17075-5598i, 15629+19686i,
-                              -27961-5378i, 22850-7463i, -17585+883i,
-                              -1421-6768i, 28956-7833i, 19321-31347i,
-                              22739-27552i, -5804-12847i,
-                              -19613+7820i, -24500+23384i,
-                              6332-32352i, 9084+8866i, 12787+16795i,
-                              27522+650i, 7219-25890i, -16811-5838i,
-                              22569+6221i, 21757-28407i, -2817+10293i,
-                              -666-21153i, 6202+23652i, -27772+7728i,
-                              24485+27017i, 7898+4210i, 8062+28365i,
-                              -28910-21963i, 7298-10445i,
-                              29980+25776i, 5019-2720i), .Dim = c(11L,
-                              6L, 2L))
-    stopifnot(identical(x$var86[seq(2,32,3), seq(4,32,5), seq(8,32,16)], var86_slab))
+    var86_slab <- structure(c(31419 + 12074i, 11550 + 31935i,
+                              14036 - 25970i, 12950 - 26466i,
+                              11549 - 13221i, 8802 - 13913i,
+                              -8540 + 20686i, 82 - 2536i,
+                              6556 + 25498i, -22761 - 19987i,
+                              -14602 - 32033i, -16493 - 9400i,
+                              15688 + 20383i, -10204 - 15596i,
+                              14390 - 20232i, -21008 + 3161i,
+                              22712 - 11293i, 16110 - 30851i,
+                              6298 - 2954i, -10732 - 25971i,
+                              -15133 + 15777i, -23705 + 32679i,
+                              2771 - 10261i, -25754 - 31533i,
+                              27007 - 3499i, -7948 - 4034i,
+                              1047 - 17085i, 28781 - 6213i,
+                              22132 + 27840i, -2300 - 1878i,
+                              14919 - 19351i, -32577 + 15858i,
+                              28973 - 16332i, -13965 + 16888i,
+                              -1934 - 19892i, 24973 - 17196i,
+                              29557 - 23198i, -26196 - 27443i,
+                              17138 + 17163i, 4173 + 22551i,
+                              21456 - 372i, -12554 - 766i,
+                              -11899 + 26000i, -13223-7784i,
+                              -25303 + 5509i, 16352 + 363i,
+                              9743 - 9728i, 6783 - 16717i,
+                              27364 - 31769i, 845 - 5483i,
+                              -5927 + 30238i, 9080 + 5283i,
+                              25263 - 12552i, -6594 + 9643i,
+                              -21471 - 8832i, 13196 + 15195i,
+                              -12123 - 23263i, -10874 + 25982i,
+                              -11012 - 7600i, -10870 - 24078i,
+                              -4181 + 21428i, 19441 - 25234i,
+                              27199 - 11909i, -4204 + 14748i,
+                              -12638 + 6522i, -21381 + 3874i,
+                              10009 - 1227i, 23342 + 16514i,
+                              27792 - 11483i, -16194 - 25596i,
+                              9911 - 20183i, -28341 + 22322i,
+                              3508 - 7880i, 20369 - 482i,
+                              -4578 + 21351i, 18426 + 31578i,
+                              -26016 + 17152i, 23621 + 10035i,
+                              -26955 - 8794i, 3884 + 18834i,
+                              25669 + 17940i, 19480 - 25157i,
+                              -24243 - 10527i, 4464 + 28510i,
+                              -6616 - 24233i, -14599 - 1762i,
+                              -19424 + 6424i, -29786 + 14220i,
+                              -22333 - 20060i, -28080 - 30034i,
+                              -24965 + 30996i, 11506 - 19238i,
+                              -5438 + 17227i, 6325 + 19908i,
+                              16761 + 20643i, 18192 - 20736i,
+                              -18629 + 17622i, 2759 - 21496i,
+                              15764 + 18250i, -28782 + 3888i,
+                              -26055 - 4279i, 17075 - 5598i,
+                              15629 + 19686i, -27961 - 5378i,
+                              22850 - 7463i, -17585 + 883i,
+                              -1421 - 6768i, 28956 - 7833i,
+                              19321 - 31347i, 22739 - 27552i,
+                              -5804 - 12847i, -19613 + 7820i,
+                              -24500 + 23384i, 6332 - 32352i,
+                              9084 + 8866i, 12787 + 16795i,
+                              27522 + 650i, 7219 - 25890i,
+                              -16811 - 5838i, 22569 + 6221i,
+                              21757-28407i, -2817 + 10293i,
+                              -666-21153i, 6202 + 23652i,
+                              -27772 + 7728i, 24485 + 27017i,
+                              7898 + 4210i, 8062 + 28365i,
+                              -28910 - 21963i, 7298 - 10445i,
+                              29980 + 25776i, 5019 - 2720i),
+                            .Dim = c(11L, 6L, 2L))
+    stopifnot(identical(x$var86[seq(2, 32, 3), seq(4, 32, 5),
+                                seq(8, 32, 16)], var86_slab))
 
     ## var87 read as complex
     var87_slab <- structure(c(63490 + 42712i, 29714 + 8391i,
@@ -992,7 +1011,7 @@ test_mat_v5_file <- function(x) {
                                 TRUE, TRUE, FALSE, FALSE, FALSE, TRUE,
                                 TRUE, FALSE, FALSE, FALSE, FALSE,
                                 TRUE), .Dim = c(5L, 5L))), field2 =
-                                list( structure(c(TRUE, FALSE, TRUE,
+                                list(structure(c(TRUE, FALSE, TRUE,
                                 FALSE, TRUE, FALSE, TRUE, FALSE, TRUE,
                                 FALSE, TRUE, FALSE, TRUE, FALSE, TRUE,
                                 FALSE, TRUE, FALSE, TRUE, FALSE), .Dim
