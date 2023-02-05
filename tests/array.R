@@ -96,7 +96,7 @@ stopifnot(identical(a3_zlib_obs, a3_exp))
 ##
 ## array: case-4
 ##
-a4_exp <- array(seq_len(32^3), c(32, 32, 32));
+a4_exp <- array(seq_len(32^3), c(32, 32, 32))
 storage.mode(a4_exp) <- "double"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a4_exp), filename = filename, compression = FALSE,
@@ -118,7 +118,7 @@ stopifnot(identical(a4_zlib_obs, a4_exp))
 ##
 ## array: case-5
 ##
-a5_exp <- array(seq_len(32^3), c(32, 32, 32));
+a5_exp <- array(seq_len(32^3), c(32, 32, 32))
 storage.mode(a5_exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a5_exp), filename = filename, compression = FALSE,
@@ -140,7 +140,7 @@ stopifnot(identical(a5_zlib_obs, a5_exp))
 ##
 ## array: case-6
 ##
-a6_exp <- array(c(seq_len(32767), 32767), c(32, 32, 32));
+a6_exp <- array(c(seq_len(32767), 32767), c(32, 32, 32))
 storage.mode(a6_exp) <- "integer"
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a6_exp), filename = filename, compression = FALSE,
@@ -162,7 +162,7 @@ stopifnot(identical(a6_zlib_obs, a6_exp))
 ##
 ## array: case-7
 ##
-a7_exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary=seq(2, 2*32^3, 2)),
+a7_exp <- array(complex(real=seq(1, 2*32^3, 2), imaginary = seq(2, 2*32^3, 2)),
                 c(32, 32, 32))
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a7_exp), filename = filename, compression = FALSE,
