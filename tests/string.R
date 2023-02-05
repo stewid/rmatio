@@ -28,10 +28,10 @@ sessionInfo()
 ##
 ## Note:
 ## If the character vector contains elements of differents lengths i.e.
-## a2_in <- list(c("a", "bb"), c("c", "dd"))
+## a2_in <- list(c("a", "bb"), c("c", "dd"))                            # nolint
 ## then the expected result is not identical, since each element
 ## is saved in a cell and the expected result of a2_in is therefore
-## a2_exp <- list("a", "bb")
+## a2_exp <- list("a", "bb")                                            # nolint
 ##
 
 ##

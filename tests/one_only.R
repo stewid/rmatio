@@ -23,4 +23,4 @@ sessionInfo()
 ## Read OneOnly.mat containing function callbacks without raising an
 ## error
 ##
-m <- read.mat(system.file("extdata/OneOnly.mat", package="rmatio"))
+m <- read.mat(system.file("extdata/OneOnly.mat", package = "rmatio"))

@@ -51,7 +51,7 @@ stopifnot(identical(a1_zlib_obs, a1_exp))
 ##
 ## matrix: case-2
 ##
-a2_exp <- matrix(c(1,2,3,4,5,6,7,8,9), nrow = 3)
+a2_exp <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = 3)
 filename <- tempfile(fileext = ".mat")
 write.mat(list(a = a2_exp), filename = filename, compression = FALSE,
           version = "MAT5")

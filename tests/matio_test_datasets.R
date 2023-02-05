@@ -55,6 +55,7 @@
 ## (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ## SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# nolint start
 ## [c,m,e]=computer;
 ## if e == 'B'
 ##   e_str = '_be';
@@ -266,6 +267,7 @@
 
 ## x = pi;
 ## save('-v4',['small_v4' e_str '.mat'],'x');
+# nolint end
 
 ##
 ## Load rmatio
