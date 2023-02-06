@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2019  Stefan Widgren
+## Copyright (C) 2013-2023  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ filename <- tempfile(fileext = ".mat")
 ##
 
 ##
-## 'filename' must be a character vector of length one
+## "filename" must be a character vector of length one
 ##
 assertError(write.mat(list(a = 1:5), filename = NULL))
 assertError(write.mat(list(a = 1:5), filename = 5))
@@ -39,7 +39,7 @@ assertError(write.mat(list(a = 1:5), filename = c("a", "b")))
 assertError(write.mat(list(a = 1:5), filename = ""))
 
 ##
-## 'compression' must be a logical vector of length one
+## "compression" must be a logical vector of length one
 ##
 assertError(write.mat(list(a = 1:5), filename = filename,
                       compression = NULL))
@@ -60,5 +60,6 @@ assertError(write.mat(list(a = 1:5, 6:10), filename = filename,
 assertError(write.mat(list(a = 1:5, a = 6:10), filename = filename,
                       compression = FALSE))
 
-## Make sure the file is removed in case test failure and data are written...
+## Make sure the file is removed in case test failure and data are
+## written...
 unlink(filename)

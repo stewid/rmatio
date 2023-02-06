@@ -7,7 +7,8 @@
 read.mat(filename)
 }
 \arguments{
-\item{filename}{Character string, with the MAT file or URL to read.}
+\item{filename}{Character string, with the MAT file or URL to
+read.}
 }
 \value{
 A list with the variables read.
@@ -62,5 +63,6 @@ m <- read.mat(filename)
 str(m)
 }
 \seealso{
-See \code{\link{write.mat}} for more details and examples.
+See \code{\link{write.mat}} for more details and
+    examples.
 }

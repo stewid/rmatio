@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2019  Stefan Widgren
+## Copyright (C) 2013-2023  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
 ##'   \item A vector is saved as a \code{1 x length} array
 ##'
 ##'   \item Support for writing a sparse matrix of type 'dgCMatrix' or
-##'     'lgCMatrix' to file }
+##'     'lgCMatrix' to file
+##' }
 ##' @rdname write.mat-methods
 ##' @docType methods
 ##' @title Write Matlab file
@@ -35,11 +36,10 @@
 ##'     for Matlab level-5 file (MAT5) from rmatio package.
 ##' @return invisible NULL
 ##' @keywords methods
-##' @include have_lib.R
 ##' @author Stefan Widgren
 ##' @examples
 ##' \dontrun{
-##' library("Matrix")
+##' library(Matrix)
 ##' filename <- tempfile(fileext = ".mat")
 ##'
 ##' ## Example how to read and write an integer vector with rmatio
@@ -92,11 +92,11 @@
 ##' setAs(from = "list",
 ##'       to = "DemoS4Mat",
 ##'       def = function(from) {
-##'         return(new("DemoS4Mat",
-##'                     a = from[["a"]],
-##'                     b = as.integer(from[["b"]]),
-##'                     c = from[["c"]],
-##'                     d = from[["d"]]))
+##'         new("DemoS4Mat",
+##'             a = from[["a"]],
+##'             b = as.integer(from[["b"]]),
+##'             c = from[["c"]],
+##'             d = from[["d"]])
 ##'       }
 ##' )
 ##'
@@ -109,10 +109,10 @@
 ##'                    version) {
 ##'             ## Coerce the 'DemoS4Mat' object to a list and
 ##'             ## call 'rmatio' 'write.mat' with the list.
-##'             return(write.mat(as(object, "list"),
-##'                              filename,
-##'                              compression,
-##'                              version))
+##'             write.mat(as(object, "list"),
+##'                       filename,
+##'                       compression,
+##'                       version)
 ##'           }
 ##' )
 ##'
@@ -133,10 +133,10 @@
 ##' write.mat(demoS4mat, filename)
 ##'
 ##' ## Read the MAT file
-##' demoS4mat.2 <- as(read.mat(filename), "DemoS4Mat")
+##' demoS4mat_2 <- as(read.mat(filename), "DemoS4Mat")
 ##'
 ##' ## Check result
-##' stopifnot(identical(demoS4mat, demoS4mat.2))
+##' stopifnot(identical(demoS4mat, demoS4mat_2))
 ##'
 ##' unlink(filename)
 ##' }
@@ -145,7 +145,10 @@ setGeneric("write.mat",
            function(object,
                     filename = NULL,
                     compression = TRUE,
-                    version = c("MAT5")) standardGeneric("write.mat"))
+                    version = c("MAT5")) {
+               standardGeneric("write.mat")
+           }
+)
 
 ##' @rdname write.mat-methods
 ##' @export
@@ -169,11 +172,6 @@ setMethod("write.mat",
               }
 
               if (identical(compression, TRUE)) {
-                  if (!have.zlib()) {
-                      stop(paste("Sorry, library 'zlib' is not available.",
-                                 "Use 'compression = FALSE' or",
-                                 "install with 'zlib'"))
-                  }
                   compression <- 1L
               } else {
                   compression <- 0L

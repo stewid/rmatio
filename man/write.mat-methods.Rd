@@ -36,11 +36,12 @@ list must have unique names.
   \item A vector is saved as a \code{1 x length} array
 
   \item Support for writing a sparse matrix of type 'dgCMatrix' or
-    'lgCMatrix' to file }
+    'lgCMatrix' to file
+}
 }
 \examples{
 \dontrun{
-library("Matrix")
+library(Matrix)
 filename <- tempfile(fileext = ".mat")
 
 ## Example how to read and write an integer vector with rmatio
@@ -93,11 +94,11 @@ setAs(from = "DemoS4Mat",
 setAs(from = "list",
       to = "DemoS4Mat",
       def = function(from) {
-        return(new("DemoS4Mat",
-                    a = from[["a"]],
-                    b = as.integer(from[["b"]]),
-                    c = from[["c"]],
-                    d = from[["d"]]))
+        new("DemoS4Mat",
+            a = from[["a"]],
+            b = as.integer(from[["b"]]),
+            c = from[["c"]],
+            d = from[["d"]])
       }
 )
 
@@ -110,10 +111,10 @@ setMethod("write.mat",
                    version) {
             ## Coerce the 'DemoS4Mat' object to a list and
             ## call 'rmatio' 'write.mat' with the list.
-            return(write.mat(as(object, "list"),
-                             filename,
-                             compression,
-                             version))
+            write.mat(as(object, "list"),
+                      filename,
+                      compression,
+                      version)
           }
 )
 
@@ -134,10 +135,10 @@ demoS4mat <- new("DemoS4Mat",
 write.mat(demoS4mat, filename)
 
 ## Read the MAT file
-demoS4mat.2 <- as(read.mat(filename), "DemoS4Mat")
+demoS4mat_2 <- as(read.mat(filename), "DemoS4Mat")
 
 ## Check result
-stopifnot(identical(demoS4mat, demoS4mat.2))
+stopifnot(identical(demoS4mat, demoS4mat_2))
 
 unlink(filename)
 }

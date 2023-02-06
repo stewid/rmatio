@@ -61,6 +61,23 @@ test_objects = $(wildcard tests/*.R)
 valgrind:
 	$(foreach var,$(test_objects),R -d "valgrind --tool=memcheck --leak-check=full" --vanilla < $(var);)
 
+# Build and check package on R-hub
+.PHONY: rhub
+rhub: clean check
+	cd .. && Rscript -e "rhub::check(path='$(PKG_TAR)', rhub::platforms()[['name']], show_status = FALSE)"
+
+# Build and use 'rchk' on package on R-hub
+.PHONY: rchk
+rchk: clean check
+	cd .. && Rscript -e "rhub::check(path='$(PKG_TAR)', 'ubuntu-rchk', show_status = FALSE)"
+
+# Build and check package on https://win-builder.r-project.org/
+.PHONY: winbuilder
+winbuilder: clean check
+	cd .. && curl -T $(PKG_TAR) ftp://win-builder.r-project.org/R-oldrelease/
+	cd .. && curl -T $(PKG_TAR) ftp://win-builder.r-project.org/R-release/
+	cd .. && curl -T $(PKG_TAR) ftp://win-builder.r-project.org/R-devel/
+
 # Check reverse dependencies
 #
 # 1) Install packages (in ./revdep/lib) to check reverse dependencies.

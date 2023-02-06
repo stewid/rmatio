@@ -1,5 +1,5 @@
 ## rmatio, a R interface to the C library matio, MAT File I/O Library.
-## Copyright (C) 2013-2019  Stefan Widgren
+## Copyright (C) 2013-2023  Stefan Widgren
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -35,9 +35,11 @@
 ##'   \item A function class type is read as NULL and gives a warning.
 ##' }
 ##' @title Read Matlab file
-##' @param filename Character string, with the MAT file or URL to read.
+##' @param filename Character string, with the MAT file or URL to
+##'     read.
 ##' @return A list with the variables read.
-##' @seealso See \code{\link{write.mat}} for more details and examples.
+##' @seealso See \code{\link{write.mat}} for more details and
+##'     examples.
 ##' @export
 ##' @examples
 ##' ## Read a version 4 MAT file with little-endian byte ordering
@@ -63,7 +65,7 @@
 ##'
 ##' ## View content
 ##' str(m)
-read.mat <- function(filename) {
+read.mat <- function(filename) { # nolint
     ## Argument checking
     stopifnot(is.character(filename),
               identical(length(filename), 1L),
@@ -78,5 +80,5 @@ read.mat <- function(filename) {
         stop(sprintf("File don't exists: %s", filename))
     }
 
-    return(.Call(read_mat, filename))
+    .Call(read_mat, filename)
 }
