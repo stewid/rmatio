@@ -16,8 +16,8 @@ with variable compression.
 }
 \references{
 \itemize{
-
   \item The MathWorks Inc., MATLAB - MAT-File Format, version
   R2013b, September 2013.\cr
   \url{https://www.mathworks.com/help/pdf_doc/matlab/matfile_format.pdf}
+}
 }
