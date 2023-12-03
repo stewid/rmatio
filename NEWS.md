@@ -1,3 +1,8 @@
+
+## CHANGES
+
+* Fixed CRAN check warnings for print format specifiers.
+
 # rmatio 0.18.0 (2023-02-05)
 
 ## CHANGES

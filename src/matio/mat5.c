@@ -3862,7 +3862,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -3888,7 +3888,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -3915,7 +3915,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -3943,7 +3943,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -3970,7 +3970,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -3996,7 +3996,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -4022,7 +4022,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -4048,7 +4048,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -4074,7 +4074,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -4100,7 +4100,7 @@ Read5(mat_t *mat, matvar_t *matvar)
                 matvar->nbytes = len*matvar->data_size;
                 matvar->data   = malloc(matvar->nbytes);
                 if ( NULL == matvar->data ) {
-                    Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 Mat_VarReadNumeric5(mat,matvar,matvar->data,len);
@@ -4155,7 +4155,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             matvar->nbytes = len*matvar->data_size;
             matvar->data   = calloc(matvar->nbytes+1,1);
             if ( NULL == matvar->data ) {
-                Mat_Critical("Failed to allocate %d bytes",matvar->nbytes);
+                Mat_Critical("Failed to allocate");
                 break;
             }
             if ( matvar->compression == MAT_COMPRESSION_NONE) {
@@ -4691,8 +4691,7 @@ Read5(mat_t *mat, matvar_t *matvar)
             } else { /* isComplex */
                 data->data = malloc(data->ndata*Mat_SizeOf(matvar->data_type));
                 if ( data->data == NULL ) {
-                    Mat_Critical("Failed to allocate %d bytes",
-                                 data->ndata*Mat_SizeOf(MAT_T_DOUBLE));
+                    Mat_Critical("Failed to allocate");
                     break;
                 }
                 if ( matvar->compression == MAT_COMPRESSION_NONE) {

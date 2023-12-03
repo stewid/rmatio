@@ -2548,8 +2548,7 @@ ReadCharData(mat_t *mat,char *data,enum matio_types data_type,int len)
             break;
         }
         default:
-            Mat_Warning("ReadCharData: %d is not a supported data type for ",
-                "character data", data_type);
+            Mat_Warning("ReadCharData: not a supported data type for character data");
             break;
     }
     bytesread *= data_size;
