@@ -1,6 +1,6 @@
 /*
  * rmatio, a R interface to the C library matio, MAT File I/O Library.
- * Copyright (C) 2013-2019  Stefan Widgren
+ * Copyright (C) 2013-2023  Stefan Widgren
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -3271,7 +3271,7 @@ cleanup:
         Mat_Close(mat);
     UNPROTECT(2);
     if (err)
-        Rf_error(err_msg);
+        Rf_error("%s", err_msg);
 
     return list;
 }
